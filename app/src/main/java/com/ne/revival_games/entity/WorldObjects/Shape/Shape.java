@@ -1,12 +1,14 @@
 package com.ne.revival_games.entity.WorldObjects.Shape;
 
+import android.content.Entity;
 import android.graphics.Canvas;
 
 /**
  * A interface representing different shapes.
  */
 public interface Shape {
-
+    int getX();
+    int getY();
     /**
      * Draws the given shape onto the given canvas.
      *
@@ -25,5 +27,7 @@ public interface Shape {
      * @return  Returns true if this shape is collided (intersecting) with the other
      */
     boolean collided(Shape other);
+
+    boolean isWithin(double curX, double curY);
 
 }

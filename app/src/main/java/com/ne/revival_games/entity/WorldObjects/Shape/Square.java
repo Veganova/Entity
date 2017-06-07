@@ -25,13 +25,34 @@ public class Square implements Shape {
     }
 
     @Override
+    public int getX(){
+        return this.x;
+    }
+
+    @Override
+    public int getY(){
+        return this.y;
+    }
+
+    @Override
     public void draw(Canvas canvas, int curX, int curY, int offsetX, int offsetY) {
         // TODO: 6/7/2017
     }
 
     @Override
-    public boolean collided(Shape other) {
-        // TODO: 6/7/2017
-        return false;
+    public boolean collided(Shape other){
+        double vectX = other.getX() - this.x;
+        double vectY = other.getY() - this.y;
+        double scale = Math.pow(Math.pow(vectX,2) + Math.pow(vectY,2), 0.5);
+        vectX = vectX/scale;
+        vectY = vectY/scale;
+        return isWithin(this.x + vectX*Math.abs(vectX)
+                , this.y + vectY*Math.abs(vectX));
+    }
+
+    @Override
+    public boolean isWithin(double curX, double curY){
+        return (this.x+0.5*this.side >= curX) && (this.x - 0.5*this.side <=curX )
+                && (this.y + 0.5*this.side >= curY) && (this.y - 0.5*this.side <=curY);
     }
 }

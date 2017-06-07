@@ -19,6 +19,4 @@ public interface WorldObject {
      */
     void draw(Canvas canvas);
 
-
-
 }
