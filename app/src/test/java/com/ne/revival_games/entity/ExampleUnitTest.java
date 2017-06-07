@@ -12,6 +12,11 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
+        /*
+        sqaure s = new sqare(0, 0, 2)
+        circle c = new circle(0, 0, 1)
+        asserTrue(s.collide(c));
+         */
         assertEquals(4, 2 + 2);
     }
 }

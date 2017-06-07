@@ -7,14 +7,13 @@ package com.ne.revival_games.entity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import java.util.ArrayList;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+
+import java.util.List;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -23,6 +22,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private static final float ADJUST = (float) 0.02;
     private MainThread thread;
     private Background bg;
+    List<Entity> entities;
 
     public GamePanel(Context context) {
         super(context);
@@ -61,7 +61,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        bg = new Background(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.whitebackground1));
+        bg = new Background(BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.whitebackground1));
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
