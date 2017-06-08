@@ -2,15 +2,17 @@ package com.ne.revival_games.entity.WorldObjects.Shape;
 
 import android.content.Entity;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Vector2;
 
 /**
  * Represents the simple shape circle class.
  */
-public class Circle implements Shape {
-
-    int x;
-    int y;
-    int r;
+public class Circle extends AShape {
 
     /**
      * Constructor for the square object.
@@ -20,38 +22,19 @@ public class Circle implements Shape {
      * @param r  The radius
      */
     Circle (int x, int y, int r) {
-        this.x = x;
-        this.y = y;
-        this.r = r;
+        org.dyn4j.geometry.Circle cirShape = new org.dyn4j.geometry.Circle(r);
+        Body body = new Body();
+        body.addFixture(cirShape);
+        body.setMass(MassType.NORMAL);
+        body.translate(x, y);
     }
 
     @Override
-    public int getX(){
-        return this.x;
-    }
+    public void draw(Canvas canvas) {
 
-    @Override
-    public int getY(){
-        return this.y;
-    }
-
-    @Override
-    public void draw(Canvas canvas, int curX, int curY, int offsetX, int offsetY) {
+        canvas.drawCircle(this.getX(), this.getY(),
+                this.body.getRotationDiscRadius(), new Paint());
         // TODO: 6/7/2017
     }
 
-    @Override
-    public boolean collided(Shape other){
-        double vectX = other.getX() - this.x;
-        double vectY = other.getY() - this.y;
-        double scale = Math.pow(Math.pow(vectX,2) + Math.pow(vectY,2), 0.5);
-        vectX = vectX/scale;
-        vectY = vectY/scale;
-        return isWithin(this.x + vectX*this.r, this.y + vectY*this.r);
-    }
-
-    @Override
-    public boolean isWithin(double curX, double curY) {
-        return (Math.pow(Math.pow(curX - this.x, 2) + Math.pow(curY - this.y, 2), 0.5) <= this.r);
-    }
 }

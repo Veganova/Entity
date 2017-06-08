@@ -12,6 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private static final float ADJUST = (float) 0.02;
     private MainThread thread;
     private Background bg;
-    List<Entity> entities;
+    MyWorld world;
+
 
     public GamePanel(Context context) {
         super(context);
