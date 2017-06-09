@@ -12,7 +12,7 @@ public interface Shape {
 
     double getY();
 
-    void draw(Canvas canvas);
+    void draw(Canvas canvas, double [] scale);
 
     boolean collided(AShape other);
 

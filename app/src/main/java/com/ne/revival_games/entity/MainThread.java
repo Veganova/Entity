@@ -46,6 +46,7 @@ public class MainThread extends Thread
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
                     //main thread runs functions of game panel
+//                    System.out.println("Updating!");
                     this.gamePanel.update();
                     this.gamePanel.draw(canvas);
                 }
@@ -78,7 +79,7 @@ public class MainThread extends Thread
                 averageFPS = 1000/((totalTime/frameCount)/1000000);
                 frameCount =0;
                 totalTime = 0;
-                // System.out.println(averageFPS);
+//                System.out.println(averageFPS);
             }
         }
     }

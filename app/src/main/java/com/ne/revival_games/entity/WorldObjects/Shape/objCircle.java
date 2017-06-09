@@ -12,8 +12,9 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Represents the simple shape circle class.
  */
-public class Circle extends AShape {
+public class objCircle extends AShape {
 
+    private double r;
     /**
      * Constructor for the square object.
      *
@@ -21,20 +22,21 @@ public class Circle extends AShape {
      * @param y The x of the center of the shape
      * @param r  The radius
      */
-    Circle (int x, int y, int r) {
+    public objCircle(double x, double y, double r) {
         org.dyn4j.geometry.Circle cirShape = new org.dyn4j.geometry.Circle(r);
-        Body body = new Body();
+        this.body = new Body();
         body.addFixture(cirShape);
         body.setMass(MassType.NORMAL);
         body.translate(x, y);
+        this.r = r;
     }
 
     @Override
-    public void draw(Canvas canvas) {
-
-        canvas.drawCircle(this.getX(), this.getY(),
-                this.body.getRotationDiscRadius(), new Paint());
-        // TODO: 6/7/2017
+    public void draw(Canvas canvas, double [] scale) {
+        //might have to modify coordinates as needed
+        canvas.drawCircle((float) translateXtoCanvas(this.body.getWorldCenter().x, scale[0]),
+                (float) translateYtoCanvas(this.body.getWorldCenter().y, scale[1]),
+                        (float) this.body.getRotationDiscRadius(), new Paint());
     }
 
 }

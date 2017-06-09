@@ -1,18 +1,12 @@
 package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
+import com.ne.revival_games.entity.WorldObjects.Shape.objCircle;
 
-import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.World;
-import org.dyn4j.geometry.Circle;
-import org.dyn4j.geometry.Convex;
-import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Rectangle;
-import org.dyn4j.geometry.Triangle;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.List;
@@ -35,16 +29,27 @@ public class MyWorld {
     /** The dynamics engine */
     protected World world;
 
-    /** Wether the example is stopped or not */
+    /** Whether the example is stopped or not */
     protected boolean stopped;
 
     /** The time stamp for the last iteration */
     protected long last;
 
     List<Entity> entities;
+    public objCircle circ, circ2;
+     ObjRectangle rect;
 
-
-    // TODO: 6/8/2017 addEntity(), constructors
+    /**
+     * default constructor for MyWorld (calls initialize world, can vary based off game type, etc.)
+     * TODO: include data or list of objects or entities to be initialized
+     *
+     */
+    public MyWorld(Canvas canvas){
+//        Paint paint =  new Paint();
+//        paint.setStyle(Paint.Style.FILL);
+//        canvas.drawCircle((float) 50.0, (float) 50.0, (float) 30.0, paint);
+        initializeWorld();
+    };
     /**
      * Creates game objects and adds them to the world.
      * <p>
@@ -54,49 +59,58 @@ public class MyWorld {
     protected void initializeWorld() {
         // create the world
         this.world = new World();
-
+        this.world.setGravity(new Vector2(0.0, 0.0));
+        System.out.println("Initialized WORLD");
         // create all your bodies/joints
-
-        // create the floor
-        Rectangle floorRect = new Rectangle(15.0, 1.0);
-        Body floor = new Body();
-        floor.addFixture(new BodyFixture(floorRect));
-        floor.setMass(MassType.INFINITE);
-        // move the floor down a bit
-        floor.translate(-5.0, -4.0);
-        this.world.addBody(floor);
-
-        // create a triangle object
-        Triangle triShape = new Triangle(
-                new Vector2(0.0, 0.5),
-                new Vector2(-0.5, -0.5),
-                new Vector2(0.5, -0.5));
-        Body triangle = new Body();
-        triangle.addFixture(triShape);
-        triangle.setMass(MassType.NORMAL);
-        triangle.translate(-1.0, 2.0);
-        // test having a velocity
-        triangle.getLinearVelocity().set(5.0, 0.0);
-        this.world.addBody(triangle);
-
-        // create a circle
-        Circle cirShape = new Circle(0.05);
-        Body circle = new Body();
-        circle.addFixture(cirShape);
-        circle.setMass(MassType.NORMAL);
-        circle.translate(-8.0, 2.0);
-        // test adding some force
-        //circle.applyForce(new Vector2(-100.0, 1.0));
-        // set some linear damping to simulate rolling friction
-        circle.setLinearDamping(0.05);
-        this.world.addBody(circle);
+//        circ = new objCircle(-300.0, -300.0, 50.0);
+//        this.world.addBody(circ.body);
+        rect = new ObjRectangle(0, 0, 50, 30);
+        circ2 = new objCircle(0.0, 500.0, 30.0);
+        this.world.addBody(circ2.body);
+//        // create the floor
+//        Rectangle floorRect = new Rectangle(15.0, 1.0);
+//        Body floor = new Body();
+//        floor.addFixture(new BodyFixture(floorRect));
+//        floor.setMass(MassType.INFINITE);
+//        // move the floor down a bit
+//        floor.translate(-5.0, -4.0);
+//        this.world.addBody(floor);
+//
+//        // create a triangle object
+//        Triangle triShape = new Triangle(
+//                new Vector2(0.0, 0.5),
+//                new Vector2(-0.5, -0.5),
+//                new Vector2(0.5, -0.5));
+//        Body triangle = new Body();
+//        triangle.addFixture(triShape);
+//        triangle.setMass(MassType.NORMAL);
+//        triangle.translate(-1.0, 2.0);
+//        // test having a velocity
+//        triangle.getLinearVelocity().set(5.0, 0.0);
+//        this.world.addBody(triangle);
+//
+//        // create a circle
+//        Circle cirShape = new Circle(0.05);
+//        Body circle = new Body();
+//        circle.addFixture(cirShape);
+//        circle.setMass(MassType.NORMAL);
+//        circle.translate(-8.0, 2.0);
+//        // test adding some force
+//        //circle.applyForce(new Vector2(-100.0, 1.0));
+//        // set some linear damping to simulate rolling friction
+//        circle.setLinearDamping(0.05);
+//        this.world.addBody(circle);
     }
+
+    //need a way to add an object (check what kind of object it is, etc.)
+    //alternative is to add a new object on creation in MainThread
+
 
     /**
      * The method calling the necessary methods to update
      * the game, graphics, and poll for input.
      */
-    protected void objectUpdate() {
+    public void objectUpdate() {
         // get the current time
         long time = System.nanoTime();
         // get the elapsed time from the last iteration
@@ -106,6 +120,17 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the world with the elapsed time
+        System.out.println("Collided:" + circ2.collided(circ));
         this.world.update(elapsedTime);
+    }
+
+    /**
+     * Cycles through entity list and draws onto canvas
+     *
+     * @param canvas the canvas onto which the entities will be drawn
+     */
+    public void drawObjects(Canvas canvas, double [] scale){
+        circ.draw(canvas, scale);
+        circ2.draw(canvas, scale);
     }
 }

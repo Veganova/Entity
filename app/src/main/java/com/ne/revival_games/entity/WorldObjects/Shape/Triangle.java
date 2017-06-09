@@ -22,7 +22,7 @@ public class Triangle extends AShape {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, double [] scale) {
         // TODO: 6/7/2017
     }
 

@@ -7,19 +7,23 @@ package com.ne.revival_games.entity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
+import org.dyn4j.geometry.Transform;
+
 import java.util.List;
+
+import static com.ne.revival_games.entity.MainThread.canvas;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final float WIDTH = 900;
     private static final float HEIGHT = 1600;
+    private float scaleX = 1, scaleY = 1;
     private static final float ADJUST = (float) 0.02;
     private MainThread thread;
     private Background bg;
@@ -34,6 +38,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
 
         thread = new MainThread(getHolder(), this);
+        world = new MyWorld(thread.canvas);
 
         //make gamePanel focusable so it can handle events
         setFocusable(true);
@@ -66,6 +71,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         bg = new Background(BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.whitebackground1));
         //we can safely start the game loop
+        //TODO: we want to initialize the world here!
+        //add some intial objects like the nexus
+
         thread.setRunning(true);
         thread.start();
 
@@ -73,22 +81,30 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            double canvasX = event.getX() / scaleX;
+            double canvasY = event.getY() / scaleY;
+//            Transform trans = new Transform();
+//            trans.setTranslation(world.circ2.translateXtoWorld(canvasX, scaleX),
+//                    world.circ2.translateYtoWorld(canvasY, scaleY));
+            world.circ2.body.translateToOrigin();
+            world.circ2.body.translate(world.circ2.translateXtoWorld(canvasX, WIDTH),
+                    world.circ2.translateYtoWorld(canvasY, HEIGHT));
+            return true;
+        }
         return super.onTouchEvent(event);
     }
 
     public void update() {
         //where we update individual game objects (ex. move them, etc.)
-
-
+        world.objectUpdate();
     }
 
     @Override
     public void draw(Canvas canvas) {
         //seems a bit inefficient
-        float scaleX = getWidth() / WIDTH;
-        float scaleY = getHeight() / HEIGHT;
+        scaleX = getWidth() / WIDTH;
+        scaleY = getHeight() / HEIGHT;
 
         //draw game objects and background
         if (canvas != null) {
@@ -96,6 +112,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             //scaling does funky stuff to length / width so be careful LMAO
             canvas.scale(scaleX, scaleY);
             bg.draw(canvas);
+            world.drawObjects(canvas, new double[]{WIDTH, HEIGHT});
 
             canvas.restoreToCount(savedState);
         }

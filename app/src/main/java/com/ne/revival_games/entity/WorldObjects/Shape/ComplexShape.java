@@ -20,10 +20,11 @@ public class ComplexShape extends AShape {
 
     // TODO: 6/7/2017 how to store the relative manner in which the shapes are stored
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, double [] scale) {
 //        for (Shape shape: this.body.parts) {
 //            shape.draw(canvas, curX, curY, offsetX, offsetY);
 //        }
     }
+
 
 }

@@ -7,7 +7,7 @@ import org.dyn4j.dynamics.Body;
  */
 public abstract class AShape implements Shape {
 
-    Body body;
+    public Body body;
 
     @Override
     public double getX(){
@@ -21,7 +21,25 @@ public abstract class AShape implements Shape {
 
     @Override
     public boolean collided(AShape other){
+        System.out.println("Collided: " + this.body.isInContact(other.body));
         return this.body.isInContact(other.body);
     }
 
+    //input coordinates of the world and outputs canvas coordinates
+    public static double translateXtoCanvas(double x, double scaleX){
+        return x+scaleX/2;
+    }
+
+    //input coordinates of the world and then outputs canvas coordinates
+    public static double translateYtoCanvas(double y, double scaleY){
+        return -1*(y - scaleY/2);
+    }
+
+    public static double translateXtoWorld(double x, double scaleX){
+        return x-scaleX/2;
+    }
+
+    public static double translateYtoWorld(double y, double scaleY){
+        return -1*(y - scaleY/2);
+    }
 }
