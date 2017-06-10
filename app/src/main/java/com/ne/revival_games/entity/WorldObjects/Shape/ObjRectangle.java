@@ -28,10 +28,10 @@ public class ObjRectangle extends AShape {
     @Override
     public void draw(Canvas canvas) {
         //left, top, right, bottom
-        double bottom = translateYtoCanvas(this.getY() - 0.5 * this.rect.getHeight(), GamePanel.HEIGHT);
-        double left = translateXtoCanvas(this.getX() - 0.5 * this.rect.getWidth(), GamePanel.WIDTH);
-        double right = translateXtoCanvas(this.getX() + 0.5 * this.rect.getWidth(), GamePanel.WIDTH);
-        double top = translateYtoCanvas(this.getY() + 0.5 * this.rect.getHeight(), GamePanel.HEIGHT);
+        double bottom = this.getY() - 0.5 * this.rect.getHeight();
+        double left = this.getX() - 0.5 * this.rect.getWidth();
+        double right = this.getX() + 0.5 * this.rect.getWidth();
+        double top = this.getY() + 0.5 * this.rect.getHeight();
 
        // RectF rectangle = new RectF((int) left, (int) top, (int) right, (int) bottom);
         Rect rectangle = new Rect((int) left, (int) top, (int) right, (int) bottom);

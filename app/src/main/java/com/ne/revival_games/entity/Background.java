@@ -21,7 +21,8 @@ public class Background {
     }
 
     public void draw(Canvas canvas){
-        canvas.drawBitmap(image, x, y, null);
+//        System.out.println("(X,y): " + x + ", " + y);
+        canvas.drawBitmap( image, -450, -800, null);
     }
 
 }
