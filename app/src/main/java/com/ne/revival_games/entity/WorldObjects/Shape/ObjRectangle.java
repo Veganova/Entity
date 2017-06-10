@@ -19,7 +19,7 @@ import org.dyn4j.geometry.Rectangle;
 public class ObjRectangle extends AShape {
     private Rectangle rect;
 
-    public ObjRectangle(int x, int y, int w, int l) {
+    public ObjRectangle(double x, double y, int w, int l) {
         rect = new Rectangle(l, w);
         initValues(rect, x, y);
     }
@@ -36,8 +36,8 @@ public class ObjRectangle extends AShape {
        // RectF rectangle = new RectF((int) left, (int) top, (int) right, (int) bottom);
         Rect rectangle = new Rect((int) left, (int) top, (int) right, (int) bottom);
         canvas.save();
-        canvas.rotate((float)Math.toDegrees(this.rect.getRotation()));
-                //(float)this.body.getWorldCenter().x, (float)this.body.getWorldCenter().y);
+        canvas.rotate((float)Math.toDegrees(this.rect.getRotation()),
+                (float)this.body.getWorldCenter().x, (float)this.body.getWorldCenter().y);
 
         canvas.drawRect(rectangle, new Paint());
         canvas.restore();
@@ -55,7 +55,6 @@ public class ObjRectangle extends AShape {
      */
     public void rotate(double degrees) {
         this.angle += degrees;
-
         double theta = Math.PI / 180.0 * degrees;
         //this.rect.rotate(theta);
         this.rect.rotate(theta, this.body.getWorldCenter().x, this.body.getWorldCenter().y);

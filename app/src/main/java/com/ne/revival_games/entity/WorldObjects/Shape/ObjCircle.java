@@ -40,6 +40,17 @@ public class ObjCircle extends AShape {
                         (float) this.circ.getRadius(), new Paint());
     }
 
+
+    public void draw(Canvas canvas, Paint paint) {
+        //might have to modify coordinates as needed
+        Vector2 coord = this.body.getWorldCenter();
+        canvas.drawCircle((float) coord.x,
+                (float) coord.y,
+                (float) this.circ.getRadius(), paint);
+    }
+
+
+
     @Override
     public void rotate(double degrees) {
         return;

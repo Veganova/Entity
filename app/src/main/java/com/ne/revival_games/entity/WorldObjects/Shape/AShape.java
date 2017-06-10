@@ -37,7 +37,7 @@ public abstract class AShape implements Shape {
 
     @Override
     public boolean collided(AShape other) {
-        //System.out.println("Collided: " + this.body.isInContact(other.body));
+        System.out.println("Collided: " + this.body.isInContact(other.body));
         return this.body.isInContact(other.body);
     }
 

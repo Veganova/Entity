@@ -47,8 +47,9 @@ public class MainThread extends Thread
                 synchronized (surfaceHolder) {
                     //main thread runs functions of game panel
 //                    System.out.println("Updating!");
-                    this.gamePanel.update();
                     this.gamePanel.draw(canvas);
+                    this.gamePanel.update();
+
                 }
             } catch (Exception e) {
             }

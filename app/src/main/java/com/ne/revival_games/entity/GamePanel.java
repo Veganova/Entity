@@ -71,7 +71,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         bg = new Background(BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.whitebackground1));
         //we can safely start the game loop
-        //TODO: we want to initialize the world here!
+        //TODO: we want to initialize the engineWorld here!
         //add some intial objects like the nexus
 
         thread.setRunning(true);
@@ -86,7 +86,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             double canvasY = event.getY() / scaleY;
             world.circ2.body.translateToOrigin();
             world.circ2.body.translate(canvasX - WIDTH/2, -1*(canvasY - HEIGHT/2));
-            System.out.println("X,Y"  + canvasX + ", " + canvasY);
+            // System.out.println("X,Y"  + canvasX + ", " + canvasY);
             return true;
         }
         return super.onTouchEvent(event);
@@ -94,11 +94,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         //where we update individual game objects (ex. move them, etc.)
+
         world.objectUpdate();
     }
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         //seems a bit inefficient
         scaleX = getWidth() / WIDTH;
         scaleY = getHeight() / HEIGHT;
@@ -107,9 +109,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas != null) {
             final int savedState = canvas.save();
             //scaling does funky stuff to length / width so be careful LMAO
-            canvas.scale(scaleX, scaleY);
-            canvas.translate(450, 800);
-            canvas.scale(1, -1);
+            canvas.scale(scaleX, -scaleY);
+            canvas.translate(WIDTH / 2, -HEIGHT / 2);
+
             bg.draw(canvas);
             world.drawObjects(canvas);
             canvas.restoreToCount(savedState);
