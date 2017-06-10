@@ -10,31 +10,34 @@ import org.dyn4j.geometry.MassType;
 public abstract class AShape implements Shape {
 
     public Body body;
+    double angle;
 
     AShape() {
 
     }
 
-    AShape(Convex shape, double x, double y) {
+    protected void initValues(Convex shape, double x, double y) {
         this.body = new Body();
         body.addFixture(shape);
         body.setMass(MassType.NORMAL);
         body.translate(x, y);
+
+        this.angle = 0;
     }
 
     @Override
-    public double getX(){
+    public double getX() {
         return this.body.getWorldCenter().x;
     }
 
     @Override
-    public double getY(){
+    public double getY() {
         return this.body.getWorldCenter().y;
     }
 
     @Override
-    public boolean collided(AShape other){
-        System.out.println("Collided: " + this.body.isInContact(other.body));
+    public boolean collided(AShape other) {
+        //System.out.println("Collided: " + this.body.isInContact(other.body));
         return this.body.isInContact(other.body);
     }
 
@@ -55,4 +58,5 @@ public abstract class AShape implements Shape {
     public static double translateYtoWorld(double y, double scaleY) {
         return -1 * (y - scaleY / 2);
     }
+
 }

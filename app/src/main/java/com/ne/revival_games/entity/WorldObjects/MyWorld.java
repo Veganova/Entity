@@ -37,7 +37,7 @@ public class MyWorld {
 
     List<Entity> entities;
     public ObjCircle circ, circ2;
-//     ObjRectangle rect;
+    public ObjRectangle rect, rect2;
 
     /**
      * default constructor for MyWorld (calls initialize world, can vary based off game type, etc.)
@@ -64,8 +64,12 @@ public class MyWorld {
         // create all your bodies/joints
         circ = new ObjCircle(-300.0, -300.0, 50.0);
         this.world.addBody(circ.body);
-//        rect = new ObjRectangle(0, 0, 50, 30);
+        rect = new ObjRectangle(0, 0, 200, 120);
+        rect.rotate(60);
+        rect2 = new ObjRectangle(100, 0, 30, 1000);
         circ2 = new ObjCircle(0.0, 500.0, 30.0);
+        this.world.addBody(rect.body);
+        this.world.addBody(rect2.body);
         this.world.addBody(circ2.body);
 //        // create the floor
 //        Rectangle floorRect = new Rectangle(15.0, 1.0);
@@ -120,7 +124,6 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the world with the elapsed time
-        System.out.println("Collided:" + circ2.collided(circ));
         this.world.update(elapsedTime);
     }
 
@@ -132,5 +135,16 @@ public class MyWorld {
     public void drawObjects(Canvas canvas){
         circ.draw(canvas);
         circ2.draw(canvas);
+        rect.draw(canvas);
+        rect2.draw(canvas);
+    }
+
+    public static long yuck = 0;
+
+    public static void log(String s) {
+        if (System.currentTimeMillis() - yuck >= 1000) {
+            yuck = System.currentTimeMillis();
+            System.out.println(s);
+        }
     }
 }

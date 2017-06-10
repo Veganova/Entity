@@ -18,8 +18,7 @@ import org.dyn4j.geometry.Vector2;
  */
 public class ObjCircle extends AShape {
 
-    private double r;
-
+    private Circle circ;
     /**
      * Constructor for the square object.
      *
@@ -28,8 +27,8 @@ public class ObjCircle extends AShape {
      * @param r  The radius
      */
     public ObjCircle(double x, double y, double r) {
-        super(new Circle(r), x, y);
-        this.r = r;
+        this.circ = new Circle(r);
+        initValues(this.circ, x, y);
     }
 
     @Override
@@ -38,7 +37,12 @@ public class ObjCircle extends AShape {
         Vector2 coord = this.body.getWorldCenter();
         canvas.drawCircle((float) translateXtoCanvas(coord.x, GamePanel.WIDTH),
                         (float) translateYtoCanvas(coord.y, GamePanel.HEIGHT),
-                        (float) this.body.getRotationDiscRadius(), new Paint());
+                        (float) this.circ.getRadius(), new Paint());
+    }
+
+    @Override
+    public void rotate(double degrees) {
+        return;
     }
 
 }

@@ -16,13 +16,18 @@ public class Triangle extends AShape {
     private double s;
     
     Triangle (int x, int y, int s) {
-        super(Geometry.createEquilateralTriangle(s), x, y);
+        initValues(Geometry.createEquilateralTriangle(s), x, y);
         this.s = s;
     }
 
     @Override
     public void draw(Canvas canvas) {
         // TODO: 6/9/2017  
+    }
+
+    @Override
+    public void rotate(double degrees) {
+
     }
 
 }

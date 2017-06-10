@@ -26,5 +26,10 @@ public class ComplexShape extends AShape {
 //        }
     }
 
+    @Override
+    public void rotate(double degrees) {
+
+    }
+
 
 }

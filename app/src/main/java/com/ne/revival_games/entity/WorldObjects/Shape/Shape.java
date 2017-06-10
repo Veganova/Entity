@@ -16,4 +16,11 @@ public interface Shape {
 
     boolean collided(AShape other);
 
+    /**
+     * In degrees (not radians)
+     *
+     * @param degrees above
+     */
+    void rotate(double degrees);
+
 }
