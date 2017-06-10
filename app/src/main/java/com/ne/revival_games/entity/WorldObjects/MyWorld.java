@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
-import com.ne.revival_games.entity.WorldObjects.Shape.objCircle;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.Vector2;
@@ -36,8 +36,8 @@ public class MyWorld {
     protected long last;
 
     List<Entity> entities;
-    public objCircle circ, circ2;
-     ObjRectangle rect;
+    public ObjCircle circ, circ2;
+//     ObjRectangle rect;
 
     /**
      * default constructor for MyWorld (calls initialize world, can vary based off game type, etc.)
@@ -62,10 +62,10 @@ public class MyWorld {
         this.world.setGravity(new Vector2(0.0, 0.0));
         System.out.println("Initialized WORLD");
         // create all your bodies/joints
-//        circ = new objCircle(-300.0, -300.0, 50.0);
-//        this.world.addBody(circ.body);
-        rect = new ObjRectangle(0, 0, 50, 30);
-        circ2 = new objCircle(0.0, 500.0, 30.0);
+        circ = new ObjCircle(-300.0, -300.0, 50.0);
+        this.world.addBody(circ.body);
+//        rect = new ObjRectangle(0, 0, 50, 30);
+        circ2 = new ObjCircle(0.0, 500.0, 30.0);
         this.world.addBody(circ2.body);
 //        // create the floor
 //        Rectangle floorRect = new Rectangle(15.0, 1.0);
@@ -129,8 +129,8 @@ public class MyWorld {
      *
      * @param canvas the canvas onto which the entities will be drawn
      */
-    public void drawObjects(Canvas canvas, double [] scale){
-        circ.draw(canvas, scale);
-        circ2.draw(canvas, scale);
+    public void drawObjects(Canvas canvas){
+        circ.draw(canvas);
+        circ2.draw(canvas);
     }
 }

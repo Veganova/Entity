@@ -9,21 +9,20 @@ import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 
 /**
- * Represents the simple shape circle class.
+ * Represents the simple shape equilateral triangle
  */
 public class Triangle extends AShape {
 
-
+    private double s;
+    
     Triangle (int x, int y, int s) {
-        Body equTri = new Body();
-        equTri.addFixture(Geometry.createEquilateralTriangle(s));
-        equTri.setMass(MassType.NORMAL);
-        equTri.translate(x, y);
+        super(Geometry.createEquilateralTriangle(s), x, y);
+        this.s = s;
     }
 
     @Override
-    public void draw(Canvas canvas, double [] scale) {
-        // TODO: 6/7/2017
+    public void draw(Canvas canvas) {
+        // TODO: 6/9/2017  
     }
 
 }

@@ -21,8 +21,8 @@ import static com.ne.revival_games.entity.MainThread.canvas;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final float WIDTH = 900;
-    private static final float HEIGHT = 1600;
+    public static final float WIDTH = 900;
+    public static final float HEIGHT = 1600;
     private float scaleX = 1, scaleY = 1;
     private static final float ADJUST = (float) 0.02;
     private MainThread thread;
@@ -112,7 +112,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             //scaling does funky stuff to length / width so be careful LMAO
             canvas.scale(scaleX, scaleY);
             bg.draw(canvas);
-            world.drawObjects(canvas, new double[]{WIDTH, HEIGHT});
+            world.drawObjects(canvas);
 
             canvas.restoreToCount(savedState);
         }
