@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Shape;
 
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
+
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.MassType;
@@ -16,12 +18,12 @@ public abstract class AShape implements Shape {
 
     }
 
-    protected void initValues(Convex shape, double x, double y) {
+    protected void initValues(Convex shape, double x, double y, MyWorld world) {
         this.body = new Body();
         body.addFixture(shape);
         body.setMass(MassType.NORMAL);
         body.translate(x, y);
-
+        world.engineWorld.addBody(this.body);
         this.angle = 0;
     }
 

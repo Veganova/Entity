@@ -84,8 +84,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             double canvasX = event.getX() / scaleX;
             double canvasY = event.getY() / scaleY;
-            world.circ2.body.translateToOrigin();
-            world.circ2.body.translate(canvasX - WIDTH/2, -1*(canvasY - HEIGHT/2));
+//            world.circ2.body.translateToOrigin();
+//            world.circ2.body.translate(canvasX - WIDTH/2, -1*(canvasY - HEIGHT/2));
             // System.out.println("X,Y"  + canvasX + ", " + canvasY);
             return true;
         }

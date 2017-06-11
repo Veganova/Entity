@@ -19,9 +19,9 @@ import org.dyn4j.geometry.Rectangle;
 public class ObjRectangle extends AShape {
     private Rectangle rect;
 
-    public ObjRectangle(double x, double y, int w, int l) {
+    public ObjRectangle(double x, double y, int w, int l, MyWorld world) {
         rect = new Rectangle(l, w);
-        initValues(rect, x, y);
+        initValues(rect, x, y, world);
     }
 
 
@@ -43,9 +43,6 @@ public class ObjRectangle extends AShape {
         canvas.restore();
 
         //canvas.drawRoundRect(rectangle, 0, 0, new Paint());
-        MyWorld.log("rotation " + this.rect.getRotation() + " " + (float)this.body.getWorldCenter().x
-                + " " + (float)this.body.getWorldCenter().y);
-
     }
 
     /**

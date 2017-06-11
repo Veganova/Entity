@@ -4,13 +4,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
 import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
+import org.dyn4j.collision.manifold.Manifold;
+import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.HashMap;
@@ -34,18 +41,14 @@ public class MyWorld {
     protected Canvas canvas;
 
     /** The dynamics engine */
-    protected World engineWorld;
-
+    public World engineWorld;
     /** Whether the example is stopped or not */
     protected boolean stopped;
 
     /** The time stamp for the last iteration */
     protected long last;
 
-    List<Entity> entities;
-    public ObjCircle circ, circ2;
-    public ObjRectangle rect;
-
+    //List<Entity> entities;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      * TODO: include data or list of objects or entities to be initialized
@@ -67,16 +70,11 @@ public class MyWorld {
         // create the engineWorld
         this.objectDatabase = new HashMap<>();
         this.engineWorld = new World();
-        this.engineWorld.setGravity(new Vector2(0.0, 0.0));
-        System.out.println("Initialized WORLD");
-        // create all your bodies/joints
-        circ = new ObjCircle(-300.0, -300.0, 50.0);
-        this.engineWorld.addBody(circ.body);
-        rect = new ObjRectangle(0, 0, 500, 320);
-        rect.rotate(15);
-        circ2 = new ObjCircle(0.0, 500.0, 30.0);
-        this.engineWorld.addBody(rect.body);
-        this.engineWorld.addBody(circ2.body);
+
+        this.engineWorld.setGravity(new Vector2(0, 0));
+        //this.engineWorld.addListener(new SkipDeadObjects(this));
+        Entity barrier = new Barrier(300, 400, 60, this);
+        Entity bullet = new Bullet(0, 0, 50, 60, this);
     }
 
     //need a way to add an object (check what kind of object it is, etc.)
@@ -96,7 +94,6 @@ public class MyWorld {
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
         this.engineWorld.update(elapsedTime);
-        rect.rotate(0.1);
 
     }
 
@@ -106,24 +103,49 @@ public class MyWorld {
      * @param canvas the canvas onto which the entities will be drawn
      */
     public void drawObjects(Canvas canvas){
-        circ.draw(canvas);
-
-        rect.draw(canvas);
-        if (rect.collided(circ2)) {
-            Paint p = new Paint();
-            p.setColor(Color.YELLOW);
-            circ2.draw(canvas, p);
-        } else {
-            circ2.draw(canvas);
+        for (Entity entity : objectDatabase.values()) {
+            entity.draw(canvas);
         }
+        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
+        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
+        System.out.println(ent1.shape.collided(ent2.shape));
     }
 
-    public static long yuck = 0;
+}
 
-    public static void log(String s) {
-        if (System.currentTimeMillis() - yuck >= 1000) {
-            yuck = System.currentTimeMillis();
-            System.out.println(s);
-        }
+class SkipDeadObjects implements CollisionListener {
+
+    MyWorld world;
+
+    SkipDeadObjects(MyWorld world) {
+        this.world = world;
+    }
+
+    @Override
+    public boolean collision(Body body, BodyFixture bodyFixture,
+                             Body body1, BodyFixture bodyFixture1) {
+
+        Entity ent1 = world.objectDatabase.get(body);
+        Entity ent2 = world.objectDatabase.get(body1);
+        System.out.println(ent1.getClass() + " " + ent1.health);
+        System.out.println(ent2.getClass() + " " + ent2.health);
+        return (ent1.health <= 0 || ent2.health <= 0);
+    }
+
+    @Override
+    public boolean collision(Body body, BodyFixture bodyFixture, Body body1,
+                             BodyFixture bodyFixture1, Penetration penetration) {
+        return this.collision(body, bodyFixture, body1, bodyFixture1);
+    }
+
+    @Override
+    public boolean collision(Body body, BodyFixture bodyFixture, Body body1,
+                             BodyFixture bodyFixture1, Manifold manifold) {
+        return this.collision(body, bodyFixture, body1, bodyFixture1);
+    }
+
+    @Override
+    public boolean collision(ContactConstraint contactConstraint) {
+        return false;
     }
 }

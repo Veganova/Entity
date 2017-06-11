@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.GamePanel;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.AbstractShape;
@@ -26,9 +27,9 @@ public class ObjCircle extends AShape {
      * @param y The x of the center of the shape
      * @param r  The radius
      */
-    public ObjCircle(double x, double y, double r) {
+    public ObjCircle(double x, double y, double r, MyWorld world) {
         this.circ = new Circle(r);
-        initValues(this.circ, x, y);
+        initValues(this.circ, x, y, world);
     }
 
     @Override

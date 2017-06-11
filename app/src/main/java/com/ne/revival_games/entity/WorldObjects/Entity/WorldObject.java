@@ -21,4 +21,6 @@ public interface WorldObject {
      */
     void draw(Canvas canvas);
 
+    void setVelocity(double speed);
+
 }
