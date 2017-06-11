@@ -20,7 +20,7 @@ public abstract class AShape implements Shape {
 
     protected void initValues(Convex shape, double x, double y, MyWorld world) {
         this.body = new Body();
-        body.addFixture(shape);
+        body.addFixture(shape, 1.0D, 0.2D, 2.0D);
         body.setMass(MassType.NORMAL);
         body.translate(x, y);
         world.engineWorld.addBody(this.body);

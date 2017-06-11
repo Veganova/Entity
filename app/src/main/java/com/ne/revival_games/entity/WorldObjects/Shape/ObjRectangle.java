@@ -20,7 +20,7 @@ public class ObjRectangle extends AShape {
     private Rectangle rect;
 
     public ObjRectangle(double x, double y, int w, int l, MyWorld world) {
-        rect = new Rectangle(l, w);
+        rect = new Rectangle(w, l);
         initValues(rect, x, y, world);
     }
 
@@ -54,7 +54,7 @@ public class ObjRectangle extends AShape {
         this.angle += degrees;
         double theta = Math.PI / 180.0 * degrees;
         //this.rect.rotate(theta);
-        this.rect.rotate(theta, this.body.getWorldCenter().x, this.body.getWorldCenter().y);
+        this.rect.rotate(theta, this.getX(), this.getY());
         //this.body.setTransform();
     }
 }

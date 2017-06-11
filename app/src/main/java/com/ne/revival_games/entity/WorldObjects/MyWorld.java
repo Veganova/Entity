@@ -18,6 +18,7 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactConstraint;
+import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.HashMap;
@@ -49,9 +50,11 @@ public class MyWorld {
     protected long last;
 
     //List<Entity> entities;
+
+    public ObjRectangle rect;
+    public Entity barrier;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
-     * TODO: include data or list of objects or entities to be initialized
      *
      */
     public MyWorld(Canvas canvas){
@@ -71,10 +74,14 @@ public class MyWorld {
         this.objectDatabase = new HashMap<>();
         this.engineWorld = new World();
 
+
         this.engineWorld.setGravity(new Vector2(0, 0));
         //this.engineWorld.addListener(new SkipDeadObjects(this));
-        Entity barrier = new Barrier(300, 400, 60, this);
+        barrier = new Barrier(300, 400, 0, this);
         Entity bullet = new Bullet(0, 0, 50, 60, this);
+//// TODO: 6/11/2017 ROTATION PLACES THE BARRIER INCORRECTLY, THE BULLET STILL PASSES THROUGH THE
+/// OBJECT BUT SOME WIERD COLLISION OCCURS WHERE IT PULLS THE OTHER OBJECT ALONG.
+        rect = new ObjRectangle(700, 700, 800, 20, this);
     }
 
     //need a way to add an object (check what kind of object it is, etc.)
@@ -106,6 +113,7 @@ public class MyWorld {
         for (Entity entity : objectDatabase.values()) {
             entity.draw(canvas);
         }
+        rect.draw(canvas);
 //        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
 //        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
 //        System.out.println(ent1.shape.collided(ent2.shape));

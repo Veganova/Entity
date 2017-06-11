@@ -61,7 +61,7 @@ public abstract class Entity implements WorldObject {
 
     @Override
     public void setVelocity(double speed) {
-        this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
+            this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
                 speed * Math.sin(Math.toRadians(this.direction)));
     }
 
@@ -73,6 +73,5 @@ public abstract class Entity implements WorldObject {
         result += "Direction:  " + this.direction + "\n";
         result += "----------------------------\n";
         return result;
-
     }
 }
