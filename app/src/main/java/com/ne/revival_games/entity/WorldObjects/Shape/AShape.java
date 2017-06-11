@@ -12,6 +12,10 @@ import org.dyn4j.geometry.MassType;
 public abstract class AShape implements Shape {
 
     public Body body;
+
+    /**
+    * RADIANS
+     */
     double angle;
 
     AShape() {
@@ -22,6 +26,7 @@ public abstract class AShape implements Shape {
         this.body = new Body();
         body.addFixture(shape, 1.0D, 0.2D, 2.0D);
         body.setMass(MassType.NORMAL);
+
         body.translate(x, y);
         world.engineWorld.addBody(this.body);
         this.angle = 0;

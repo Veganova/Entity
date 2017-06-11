@@ -38,8 +38,8 @@ public abstract class Entity implements WorldObject {
 
     @Override
     public void update(MyWorld world) {
-        this.x = this.shape.getX();
-        this.y = this.shape.getY();
+//        this.x = this.shape.getX();
+//        this.y = this.shape.getY();
         for (Body body: this.shape.body.getInContactBodies(true)) {
             Entity entityInCollision = world.objectDatabase.get(body);
             if (entityInCollision.TYPE.opposite(this.TYPE)) {

@@ -28,6 +28,8 @@ public class ObjRectangle extends AShape {
     @Override
     public void draw(Canvas canvas) {
         //left, top, right, bottom
+        //System.out.println("ROTATION: " + this.angle);
+
         double bottom = this.getY() - 0.5 * this.rect.getHeight();
         double left = this.getX() - 0.5 * this.rect.getWidth();
         double right = this.getX() + 0.5 * this.rect.getWidth();
@@ -36,8 +38,10 @@ public class ObjRectangle extends AShape {
        // RectF rectangle = new RectF((int) left, (int) top, (int) right, (int) bottom);
         Rect rectangle = new Rect((int) left, (int) top, (int) right, (int) bottom);
         canvas.save();
-        canvas.rotate((float)Math.toDegrees(this.rect.getRotation()),
-                (float)this.body.getWorldCenter().x, (float)this.body.getWorldCenter().y);
+
+        this.angle = this.body.getTransform().getRotation();;//this.rect.getRotation();
+        canvas.rotate((float)Math.toDegrees(this.angle),
+                (float)this.getX(), (float)this.getY());
 
         canvas.drawRect(rectangle, new Paint());
         canvas.restore();
@@ -46,15 +50,16 @@ public class ObjRectangle extends AShape {
     }
 
     /**
-     * In degrees (not radians)
+     * In radians (not degrees)
      *
-     * @param degrees above
+     * @param radians above
      */
-    public void rotate(double degrees) {
-        this.angle += degrees;
-        double theta = Math.PI / 180.0 * degrees;
+    public void rotate(double radians) {
+        this.angle += radians;
         //this.rect.rotate(theta);
-        this.rect.rotate(theta, this.getX(), this.getY());
+        //this.body.rotateAboutCenter(theta);
+        this.body.rotate(radians, this.getX(), this.getY());
+        //this.rect.rotate(radians, this.getX(), this.getY());
         //this.body.setTransform();
     }
 }
