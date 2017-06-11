@@ -106,9 +106,9 @@ public class MyWorld {
         for (Entity entity : objectDatabase.values()) {
             entity.draw(canvas);
         }
-        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
-        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
-        System.out.println(ent1.shape.collided(ent2.shape));
+//        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
+//        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
+//        System.out.println(ent1.shape.collided(ent2.shape));
     }
 
 }

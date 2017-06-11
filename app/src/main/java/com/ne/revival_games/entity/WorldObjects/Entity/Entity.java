@@ -38,7 +38,8 @@ public abstract class Entity implements WorldObject {
 
     @Override
     public void update(MyWorld world) {
-
+        this.x = this.shape.getX();
+        this.y = this.shape.getY();
         for (Body body: this.shape.body.getInContactBodies(true)) {
             Entity entityInCollision = world.objectDatabase.get(body);
             if (entityInCollision.TYPE.opposite(this.TYPE)) {
@@ -62,5 +63,16 @@ public abstract class Entity implements WorldObject {
     public void setVelocity(double speed) {
         this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
                 speed * Math.sin(Math.toRadians(this.direction)));
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        result += "Type: " + this.getClass() + "\n";
+        result += "Location: " + this.x + ", " + this.y + "\n";
+        result += "Direction:  " + this.direction + "\n";
+        result += "----------------------------\n";
+        return result;
+
     }
 }

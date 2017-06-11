@@ -11,6 +11,8 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.Transform;
@@ -84,6 +86,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             double canvasX = event.getX() / scaleX;
             double canvasY = event.getY() / scaleY;
+            for (Entity entity :world.objectDatabase.values()) {
+                System.out.println(entity.toString());
+            }
 //            world.circ2.body.translateToOrigin();
 //            world.circ2.body.translate(canvasX - WIDTH/2, -1*(canvasY - HEIGHT/2));
             // System.out.println("X,Y"  + canvasX + ", " + canvasY);
