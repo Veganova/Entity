@@ -76,12 +76,11 @@ public class MyWorld {
 
 
         this.engineWorld.setGravity(new Vector2(0, 0));
-        //this.engineWorld.addListener(new SkipDeadObjects(this));
         barrier = new Barrier(300, 400, 0, this);
         Entity bullet = new Bullet(0, 0, 50, 60, this);
-//// TODO: 6/11/2017 ROTATION PLACES THE BARRIER INCORRECTLY, THE BULLET STILL PASSES THROUGH THE
-/// OBJECT BUT SOME WIERD COLLISION OCCURS WHERE IT PULLS THE OTHER OBJECT ALONG.
         rect = new ObjRectangle(700, 700, 800, 20, this);
+
+        //this.engineWorld.addListener(new SkipDeadObjects(this));
     }
 
     //need a way to add an object (check what kind of object it is, etc.)
@@ -101,6 +100,9 @@ public class MyWorld {
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
         this.engineWorld.update(elapsedTime);
+        for (Entity entity : objectDatabase.values()) {
+            entity.update(this);
+        }
 
     }
 
@@ -135,8 +137,9 @@ class SkipDeadObjects implements CollisionListener {
 
         Entity ent1 = world.objectDatabase.get(body);
         Entity ent2 = world.objectDatabase.get(body1);
-        System.out.println(ent1.getClass() + " " + ent1.health);
-        System.out.println(ent2.getClass() + " " + ent2.health);
+        System.out.println();
+        System.out.println(ent1 + " " + ent1.health);
+        System.out.println(ent2 + " " + ent2.health);
         return (ent1.health <= 0 || ent2.health <= 0);
     }
 
@@ -154,6 +157,6 @@ class SkipDeadObjects implements CollisionListener {
 
     @Override
     public boolean collision(ContactConstraint contactConstraint) {
-        return false;
+        return true;
     }
 }

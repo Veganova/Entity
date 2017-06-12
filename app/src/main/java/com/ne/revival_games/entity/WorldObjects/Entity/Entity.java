@@ -36,10 +36,11 @@ public abstract class Entity implements WorldObject {
         this.invulnerable = invulnerable;
     }
 
+    // damage from speed;
     @Override
     public void update(MyWorld world) {
-//        this.x = this.shape.getX();
-//        this.y = this.shape.getY();
+        this.x = this.shape.getX();
+        this.y = this.shape.getY();
         for (Body body: this.shape.body.getInContactBodies(true)) {
             Entity entityInCollision = world.objectDatabase.get(body);
             if (entityInCollision.TYPE.opposite(this.TYPE)) {
@@ -50,7 +51,7 @@ public abstract class Entity implements WorldObject {
                 System.out.println("Collision in ENTITY.JAVA: " + System.currentTimeMillis());
             }
         }
-        // if anything has collided, reduce health - this can be put in Entity
+         //if anything has collided, reduce health - this can be put in Entity
 
     }
 
