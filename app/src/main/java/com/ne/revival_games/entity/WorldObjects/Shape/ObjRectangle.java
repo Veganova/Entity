@@ -10,57 +10,65 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.collision.Fixture;
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Rectangle;
+import org.dyn4j.geometry.Vector2;
+
+import static android.R.attr.x;
+import static android.R.attr.y;
 
 /**
  * Represents the simple shape rectangle.
  */
 public class ObjRectangle extends AShape {
-    private Rectangle rect;
+    public Rectangle rect;
 
     public ObjRectangle(double x, double y, int w, int l, MyWorld world) {
         rect = new Rectangle(w, l);
         initValues(rect, x, y, world);
     }
 
+    public ObjRectangle(double x, double y, int w, int l, double fixtureangle) {
+        rect = new Rectangle(w, l);
+        initValues(this.rect, x, y, fixtureangle);
+    }
+
+//    //this is a fixture right now
+//    public ObjRectangle(double x, double y, int w, int l, Body newBody) {
+//        rect = new Rectangle(w, l);
+//        newBody.addFixture(rect);
+//    }
 
     @Override
     public void draw(Canvas canvas) {
-        //left, top, right, bottom
-        //System.out.println("ROTATION: " + this.angle);
+        double bottom = this.getY() - 0.5 * this.rect.getHeight() + this.rect.getCenter().y;
+        double left =  this.getX() - 0.5 * this.rect.getWidth() + this.rect.getCenter().x;
+        double right = this.getX() + 0.5 * this.rect.getWidth() + this.rect.getCenter().x;
+        double top = this.getY() + 0.5 * this.rect.getHeight() + this.rect.getCenter().y;
 
-        double bottom = this.getY() - 0.5 * this.rect.getHeight();
-        double left = this.getX() - 0.5 * this.rect.getWidth();
-        double right = this.getX() + 0.5 * this.rect.getWidth();
-        double top = this.getY() + 0.5 * this.rect.getHeight();
-
-       // RectF rectangle = new RectF((int) left, (int) top, (int) right, (int) bottom);
+//       this.angle = this.body.getTransform().getRotation() + this.rect.getRotation();
         Rect rectangle = new Rect((int) left, (int) top, (int) right, (int) bottom);
-        canvas.save();
 
-        this.angle = this.body.getTransform().getRotation();;//this.rect.getRotation();
+        this.angle = this.body.getTransform().getRotation();
+        canvas.save();
+        //ideal order would be rotate, translate
+        ////getCenter is relative to orientation so I need to multiple by like sign or cosign of the angle
+
         canvas.rotate((float)Math.toDegrees(this.angle),
                 (float)this.getX(), (float)this.getY());
 
-        canvas.drawRect(rectangle, new Paint());
-        canvas.restore();
+        canvas.rotate((float)Math.toDegrees(this.rect.getRotation()),
+                (float)(this.getX() + this.rect.getCenter().x), (float)(this.getY() + this.rect.getCenter().y));
 
-        //canvas.drawRoundRect(rectangle, 0, 0, new Paint());
+        canvas.drawRect(rectangle, new Paint());
+
+        canvas.restore();
     }
 
-    /**
-     * In radians (not degrees)
-     *
-     * @param radians above
-     */
-    public void rotate(double radians) {
-        this.angle += radians;
-        //this.rect.rotate(theta);
-        //this.body.rotateAboutCenter(theta);
-        this.body.rotate(radians, this.getX(), this.getY());
-        //this.rect.rotate(radians, this.getX(), this.getY());
-        //this.body.setTransform();
+
+    public Convex getShape(){
+        return this.rect;
     }
 }
 

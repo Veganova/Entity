@@ -16,7 +16,7 @@ public abstract class Projectile extends Entity {
     public Projectile(double x, double y, int r, double direction, double speed,
                       int health, MyWorld world) {
         super(x, y, direction, speed, health, false);
-        shape = new ObjCircle(x, y, r, world);
+        shape = new ObjCircle(x, y, (double) r, world);
         world.objectDatabase.put(this.shape.body, this);
         this.setVelocity(this.speed);
     }

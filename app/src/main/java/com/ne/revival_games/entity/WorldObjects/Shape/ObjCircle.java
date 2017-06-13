@@ -11,6 +11,7 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.AbstractShape;
 import org.dyn4j.geometry.Circle;
+import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
@@ -19,7 +20,7 @@ import org.dyn4j.geometry.Vector2;
  */
 public class ObjCircle extends AShape {
 
-    private Circle circ;
+    private Convex circ;
     /**
      * Constructor for the square object.
      *
@@ -30,6 +31,11 @@ public class ObjCircle extends AShape {
     public ObjCircle(double x, double y, double r, MyWorld world) {
         this.circ = new Circle(r);
         initValues(this.circ, x, y, world);
+    }
+
+    public ObjCircle(double x, double y, double r, double fixtureangle) {
+        this.circ = new Circle(r);
+        initValues(this.circ, x, y, fixtureangle);
     }
 
     @Override
@@ -45,16 +51,14 @@ public class ObjCircle extends AShape {
     public void draw(Canvas canvas, Paint paint) {
         //might have to modify coordinates as needed
         Vector2 coord = this.body.getWorldCenter();
-        canvas.drawCircle((float) coord.x,
-                (float) coord.y,
+        canvas.drawCircle((float) (coord.x + circ.getCenter().x),
+                (float) (coord.y + circ.getCenter().y),
                 (float) this.circ.getRadius(), paint);
     }
 
 
-
-    @Override
-    public void rotate(double degrees) {
-        return;
+    public Convex getShape(){
+        return this.circ;
     }
 
 }

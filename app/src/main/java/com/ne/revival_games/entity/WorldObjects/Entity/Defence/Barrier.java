@@ -24,7 +24,7 @@ public class Barrier extends Entity {
     public Barrier(double x, double y, double angle, MyWorld world) {
         super(x, y, angle, 0, HEALTH, false);
         this.shape = new ObjRectangle(x, y, 200, 30, world);
-        this.shape.rotate(Math.toRadians(angle));
+        this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
     }
 
