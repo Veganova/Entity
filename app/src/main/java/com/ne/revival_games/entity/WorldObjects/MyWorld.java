@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
 import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
@@ -85,15 +86,16 @@ public class MyWorld {
 //        this.engineWorld.addListener(skip);
         barrier = new Barrier(300, 400, 0, this);
         Entity bullet = new Bullet(0, 0, 50, 60, this);
+        Entity turret = new Turret(new Vector2(-200, 100), 30, this);
         rect = new ObjRectangle(700, 700, 800, 20, this);
-        List<AShape> objects = new ArrayList<AShape>();
-        rect2 = new ObjRectangle(50, 0, 100, 20, 0);
-        rect = new ObjRectangle(-10, -10, 10, 10, this);
-        objects.add(rect2);
-        objects.add(new ObjCircle(0, 0, 50, 0));
-        rect2.rotateFixture(Math.PI, new Vector2(0,0));
+//        List<AShape> objects = new ArrayList<AShape>();
+//        rect2 = new ObjRectangle(50, 0, 100, 20, 0);
+//        rect = new ObjRectangle(-10, -10, 10, 10, this);
+//        objects.add(rect2);
+//        objects.add(new ObjCircle(0, 0, 50, 0));
+//        rect2.rotateFixture(2*Math.PI/3, new Vector2(0, 0));
 //        System.out.println("x,y:" + rect2.getShape().getCenter());
-        complex = new ComplexShape(objects, 300, 420, this);
+//        complex = new ComplexShape(objects, 300, 420, this);
 
     }
 
@@ -129,11 +131,12 @@ public class MyWorld {
      * @param canvas the canvas onto which the entities will be drawn
      */
     public void drawObjects(Canvas canvas){
+        //this might draw multiple of the same entities
         for (Entity entity : objectDatabase.values()) {
             entity.draw(canvas);
         }
-        complex.draw(canvas);
-        rect.draw(canvas);
+//        complex.draw(canvas);
+//        rect.draw(canvas);
 //        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
 //        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
 //        System.out.println(ent1.shape.collided(ent2.shape));
