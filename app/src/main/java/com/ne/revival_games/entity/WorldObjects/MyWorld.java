@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
 import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
+import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
+import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
@@ -15,12 +18,14 @@ import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.CollisionAdapter;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,7 +56,8 @@ public class MyWorld {
 
     //List<Entity> entities;
 
-    public ObjRectangle rect;
+    public ObjRectangle rect, rect2;
+    public ComplexShape complex;
     public Entity barrier;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
@@ -76,11 +82,21 @@ public class MyWorld {
 
 
         this.engineWorld.setGravity(new Vector2(0, 0));
+        CollisionListener skip = new CollisionController(this);
+//        this.engineWorld.addListener(skip);
         barrier = new Barrier(300, 400, 0, this);
         Entity bullet = new Bullet(0, 0, 50, 60, this);
+        Entity turret = new Turret(new Vector2(-200, 100), 30, this);
         rect = new ObjRectangle(700, 700, 800, 20, this);
+//        List<AShape> objects = new ArrayList<AShape>();
+//        rect2 = new ObjRectangle(50, 0, 100, 20, 0);
+//        rect = new ObjRectangle(-10, -10, 10, 10, this);
+//        objects.add(rect2);
+//        objects.add(new ObjCircle(0, 0, 50, 0));
+//        rect2.rotateFixture(2*Math.PI/3, new Vector2(0, 0));
+//        System.out.println("x,y:" + rect2.getShape().getCenter());
+//        complex = new ComplexShape(objects, 300, 420, this);
 
-        //this.engineWorld.addListener(new SkipDeadObjects(this));
     }
 
     //need a way to add an object (check what kind of object it is, etc.)
@@ -100,6 +116,7 @@ public class MyWorld {
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
         this.engineWorld.update(elapsedTime);
+
         for (Entity entity : objectDatabase.values()) {
             entity.update(this);
         }
@@ -112,51 +129,15 @@ public class MyWorld {
      * @param canvas the canvas onto which the entities will be drawn
      */
     public void drawObjects(Canvas canvas){
+        //this might draw multiple of the same entities
         for (Entity entity : objectDatabase.values()) {
             entity.draw(canvas);
         }
-        rect.draw(canvas);
+//        complex.draw(canvas);
+//        rect.draw(canvas);
 //        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
 //        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
 //        System.out.println(ent1.shape.collided(ent2.shape));
     }
 
-}
-
-class SkipDeadObjects implements CollisionListener {
-
-    MyWorld world;
-
-    SkipDeadObjects(MyWorld world) {
-        this.world = world;
-    }
-
-    @Override
-    public boolean collision(Body body, BodyFixture bodyFixture,
-                             Body body1, BodyFixture bodyFixture1) {
-
-        Entity ent1 = world.objectDatabase.get(body);
-        Entity ent2 = world.objectDatabase.get(body1);
-        System.out.println();
-        System.out.println(ent1 + " " + ent1.health);
-        System.out.println(ent2 + " " + ent2.health);
-        return (ent1.health <= 0 || ent2.health <= 0);
-    }
-
-    @Override
-    public boolean collision(Body body, BodyFixture bodyFixture, Body body1,
-                             BodyFixture bodyFixture1, Penetration penetration) {
-        return this.collision(body, bodyFixture, body1, bodyFixture1);
-    }
-
-    @Override
-    public boolean collision(Body body, BodyFixture bodyFixture, Body body1,
-                             BodyFixture bodyFixture1, Manifold manifold) {
-        return this.collision(body, bodyFixture, body1, bodyFixture1);
-    }
-
-    @Override
-    public boolean collision(ContactConstraint contactConstraint) {
-        return true;
-    }
 }
