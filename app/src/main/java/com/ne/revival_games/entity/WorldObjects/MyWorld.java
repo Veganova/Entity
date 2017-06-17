@@ -59,6 +59,7 @@ public class MyWorld {
     public ObjRectangle rect, rect2;
     public ComplexShape complex;
     public Entity barrier;
+    public Turret turret;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
@@ -86,8 +87,8 @@ public class MyWorld {
 //        this.engineWorld.addListener(skip);
         barrier = new Barrier(300, 400, 0, this);
         Entity bullet = new Bullet(0, 0, 50, 60, this);
-        Entity turret = new Turret(new Vector2(-200, 100), 30, this);
-        rect = new ObjRectangle(700, 700, 800, 20, this);
+        turret = new Turret(new Vector2(-200, 100), 30, this);
+        rect = new ObjRectangle(700, 700, 20, 20, this);
 //        List<AShape> objects = new ArrayList<AShape>();
 //        rect2 = new ObjRectangle(50, 0, 100, 20, 0);
 //        rect = new ObjRectangle(-10, -10, 10, 10, this);
@@ -115,11 +116,13 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
+        turret.aim(rect.body);
         this.engineWorld.update(elapsedTime);
 
         for (Entity entity : objectDatabase.values()) {
             entity.update(this);
         }
+
 
     }
 
@@ -134,7 +137,7 @@ public class MyWorld {
             entity.draw(canvas);
         }
 //        complex.draw(canvas);
-//        rect.draw(canvas);
+        rect.draw(canvas);
 //        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
 //        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
 //        System.out.println(ent1.shape.collided(ent2.shape));

@@ -22,6 +22,8 @@ public interface Shape {
 
     Convex getShape();
 
+    double getOrientation();
+
     /**
      * In degrees (not radians)
      *

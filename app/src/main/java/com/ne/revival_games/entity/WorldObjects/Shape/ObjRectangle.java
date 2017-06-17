@@ -66,6 +66,10 @@ public class ObjRectangle extends AShape {
         canvas.restore();
     }
 
+    @Override
+    public double getOrientation(){
+        return rect.getRotation();
+    }
 
     public Convex getShape(){
         return this.rect;

@@ -87,11 +87,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             double canvasX = event.getX() / scaleX;
             double canvasY = event.getY() / scaleY;
             for (Entity entity :world.objectDatabase.values()) {
-                System.out.println(entity.toString());
+//                System.out.println(entity.toString());
             }
 //            System.out.println(world.rect.collided(world.barrier.shape));
-            world.complex.body.translateToOrigin();
-            world.complex.body.translate(canvasX - WIDTH/2, -1*(canvasY - HEIGHT/2));
+            world.rect.body.translateToOrigin();
+            world.rect.body.translate(canvasX - WIDTH/2, -1*(canvasY - HEIGHT/2));
             // System.out.println("X,Y"  + canvasX + ", " + canvasY);
             return true;
         }

@@ -83,4 +83,10 @@ public class ComplexShape extends AShape {
         }
         System.out.println("Warning-- this shape is not a complex body");
     }
+
+    @Override
+    public double getOrientation(){
+
+        return 0;
+    }
 }

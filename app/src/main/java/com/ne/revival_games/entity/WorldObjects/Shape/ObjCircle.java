@@ -58,6 +58,12 @@ public class ObjCircle extends AShape {
     }
 
 
+    @Override
+    public double getOrientation(){
+        //TODO: Orientation of the circle doesn't exist
+        return 0;
+    }
+
 
     public Convex getShape(){
         return this.circ;

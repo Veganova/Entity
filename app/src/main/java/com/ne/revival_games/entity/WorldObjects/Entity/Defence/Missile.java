@@ -13,10 +13,10 @@ public class Missile extends Projectile {
 
     public static double SPEED = 30.0;
     public static int HEALTH = 30;
-    public static int RADIUS = 30;
+    public static int RADIUS = 10;
 
     public Missile(double x, double y, double direction, double speed, MyWorld world) {
-        super(x, y, RADIUS, direction, SPEED, HEALTH, world);
+        super(x, y, RADIUS, direction, speed, HEALTH, world);
     }
 
 }
