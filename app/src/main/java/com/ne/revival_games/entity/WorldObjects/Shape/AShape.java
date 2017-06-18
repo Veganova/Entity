@@ -28,7 +28,7 @@ public abstract class AShape implements Shape {
         this.body = new Body();
         this.convex = shape;
         //this part is only relevant to fixtures...
-        body.addFixture(shape, 0.05D, 0.2D, 2.0D);
+        body.addFixture(shape, 0.005D, 0.2D, 2.0D);
         body.setMass(MassType.NORMAL);
 
         body.translate(x, y);

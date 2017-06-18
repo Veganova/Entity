@@ -13,6 +13,7 @@ import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.joint.AngleJoint;
 import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.dynamics.joint.RevoluteJoint;
+import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Vector2;
 
@@ -28,11 +29,11 @@ public class Turret extends Entity{
     public static int MASS = 25;
     public static int HEALTH = 80;
     public static ObjectType TYPE = ObjectType.DEFENCE;
-    private static double reload = 750;
+    private static double reload = 3000;
     private double lastfired = 0;
 
     List<AShape> components = new ArrayList<AShape>();
-    RevoluteJoint joint;
+    WeldJoint joint;
     MyWorld world;
 
     //need to include the angle somehow
@@ -46,7 +47,7 @@ public class Turret extends Entity{
         //make sure relative location placement is correct
         components.add(new ObjRectangle(50+location.x, location.y , 100, 20, world));
         components.add(new ObjCircle(location.x, location.y, 50.0, world));
-        joint = new RevoluteJoint(components.get(0).body, components.get(1).body,
+        joint = new WeldJoint(components.get(0).body, components.get(1).body,
         components.get(1).body.getWorldCenter());
         world.engineWorld.addJoint(joint);
         this.shape = new ComplexShape(components);
@@ -97,26 +98,25 @@ public class Turret extends Entity{
 
         //better find a shortest distance algorithm
         if (Math.abs(angleDifference) <= 0.02){
-            System.out.println("We did it!");
-            joint.setMotorSpeed(0);
-            joint.setMotorEnabled(false);
             fire(angleTo);
-//            joint.getBody1().clearTorque();
-//            joint.getBody1().clearForce();
-//            joint.getBody2().clearTorque();
-//            joint.getBody2().clearForce();
         }
         else {
-            joint.setMotorEnabled(true);
+            double increment = 0.075;
+            if(Math.abs(angleDifference) <= 0.075){
+                increment = 0.05;
+            }
+            if(Math.abs(angleDifference) <= 0.05){
+                increment = 0.03;
+            }
+            if(Math.abs(angleDifference)<= 0.03){
+                increment = 0.03;
+            }
             if (counterclockDist <= Math.PI){
-                joint.setMotorEnabled(true);
-                joint.setMotorSpeed(50000000);
-                joint.setMaximumMotorTorque(50000000);
+
+                components.get(0).body.rotate(increment, center.x, center.y);
             }
             else{
-                joint.setMotorEnabled(true);
-                joint.setMotorSpeed(-50000000);
-                joint.setMaximumMotorTorque(50000000);
+                components.get(0).body.rotate(-1*increment, center.x, center.y);
             }
         }
 
