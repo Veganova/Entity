@@ -38,7 +38,7 @@ public class MyWorld {
     public HashMap<Body, Entity> objectDatabase;
 
     /** The scale 45 pixels per meter */
-    public static final double SCALE = 1.0;
+    public static final double SCALE = 50.0;
 
     /** The conversion factor from nano to base */
     public static final double NANO_TO_BASE = 1.0e9;
@@ -85,10 +85,10 @@ public class MyWorld {
         this.engineWorld.setGravity(new Vector2(0, 0));
         CollisionListener skip = new CollisionController(this);
 //        this.engineWorld.addListener(skip);
-        barrier = new Barrier(300, 400, 0, this);
+//        barrier = new Barrier(300, 400, 0, this);
         Entity bullet = new Bullet(0, 0, 50, 60, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
-        rect = new ObjRectangle(700, 700, 20, 20, this);
+        rect = new ObjRectangle(300, 300, 20, 20, this);
 //        List<AShape> objects = new ArrayList<AShape>();
 //        rect2 = new ObjRectangle(50, 0, 100, 20, 0);
 //        rect = new ObjRectangle(-10, -10, 10, 10, this);
@@ -136,7 +136,6 @@ public class MyWorld {
         for (Entity entity : objectDatabase.values()) {
             entity.draw(canvas);
         }
-//        complex.draw(canvas);
         rect.draw(canvas);
 //        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
 //        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];

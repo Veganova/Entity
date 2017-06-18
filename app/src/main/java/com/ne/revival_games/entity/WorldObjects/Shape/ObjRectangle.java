@@ -24,12 +24,17 @@ import static android.R.attr.y;
 public class ObjRectangle extends AShape {
     public Rectangle rect;
 
-    public ObjRectangle(double x, double y, int w, int l, MyWorld world) {
+    public ObjRectangle(double x, double y, double w, double l, MyWorld world) {
+        w = w/MyWorld.SCALE;
+        l = l/MyWorld.SCALE;
         rect = new Rectangle(w, l);
         initValues(rect, x, y, world);
     }
 
-    public ObjRectangle(double x, double y, int w, int l, double fixtureangle) {
+    public ObjRectangle(double x, double y, double w, double l, double fixtureangle) {
+        w = w/MyWorld.SCALE;
+        l = l/MyWorld.SCALE;
+
         rect = new Rectangle(w, l);
         initValues(this.rect, x, y, fixtureangle);
     }
@@ -48,7 +53,7 @@ public class ObjRectangle extends AShape {
         double top = this.getY() + 0.5 * this.rect.getHeight() + this.rect.getCenter().y;
 
 //       this.angle = this.body.getTransform().getRotation() + this.rect.getRotation();
-        Rect rectangle = new Rect((int) left, (int) top, (int) right, (int) bottom);
+        RectF rectangle = new RectF((float) left, (float) top, (float) right, (float) bottom);
 
         this.angle = this.body.getTransform().getRotation();
         canvas.save();

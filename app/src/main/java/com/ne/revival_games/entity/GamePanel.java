@@ -85,13 +85,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             double canvasX = event.getX() / scaleX;
-            double canvasY = event.getY() / scaleY;
+            double canvasY = event.getY()  / scaleY;
             for (Entity entity :world.objectDatabase.values()) {
 //                System.out.println(entity.toString());
             }
 //            System.out.println(world.rect.collided(world.barrier.shape));
             world.rect.body.translateToOrigin();
-            world.rect.body.translate(canvasX - WIDTH/2, -1*(canvasY - HEIGHT/2));
+            world.rect.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE, -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
             // System.out.println("X,Y"  + canvasX + ", " + canvasY);
             return true;
         }
@@ -108,7 +108,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         //seems a bit inefficient
-        scaleX = getWidth() / WIDTH;
+        scaleX = getWidth()  / WIDTH;
         scaleY = getHeight() / HEIGHT;
 
         //draw game objects and background
@@ -117,6 +117,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             //scaling does funky stuff to length / width so be careful LMAO
             canvas.scale(scaleX, -scaleY);
             canvas.translate(WIDTH / 2, -HEIGHT / 2);
+            canvas.scale((float)MyWorld.SCALE, (float) MyWorld.SCALE);
 
             bg.draw(canvas);
             world.drawObjects(canvas);

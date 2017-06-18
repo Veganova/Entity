@@ -25,6 +25,8 @@ public abstract class AShape implements Shape {
     }
 
     protected void initValues(Convex shape, double x, double y, MyWorld world) {
+        x = x/MyWorld.SCALE;
+        y = y/MyWorld.SCALE;
         this.body = new Body();
         this.convex = shape;
         //this part is only relevant to fixtures...
@@ -37,6 +39,8 @@ public abstract class AShape implements Shape {
     }
 
     protected void initValues(Convex shape, double x, double y, double fixtureangle) {
+        x = x/MyWorld.SCALE;
+        y = y/MyWorld.SCALE;
         this.convex = shape;
         this.angle = Math.toRadians(fixtureangle);
         this.rotateFixture(this.angle, new Vector2(0,0));
@@ -46,6 +50,8 @@ public abstract class AShape implements Shape {
 
 
     protected void initValues(Body body, double x, double y, MyWorld world) {
+        x = x/MyWorld.SCALE;
+        y = y/MyWorld.SCALE;
         this.body = body;
         body.setMass(MassType.NORMAL);
         body.translate(x, y);

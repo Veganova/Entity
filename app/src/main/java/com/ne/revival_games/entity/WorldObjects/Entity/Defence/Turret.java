@@ -57,7 +57,7 @@ public class Turret extends Entity{
 
     public void aim(Body body){
         Vector2 center = components.get(1).body.getWorldCenter();
-        Vector2 axispoint = new Vector2(center.x + 50, center.y);
+        Vector2 axispoint = new Vector2(center.x + 50/MyWorld.SCALE, center.y);
         Vector2 enemypoint = body.getWorldCenter();
         System.out.println("");
         double angle = (Math.PI*2 + components.get(0).getOrientation()
@@ -101,14 +101,17 @@ public class Turret extends Entity{
             fire(angleTo);
         }
         else {
-            double increment = 0.075;
-            if(Math.abs(angleDifference) <= 0.075){
+            double increment = 0.15;
+            if(Math.abs(angleDifference) <= 0.15){
+                increment = 0.09;
+            }
+            if(Math.abs(angleDifference) <= 0.09){
+                increment = 0.07;
+            }
+            if(Math.abs(angleDifference)<= 0.07){
                 increment = 0.05;
             }
-            if(Math.abs(angleDifference) <= 0.05){
-                increment = 0.03;
-            }
-            if(Math.abs(angleDifference)<= 0.03){
+            if(Math.abs(angleDifference)<= 0.05){
                 increment = 0.03;
             }
             if (counterclockDist <= Math.PI){
@@ -137,14 +140,14 @@ public class Turret extends Entity{
         if(System.currentTimeMillis() - lastfired <= reload ){
             return;
         }
-        int magnitude = 120;
+        double magnitude = 100;
         lastfired = System.currentTimeMillis();
         double x, y, direction, speed; //world
         //magnitude of 90 away
-        x = magnitude * Math.cos(angle) + components.get(1).body.getWorldCenter().x;
-        y = magnitude * Math.sin(angle) + components.get(1).body.getWorldCenter().y;
+        x = magnitude * Math.cos(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().x;
+        y = magnitude * Math.sin(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
-        new Missile(x, y, angle, 999999999, this.world);
+        new Missile(x, y, angle, 40, this.world);
     }
 
 }

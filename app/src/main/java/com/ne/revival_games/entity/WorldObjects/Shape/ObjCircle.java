@@ -29,11 +29,13 @@ public class ObjCircle extends AShape {
      * @param r  The radius
      */
     public ObjCircle(double x, double y, double r, MyWorld world) {
+        r = r/MyWorld.SCALE;
         this.circ = new Circle(r);
         initValues(this.circ, x, y, world);
     }
 
     public ObjCircle(double x, double y, double r, double fixtureangle) {
+        r = r/MyWorld.SCALE;
         this.circ = new Circle(r);
         initValues(this.circ, x, y, fixtureangle);
     }
