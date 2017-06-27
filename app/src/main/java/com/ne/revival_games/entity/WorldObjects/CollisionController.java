@@ -24,11 +24,29 @@ class CollisionController extends CollisionAdapter {
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
-//        Entity ent1 = world.objectDatabase.get(body1);
-//        Entity ent2 = world.objectDatabase.get(body2);
-//        System.out.println(ent1.getClass() + " " + ent1.health);
-//        System.out.println(ent2.getClass() + " " + ent2.health);
-//        return ! ((ent1.health <= 0) || (ent2.health <=0));
-        return true;
+        Entity ent1 = world.objectDatabase.get(body1);
+        Entity ent2 = world.objectDatabase.get(body2);
+        boolean continueContact = true;
+
+        if(ent1.health > 0 && ent2.health > 0) {
+            double damage1 = ent1.health;
+            double damage2 = ent2.health;
+
+            //if either entity wants to continue the contact
+            continueContact = ent1.onCollision(ent2, damage2);
+            continueContact = ent2.onCollision(ent1, damage1) || continueContact;
+        }
+
+        if(!continueContact){
+            if(ent1.health <= 0){
+                world.bodiestodelete.add(ent1.shape.body);
+            }
+            if(ent2.health <= 0){
+                world.bodiestodelete.add(ent2.shape.body);
+            }
+        }
+
+        return continueContact;
+        //ent1.health > 0 && ent2.health > 0
     }
 }

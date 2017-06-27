@@ -13,10 +13,10 @@ import org.dyn4j.dynamics.Body;
  */
 public abstract class Entity implements WorldObject {
 
-    public static int COST;
-    public static int MASS;
-    public static int HEALTH;
-    public static ObjectType TYPE;
+    public  int COST;
+    public int MASS;
+    public  int HEALTH;
+    public ObjectType TYPE;
 
     double x;
     double y;
@@ -24,6 +24,7 @@ public abstract class Entity implements WorldObject {
     protected double direction;
     protected double speed;
     public int health;
+    public boolean invisible = false;
     boolean invulnerable;
 
     public Entity(double x, double y, double direction,
@@ -75,4 +76,13 @@ public abstract class Entity implements WorldObject {
         result += "----------------------------\n";
         return result;
     }
+
+    @Override
+    public void onDeath(){};
+
+    @Override
+    public boolean onCollision(Entity contact, double damage){
+        return true;
+    };
+
 }

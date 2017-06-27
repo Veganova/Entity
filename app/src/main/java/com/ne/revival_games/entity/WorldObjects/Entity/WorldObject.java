@@ -23,4 +23,14 @@ public interface WorldObject {
 
     void setVelocity(double speed);
 
+    void onDeath();
+
+    /**
+     *
+     * @param contact
+     * @param damage
+     * @return true if collision should continue, false if collision should end
+     */
+    boolean onCollision(Entity contact, double damage);
+
 }

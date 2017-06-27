@@ -22,6 +22,7 @@ import org.dyn4j.dynamics.CollisionAdapter;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactConstraint;
+import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
@@ -36,6 +37,7 @@ import java.util.List;
 public class MyWorld {
 
     public HashMap<Body, Entity> objectDatabase;
+    public ArrayList<Body> bodiestodelete;
 
     /** The scale 45 pixels per meter */
     public static final double SCALE = 50.0;
@@ -56,7 +58,7 @@ public class MyWorld {
 
     //List<Entity> entities;
 
-    public ObjRectangle rect, rect2;
+    public Barrier rect;
     public ComplexShape complex;
     public Entity barrier;
     public Turret turret;
@@ -79,16 +81,21 @@ public class MyWorld {
     protected void initializeWorld() {
         // create the engineWorld
         this.objectDatabase = new HashMap<>();
+        this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();
 
 
         this.engineWorld.setGravity(new Vector2(0, 0));
         CollisionListener skip = new CollisionController(this);
-//        this.engineWorld.addListener(skip);
+        ContactListener contact = new ContactController(this);
+        this.engineWorld.addListener(skip);
+        this.engineWorld.addListener(contact);
+
 //        barrier = new Barrier(300, 400, 0, this);
-        Entity bullet = new Bullet(0, 0, 50, 60, this);
+//        Entity bullet = new Bullet(0, 0, 50, 60, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
-        rect = new ObjRectangle(300, 300, 20, 20, this);
+        rect = new Barrier(300, 300, 0, this);
+
 //        List<AShape> objects = new ArrayList<AShape>();
 //        rect2 = new ObjRectangle(50, 0, 100, 20, 0);
 //        rect = new ObjRectangle(-10, -10, 10, 10, this);
@@ -116,13 +123,19 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
-        turret.aim(rect.body);
+        turret.aim(rect.shape.body);
         this.engineWorld.update(elapsedTime);
 
-        for (Entity entity : objectDatabase.values()) {
-            entity.update(this);
+        for(Body body: bodiestodelete){
+            objectDatabase.get(body).onDeath();
+            objectDatabase.remove(body);
+            engineWorld.removeBody(body);
+            bodiestodelete.remove(body);
         }
 
+        for (Entity entity : objectDatabase.values()) {
+//            entity.update(this);
+        }
 
     }
 
@@ -134,9 +147,9 @@ public class MyWorld {
     public void drawObjects(Canvas canvas){
         //this might draw multiple of the same entities
         for (Entity entity : objectDatabase.values()) {
+            if(!entity.invisible)
             entity.draw(canvas);
         }
-        rect.draw(canvas);
 //        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
 //        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
 //        System.out.println(ent1.shape.collided(ent2.shape));
