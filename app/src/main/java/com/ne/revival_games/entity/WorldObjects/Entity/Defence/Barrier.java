@@ -30,7 +30,6 @@ public class Barrier extends Entity {
 
     @Override
     public boolean onCollision(Entity contact, double damage){
-        System.out.println("BARRIER");
         if(contact.TYPE == ObjectType.DEFENCE){
             this.health -= damage;
             if(this.health <= 0){

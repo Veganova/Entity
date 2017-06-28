@@ -29,10 +29,12 @@ public abstract class AShape implements Shape {
         y = y/MyWorld.SCALE;
         this.body = new Body();
         this.convex = shape;
-        //this part is only relevant to fixtures...
+        this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
+
         body.addFixture(shape, 0.5D, 0.2D, 2.0D);
         body.setMass(MassType.NORMAL);
-
+        System.out.println(x + " "  + y);
+        body.translateToOrigin();
         body.translate(x, y);
         world.engineWorld.addBody(this.body);
         this.angle = 0;
@@ -44,7 +46,8 @@ public abstract class AShape implements Shape {
         this.convex = shape;
         this.angle = Math.toRadians(fixtureangle);
         this.rotateFixture(this.angle, new Vector2(0,0));
-        this.translateFixture(x ,y);
+//        this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
+        this.translateFixture(x, y);
     }
 
 
@@ -57,6 +60,7 @@ public abstract class AShape implements Shape {
         body.translate(x, y);
         this.angle = 0;
         world.engineWorld.addBody(this.body);
+        System.out.println(this.body.getWorldCenter());
     }
 
 

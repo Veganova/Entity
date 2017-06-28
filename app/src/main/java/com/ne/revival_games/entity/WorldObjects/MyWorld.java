@@ -13,6 +13,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
@@ -24,8 +25,10 @@ import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.geometry.Rectangle;
+import org.dyn4j.geometry.Triangle;
 import org.dyn4j.geometry.Vector2;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +41,7 @@ public class MyWorld {
 
     public HashMap<Body, Entity> objectDatabase;
     public ArrayList<Body> bodiestodelete;
+    public ArrayList<double []> coords;
 
     /** The scale 45 pixels per meter */
     public static final double SCALE = 50.0;
@@ -58,10 +62,12 @@ public class MyWorld {
 
     //List<Entity> entities;
 
-    public Barrier rect;
-    public ComplexShape complex;
+    public ObjRectangle rect;
+    public ObjTriangle tri;
+    public ObjCircle circ;
     public Entity barrier;
     public Turret turret;
+    public ComplexShape complex;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
@@ -86,25 +92,23 @@ public class MyWorld {
 
 
         this.engineWorld.setGravity(new Vector2(0, 0));
-        CollisionListener skip = new CollisionController(this);
-        ContactListener contact = new ContactController(this);
-        this.engineWorld.addListener(skip);
-        this.engineWorld.addListener(contact);
+//        CollisionListener skip = new CollisionController(this);
+//        ContactListener contact = new ContactController(this);
+//        this.engineWorld.addListener(skip);
+//        this.engineWorld.addListener(contact);
 
 //        barrier = new Barrier(300, 400, 0, this);
 //        Entity bullet = new Bullet(0, 0, 50, 60, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
-        rect = new Barrier(300, 300, 0, this);
+//        rect = new Barrier(300, 300, 0, this);
 
-//        List<AShape> objects = new ArrayList<AShape>();
-//        rect2 = new ObjRectangle(50, 0, 100, 20, 0);
-//        rect = new ObjRectangle(-10, -10, 10, 10, this);
-//        objects.add(rect2);
+        circ = new ObjCircle(0, 150, 10, this);
+        coords = new ArrayList<double[]>();
+        List<AShape> objects = new ArrayList<AShape>();
+        double [] points = {0, 100, -100, -100, 100, -100};
+        tri = new ObjTriangle(150, 150, points, this);
 //        objects.add(new ObjCircle(0, 0, 50, 0));
-//        rect2.rotateFixture(2*Math.PI/3, new Vector2(0, 0));
-//        System.out.println("x,y:" + rect2.getShape().getCenter());
-//        complex = new ComplexShape(objects, 300, 420, this);
-
+//        testlocation(-500, 500, -500, 500, 10, tri);
     }
 
     //need a way to add an object (check what kind of object it is, etc.)
@@ -123,7 +127,7 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
-        turret.aim(rect.shape.body);
+        turret.aim(tri.body);
         this.engineWorld.update(elapsedTime);
 
         for(Body body: bodiestodelete){
@@ -150,9 +154,31 @@ public class MyWorld {
             if(!entity.invisible)
             entity.draw(canvas);
         }
-//        Entity ent1 = (Entity)objectDatabase.values().toArray()[0];
-//        Entity ent2 = (Entity)objectDatabase.values().toArray()[1];
-//        System.out.println(ent1.shape.collided(ent2.shape));
+        tri.draw(canvas);
+        circ.draw(canvas);
+
+        Paint pent = new Paint();
+        pent.setColor(Color.RED);
+        for(double [] kek : coords){
+            canvas.drawCircle((float) kek[0], (float) kek[1], (float) (5/SCALE), pent);
+        }
+
     }
 
+    public void testlocation(double x1, double x2, double y1, double y2, double grain, AShape shape){
+        x1 = x1/SCALE;
+        x2 = x2/SCALE;
+        y1 = y1/SCALE;
+        y2 = y2/SCALE;
+        grain = grain/SCALE;
+        for(double x=x1; x<x2; x+=grain){
+            for(double y=y1; y<y2; y+=grain){
+                if(shape.body.contains(new Vector2(x,y))){
+                    double [] hi = {x, y};
+                    coords.add(hi);
+                }
+            }
+        }
+    }
 }
+

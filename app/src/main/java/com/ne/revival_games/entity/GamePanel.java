@@ -90,8 +90,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 //                System.out.println(entity.toString());
             }
 //            System.out.println(world.rect.collided(world.barrier.shape));
-            world.rect.shape.body.translateToOrigin();
-            world.rect.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE, -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
+            world.circ.body.translateToOrigin();
+            world.circ.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE, -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
             // System.out.println("X,Y"  + canvasX + ", " + canvasY);
             return true;
         }
@@ -115,12 +115,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas != null) {
             final int savedState = canvas.save();
             //scaling does funky stuff to length / width so be careful LMAO
-            canvas.scale(scaleX, -scaleY);
+           canvas.scale(scaleX, -scaleY);
             canvas.translate(WIDTH / 2, -HEIGHT / 2);
             canvas.scale((float)MyWorld.SCALE, (float) MyWorld.SCALE);
 
+
             bg.draw(canvas);
             world.drawObjects(canvas);
+
             canvas.restoreToCount(savedState);
         }
     }

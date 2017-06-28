@@ -45,7 +45,7 @@ public class Turret extends Entity{
 
     public void initializeTurret(Vector2 location, MyWorld world){
         //make sure relative location placement is correct
-        components.add(new ObjRectangle(50+location.x, location.y , 100, 20, world));
+        components.add(new ObjRectangle(50+location.x, location.y, 100, 20, world));
         components.add(new ObjCircle(location.x, location.y, 50.0, world));
         joint = new WeldJoint(components.get(0).body, components.get(1).body,
         components.get(1).body.getWorldCenter());
@@ -130,11 +130,6 @@ public class Turret extends Entity{
         return Math.sqrt(Math.pow(point1.x-point2.x, 2) + Math.pow(point1.y-point2.y, 2));
     }
 
-    public double calcMotorForce(double angleTo, double angle){
-        double motorSpeed = 0;
-
-        return motorSpeed;
-    }
 
     public void fire(double angle){
         if(System.currentTimeMillis() - lastfired <= reload ){
@@ -147,7 +142,11 @@ public class Turret extends Entity{
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
-        new Missile(x, y, angle, 40, this.world);
+        new Missile(x, y, angle, 30, this.world);
+    }
+
+    public boolean inContact(Body contact){
+        return components.get(0).body.isInContact(contact) || components.get(1).body.isInContact(contact);
     }
 
 }

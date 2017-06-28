@@ -44,19 +44,9 @@ public class ObjCircle extends AShape {
     public void draw(Canvas canvas) {
         //might have to modify coordinates as needed
         Vector2 coord = this.body.getWorldCenter();
-        canvas.drawCircle((float) coord.x,
-                        (float) coord.y,
+        canvas.drawCircle((float) (coord.x + this.circ.getCenter().x - this.body.getLocalCenter().x),
+                        (float) (coord.y + this.circ.getCenter().y - this.body.getLocalCenter().y),
                         (float) this.circ.getRadius(), new Paint());
-    }
-
-
-    public void draw(Canvas canvas, Paint paint) {
-        //might have to modify coordinates as needed
-        Vector2 coord = this.body.getWorldCenter();
-
-        canvas.drawCircle((float) (coord.x + circ.getCenter().x),
-                (float) (coord.y + circ.getCenter().y),
-                (float) this.circ.getRadius(), paint);
     }
 
 

@@ -47,11 +47,10 @@ public class ObjRectangle extends AShape {
 
     @Override
     public void draw(Canvas canvas) {
-        double bottom = this.getY() - 0.5 * this.rect.getHeight() + this.rect.getCenter().y;
-        double left =  this.getX() - 0.5 * this.rect.getWidth() + this.rect.getCenter().x;
-        double right = this.getX() + 0.5 * this.rect.getWidth() + this.rect.getCenter().x;
-        double top = this.getY() + 0.5 * this.rect.getHeight() + this.rect.getCenter().y;
-
+        double bottom = this.getY() - 0.5 * this.rect.getHeight() + this.rect.getCenter().y - this.body.getLocalCenter().y;
+        double left =  this.getX() - 0.5 * this.rect.getWidth() + this.rect.getCenter().x - this.body.getLocalCenter().x;
+        double right = this.getX() + 0.5 * this.rect.getWidth() + this.rect.getCenter().x - this.body.getLocalCenter().x;
+        double top = this.getY() + 0.5 * this.rect.getHeight() + this.rect.getCenter().y - this.body.getLocalCenter().y;
 //       this.angle = this.body.getTransform().getRotation() + this.rect.getRotation();
         RectF rectangle = new RectF((float) left, (float) top, (float) right, (float) bottom);
 
