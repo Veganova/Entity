@@ -1,5 +1,7 @@
-package com.ne.revival_games.entity.WorldObjects.Entity;
+package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
@@ -14,7 +16,7 @@ import java.util.List;
  * Created by vishn on 6/29/2017.
  */
 
-public class Nexus extends Entity{
+public class Nexus extends Entity {
     public static int HEALTH;
     public static int MASS;
     public static int COST;

@@ -1,7 +1,9 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
+import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
@@ -24,7 +26,7 @@ import java.util.List;
  * Created by vishn on 6/11/2017.
  */
 
-public class Turret extends Entity{
+public class Turret extends Entity implements Aimable {
     public static int COST = 200;
     public static int MASS = 25;
     public static int HEALTH = 80;
@@ -32,9 +34,11 @@ public class Turret extends Entity{
     private static double reload = 3000;
     private double lastfired = 0;
 
-    List<AShape> components = new ArrayList<AShape>();
-    WeldJoint joint;
-    MyWorld world;
+    private List<AShape> components = new ArrayList<AShape>();
+    private WeldJoint joint;
+    private MyWorld world;
+    private List<Barrel> bullets = new ArrayList<>();
+    private AShape center;
 
     //need to include the angle somehow
     public Turret(Vector2 location, double angle, MyWorld world){
@@ -51,10 +55,13 @@ public class Turret extends Entity{
         components.get(1).body.getWorldCenter());
         world.engineWorld.addJoint(joint);
         this.shape = new ComplexShape(components);
+
+        // TODO: 6/29/2017 shouldnt this be done in the shape class:
         world.objectDatabase.put(components.get(0).body, this);
         world.objectDatabase.put(components.get(1).body, this);
     }
 
+    @Override
     public void aim(Body body){
         Vector2 center = components.get(1).body.getWorldCenter();
         Vector2 axispoint = new Vector2(center.x + 50/MyWorld.SCALE, center.y);
@@ -64,9 +71,9 @@ public class Turret extends Entity{
                 + this.components.get(0).body.getTransform().getRotation()) % (Math.PI * 2);
 
         double getSign = (enemypoint.y - center.y);
-        double a = getDistance(center, axispoint);
-        double b = getDistance(center, enemypoint);
-        double c = getDistance(axispoint, enemypoint);
+        double a = Util.getDistance(center, axispoint);
+        double b = Util.getDistance(center, enemypoint);
+        double c = Util.getDistance(axispoint, enemypoint);
         double angleTo;
 
         //should break on 180 degrees but who knows?
@@ -126,18 +133,15 @@ public class Turret extends Entity{
 
     }
 
-    public double getDistance(Vector2 point1, Vector2 point2){
-        return Math.sqrt(Math.pow(point1.x-point2.x, 2) + Math.pow(point1.y-point2.y, 2));
-    }
 
-
+    @Override
     public void fire(double angle){
         if(System.currentTimeMillis() - lastfired <= reload ){
             return;
         }
         double magnitude = 100;
         lastfired = System.currentTimeMillis();
-        double x, y, direction, speed; //world
+        double x, y;
         //magnitude of 90 away
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().y;
