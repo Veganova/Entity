@@ -4,14 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Triangle;
 import org.dyn4j.geometry.Vector2;
-
-import java.util.List;
 
 /**
  * Created by vishn on 6/27/2017.
@@ -27,7 +24,17 @@ public class ObjTriangle extends AShape {
 
         triangle = new Triangle(new Vector2(points[0], points[1]),
                 new Vector2(points[2], points[3]), new Vector2(points[4], points[5]));
-        initValues(triangle, x, y, world);
+        initValues(triangle, x, y, DEFAULT_DENSITY, world);
+    }
+
+    public ObjTriangle(double x, double y, double [] points, double density, MyWorld world){
+        for(int z=0; z<points.length; z++){
+            points[z] = points[z]/MyWorld.SCALE;
+        }
+
+        triangle = new Triangle(new Vector2(points[0], points[1]),
+                new Vector2(points[2], points[3]), new Vector2(points[4], points[5]));
+        initValues(triangle, x, y, density, world);
     }
 
     public ObjTriangle(double x, double y, double [] points, double fixtureangle){

@@ -1,22 +1,12 @@
 package com.ne.revival_games.entity.WorldObjects.Shape;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
-import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.collision.Fixture;
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Convex;
-import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Rectangle;
-import org.dyn4j.geometry.Vector2;
-
-import static android.R.attr.x;
-import static android.R.attr.y;
 
 /**
  * Represents the simple shape rectangle.
@@ -28,8 +18,16 @@ public class ObjRectangle extends AShape {
         w = w/MyWorld.SCALE;
         l = l/MyWorld.SCALE;
         rect = new Rectangle(w, l);
-        initValues(rect, x, y, world);
+        initValues(rect, x, y, DEFAULT_DENSITY, world);
     }
+
+    public ObjRectangle(double x, double y, double w, double l, double density, MyWorld world) {
+        w = w/MyWorld.SCALE;
+        l = l/MyWorld.SCALE;
+        rect = new Rectangle(w, l);
+        initValues(rect, x, y, density, world);
+    }
+
 
     public ObjRectangle(double x, double y, double w, double l, double fixtureangle) {
         w = w/MyWorld.SCALE;

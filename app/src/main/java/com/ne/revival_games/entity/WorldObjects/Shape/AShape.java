@@ -17,6 +17,7 @@ import org.dyn4j.geometry.Vector2;
 public abstract class AShape implements Shape {
 
     private static final float STROKE_WIDTH = 0.1f;
+    public static final double DEFAULT_DENSITY = 0.5D;
     public Body body;
 
     /**
@@ -30,14 +31,14 @@ public abstract class AShape implements Shape {
         this.paint = new Paint();
     }
 
-    protected void initValues(Convex shape, double x, double y, MyWorld world) {
+    protected void initValues(Convex shape, double x, double y, double density, MyWorld world) {
         x = x/MyWorld.SCALE;
         y = y/MyWorld.SCALE;
         this.body = new Body();
         this.convex = shape;
         this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
 
-        body.addFixture(shape, 0.5D, 0.2D, 2.0D);
+        body.addFixture(shape, density, 0.2D, 2.0D);
         body.setMass(MassType.NORMAL);
         System.out.println(x + " "  + y);
         body.translateToOrigin();

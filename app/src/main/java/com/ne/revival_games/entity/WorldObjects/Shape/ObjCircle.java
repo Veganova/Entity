@@ -1,18 +1,11 @@
 package com.ne.revival_games.entity.WorldObjects.Shape;
 
-import android.content.Entity;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 
-import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.AbstractShape;
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Convex;
-import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -31,7 +24,13 @@ public class ObjCircle extends AShape {
     public ObjCircle(double x, double y, double r, MyWorld world) {
         r = r/MyWorld.SCALE;
         this.circ = new Circle(r);
-        initValues(this.circ, x, y, world);
+        initValues(this.circ, x, y, DEFAULT_DENSITY, world);
+    }
+
+    public ObjCircle(double x, double y, double r, double density, MyWorld world) {
+        r = r/MyWorld.SCALE;
+        this.circ = new Circle(r);
+        initValues(this.circ, x, y, density, world);
     }
 
     public ObjCircle(double x, double y, double r, double fixtureangle) {
