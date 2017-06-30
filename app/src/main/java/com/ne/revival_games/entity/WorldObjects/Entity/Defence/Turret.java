@@ -34,10 +34,9 @@ public class Turret extends Entity implements Aimable {
     private static double reload = 3000;
     private double lastfired = 0;
 
-    private List<AShape> components = new ArrayList<AShape>();
     private WeldJoint joint;
     private MyWorld world;
-    private List<Barrel> bullets = new ArrayList<>();
+    private List<Barrel> barrels = new ArrayList<>();
     private AShape center;
 
     //need to include the angle somehow
@@ -49,26 +48,37 @@ public class Turret extends Entity implements Aimable {
 
     public void initializeTurret(Vector2 location, MyWorld world){
         //make sure relative location placement is correct
-        components.add(new ObjRectangle(50+location.x, location.y, 100, 20, world));
-        components.add(new ObjCircle(location.x, location.y, 50.0, world));
+        this.barrels.add(new Barrel(Barrel.BarrelType.SINGLE, location, world, 1));
+       // this.barrels.add(new Barrel(Barrel.BarrelType.SINGLE, location, world));
+
+
+        this.center = new ObjCircle(location.x, location.y, 50.0, world);
+
+        List<AShape> components = new ArrayList<AShape>();
+        components.add(barrels.get(0).shape);
+        components.add(this.center);
+
+
+
         joint = new WeldJoint(components.get(0).body, components.get(1).body,
-        components.get(1).body.getWorldCenter());
+                                components.get(1).body.getWorldCenter());
+
         world.engineWorld.addJoint(joint);
         this.shape = new ComplexShape(components);
 
-        // TODO: 6/29/2017 shouldnt this be done in the shape class:
+        // TODO: 6/29/2017 can this be done in the shape class:
         world.objectDatabase.put(components.get(0).body, this);
         world.objectDatabase.put(components.get(1).body, this);
     }
 
     @Override
     public void aim(Body body){
-        Vector2 center = components.get(1).body.getWorldCenter();
+        Vector2 center = this.center.body.getWorldCenter();
         Vector2 axispoint = new Vector2(center.x + 50/MyWorld.SCALE, center.y);
         Vector2 enemypoint = body.getWorldCenter();
         System.out.println("");
-        double angle = (Math.PI*2 + components.get(0).getOrientation()
-                + this.components.get(0).body.getTransform().getRotation()) % (Math.PI * 2);
+        double angle = (Math.PI*2 + this.barrels.get(0).shape.getOrientation()
+                + this.barrels.get(0).shape.body.getTransform().getRotation()) % (Math.PI * 2);
 
         double getSign = (enemypoint.y - center.y);
         double a = Util.getDistance(center, axispoint);
@@ -123,10 +133,10 @@ public class Turret extends Entity implements Aimable {
             }
             if (counterclockDist <= Math.PI){
 
-                components.get(0).body.rotate(increment, center.x, center.y);
+                this.barrels.get(0).shape.body.rotate(increment, center.x, center.y);
             }
             else{
-                components.get(0).body.rotate(-1*increment, center.x, center.y);
+                this.barrels.get(0).shape.body.rotate(-1*increment, center.x, center.y);
             }
         }
 
@@ -139,18 +149,16 @@ public class Turret extends Entity implements Aimable {
         if(System.currentTimeMillis() - lastfired <= reload ){
             return;
         }
-        double magnitude = 100;
+        for (Barrel barrel: barrels) {
+            barrel.fire();
+        }
+
         lastfired = System.currentTimeMillis();
-        double x, y;
-        //magnitude of 90 away
-        x = magnitude * Math.cos(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().x;
-        y = magnitude * Math.sin(angle) + MyWorld.SCALE*components.get(1).body.getWorldCenter().y;
-        angle = Math.toDegrees(angle);
-        new Missile(x, y, angle, 30, this.world);
+
     }
 
     public boolean inContact(Body contact){
-        return components.get(0).body.isInContact(contact) || components.get(1).body.isInContact(contact);
+        return this.barrels.get(0).shape.body.isInContact(contact) || center.body.isInContact(contact);
     }
 
 }

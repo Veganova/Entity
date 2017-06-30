@@ -57,7 +57,6 @@ public class ObjTriangle extends AShape {
         Path path = new Path();
 
         //not sure if it's addition or subtraction at this point q.q
-        System.out.println(triangle.getCenter());
         path.moveTo((float) point1.x + (float) getX()  - (float) this.body.getLocalCenter().x,
                 (float) point1.y + (float) getY() - (float) this.body.getLocalCenter().y);
         path.lineTo((float) point2.x + (float) getX() - (float) this.body.getLocalCenter().x,

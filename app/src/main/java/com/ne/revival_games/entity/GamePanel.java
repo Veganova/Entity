@@ -90,8 +90,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 //                System.out.println(entity.toString());
             }
 //            System.out.println(world.rect.collided(world.barrier.shape));
-            world.circ.body.translateToOrigin();
-            world.circ.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE, -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
+            world.tri.body.translateToOrigin();
+            world.tri.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE, -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
             // System.out.println("X,Y"  + canvasX + ", " + canvasY);
             return true;
         }
