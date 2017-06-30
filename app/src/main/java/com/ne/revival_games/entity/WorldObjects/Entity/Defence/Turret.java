@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import android.graphics.Canvas;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -37,11 +39,11 @@ public class Turret extends Entity implements Aimable {
     private static double reload = 3000;
     private double lastfired = 0;
 
-    private WeldJoint joint;
     private MyWorld world;
     private List<Barrel> barrels = new ArrayList<>();
     private AShape center;
     private AimLogic logic;
+
     //need to include the angle somehow
     public Turret(Vector2 location, double angle, MyWorld world){
         super(location.x, location.y, angle, 0, HEALTH, false);
@@ -52,11 +54,11 @@ public class Turret extends Entity implements Aimable {
 
     private void initializeTurret(Vector2 location, MyWorld world){
         //make sure relative location placement is correct
-        this.barrels.add(new Barrel(Barrel.BarrelType.SIDE, location, world, 1));
-       // this.barrels.add(new Barrel(Barrel.BarrelType.SINGLE, location, world));
+        this.barrels.add(new Barrel(Barrel.BarrelType.SIDE, location, world, 3));
+        this.barrels.add(new Barrel(Barrel.BarrelType.SINGLE, location, world, 0));
 
 
-        this.center = new ObjCircle(location.x, location.y, 50.0, world);
+        this.center = new ObjRectangle(location.x, location.y, 50, 50, world);
 
         List<AShape> components = new ArrayList<AShape>();
         components.add(barrels.get(0).shape);
@@ -64,20 +66,23 @@ public class Turret extends Entity implements Aimable {
 
 
 
-        joint = new WeldJoint(components.get(0).body, components.get(1).body,
-                                components.get(1).body.getWorldCenter());
+        RevoluteJoint joint = new RevoluteJoint(barrels.get(0).shape.body, this.center.body, this.getCenter());
+        RevoluteJoint joint2 = new RevoluteJoint(barrels.get(1).shape.body, this.center.body, this.getCenter());
+        world.engineWorld.addJoint(joint2);
 
         world.engineWorld.addJoint(joint);
         this.shape = new ComplexShape(components);
 
         // TODO: 6/29/2017 can this be done in the shape class:
-        world.objectDatabase.put(components.get(0).body, this);
-        world.objectDatabase.put(components.get(1).body, this);
+        //not advised because some shapes need to be temporarily declared independent of entity
+        //another option is to have multiple constructors but I think this is not necessary
+        world.objectDatabase.put(this.center.body, this);
     }
 
     @Override
     public void aim(Body body){
         logic.aim(body, this.barrels.get(0).shape);
+        logic.aim(body, this.barrels.get(1).shape);
     }
 
 
@@ -86,6 +91,7 @@ public class Turret extends Entity implements Aimable {
         if(System.currentTimeMillis() - lastfired <= reload ){
             return;
         }
+
         for (Barrel barrel: barrels) {
             barrel.fire();
         }
@@ -106,6 +112,11 @@ public class Turret extends Entity implements Aimable {
 
     public boolean inContact(Body contact){
         return this.barrels.get(0).shape.body.isInContact(contact) || center.body.isInContact(contact);
+    }
+
+    @Override
+    public void draw(Canvas canvas){
+        this.center.draw(canvas);
     }
 
 }

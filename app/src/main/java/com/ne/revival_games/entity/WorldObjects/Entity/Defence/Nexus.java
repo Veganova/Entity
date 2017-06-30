@@ -35,7 +35,7 @@ public class Nexus extends Entity {
         double [] points4 = {40, 0,-40, 0,0, -40};
         components.add(new ObjTriangle(0, -50, points4,0));
 
-        this.shape = new ComplexShape(components, 0, 0, world);
+        this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
         TYPE = ObjectType.DEFENCE;
     }

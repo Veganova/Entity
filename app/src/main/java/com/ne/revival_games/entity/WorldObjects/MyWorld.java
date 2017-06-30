@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
@@ -68,6 +69,7 @@ public class MyWorld {
     public Entity barrier;
     public Turret turret;
     public ComplexShape complex;
+    public Nexus nex;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
@@ -101,12 +103,12 @@ public class MyWorld {
 //        Entity bullet = new Bullet(0, 0, 50, 60, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
 //        rect = new Barrier(300, 300, 0, this);
-
+        nex = new Nexus(-300, -300, 50, this);
         circ = new ObjCircle(0, 150, 10, this);
         coords = new ArrayList<double[]>();
         List<AShape> objects = new ArrayList<AShape>();
-        double [] points = {0, 100, -100, -100, 100, -100};
-        tri = new ObjTriangle(150, 150, points, this);
+//        double [] points = {0, 100, -100, -100, 100, -100};
+//        tri = new ObjTriangle(150, 150, points, this);
 //        objects.add(new ObjCircle(0, 0, 50, 0));
 //        testlocation(-500, 500, -500, 500, 10, tri);
     }
@@ -127,7 +129,7 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
-        turret.aim(tri.body);
+        turret.aim(nex.shape.body);
         this.engineWorld.update(elapsedTime);
 
         for(Body body: bodiestodelete){
@@ -154,8 +156,8 @@ public class MyWorld {
             if(!entity.invisible)
             entity.draw(canvas);
         }
-        tri.draw(canvas);
-        circ.draw(canvas);
+//        tri.draw(canvas);
+//        circ.draw(canvas);
 
         Paint pent = new Paint();
         pent.setColor(Color.RED);

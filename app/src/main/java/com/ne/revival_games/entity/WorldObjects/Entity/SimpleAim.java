@@ -1,13 +1,10 @@
 package com.ne.revival_games.entity.WorldObjects.Entity;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrel;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
-
-import java.util.List;
 
 /**
  * Created by Veganova on 6/29/2017.
@@ -24,25 +21,27 @@ public class SimpleAim implements AimLogic {
     @Override
     public void aim(Body body, AShape mainBarrel) {
         
-        Vector2 center = this.turret.getCenter();
-        Vector2 axispoint = new Vector2(center.x + 50/ MyWorld.SCALE, center.y);
-        Vector2 enemypoint = body.getWorldCenter();
-        System.out.println("");
+        Vector2 centerofRotation = mainBarrel.body.getWorldCenter();
+        Vector2 pointonX = new Vector2(centerofRotation.x + 50/ MyWorld.SCALE, centerofRotation.y);
+        Vector2 targetPoint = body.getWorldCenter();
+
         double angle = (Math.PI*2 + mainBarrel.getOrientation()
                 + mainBarrel.body.getTransform().getRotation()) % (Math.PI * 2);
 
-        double getSign = (enemypoint.y - center.y);
-        double a = Util.getDistance(center, axispoint);
-        double b = Util.getDistance(center, enemypoint);
-        double c = Util.getDistance(axispoint, enemypoint);
+        double getSign = (targetPoint.y - centerofRotation.y);
+        double a = Util.getDistance(centerofRotation, pointonX);
+        double b = Util.getDistance(centerofRotation, targetPoint);
+        double c = Util.getDistance(pointonX, targetPoint);
         double angleTo;
 
         //should break on 180 degrees but who knows?
         if(getSign == 0){
-            if(Math.abs(angle - Math.PI) <= 0.2 && enemypoint.x - center.x < 0){
+            if(Math.abs(angle - Math.PI) <= 0.2 && targetPoint.x - centerofRotation.x < 0){
+                mainBarrel.body.setAsleep(true);
                 angleTo = 0;
             }
-            else if(Math.abs(angle) <= 0.2 && enemypoint.x - center.x > 0){
+            else if(Math.abs(angle) <= 0.2 && targetPoint.x - centerofRotation.x > 0){
+                mainBarrel.body.setAsleep(true);
                 angleTo = 0;
             }
             else{
@@ -51,8 +50,7 @@ public class SimpleAim implements AimLogic {
 
         }
         else{
-            angleTo = getSign/Math.abs(getSign)*Math.acos((Math.pow(a, 2) + Math.pow(b, 2)
-                    - Math.pow(c, 2)) / (2 * a * b));
+            angleTo = getSign/Math.abs(getSign)*Util.lawofCosines(a,b,c);
             angleTo = (Math.PI *2 + angleTo) % (Math.PI *2);
         }
 
@@ -84,10 +82,10 @@ public class SimpleAim implements AimLogic {
             }
             if (counterclockDist <= Math.PI){
 
-                mainBarrel.body.rotate(increment, center.x, center.y);
+                mainBarrel.body.rotate(increment, this.turret.getCenter().x, this.turret.getCenter().y);
             }
             else{
-                mainBarrel.body.rotate(-1*increment, center.x, center.y);
+                mainBarrel.body.rotate(-1*increment, this.turret.getCenter().x, this.turret.getCenter().y);
             }
         }
 

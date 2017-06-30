@@ -1,5 +1,8 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import android.graphics.Canvas;
+
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -11,7 +14,7 @@ import org.dyn4j.geometry.Vector2;
  * Created by Veganova on 6/29/2017.
  */
 
-public class Barrel {
+public class Barrel extends Entity{
 
     public enum BarrelType {
         SINGLE, LAZER, SIDE, SPIRIT_BOMB
@@ -19,24 +22,32 @@ public class Barrel {
 
     AShape shape;
     private MyWorld world;
+    private double magnitude;
+
     Barrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
+        super(0, 0, 0, 0, 0, false);
         initBarrel(type, location, world, angle);
         this.world = world;
+        this.world.objectDatabase.put(this.shape.body, this);
     }
 
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
         switch (type) {
             case SINGLE:
-                this.shape = new ObjRectangle(50 + location.x, location.y, 100, 20, world);
+                //magnitude needs to be specified here
+                this.shape = new ObjRectangle(location.x, location.y, 120, 20, world);
+                magnitude = 150;
+                break;
             case SIDE:
-                this.shape = new ObjRectangle(50 + location.x, location.y, 300, 20, world);
+                this.shape = new ObjRectangle(50 + location.x, 100+location.y, 120, 20, world);
+                magnitude = 50;
                 this.shape.rotateBody(angle);
+                break;
         }
 
     }
 
     protected void fire() {
-        double magnitude = 100;
         double angle = shape.body.getTransform().getRotation();
         double x, y;
         //magnitude of 90 away
@@ -44,6 +55,12 @@ public class Barrel {
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
         new Missile(x, y, angle, 30, this.world);
+        this.shape.body.setAsleep(false);
+    }
+
+    @Override
+    public void draw(Canvas canvas){
+        this.shape.draw(canvas);
     }
 
 }
