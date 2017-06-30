@@ -11,13 +11,13 @@ import org.dyn4j.geometry.Vector2;
  * Created by Veganova on 6/29/2017.
  */
 
-class Barrel {
+public class Barrel {
 
     public enum BarrelType {
-        SINGLE, LAZER, SPIRIT_BOMB
+        SINGLE, LAZER, SIDE, SPIRIT_BOMB
     }
 
-    protected AShape shape;
+    AShape shape;
     private MyWorld world;
     Barrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
         initBarrel(type, location, world, angle);
@@ -27,6 +27,8 @@ class Barrel {
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
         switch (type) {
             case SINGLE:
+                this.shape = new ObjRectangle(50 + location.x, location.y, 100, 20, world);
+            case SIDE:
                 this.shape = new ObjRectangle(50 + location.x, location.y, 300, 20, world);
                 this.shape.rotateBody(angle);
         }

@@ -1,14 +1,17 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
+import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
+import com.ne.revival_games.entity.WorldObjects.Shape.Shape;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
@@ -38,17 +41,18 @@ public class Turret extends Entity implements Aimable {
     private MyWorld world;
     private List<Barrel> barrels = new ArrayList<>();
     private AShape center;
-
+    private AimLogic logic;
     //need to include the angle somehow
     public Turret(Vector2 location, double angle, MyWorld world){
         super(location.x, location.y, angle, 0, HEALTH, false);
         initializeTurret(location, world);
         this.world = world;
+        this.logic = new SimpleAim(this);
     };
 
-    public void initializeTurret(Vector2 location, MyWorld world){
+    private void initializeTurret(Vector2 location, MyWorld world){
         //make sure relative location placement is correct
-        this.barrels.add(new Barrel(Barrel.BarrelType.SINGLE, location, world, 1));
+        this.barrels.add(new Barrel(Barrel.BarrelType.SIDE, location, world, 1));
        // this.barrels.add(new Barrel(Barrel.BarrelType.SINGLE, location, world));
 
 
@@ -73,74 +77,7 @@ public class Turret extends Entity implements Aimable {
 
     @Override
     public void aim(Body body){
-        Vector2 center = this.center.body.getWorldCenter();
-        Vector2 axispoint = new Vector2(center.x + 50/MyWorld.SCALE, center.y);
-        Vector2 enemypoint = body.getWorldCenter();
-        System.out.println("");
-        double angle = (Math.PI*2 + this.barrels.get(0).shape.getOrientation()
-                + this.barrels.get(0).shape.body.getTransform().getRotation()) % (Math.PI * 2);
-
-        double getSign = (enemypoint.y - center.y);
-        double a = Util.getDistance(center, axispoint);
-        double b = Util.getDistance(center, enemypoint);
-        double c = Util.getDistance(axispoint, enemypoint);
-        double angleTo;
-
-        //should break on 180 degrees but who knows?
-        if(getSign == 0){
-            if(Math.abs(angle - Math.PI) <= 0.2 && enemypoint.x - center.x < 0){
-                angleTo = 0;
-            }
-            else if(Math.abs(angle) <= 0.2 && enemypoint.x - center.x > 0){
-                angleTo = 0;
-            }
-            else{
-                angleTo = Math.PI;
-            }
-
-        }
-        else{
-            angleTo = getSign/Math.abs(getSign)*Math.acos((Math.pow(a, 2) + Math.pow(b, 2)
-                    - Math.pow(c, 2)) / (2 * a * b));
-            angleTo = (Math.PI *2 + angleTo) % (Math.PI *2);
-        }
-
-        double angleDifference = angleTo - angle;
-        double counterclockDist = (Math.PI * 2 + angleTo - angle) % (Math.PI*2);
-
-//        System.out.println("Current angle: " + Math.toDegrees(angle));
-//        System.out.println("angleTo: " + Math.toDegrees(angleTo));
-//        System.out.println("angle difference: " + angleDifference);
-
-
-        //better find a shortest distance algorithm
-        if (Math.abs(angleDifference) <= 0.02){
-            fire(angleTo);
-        }
-        else {
-            double increment = 0.15;
-            if(Math.abs(angleDifference) <= 0.15){
-                increment = 0.09;
-            }
-            if(Math.abs(angleDifference) <= 0.09){
-                increment = 0.07;
-            }
-            if(Math.abs(angleDifference)<= 0.07){
-                increment = 0.05;
-            }
-            if(Math.abs(angleDifference)<= 0.05){
-                increment = 0.03;
-            }
-            if (counterclockDist <= Math.PI){
-
-                this.barrels.get(0).shape.body.rotate(increment, center.x, center.y);
-            }
-            else{
-                this.barrels.get(0).shape.body.rotate(-1*increment, center.x, center.y);
-            }
-        }
-
-
+        logic.aim(body, this.barrels.get(0).shape);
     }
 
 
@@ -155,6 +92,16 @@ public class Turret extends Entity implements Aimable {
 
         lastfired = System.currentTimeMillis();
 
+    }
+
+    @Override
+    public Vector2 getCenter() {
+        return this.center.body.getWorldCenter();
+    }
+
+    @Override
+    public void changeLogicTo(AimLogic logic) {
+        this.logic = logic;
     }
 
     public boolean inContact(Body contact){
