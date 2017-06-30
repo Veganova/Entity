@@ -41,7 +41,9 @@ public class Barrel extends Entity{
             case SIDE:
                 this.shape = new ObjRectangle(50 + location.x, 100+location.y, 120, 20, world);
                 magnitude = 50;
+
                 this.shape.rotateBody(angle);
+                this.shape.body.getTransform().rotate(1);
                 break;
         }
 

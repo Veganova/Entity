@@ -22,8 +22,12 @@ public abstract class Projectile extends Entity {
         this.setVelocity(this.speed);
     }
 
-    public Projectile(Projectile projectile){
-        super(projectile.shape.getX(), projectile.shape.getY(), 0, 0, 0, false);
-        shape = new ObjCircle(projectile.shape.getX(), projectile.shape.getY(), (double) projectile.s, world);
-    }
+//    public Projectile duplicate() {
+//
+//    }
+//
+//    public Projectile(Projectile projectile){
+//        super(projectile.shape.getX(), projectile.shape.getY(), 0, 0, 0, false);
+//        shape = new ObjCircle(projectile.shape.getX(), projectile.shape.getY(), (double) projectile.s, world);
+//    }
 }
