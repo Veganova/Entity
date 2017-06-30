@@ -23,6 +23,7 @@ public class ContactController extends ContactAdapter {
     public void end(ContactPoint point) {
         Entity ent1 = world.objectDatabase.get(point.getBody1());
         Entity ent2 = world.objectDatabase.get(point.getBody2());
+
         if(ent1.health <= 0){
             world.bodiestodelete.add(ent1.shape.body);
         }

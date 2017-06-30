@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Shape;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
@@ -53,6 +54,13 @@ public class ComplexShape extends AShape {
     public void draw(Canvas canvas) {
         for(int x=0; x<shapes.size(); x++){
             shapes.get(x).draw(canvas);
+        }
+    }
+
+    @Override
+    public void setPaint(Paint.Style style) {
+        for (Shape shape: this.shapes) {
+            shape.setPaint(style);
         }
     }
 

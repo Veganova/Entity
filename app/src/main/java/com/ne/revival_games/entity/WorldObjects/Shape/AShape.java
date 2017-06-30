@@ -26,7 +26,7 @@ public abstract class AShape implements Shape {
     protected Paint paint;
 
     AShape() {
-
+        this.paint = new Paint();
     }
 
     protected void initValues(Convex shape, double x, double y, MyWorld world) {
@@ -43,38 +43,38 @@ public abstract class AShape implements Shape {
         body.translate(x, y);
         world.engineWorld.addBody(this.body);
         this.angle = 0;
-        this.paint = new Paint();
     }
 
     protected void initValues(Convex shape, double x, double y, double fixtureangle) {
         x = x/MyWorld.SCALE;
         y = y/MyWorld.SCALE;
+
         this.convex = shape;
         this.angle = Math.toRadians(fixtureangle);
         this.rotateFixture(this.angle, new Vector2(0,0));
 //        this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
         this.translateFixture(x, y);
-        this.paint = new Paint();
-        this.setPaint(Paint.Style.STROKE);
     }
-
-
 
     protected void initValues(Body body, double x, double y, MyWorld world) {
         x = x/MyWorld.SCALE;
         y = y/MyWorld.SCALE;
+
         this.body = body;
         body.setMass(MassType.NORMAL);
         body.translate(x, y);
         this.angle = 0;
         world.engineWorld.addBody(this.body);
-        System.out.println(this.body.getWorldCenter());
     }
 
+
+
     public void setPaint(Paint.Style style) {
-        this.paint.setStyle(style);
-        if (style == Paint.Style.STROKE) {
-            this.paint.setStrokeWidth(STROKE_WIDTH);
+        if (this.paint != null) {
+            this.paint.setStyle(style);
+            if (style == Paint.Style.STROKE) {
+                this.paint.setStrokeWidth(STROKE_WIDTH);
+            }
         }
     }
 
@@ -97,7 +97,7 @@ public abstract class AShape implements Shape {
 
     @Override
     /**
-     * In radians (not degrees)
+     * In radians (not degrees).
      *
      * @param radians above
      */

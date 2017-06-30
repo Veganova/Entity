@@ -1,6 +1,9 @@
 package com.ne.revival_games.entity.WorldObjects;
 
+import android.graphics.Paint;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
@@ -24,8 +27,21 @@ class CollisionController extends CollisionAdapter {
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+
         Entity ent1 = world.objectDatabase.get(body1);
         Entity ent2 = world.objectDatabase.get(body2);
+
+        if (ent1.ghost || ent2.ghost) {
+            if (ent1.ghost) {
+                ent1.shape.setPaint(Paint.Style.FILL);
+            }
+            if (ent2.ghost) {
+                ent2.shape.setPaint(Paint.Style.FILL);
+            }
+            return false;
+        }
+
+
         boolean continueContact = true;
 
         if(ent1.health > 0 && ent2.health > 0) {

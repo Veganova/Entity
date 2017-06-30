@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
 import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -94,16 +95,17 @@ public class MyWorld {
 
 
         this.engineWorld.setGravity(new Vector2(0, 0));
-//        CollisionListener skip = new CollisionController(this);
-//        ContactListener contact = new ContactController(this);
-//        this.engineWorld.addListener(skip);
-//        this.engineWorld.addListener(contact);
+        CollisionListener skip = new CollisionController(this);
+        ContactListener contact = new ContactController(this);
+        this.engineWorld.addListener(skip);
+        this.engineWorld.addListener(contact);
 
 //        barrier = new Barrier(300, 400, 0, this);
 //        Entity bullet = new Bullet(0, 0, 50, 60, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
 //        rect = new Barrier(300, 300, 0, this);
-        nex = new Nexus(-300, -300, 50, this);
+        nex = new Nexus(100, 0, 50, this);
+        GhostEntity ghost = new GhostEntity(nex);
         circ = new ObjCircle(0, 150, 10, this);
         coords = new ArrayList<double[]>();
         List<AShape> objects = new ArrayList<AShape>();

@@ -22,7 +22,7 @@ public class Nexus extends Entity {
     public static int COST;
     public List<AShape> components;
 
-    public Nexus(double x, double y, double angle, MyWorld world){
+    public Nexus(double x, double y, double angle, MyWorld world) {
         super(x, y, angle, 0, HEALTH, false);
         components = new ArrayList<>();
         components.add(new ObjRectangle(0, 0, 120, 120, 0));

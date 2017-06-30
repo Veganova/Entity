@@ -26,7 +26,7 @@ public abstract class Entity implements WorldObject {
     public int health;
     public boolean invisible = false;
     boolean invulnerable;
-    boolean ghost = false;
+    public boolean ghost = false;
 
     public Entity(double x, double y, double direction,
                   double speed, int health, boolean invulnerable) {
@@ -49,7 +49,6 @@ public abstract class Entity implements WorldObject {
                 // subtract health etc.
                 this.health -= entityInCollision.health;
                 entityInCollision.health -= this.health;
-
                 System.out.println("Collision in ENTITY.JAVA: " + System.currentTimeMillis());
             }
         }
