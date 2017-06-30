@@ -26,6 +26,7 @@ public abstract class Entity implements WorldObject {
     public int health;
     public boolean invisible = false;
     boolean invulnerable;
+    boolean ghost = false;
 
     public Entity(double x, double y, double direction,
                   double speed, int health, boolean invulnerable) {
@@ -53,7 +54,6 @@ public abstract class Entity implements WorldObject {
             }
         }
          //if anything has collided, reduce health - this can be put in Entity
-
     }
 
     @Override
@@ -72,7 +72,7 @@ public abstract class Entity implements WorldObject {
         String result = "";
         result += "Type: " + this.getClass() + "\n";
         result += "Location: " + this.x + ", " + this.y + "\n";
-        result += "Direction:  " + this.direction + "\n";
+        result += "Direction: " + this.direction + "\n";
         result += "----------------------------\n";
         return result;
     }

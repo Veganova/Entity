@@ -89,7 +89,7 @@ public class Turret extends Entity implements Aimable {
 
         this.addBarrel(Barrel.BarrelType.SIDE);
         this.setMainBarrel(this.barrels.get(0));
-        
+
         //this.addBarrel(Barrel.BarrelType.SINGLE);
 
        // stupidshit(location);

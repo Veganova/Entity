@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Shape;
 
+import android.graphics.Paint;
+
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.collision.Fixture;
@@ -13,12 +15,15 @@ import org.dyn4j.geometry.Vector2;
  */
 public abstract class AShape implements Shape {
 
+    private static final float STROKE_WIDTH = 0.1f;
     public Body body;
+
     /**
     * RADIANS
      */
-    double angle;
-    Convex convex;
+    protected double angle;
+    private Convex convex;
+    protected Paint paint;
 
     AShape() {
 
@@ -38,6 +43,7 @@ public abstract class AShape implements Shape {
         body.translate(x, y);
         world.engineWorld.addBody(this.body);
         this.angle = 0;
+        this.paint = new Paint();
     }
 
     protected void initValues(Convex shape, double x, double y, double fixtureangle) {
@@ -48,6 +54,8 @@ public abstract class AShape implements Shape {
         this.rotateFixture(this.angle, new Vector2(0,0));
 //        this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
         this.translateFixture(x, y);
+        this.paint = new Paint();
+        this.setPaint(Paint.Style.STROKE);
     }
 
 
@@ -61,6 +69,13 @@ public abstract class AShape implements Shape {
         this.angle = 0;
         world.engineWorld.addBody(this.body);
         System.out.println(this.body.getWorldCenter());
+    }
+
+    public void setPaint(Paint.Style style) {
+        this.paint.setStyle(style);
+        if (style == Paint.Style.STROKE) {
+            this.paint.setStrokeWidth(STROKE_WIDTH);
+        }
     }
 
 

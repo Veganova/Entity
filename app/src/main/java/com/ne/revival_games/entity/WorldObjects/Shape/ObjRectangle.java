@@ -65,7 +65,7 @@ public class ObjRectangle extends AShape {
         canvas.rotate((float)Math.toDegrees(this.rect.getRotation()),
                 (float)(this.getX() + this.rect.getCenter().x), (float)(this.getY() + this.rect.getCenter().y));
 
-        canvas.drawRect(rectangle, new Paint());
+        canvas.drawRect(rectangle, this.paint);
 
         canvas.restore();
     }

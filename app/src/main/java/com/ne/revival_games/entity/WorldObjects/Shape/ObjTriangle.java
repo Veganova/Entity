@@ -71,7 +71,7 @@ public class ObjTriangle extends AShape {
 
         canvas.rotate((float)Math.toDegrees(this.angle),
                 (float)this.getX(), (float)this.getY());
-        canvas.drawPath(path, paint);
+        canvas.drawPath(path, this.paint);
         canvas.restore();
 
     }

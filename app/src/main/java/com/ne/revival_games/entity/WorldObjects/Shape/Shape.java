@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Shape;
 
 import android.content.Entity;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Convex;
@@ -34,6 +35,8 @@ public interface Shape {
     void rotateFixture(double radians, Vector2 location);
 
     void translateFixture(double x, double y);
+
+    void setPaint(Paint.Style style);
 
 
 }
