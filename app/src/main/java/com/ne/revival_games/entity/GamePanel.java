@@ -8,9 +8,11 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -32,7 +34,50 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     MyWorld world;
 
 
+//    private class TouchListener implements OnTouchListener {
+//        private GestureDetector gestureDetector =
+//                new GestureDetector(Test.this, new GestureDetector.SimpleOnGestureListener() {
+//                    @Override
+//                    public boolean onDoubleTap(MotionEvent e) {
+//                        return super.onDoubleTap(e);
+//                    }
+//                });
+//        @Override
+//        public boolean onTouch(View v, MotionEvent event) {
+//            gestureDetector.onTouchEvent(event);
+//            return true;
+//        }
+//    }
+
+    private abstract class DoubleClickListener implements OnTouchListener {
+
+        private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
+
+        long lastClickTime = 0;
+
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                long clickTime = System.currentTimeMillis();
+                if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                    onDoubleClick(event);
+                } else {
+                    onSingleClick(event);
+                }
+                lastClickTime = clickTime;
+                return true;
+            }
+            return false;
+        }
+
+        abstract void onSingleClick(MotionEvent v);
+        abstract void onDoubleClick(MotionEvent v);
+    }
+
     public GamePanel(Context context) {
+
+
         super(context);
 
 
@@ -41,6 +86,24 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         thread = new MainThread(getHolder(), this);
         world = new MyWorld(thread.canvas);
+
+        this.setOnTouchListener(new DoubleClickListener() {
+            @Override
+            void onSingleClick(MotionEvent event) {
+                System.out.println("SINGLE");
+                double canvasX = event.getX() / scaleX;
+                double canvasY = event.getY()  / scaleY;
+                world.nex.shape.body.translateToOrigin();
+                world.nex.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE,
+                        -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
+            }
+
+            @Override
+            void onDoubleClick(MotionEvent event) {
+                System.out.println("DOUBLE");
+                //world.ghostNexus.place();
+            }
+        });
 
         //make gamePanel focusable so it can handle events
         setFocusable(true);
@@ -81,22 +144,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            double canvasX = event.getX() / scaleX;
-            double canvasY = event.getY()  / scaleY;
-            for (Entity entity :world.objectDatabase.values()) {
-//                System.out.println(entity.toString());
-            }
-//            System.out.println(world.rect.collided(world.barrier.shape));
-            world.nex.shape.body.translateToOrigin();
-            world.nex.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE, -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
-            // System.out.println("X,Y"  + canvasX + ", " + canvasY);
-            return true;
-        }
-        return super.onTouchEvent(event);
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//
+//            return true;
+//        }
+//        return super.onTouchEvent(event);
+//    }
 
     public void update() {
         //where we update individual game objects (ex. move them, etc.)

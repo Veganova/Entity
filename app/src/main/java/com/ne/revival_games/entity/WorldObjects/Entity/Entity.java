@@ -70,6 +70,7 @@ public abstract class Entity implements WorldObject {
     public String toString() {
         String result = "";
         result += "Type: " + this.getClass() + "\n";
+        result += "Health: " + this.health + "\n";
         result += "Location: " + this.x + ", " + this.y + "\n";
         result += "Direction: " + this.direction + "\n";
         result += "----------------------------\n";

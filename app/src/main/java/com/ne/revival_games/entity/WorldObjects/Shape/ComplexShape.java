@@ -65,6 +65,13 @@ public class ComplexShape extends AShape {
     }
 
     @Override
+    public void setColor(int color) {
+        for (Shape shape: this.shapes) {
+            shape.setColor(color);
+        }
+    }
+
+    @Override
     public void rotateFixture(double angle, Vector2 location){
       shapes.get(0).rotateFixture(angle, location);
     }

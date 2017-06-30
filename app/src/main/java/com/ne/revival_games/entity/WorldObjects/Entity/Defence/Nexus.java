@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class Nexus extends Entity {
-    public static int HEALTH;
+    public static int HEALTH = Integer.MAX_VALUE;
     public static int MASS;
     public static int COST;
     public List<AShape> components;

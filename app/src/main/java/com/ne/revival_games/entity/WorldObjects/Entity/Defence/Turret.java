@@ -86,6 +86,8 @@ public class Turret extends Entity implements Aimable {
 
         this.center = new ObjRectangle(location.x, location.y, 50, 50, world);
         this.world.objectDatabase.put(this.center.body, this);
+        this.components.add(center);
+        this.shape = new ComplexShape(components);
 
         this.addBarrel(Barrel.BarrelType.SIDE);
         this.setMainBarrel(this.barrels.get(0));

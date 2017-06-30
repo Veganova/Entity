@@ -1,5 +1,6 @@
 package com.ne.revival_games.entity.WorldObjects.Shape;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -76,6 +77,11 @@ public abstract class AShape implements Shape {
                 this.paint.setStrokeWidth(STROKE_WIDTH);
             }
         }
+    }
+
+    @Override
+    public void setColor(int color) {
+        this.paint.setColor(color);
     }
 
 

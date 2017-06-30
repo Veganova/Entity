@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Shape;
 
 import android.content.Entity;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import org.dyn4j.dynamics.Body;
@@ -37,6 +38,8 @@ public interface Shape {
     void translateFixture(double x, double y);
 
     void setPaint(Paint.Style style);
+
+    void setColor(int color);
 
 
 }

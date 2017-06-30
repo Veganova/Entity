@@ -71,6 +71,7 @@ public class MyWorld {
     public Turret turret;
     public ComplexShape complex;
     public Nexus nex;
+    public GhostEntity ghostNexus;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
@@ -105,7 +106,9 @@ public class MyWorld {
         turret = new Turret(new Vector2(-200, 100), 30, this);
 //        rect = new Barrier(300, 300, 0, this);
         nex = new Nexus(100, 0, 50, this);
-        GhostEntity ghost = new GhostEntity(nex);
+        nex.shape.setColor(Color.BLUE);
+//        this.ghostNexus = new GhostEntity(nex);
+
         circ = new ObjCircle(0, 150, 10, this);
         coords = new ArrayList<double[]>();
         List<AShape> objects = new ArrayList<AShape>();
@@ -145,6 +148,7 @@ public class MyWorld {
 //            entity.update(this);
         }
 
+
     }
 
     /**
@@ -166,6 +170,7 @@ public class MyWorld {
         for(double [] kek : coords){
             canvas.drawCircle((float) kek[0], (float) kek[1], (float) (5/SCALE), pent);
         }
+        nex.shape.setPaint(Paint.Style.STROKE);
 
     }
 

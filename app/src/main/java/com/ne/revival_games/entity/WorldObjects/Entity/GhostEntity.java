@@ -21,5 +21,17 @@ public class GhostEntity {
         return this.entity.shape.body.getInContactBodies(true).size() == 0;
     }
 
+    public void place() {
+        if (canPlace()) {
+            System.out.println("BORN NEXUS");
+            System.out.println(this.entity);
+            this.entity.shape.setPaint(Paint.Style.FILL);
+            this.entity.ghost = false;
+            this.entity.invulnerable = false;
+        } else {
+            System.out.println("CANNOT PLACE THERE.");
+        }
+    }
+
 
 }
