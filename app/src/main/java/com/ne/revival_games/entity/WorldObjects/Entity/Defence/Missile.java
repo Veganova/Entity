@@ -1,11 +1,11 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
-import android.graphics.Canvas;
-
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+
+import org.dyn4j.dynamics.Body;
 
 /**
  * Created by Veganova on 6/10/2017.
@@ -23,7 +23,7 @@ public class Missile extends Projectile {
     }
 
     @Override
-    public boolean onCollision(Entity contact, double damage){
+    public boolean onCollision(Entity contact, Body componentHit, double damage){
         if(contact.TYPE == ObjectType.OFFENSE){
             this.health = 0;
             this.invisible = true;

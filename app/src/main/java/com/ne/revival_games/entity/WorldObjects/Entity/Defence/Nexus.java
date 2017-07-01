@@ -5,9 +5,10 @@ import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
+
+import org.dyn4j.dynamics.Body;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Nexus extends Entity {
     }
 
     @Override
-    public boolean onCollision(Entity contact, double damage){
+    public boolean onCollision(Entity contact, Body componentHit, double damage){
         if(contact.TYPE == ObjectType.DEFENCE){
             this.health -= damage;
             if(this.health <= 0){

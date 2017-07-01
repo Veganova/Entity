@@ -99,7 +99,7 @@ public class MyWorld {
         this.engineWorld.addListener(contact);
 
         turret = new Turret(new Vector2(-200, 100), 30, this);
-        bam = new MassLazer(200, 200, 30, this);
+        bam = new MassLazer(-200, -200, 30, this);
         nex = new Nexus(100, 0, 50, this);
         nex.shape.setColor(Color.BLUE);
 //        this.ghostNexus = new GhostEntity(nex);

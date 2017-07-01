@@ -3,15 +3,11 @@ package com.ne.revival_games.entity.WorldObjects;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
-import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionAdapter;
-import org.dyn4j.dynamics.CollisionListener;
-import org.dyn4j.dynamics.contact.ContactConstraint;
 
 /**
  * Created by vishn on 6/11/2017.
@@ -35,14 +31,8 @@ class CollisionController extends CollisionAdapter {
             if (ent1.ghost) {
                 ent1.shape.setPaint(Paint.Style.FILL);
             }
-            else{
-                ent1.onCollision(ent2, 0);
-            }
             if (ent2.ghost) {
                 ent2.shape.setPaint(Paint.Style.FILL);
-            }
-            else{
-                ent2.onCollision(ent1, 0);
             }
             return false;
         }
@@ -51,12 +41,22 @@ class CollisionController extends CollisionAdapter {
         boolean continueContact = true;
 
         if(ent1.health > 0 && ent2.health > 0) {
-            double damage1 = ent1.health;
-            double damage2 = ent2.health;
+            double damage1 = ent1.getDamage(body1);
+            double damage2 = ent2.getDamage(body2);
 
             //if either entity wants to continue the contact
-            continueContact = ent1.onCollision(ent2, damage2);
-            continueContact = ent2.onCollision(ent1, damage1) || continueContact;
+           if(ent1.isCollisionAuthority) {
+               continueContact = ent1.onCollision(ent2, body1, damage2);
+               ent2.onCollision(ent1, body2, damage1);
+           }
+           else if(ent2.isCollisionAuthority) {
+               continueContact = ent2.onCollision(ent1, body2, damage1);
+               ent1.onCollision(ent2, body1, damage2);
+           }
+           else{
+               continueContact = ent1.onCollision(ent2, body1, damage2);
+               continueContact = ent2.onCollision(ent1, body2, damage1) || continueContact;
+           }
         }
 
         if(!continueContact){

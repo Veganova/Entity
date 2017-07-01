@@ -1,12 +1,11 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
-import android.graphics.Canvas;
-
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
+import org.dyn4j.dynamics.Body;
 
 
 /**
@@ -29,7 +28,7 @@ public class Barrier extends Entity {
     }
 
     @Override
-    public boolean onCollision(Entity contact, double damage){
+    public boolean onCollision(Entity contact, Body componentHit, double damage){
         if(contact.TYPE == ObjectType.DEFENCE){
             this.health -= damage;
             if(this.health <= 0){

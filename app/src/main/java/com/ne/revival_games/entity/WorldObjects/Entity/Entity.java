@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.Shape;
 
 import org.dyn4j.dynamics.Body;
 
@@ -24,6 +23,7 @@ public abstract class Entity implements WorldObject {
     protected double direction;
     protected double speed;
     public int health;
+    public boolean isCollisionAuthority = false;
     public boolean invisible = false;
     boolean invulnerable;
     public boolean ghost = false;
@@ -81,8 +81,13 @@ public abstract class Entity implements WorldObject {
     public void onDeath(){};
 
     @Override
-    public boolean onCollision(Entity contact, double damage){
+    public boolean onCollision(Entity contact, Body componentHit, double damage){
         return true;
     };
+
+    @Override
+    public double getDamage(Body componentHit){
+        return this.health;
+    }
 
 }
