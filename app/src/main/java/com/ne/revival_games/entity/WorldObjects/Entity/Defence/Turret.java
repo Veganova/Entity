@@ -56,7 +56,6 @@ public class Turret extends Entity implements Aimable {
     };
 
     public void addBarrel(Barrel.BarrelType type) {
-        System.out.println("ADDING BARREL");
         Barrel b = new Barrel(type, new Vector2(center.getX(), center.getY()), world, 3);
         this.barrels.add(b);
         RevoluteJoint joint = new RevoluteJoint(b.shape.body, this.center.body, this.getCenter());
@@ -65,7 +64,6 @@ public class Turret extends Entity implements Aimable {
         world.engineWorld.addJoint(joint);
 
         this.shape = new ComplexShape(components);
-        System.out.println("ADDED BARREL");
     }
 
     /**
@@ -74,7 +72,6 @@ public class Turret extends Entity implements Aimable {
      */
     public void setMainBarrel(Barrel mainBarrel) {
         this.mainBarrel = mainBarrel;
-        System.out.println("MAIN BARREL SET");
 //        for (Barrel barrel: barrels) {
 //            if (barrel == mainBarrel) {
 //

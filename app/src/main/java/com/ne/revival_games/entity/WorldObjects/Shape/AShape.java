@@ -40,7 +40,6 @@ public abstract class AShape implements Shape {
 
         body.addFixture(shape, density, 0.2D, 2.0D);
         body.setMass(MassType.NORMAL);
-        System.out.println(x + " "  + y);
         body.translateToOrigin();
         body.translate(x, y);
         world.engineWorld.addBody(this.body);

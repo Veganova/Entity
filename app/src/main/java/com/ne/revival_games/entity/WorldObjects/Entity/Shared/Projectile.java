@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Shared;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 /**
@@ -17,9 +18,12 @@ public abstract class Projectile extends Entity {
                       int health, MyWorld world) {
         super(x, y, direction, speed, health, false);
         shape = new ObjCircle(x, y, (double) r, world);
-//        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
         this.setVelocity(this.speed);
+    }
+
+    public Projectile(double direction, double speed, int health, MyWorld world) {
+        super(0, 0, direction, speed, health, false);
     }
 
 //    public Projectile duplicate() {

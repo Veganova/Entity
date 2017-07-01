@@ -41,17 +41,7 @@ public abstract class Entity implements WorldObject {
     // damage from speed;
     @Override
     public void update(MyWorld world) {
-        this.x = this.shape.getX();
-        this.y = this.shape.getY();
-        for (Body body: this.shape.body.getInContactBodies(true)) {
-            Entity entityInCollision = world.objectDatabase.get(body);
-            if (entityInCollision.TYPE.opposite(this.TYPE)) {
-                // subtract health etc.
-                this.health -= entityInCollision.health;
-                entityInCollision.health -= this.health;
-                System.out.println("Collision in ENTITY.JAVA: " + System.currentTimeMillis());
-            }
-        }
+
          //if anything has collided, reduce health - this can be put in Entity
     }
 

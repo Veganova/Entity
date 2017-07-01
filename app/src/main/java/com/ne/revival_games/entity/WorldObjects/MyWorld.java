@@ -129,8 +129,10 @@ public class MyWorld {
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
         turret.aim(nex.shape.body);
-        this.engineWorld.update(elapsedTime);
         bam.update(this);
+
+        this.engineWorld.update(elapsedTime);
+
         for(Body body: bodiestodelete){
             objectDatabase.get(body).onDeath();
             objectDatabase.remove(body);

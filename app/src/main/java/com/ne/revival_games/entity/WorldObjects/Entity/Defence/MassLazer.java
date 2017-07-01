@@ -8,14 +8,21 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
+import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -42,15 +49,31 @@ public class MassLazer extends Projectile {
     private double trailHeadStart = 30;
 
     public MassLazer(double x, double y, double direction, MyWorld world){
-        super(x, y, MAZER_RADIUS, direction, 10, MAZER_HEALTH, world);
+        super(direction, 10, MAZER_HEALTH, world);
             this.isCollisionAuthority = true;
             fired = System.currentTimeMillis();
             tail = new ArrayList<>();
             points = new ArrayList<>();
-            pointstoPlace = new LinkedBlockingQueue<>();
+            pointstoPlace = new LinkedList<>();
             lastPoint = new Vector2(x/ MyWorld.SCALE, y/MyWorld.SCALE);
             points.add(lastPoint);
             this.world = world;
+
+        initializeHead(x, y);
+        this.shape = new ObjCircle(x, y, (double) 30, world);
+        this.world.objectDatabase.put(this.shape.body, this);
+        this.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
+        this.setVelocity(2);
+
+    }
+
+    public void initializeHead(double x, double y){
+//        List<AShape> components = new ArrayList<>();
+//        components.add(new ObjRectangle(0, 0, MAZER_RADIUS, MAZER_RADIUS, 0));
+//        double [] points = { 0, MAZER_RADIUS,MAZER_RADIUS, 0, MAZER_RADIUS*1.5, MAZER_RADIUS*1.5};
+//        components.add(new ObjTriangle(-MAZER_RADIUS/2, -MAZER_RADIUS/2, points, 0 ));
+//        this.shape = new ComplexShape(components, x, y, this.world);
+//        this.world.objectDatabase.put(this.shape.body, this);
     }
 
 
@@ -58,11 +81,10 @@ public class MassLazer extends Projectile {
     public void draw(Canvas canvas) {
 //        needs to be deleted after x seconds
 
-        if (System.currentTimeMillis() - lastRecorded > 100) {
+        if (System.currentTimeMillis() - lastRecorded > 50) {
 
             //two points point1 and this.world.getCenter
             Vector2 thisPoint = this.shape.body.getWorldCenter();
-            System.out.println(thisPoint);
             pointstoPlace.offer(thisPoint);
 
             lastRecorded = System.currentTimeMillis();
@@ -75,42 +97,42 @@ public class MassLazer extends Projectile {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth((float) (MAZER_RADIUS / 2 / MyWorld.SCALE));
 
-        Paint paint2 = new Paint();
-        paint2.setColor(Color.RED);
-        paint2.setAlpha(230);
-        paint2.setStyle(Paint.Style.STROKE);
-        paint2.setStrokeWidth((float) (MAZER_RADIUS / 4 / MyWorld.SCALE));
-
-        if(points.size() > 1) {
-            for (int x = 0; x < points.size() - 1; x++) {
-                Vector2 point1 = points.get(x);
-                Vector2 point2 = points.get(x + 1);
-
-
-                canvas.drawLine((float) point1.x, (float) point1.y, (float) point2.x, (float) point2.y,
-                        paint);
-                canvas.drawLine((float) point1.x, (float) point1.y, (float) point2.x, (float) point2.y,
-                        paint2);
-            }
-        }
+//        Paint paint2 = new Paint();
+//        paint2.setColor(Color.RED);
+//        paint2.setAlpha(230);
+//        paint2.setStyle(Paint.Style.STROKE);
+//        paint2.setStrokeWidth((float) (MAZER_RADIUS / 4 / MyWorld.SCALE));
+//
+//        if(points.size() > 1) {
+//            for (int x = 0; x < points.size() - 1; x++) {
+//                Vector2 point1 = points.get(x);
+//                Vector2 point2 = points.get(x + 1);
+//
+//
+//                canvas.drawLine((float) point1.x, (float) point1.y, (float) point2.x, (float) point2.y,
+//                        paint);
+////                canvas.drawLine((float) point1.x, (float) point1.y, (float) point2.x, (float) point2.y,
+////                        paint2);
+//            }
+//        }
             int end = points.size()-1;
 
-            //TODO: cheat to make it look smooth (there is a slight issue with mazer)!
-            canvas.drawLine((float) points.get(end).x, (float) points.get(end).y, (float) this.shape.getX(), (float) this.shape.getY(),
-                    paint);
+//            //TODO: cheat to make it look smooth (there is a slight issue with mazer)!
+//            canvas.drawLine((float) points.get(end).x, (float) points.get(end).y, (float) this.shape.getX(), (float) this.shape.getY(),
+//                    paint);
 
         this.shape.draw(canvas);
-//        for (AShape bar : tail) {
-//            bar.draw(canvas);
-//        }
+        for (AShape bar : tail) {
+            bar.draw(canvas);
+        }
     }
 
     public void placeTrail(Vector2 oldPoint, Vector2 newPoint){
         double x = (oldPoint.x + newPoint.x) / 2;
         double y = (oldPoint.y + newPoint.y) / 2;
-        double l = Util.getDistance(oldPoint, newPoint);
+        double l = Util.getDistance(oldPoint, newPoint)  * MyWorld.SCALE;
         double ang = Util.absoluteAngle(oldPoint, newPoint);
-        ObjRectangle temp = new ObjRectangle(x, y, l+trailHeadStart, 20, this.world);
+        ObjRectangle temp = new ObjRectangle(x * MyWorld.SCALE, y * MyWorld.SCALE, l+trailHeadStart, 20, this.world);
         temp.rotateBody(ang);
         temp.body.setAsleep(true);
         this.world.objectDatabase.put(temp.body, this);
@@ -120,18 +142,23 @@ public class MassLazer extends Projectile {
 
     @Override
     public void update(MyWorld world){
+        System.out.println("YO!");
         while(pointstoPlace.size() > 0){
             Vector2 temp = pointstoPlace.poll();
-            placeTrail(lastPoint, new Vector2(temp.x*MyWorld.SCALE, temp.y*MyWorld.SCALE));
-            points.add(temp);
+            if(Util.getDistance(temp, lastPoint) > 5/ MyWorld.SCALE) {
+                placeTrail(lastPoint, temp);
+                points.add(temp);
+            }
         }
+        System.out.println("TAIL: " + tail.size());
 
-        while (tail.size() > 20) {
+        while (tail.size() > 10) {
             points.remove(0);
-            world.engineWorld.removeBody(tail.get(0).body);
-            world.objectDatabase.remove(tail.get(0).body);
+            this.world.bodiestodelete.add(tail.get(0).body);
             tail.remove(0);
         }
+
+        System.out.println("WASSUP");
 
     }
 
