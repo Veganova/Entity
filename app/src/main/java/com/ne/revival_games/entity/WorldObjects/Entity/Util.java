@@ -34,14 +34,12 @@ public class Util {
         double a = Util.getDistance(vertex, axisPoint);
         double b = Util.getDistance(vertex, outerPoint);
         double c = Util.getDistance(axisPoint, outerPoint);
-
         if(getSign == 0){
             if(vertex.x > outerPoint.x){
-                return Math.PI;
+                return 0;
             }
-            return 0;
+            return Math.PI;
         }
-
         double angleTo = getSign/Math.abs(getSign)*Util.lawofCosines(a,b,c);
         return (Math.PI *2 + angleTo) % (Math.PI *2);
 

@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.MassLazer;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -65,6 +67,7 @@ public class MyWorld {
     public ComplexShape complex;
     public Nexus nex;
     public GhostEntity ghostNexus;
+    public MassLazer bam;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
@@ -83,6 +86,7 @@ public class MyWorld {
      */
     protected void initializeWorld() {
         // create the engineWorld
+        coords = new ArrayList<double[]>();
         this.objectDatabase = new HashMap<>();
         this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();
@@ -94,17 +98,14 @@ public class MyWorld {
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
 
-//        barrier = new Barrier(300, 400, 0, this);
-//        Entity bullet = new Bullet(0, 0, 50, 60, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
-//        rect = new Barrier(300, 300, 0, this);
+        bam = new MassLazer(200, 200, 30, this);
         nex = new Nexus(100, 0, 50, this);
         nex.shape.setColor(Color.BLUE);
 //        this.ghostNexus = new GhostEntity(nex);
 
-        circ = new ObjCircle(0, 150, 10, this);
-        coords = new ArrayList<double[]>();
-        List<AShape> objects = new ArrayList<AShape>();
+//        circ = new ObjCircle(0, 150, 10, this);
+//        List<AShape> objects = new ArrayList<AShape>();
 //        double [] points = {0, 100, -100, -100, 100, -100};
 //        tri = new ObjTriangle(150, 150, points, this);
 //        objects.add(new ObjCircle(0, 0, 50, 0));
@@ -129,19 +130,13 @@ public class MyWorld {
         // update the engineWorld with the elapsed time
         turret.aim(nex.shape.body);
         this.engineWorld.update(elapsedTime);
-
+        bam.update(this);
         for(Body body: bodiestodelete){
             objectDatabase.get(body).onDeath();
             objectDatabase.remove(body);
             engineWorld.removeBody(body);
             bodiestodelete.remove(body);
         }
-
-        for (Entity entity : objectDatabase.values()) {
-//            entity.update(this);
-        }
-
-
     }
 
     /**

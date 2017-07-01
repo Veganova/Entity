@@ -35,8 +35,14 @@ class CollisionController extends CollisionAdapter {
             if (ent1.ghost) {
                 ent1.shape.setPaint(Paint.Style.FILL);
             }
+            else{
+                ent1.onCollision(ent2, 0);
+            }
             if (ent2.ghost) {
                 ent2.shape.setPaint(Paint.Style.FILL);
+            }
+            else{
+                ent2.onCollision(ent1, 0);
             }
             return false;
         }
