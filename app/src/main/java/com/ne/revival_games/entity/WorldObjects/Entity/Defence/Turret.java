@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
+import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -56,7 +57,8 @@ public class Turret extends Entity implements Aimable {
     };
 
     public void addBarrel(Barrel.BarrelType type) {
-        Barrel b = new Barrel(type, new Vector2(center.getX(), center.getY()), world, 3);
+        Projectile project = new Missile(0, 0, 0, 30, this.world);
+        Barrel b = new Barrel(project, type, new Vector2(center.getX(), center.getY()), world, 3);
         this.barrels.add(b);
         RevoluteJoint joint = new RevoluteJoint(b.shape.body, this.center.body, this.getCenter());
 

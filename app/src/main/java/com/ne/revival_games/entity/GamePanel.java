@@ -93,8 +93,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 System.out.println("SINGLE");
                 double canvasX = event.getX() / scaleX;
                 double canvasY = event.getY()  / scaleY;
-                world.nex.shape.body.translateToOrigin();
-                world.nex.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE,
+                world.bam.shape.body.translateToOrigin();
+                world.bam.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE,
                         -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
             }
 

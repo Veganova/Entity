@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
@@ -58,12 +59,13 @@ public class MassLazer extends Projectile {
             lastPoint = new Vector2(x/ MyWorld.SCALE, y/MyWorld.SCALE);
             points.add(lastPoint);
             this.world = world;
+            this.TYPE = ObjectType.OFFENSE;
 
-        initializeHead(x, y);
+//        initializeHead(x, y);
         this.shape = new ObjCircle(x, y, (double) 30, world);
         this.world.objectDatabase.put(this.shape.body, this);
         this.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
-        this.setVelocity(2);
+        this.setVelocity(20);
 
     }
 
@@ -103,28 +105,25 @@ public class MassLazer extends Projectile {
 //        paint2.setStyle(Paint.Style.STROKE);
 //        paint2.setStrokeWidth((float) (MAZER_RADIUS / 4 / MyWorld.SCALE));
 //
-//        if(points.size() > 1) {
-//            for (int x = 0; x < points.size() - 1; x++) {
-//                Vector2 point1 = points.get(x);
-//                Vector2 point2 = points.get(x + 1);
-//
-//
+        if(points.size() > 1) {
+            for (int x = 0; x < points.size() - 1; x++) {
+                Vector2 point1 = points.get(x);
+                Vector2 point2 = points.get(x + 1);
+
+
+                canvas.drawLine((float) point1.x, (float) point1.y, (float) point2.x, (float) point2.y,
+                        paint);
 //                canvas.drawLine((float) point1.x, (float) point1.y, (float) point2.x, (float) point2.y,
-//                        paint);
-////                canvas.drawLine((float) point1.x, (float) point1.y, (float) point2.x, (float) point2.y,
-////                        paint2);
-//            }
-//        }
+//                        paint2);
+            }
+        }
             int end = points.size()-1;
 
 //            //TODO: cheat to make it look smooth (there is a slight issue with mazer)!
-//            canvas.drawLine((float) points.get(end).x, (float) points.get(end).y, (float) this.shape.getX(), (float) this.shape.getY(),
-//                    paint);
+            canvas.drawLine((float) points.get(end).x, (float) points.get(end).y, (float) this.shape.getX(), (float) this.shape.getY(),
+                    paint);
 
         this.shape.draw(canvas);
-        for (AShape bar : tail) {
-            bar.draw(canvas);
-        }
     }
 
     public void placeTrail(Vector2 oldPoint, Vector2 newPoint){
@@ -142,7 +141,7 @@ public class MassLazer extends Projectile {
 
     @Override
     public void update(MyWorld world){
-        System.out.println("YO!");
+        //can optimize here (ex. don't place if point has no hope or too many points)
         while(pointstoPlace.size() > 0){
             Vector2 temp = pointstoPlace.poll();
             if(Util.getDistance(temp, lastPoint) > 5/ MyWorld.SCALE) {
@@ -150,7 +149,9 @@ public class MassLazer extends Projectile {
                 points.add(temp);
             }
         }
-        System.out.println("TAIL: " + tail.size());
+
+//        placeTrail(lastPoint, this.shape.body.getWorldCenter());
+//        lastPoint = this.shape.body.getWorldCenter();
 
         while (tail.size() > 10) {
             points.remove(0);
@@ -158,7 +159,6 @@ public class MassLazer extends Projectile {
             tail.remove(0);
         }
 
-        System.out.println("WASSUP");
 
     }
 
@@ -176,5 +176,11 @@ public class MassLazer extends Projectile {
             return HEAD_DAMAGE;
         }
         return TRAIL_DAMAGE;
+    }
+
+    //TODO: IMPLEMENT THIS FUNCTION
+    @Override
+    public Projectile returnCustomizedCopy(Vector2 location, double direction, double speed, MyWorld world){
+        return new MassLazer(location.x, location.y, direction, world);
     }
 }

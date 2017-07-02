@@ -45,13 +45,9 @@ class CollisionController extends CollisionAdapter {
             double damage2 = ent2.getDamage(body2);
 
             //if either entity wants to continue the contact
-           if(ent1.isCollisionAuthority) {
-               continueContact = ent1.onCollision(ent2, body1, damage2);
-               ent2.onCollision(ent1, body2, damage1);
-           }
-           else if(ent2.isCollisionAuthority) {
-               continueContact = ent2.onCollision(ent1, body2, damage1);
-               ent1.onCollision(ent2, body1, damage2);
+           if(ent1.isCollisionAuthority || ent2.isCollisionAuthority) {
+               System.out.println("HHELLO");
+               continueContact = ent1.onCollision(ent2, body1, damage2) && ent2.onCollision(ent1, body2, damage1);
            }
            else{
                continueContact = ent1.onCollision(ent2, body1, damage2);

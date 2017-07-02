@@ -5,14 +5,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.MassLazer;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
-import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
 
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
@@ -28,7 +25,6 @@ import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Veganova on 6/7/2017.
@@ -63,7 +59,7 @@ public class MyWorld {
     public ObjTriangle tri;
     public ObjCircle circ;
     public Entity barrier;
-    public Turret turret;
+    public Turret turret, turret1, turret2, turret3, turret4;
     public ComplexShape complex;
     public Nexus nex;
     public GhostEntity ghostNexus;
@@ -99,6 +95,11 @@ public class MyWorld {
         this.engineWorld.addListener(contact);
 
         turret = new Turret(new Vector2(-200, 100), 30, this);
+//        turret1 = new Turret(new Vector2(300, -100), 30, this);
+//        turret2 = new Turret(new Vector2(200, 200), 30, this);
+//        turret3 = new Turret(new Vector2(400, 100), 30, this);
+//        turret4 = new Turret(new Vector2(200, -250), 30, this);
+
         bam = new MassLazer(-200, -200, 30, this);
         nex = new Nexus(100, 0, 50, this);
         nex.shape.setColor(Color.BLUE);
@@ -129,7 +130,10 @@ public class MyWorld {
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
         turret.aim(nex.shape.body);
-        bam.update(this);
+
+        for(Entity ent: this.objectDatabase.values()){
+            ent.update(this);
+        }
 
         this.engineWorld.update(elapsedTime);
 

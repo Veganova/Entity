@@ -5,6 +5,8 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
+import org.dyn4j.geometry.Vector2;
+
 /**
  * Created by Veganova on 6/10/2017.
  */
@@ -26,12 +28,7 @@ public abstract class Projectile extends Entity {
         super(0, 0, direction, speed, health, false);
     }
 
-//    public Projectile duplicate() {
-//
-//    }
-//
-//    public Projectile(Projectile projectile){
-//        super(projectile.shape.getX(), projectile.shape.getY(), 0, 0, 0, false);
-//        shape = new ObjCircle(projectile.shape.getX(), projectile.shape.getY(), (double) projectile.s, world);
-//    }
+    abstract public Projectile returnCustomizedCopy(Vector2 location,
+                                                    double direction, double speed, MyWorld world);
+
 }

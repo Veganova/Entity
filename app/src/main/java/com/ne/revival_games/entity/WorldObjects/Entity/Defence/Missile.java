@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by Veganova on 6/10/2017.
@@ -31,6 +32,11 @@ public class Missile extends Projectile {
         }
 
         return true;
+    }
+
+    @Override
+    public Projectile returnCustomizedCopy(Vector2 location, double direction, double speed, MyWorld world){
+        return new Missile(location.x, location.y, direction, speed, world);
     }
 
 }

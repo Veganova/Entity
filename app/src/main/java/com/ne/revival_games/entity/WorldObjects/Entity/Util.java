@@ -12,6 +12,7 @@ public class Util {
         return Math.sqrt(Math.pow(point1.x-point2.x, 2) + Math.pow(point1.y-point2.y, 2));
     }
 
+    //warning untested
     public static double distanceFromLine(Vector2 point1line, Vector2 point2line, Vector2 target){
         //y - y2 = m * (x - x2)
         //y = m*x + c
@@ -44,4 +45,5 @@ public class Util {
         return (Math.PI *2 + angleTo) % (Math.PI *2);
 
     }
+
 }

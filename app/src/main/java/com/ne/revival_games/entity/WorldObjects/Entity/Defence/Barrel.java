@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -23,11 +24,13 @@ public class Barrel extends Entity{
     AShape shape;
     private MyWorld world;
     private double magnitude;
+    private Projectile projectile;
 
-    Barrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
+    Barrel(Projectile projectile, BarrelType type, Vector2 location, MyWorld world, double angle) {
         super(0, 0, 0, 0, 0, false);
         initBarrel(type, location, world, angle);
         this.world = world;
+        this.projectile = projectile;
         this.world.objectDatabase.put(this.shape.body, this);
     }
 
@@ -56,7 +59,8 @@ public class Barrel extends Entity{
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*shape.body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
-        new Missile(x, y, angle, 30, this.world);
+//        this.projectile.returnCustomizedCopy(new Vector2(x,y), angle, 30, this.world);
+        new SimpleLazer(new Vector2(x,y), Math.toRadians(angle), 400, 20, 300, 0, this.world);
         this.shape.body.setAsleep(false);
     }
 
@@ -64,5 +68,6 @@ public class Barrel extends Entity{
     public void draw(Canvas canvas){
         this.shape.draw(canvas);
     }
+
 
 }
