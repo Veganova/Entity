@@ -19,21 +19,14 @@ public abstract class Projectile extends Entity {
     public Projectile(double x, double y, int r, double direction, double speed,
                       int health, MyWorld world) {
         super(x, y, direction, speed, health, false);
+
         shape = new ObjCircle(r);
         AShape.InitBuilder builder = shape.getBuilder(true, world);
         builder.setXY(x, y).init();
-        //shape = new ObjCircle(x, y, (double) r, world);
-//        shape.body.setBullet(true);
+
+        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
         this.setVelocity(this.speed);
     }
 
-//    public Projectile duplicate() {
-//
-//    }
-//
-//    public Projectile(Projectile projectile){
-//        super(projectile.shape.getX(), projectile.shape.getY(), 0, 0, 0, false);
-//        shape = new ObjCircle(projectile.shape.getX(), projectile.shape.getY(), (double) projectile.s, world);
-//    }
 }

@@ -35,11 +35,15 @@ public class Barrel extends Entity {
         switch (type) {
             case SINGLE:
                 //magnitude needs to be specified here
-                this.shape = new ObjRectangle(location.x, location.y, 120, 20, world);
+                this.shape = new ObjRectangle(120, 20);
+                AShape.InitBuilder builderSingle = this.shape.getBuilder(true, world);
+                builderSingle.setXY(location.x, location.y).init();
                 magnitude = 150;
                 break;
             case SIDE:
-                this.shape = new ObjRectangle(50 + location.x, 100+location.y, 120, 20, world);
+                this.shape = new ObjRectangle(120, 20);
+                AShape.InitBuilder builderSide = this.shape.getBuilder(true, world);
+                builderSide.setXY(50 + location.x, 100 + location.y).init();
                 magnitude = 50;
 
                 this.shape.rotateBody(angle);

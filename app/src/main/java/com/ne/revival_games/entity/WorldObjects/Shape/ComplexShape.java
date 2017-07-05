@@ -35,7 +35,7 @@ public class ComplexShape extends AShape {
             body.addFixture(fixtures.get(z).getShape());
         }
         shapes = fixtures;
-        initValues(this.body, x, y, world);
+        this.getBuilder(world, body).setXY(x, y).init();
         isComplexBody = false;
     }
 

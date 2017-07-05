@@ -39,46 +39,46 @@ public abstract class AShape implements Shape {
         body.translate(newHeading.x, newHeading.y);
     }
 
-    protected void initValues(Convex shape, double x, double y, double density, MyWorld world) {
-        x = x/MyWorld.SCALE;
-        y = y/MyWorld.SCALE;
-        this.body = new Body();
-        this.convex = shape;
-        this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
-
-        body.addFixture(shape, density, 0.2D, 2.0D);
-        body.setMass(MassType.NORMAL);
-        //System.out.println(x + " "  + y);
-       // body.translateToOrigin();
-
-        setBodyPosition(new Vector2(x, y), convex.getCenter());
-        world.engineWorld.addBody(this.body);
-        this.angle = 0;
-    }
-
-    protected void initValues(Convex shape, double x, double y, double fixtureangle) {
-        x = x/MyWorld.SCALE;
-        y = y/MyWorld.SCALE;
-
-        this.convex = shape;
-        this.angle = Math.toRadians(fixtureangle);
-        this.rotateFixture(this.angle, new Vector2(0,0));
+//    protected void initValues(Convex shape, double x, double y, double density, MyWorld world) {
+//        x = x/MyWorld.SCALE;
+//        y = y/MyWorld.SCALE;
+//        this.body = new Body();
+//        this.convex = shape;
 //        this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
-        translateFixture(x, y);
-    }
-
-    protected void initValues(Body body, double x, double y, MyWorld world) {
-        x = x/MyWorld.SCALE;
-        y = y/MyWorld.SCALE;
-
-        this.body = body;
-        body.setMass(MassType.NORMAL);
-
-
-        setBodyPosition(new Vector2(x, y), this.body.getWorldCenter());
-        this.angle = 0;
-        world.engineWorld.addBody(this.body);
-    }
+//
+//        body.addFixture(shape, density, 0.2D, 2.0D);
+//        body.setMass(MassType.NORMAL);
+//        //System.out.println(x + " "  + y);
+//       // body.translateToOrigin();
+//
+//        setBodyPosition(new Vector2(x, y), convex.getCenter());
+//        world.engineWorld.addBody(this.body);
+//        this.angle = 0;
+//    }
+//
+//    protected void initValues(Convex shape, double x, double y, double fixtureangle) {
+//        x = x/MyWorld.SCALE;
+//        y = y/MyWorld.SCALE;
+//
+//        this.convex = shape;
+//        this.angle = Math.toRadians(fixtureangle);
+//        this.rotateFixture(this.angle, new Vector2(0,0));
+////        this.translateFixture(-1*convex.getCenter().x, -1*convex.getCenter().y);
+//        translateFixture(x, y);
+//    }
+//
+//    protected void initValues(Body body, double x, double y, MyWorld world) {
+//        x = x/MyWorld.SCALE;
+//        y = y/MyWorld.SCALE;
+//
+//        this.body = body;
+//        body.setMass(MassType.NORMAL);
+//
+//
+//        setBodyPosition(new Vector2(x, y), this.body.getWorldCenter());
+//        this.angle = 0;
+//        world.engineWorld.addBody(this.body);
+//    }
 
     public InitBuilder getBuilder(boolean body, MyWorld world) {
         return new InitBuilder(body, world, convex);
@@ -128,7 +128,7 @@ public abstract class AShape implements Shape {
 
         public void init() {
             // dealing with a part, not a whole body
-            if (!isBody) {
+            if (!isBody && !premadeBody) {
                 rotateFixture(this.angle, new Vector2(0,0));
                 translateFixture(x, y);
                 // exit since the below deals with building a body
@@ -144,8 +144,7 @@ public abstract class AShape implements Shape {
             // premade body
 
             body.setMass(type);
-
-            setBodyPosition(new Vector2(x, y), convex.getCenter());
+            setBodyPosition(new Vector2(x, y), body.getWorldCenter());
             // TODO: 7/4/2017 could be adding several times.. 
             world.engineWorld.addBody(body);
 

@@ -84,7 +84,10 @@ public class Turret extends Entity implements Aimable {
 
     private void initializeTurret(Vector2 location, MyWorld world){
 
-        this.center = new ObjRectangle(location.x, location.y, 50, 50, Double.MAX_VALUE, world);
+        this.center = new ObjRectangle(50, 50);
+        AShape.InitBuilder builder = this.center.getBuilder(true, world);
+        builder.setXY(location.x, location.y).init();
+
         this.world.objectDatabase.put(this.center.body, this);
         this.components.add(center);
         this.shape = new ComplexShape(components);

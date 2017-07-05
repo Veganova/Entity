@@ -28,6 +28,7 @@ public abstract class Entity implements WorldObject {
     boolean invulnerable;
     public boolean ghost = false;
 
+    // TODO: 7/5/2017 some fields here are not needed 
     public Entity(double x, double y, double direction,
                   double speed, int health, boolean invulnerable) {
         this.x = x;

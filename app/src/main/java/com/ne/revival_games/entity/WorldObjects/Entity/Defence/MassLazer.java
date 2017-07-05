@@ -87,7 +87,14 @@ public class MassLazer extends Projectile {
             double y = (lastPoint.y + thisPoint.y)/2;
             double l = Util.getDistance(lastPoint, thisPoint);
             double ang = Util.absoluteAngle(lastPoint, thisPoint);
-            tail.add(new ObjRectangle(x, y, MAZER_RADIUS, l,  ang));
+
+            ObjRectangle rect = new ObjRectangle(MAZER_RADIUS, l);
+            rect.getBuilder(true, world).setAngle(ang).setXY(x, y).init();
+
+            // TODO: 7/5/2017 fix this
+            tail.add(rect);
+
+
             tail.get(19).body.setAsleep(true);
             lastPoint = thisPoint;
         }

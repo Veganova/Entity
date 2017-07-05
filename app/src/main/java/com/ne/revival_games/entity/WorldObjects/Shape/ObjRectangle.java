@@ -14,28 +14,29 @@ import org.dyn4j.geometry.Rectangle;
 public class ObjRectangle extends AShape {
     public Rectangle rect;
 
-    public ObjRectangle(double x, double y, double w, double l, MyWorld world) {
-        w = w/MyWorld.SCALE;
-        l = l/MyWorld.SCALE;
+    public ObjRectangle(double w, double l) {
+        w = w / MyWorld.SCALE;
+        l = l / MyWorld.SCALE;
         rect = new Rectangle(w, l);
-        initValues(rect, x, y, DEFAULT_DENSITY, world);
+        convex = rect;
+        //initValues(rect, x, y, DEFAULT_DENSITY, world);
     }
 
-    public ObjRectangle(double x, double y, double w, double l, double density, MyWorld world) {
-        w = w/MyWorld.SCALE;
-        l = l/MyWorld.SCALE;
-        rect = new Rectangle(w, l);
-        initValues(rect, x, y, density, world);
-    }
-
-
-    public ObjRectangle(double x, double y, double w, double l, double fixtureangle) {
-        w = w/MyWorld.SCALE;
-        l = l/MyWorld.SCALE;
-
-        rect = new Rectangle(w, l);
-        initValues(this.rect, x, y, fixtureangle);
-    }
+//    public ObjRectangle(double x, double y, double w, double l, double density, MyWorld world) {
+//        w = w/MyWorld.SCALE;
+//        l = l/MyWorld.SCALE;
+//        rect = new Rectangle(w, l);
+//        initValues(rect, x, y, density, world);
+//    }
+//
+//
+//    public ObjRectangle(double x, double y, double w, double l, double fixtureangle) {
+//        w = w/MyWorld.SCALE;
+//        l = l/MyWorld.SCALE;
+//
+//        rect = new Rectangle(w, l);
+//        initValues(this.rect, x, y, fixtureangle);
+//    }
 
 //    //this is a fixture right now
 //    public ObjRectangle(double x, double y, int w, int l, Body newBody) {

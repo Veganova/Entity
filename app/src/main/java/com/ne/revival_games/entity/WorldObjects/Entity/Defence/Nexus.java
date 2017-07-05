@@ -25,15 +25,32 @@ public class Nexus extends Entity {
     public Nexus(double x, double y, double angle, MyWorld world) {
         super(x, y, angle, 0, HEALTH, false);
         components = new ArrayList<>();
-        components.add(new ObjRectangle(0, 0, 120, 120, 0));
+
+        ObjRectangle rect = new ObjRectangle(120, 120);
+        rect.getBuilder(false, world).setXY(0, 0).init();
+
+        components.add(rect);
+        
+        
         double [] points1 = {0, 40, 0, -40, 40, 0};
-        components.add(new ObjTriangle(50, 0, points1, 0));
+        ObjTriangle tri1 = new ObjTriangle(points1);
+        tri1.getBuilder(false, world).setXY(50, 0).init();
+        components.add(tri1);
+        
         double [] points2 = {0, -40, 0, 40, -40, 0};
-        components.add(new ObjTriangle(-50, 0, points2, 0));
+        ObjTriangle tri2 = new ObjTriangle(points2);
+        tri2.getBuilder(false, world).setXY(-50, 0).init();
+        components.add(tri2);       
+        
         double [] points3 = {-40, 0, 40, 0, 0, 40};
-        components.add(new ObjTriangle(0, 50, points3, 0));
+        ObjTriangle tri3 = new ObjTriangle(points3);
+        tri3.getBuilder(false, world).setXY(0, 50).init();
+        components.add(tri3);
+        
         double [] points4 = {40, 0,-40, 0,0, -40};
-        components.add(new ObjTriangle(0, -50, points4,0));
+        ObjTriangle tri4 = new ObjTriangle(points4);
+        tri4.getBuilder(false, world).setXY(0, -50).init();
+        components.add(tri4);
 
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);

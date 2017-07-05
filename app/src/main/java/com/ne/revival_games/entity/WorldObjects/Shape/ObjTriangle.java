@@ -17,36 +17,37 @@ import org.dyn4j.geometry.Vector2;
 public class ObjTriangle extends AShape {
     public Triangle triangle;
 
-    public ObjTriangle(double x, double y, double [] points, MyWorld world){
+    public ObjTriangle(double [] points){
         for(int z=0; z<points.length; z++){
             points[z] = points[z]/MyWorld.SCALE;
         }
 
         triangle = new Triangle(new Vector2(points[0], points[1]),
                 new Vector2(points[2], points[3]), new Vector2(points[4], points[5]));
-        initValues(triangle, x, y, DEFAULT_DENSITY, world);
+        convex = triangle;
+        //initValues(triangle, x, y, DEFAULT_DENSITY, world);
     }
 
-    public ObjTriangle(double x, double y, double [] points, double density, MyWorld world){
-        for(int z=0; z<points.length; z++){
-            points[z] = points[z]/MyWorld.SCALE;
-        }
-
-        triangle = new Triangle(new Vector2(points[0], points[1]),
-                new Vector2(points[2], points[3]), new Vector2(points[4], points[5]));
-        initValues(triangle, x, y, density, world);
-    }
-
-    public ObjTriangle(double x, double y, double [] points, double fixtureangle){
-        for(int z=0; z<points.length; z++){
-            points[z] = points[z]/MyWorld.SCALE;
-        }
-
-        triangle = new Triangle(new Vector2(points[0], points[1]),
-                new Vector2(points[2], points[3]), new Vector2(points[4], points[5]));
-
-        initValues(this.triangle, x, y, fixtureangle);
-    }
+//    public ObjTriangle(double x, double y, double [] points, double density, MyWorld world){
+//        for(int z=0; z<points.length; z++){
+//            points[z] = points[z]/MyWorld.SCALE;
+//        }
+//
+//        triangle = new Triangle(new Vector2(points[0], points[1]),
+//                new Vector2(points[2], points[3]), new Vector2(points[4], points[5]));
+//        initValues(triangle, x, y, density, world);
+//    }
+//
+//    public ObjTriangle(double x, double y, double [] points, double fixtureangle){
+//        for(int z=0; z<points.length; z++){
+//            points[z] = points[z]/MyWorld.SCALE;
+//        }
+//
+//        triangle = new Triangle(new Vector2(points[0], points[1]),
+//                new Vector2(points[2], points[3]), new Vector2(points[4], points[5]));
+//
+//        initValues(this.triangle, x, y, fixtureangle);
+//    }
 
     @Override
     public void draw(Canvas canvas){
