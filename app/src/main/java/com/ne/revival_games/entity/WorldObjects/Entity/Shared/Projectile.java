@@ -2,7 +2,10 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Shared;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
+
+import org.dyn4j.geometry.Circle;
 
 /**
  * Created by Veganova on 6/10/2017.
@@ -16,7 +19,10 @@ public abstract class Projectile extends Entity {
     public Projectile(double x, double y, int r, double direction, double speed,
                       int health, MyWorld world) {
         super(x, y, direction, speed, health, false);
-        shape = new ObjCircle(x, y, (double) r, world);
+        shape = new ObjCircle(r);
+        AShape.InitBuilder builder = shape.getBuilder(true, world);
+        builder.setXY(x, y).init();
+        //shape = new ObjCircle(x, y, (double) r, world);
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
         this.setVelocity(this.speed);

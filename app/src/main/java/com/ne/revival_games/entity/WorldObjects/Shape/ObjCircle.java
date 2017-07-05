@@ -13,39 +13,39 @@ import org.dyn4j.geometry.Vector2;
  */
 public class ObjCircle extends AShape {
 
-    private Convex circ;
+    //private Convex circ;
     /**
-     * Constructor for the square object.
-     *
-     * @param x The x of the center of the shape
-     * @param y The x of the center of the shape
+     * Constructor for the square object. Create an init builder and finish the job.
      * @param r  The radius
      */
-    public ObjCircle(double x, double y, double r, MyWorld world) {
+    public ObjCircle(double r) {
         r = r/MyWorld.SCALE;
-        this.circ = new Circle(r);
-        initValues(this.circ, x, y, DEFAULT_DENSITY, world);
+        this.convex = new Circle(r);
     }
 
-    public ObjCircle(double x, double y, double r, double density, MyWorld world) {
-        r = r/MyWorld.SCALE;
-        this.circ = new Circle(r);
-        initValues(this.circ, x, y, density, world);
-    }
+//    private ObjCircle(double x, double y, double r, double density, MyWorld world) {
+//        r = r/MyWorld.SCALE;
+//        this.circ = new Circle(r);
+//        initValues(this.circ, x, y, density, world);
+//    }
+//
+//    private ObjCircle(double x, double y, double r, double fixtureangle) {
+//        r = r/MyWorld.SCALE;
+//        this.circ = new Circle(r);
+//        initValues(this.circ, x, y, fixtureangle);
+//    }
 
-    public ObjCircle(double x, double y, double r, double fixtureangle) {
-        r = r/MyWorld.SCALE;
-        this.circ = new Circle(r);
-        initValues(this.circ, x, y, fixtureangle);
-    }
+//    public InitBuilder putInWorld(int x, int y, MyWorld world) {
+//        return new InitBuilder(world)
+//    }
 
     @Override
     public void draw(Canvas canvas) {
         //might have to modify coordinates as needed
         Vector2 coord = this.body.getWorldCenter();
-        canvas.drawCircle((float) (coord.x + this.circ.getCenter().x - this.body.getLocalCenter().x),
-                        (float) (coord.y + this.circ.getCenter().y - this.body.getLocalCenter().y),
-                        (float) this.circ.getRadius(), this.paint);
+        canvas.drawCircle((float) (coord.x + this.convex.getCenter().x - this.body.getLocalCenter().x),
+                        (float) (coord.y + this.convex.getCenter().y - this.body.getLocalCenter().y),
+                        (float) this.convex.getRadius(), this.paint);
     }
 
 
@@ -57,7 +57,7 @@ public class ObjCircle extends AShape {
 
 
     public Convex getShape(){
-        return this.circ;
+        return this.convex;
     }
 
 

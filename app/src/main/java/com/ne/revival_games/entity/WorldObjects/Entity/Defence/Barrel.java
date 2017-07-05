@@ -14,7 +14,7 @@ import org.dyn4j.geometry.Vector2;
  * Created by Veganova on 6/29/2017.
  */
 
-public class Barrel extends Entity{
+public class Barrel extends Entity {
 
     public enum BarrelType {
         SINGLE, LAZER, SIDE, SPIRIT_BOMB
@@ -46,7 +46,6 @@ public class Barrel extends Entity{
                 this.shape.body.getTransform().rotate(1);
                 break;
         }
-
     }
 
     protected void fire() {

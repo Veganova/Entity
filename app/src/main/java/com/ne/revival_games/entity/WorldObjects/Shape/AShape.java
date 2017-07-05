@@ -25,7 +25,7 @@ public abstract class AShape implements Shape {
      */
     private int test = 68;
     protected double angle;
-    private Convex convex;
+    protected Convex convex;
     protected Paint paint;
 
     AShape() {
@@ -79,13 +79,15 @@ public abstract class AShape implements Shape {
         this.angle = 0;
         world.engineWorld.addBody(this.body);
     }
-    
-    public class TestInside {
 
-        public void printOut() {
-            System.out.println("TEST PRINT OUT" + test);
-        }
+    public InitBuilder getBuilder(boolean body, MyWorld world) {
+        return new InitBuilder(body, world, convex);
     }
+
+    public InitBuilder getBuilder(MyWorld world, Body premade) {
+        return new InitBuilder(world, premade);
+    }
+
 
     public class InitBuilder {
 
@@ -118,13 +120,13 @@ public abstract class AShape implements Shape {
          * @param y
          * @return
          */
-        InitBuilder setXY(double x, double y) {
+        public InitBuilder setXY(double x, double y) {
             this.x = x / MyWorld.SCALE;
             this.y = y / MyWorld.SCALE;
             return this;
         }
 
-        void init() {
+        public void init() {
             // dealing with a part, not a whole body
             if (!isBody) {
                 rotateFixture(this.angle, new Vector2(0,0));
@@ -149,12 +151,12 @@ public abstract class AShape implements Shape {
 
         }
 
-        InitBuilder setAngle(double fixtureangle) {
+        public InitBuilder setAngle(double fixtureangle) {
             this.angle = Math.toRadians(fixtureangle);
             return this;
         }
 
-        InitBuilder setConvex(Convex shape) {
+        public InitBuilder setConvex(Convex shape) {
             convex = shape;
             if (isBody) {
                 body = new Body();
@@ -163,27 +165,27 @@ public abstract class AShape implements Shape {
             return this;
         }
 
-        InitBuilder setBody(Body abody) {
+        public InitBuilder setBody(Body abody) {
             body = abody;
             this.premadeBody = true;
             return this;
         }
 
-        InitBuilder setDensity(double density) {
+        public InitBuilder setDensity(double density) {
             this.density = density;
             return this;
         }
 
-        InitBuilder setRestitution(double restitution) {
+        public InitBuilder setRestitution(double restitution) {
             this.restitution = restitution;
             return this;
         }
-        InitBuilder setFriction(double friction) {
+        public InitBuilder setFriction(double friction) {
             this.friction = friction;
             return this;
         }
 
-        InitBuilder setMassType(MassType type) {
+        public InitBuilder setMassType(MassType type) {
             this.type = type;
             return this;
         }

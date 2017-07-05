@@ -9,10 +9,10 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
  */
 public interface WorldObject {
 
-    /**
-     * Updates the engineWorld object using its state values.
-     */
-    void update(MyWorld world);
+//    /**
+//     * Updates the engineWorld object using its state values.
+//     */
+//    void update(MyWorld world);
 
     /**
      * Draw this engineWorld object onto the given canvas.

@@ -112,12 +112,7 @@ public class MyWorld {
 
         System.out.println("-----------------------------=====================----------------------------");
 
-        circ = new ObjCircle(0, 150, 10, this);
-        AShape.TestInside t1 = circ.getTester();
-        AShape.TestInside t2 = circ.getTester();
-        t1.printOut();
-        t2.printOut();
-        System.out.println(t1 == t2);
+        //circ = new ObjCircle(0, 150, 10, this);
         coords = new ArrayList<double[]>();
         List<AShape> objects = new ArrayList<AShape>();
 //        double [] points = {0, 100, -100, -100, 100, -100};
