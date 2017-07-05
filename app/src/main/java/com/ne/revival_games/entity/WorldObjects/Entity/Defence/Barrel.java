@@ -24,7 +24,7 @@ public class Barrel extends Entity{
     private MyWorld world;
     private double magnitude;
 
-    Barrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
+    public Barrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
         super(0, 0, 0, 0, 0, false);
         initBarrel(type, location, world, angle);
         this.world = world;

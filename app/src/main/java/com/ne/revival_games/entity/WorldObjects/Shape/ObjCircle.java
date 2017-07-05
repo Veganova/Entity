@@ -60,4 +60,28 @@ public class ObjCircle extends AShape {
         return this.circ;
     }
 
+
+    public static class ObjCircleBuilder {
+
+        private double x = 0, y =0, r = 10;
+
+
+        ObjCircleBuilder setX(double x) {
+            this.x = x;
+            return this;
+        }
+        ObjCircleBuilder setY(double x) {
+            this.y = x;
+            return this;
+        }
+        ObjCircleBuilder setR(double x) {
+            this.r = x;
+            return this;
+        }
+
+        // Builder b = CircleBuilder
+        // myCricle = b.setX(10).setY(1).setR(1).build();
+
+    }
+
 }

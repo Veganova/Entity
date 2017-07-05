@@ -7,7 +7,7 @@ import android.graphics.Paint;
  */
 
 public class GhostEntity {
-    private Entity entity;
+    public Entity entity;
 
     public GhostEntity(Entity entity) {
         this.entity = entity;
@@ -18,19 +18,16 @@ public class GhostEntity {
     }
 
     public boolean canPlace() {
-        return this.entity.shape.body.getInContactBodies(true).size() == 0;
+        //this.entity.shape.body.b
+        return this.entity.shape.body.getContacts(false).size() == 0;
     }
 
-    public void place() {
-        if (canPlace()) {
-            System.out.println("BORN NEXUS");
-            System.out.println(this.entity);
-            this.entity.shape.setPaint(Paint.Style.FILL);
-            this.entity.ghost = false;
-            this.entity.invulnerable = false;
-        } else {
-            System.out.println("CANNOT PLACE THERE.");
-        }
+    public Entity place() {
+        System.out.println("Born: " + this.entity);
+        this.entity.shape.setPaint(Paint.Style.FILL);
+        this.entity.ghost = false;
+        this.entity.invulnerable = false;
+        return entity;
     }
 
 

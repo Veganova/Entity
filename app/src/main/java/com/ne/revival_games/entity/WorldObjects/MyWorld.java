@@ -6,12 +6,12 @@ import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
+import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
-import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -63,8 +63,8 @@ public class MyWorld {
     public Entity barrier;
     public Turret turret;
     public ComplexShape complex;
-    public Nexus nex;
-    public GhostEntity ghostNexus;
+    public Entity nex;
+    public GhostEntity ghost;
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
@@ -98,11 +98,26 @@ public class MyWorld {
 //        Entity bullet = new Bullet(0, 0, 50, 60, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
 //        rect = new Barrier(300, 300, 0, this);
+        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
         nex = new Nexus(100, 0, 50, this);
         nex.shape.setColor(Color.BLUE);
-//        this.ghostNexus = new GhostEntity(nex);
+        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
+        this.ghost = new GhostEntity(nex);
+
+        GhostFactory factory = new GhostFactory(this);
+
+        // TODO: 7/1/2017 WHY IS NO COLLISION BETWEEN THE GHOST AND THE TURRET..
+        //this.ghost = factory.produce(Entities.NEXUS, 0, 0);
+        System.out.println("after - " + this.engineWorld.getBodies().size());
+
+        System.out.println("-----------------------------=====================----------------------------");
 
         circ = new ObjCircle(0, 150, 10, this);
+        AShape.TestInside t1 = circ.getTester();
+        AShape.TestInside t2 = circ.getTester();
+        t1.printOut();
+        t2.printOut();
+        System.out.println(t1 == t2);
         coords = new ArrayList<double[]>();
         List<AShape> objects = new ArrayList<AShape>();
 //        double [] points = {0, 100, -100, -100, 100, -100};
@@ -127,7 +142,11 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
-        turret.aim(nex.shape.body);
+        if (nex != null)
+            turret.aim(nex.shape.body);
+
+        System.out.println(this.ghost.canPlace());
+
         this.engineWorld.update(elapsedTime);
 
         for(Body body: bodiestodelete){

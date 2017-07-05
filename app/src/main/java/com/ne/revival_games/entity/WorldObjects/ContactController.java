@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects;
 
+import android.graphics.Paint;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import org.dyn4j.dynamics.Body;
@@ -24,12 +26,28 @@ public class ContactController extends ContactAdapter {
         Entity ent1 = world.objectDatabase.get(point.getBody1());
         Entity ent2 = world.objectDatabase.get(point.getBody2());
 
-        if(ent1.health <= 0){
+        if(ent1.health <= 0) {
             world.bodiestodelete.add(ent1.shape.body);
         }
-        if(ent2.health <= 0){
+        if(ent2.health <= 0) {
             world.bodiestodelete.add(ent2.shape.body);
         }
+    }
 
+
+    public boolean begin(ContactPoint point) {
+        Entity ent1 = world.objectDatabase.get(point.getBody1());
+        Entity ent2 = world.objectDatabase.get(point.getBody2());
+
+        if (ent1.ghost || ent2.ghost) {
+            if (ent1.ghost) {
+                ent1.shape.setPaint(Paint.Style.FILL);
+            }
+            if (ent2.ghost) {
+                ent2.shape.setPaint(Paint.Style.FILL);
+            }
+            return false;
+        }
+        return true;
     }
 }

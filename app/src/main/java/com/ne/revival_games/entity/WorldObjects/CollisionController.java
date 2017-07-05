@@ -26,10 +26,12 @@ class CollisionController extends CollisionAdapter {
     }
 
     @Override
-    public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+    public boolean collision(Body body1, BodyFixture fixture1, Body body2,
+                             BodyFixture fixture2, Penetration penetration) {
 
         Entity ent1 = world.objectDatabase.get(body1);
         Entity ent2 = world.objectDatabase.get(body2);
+
 
         if (ent1.ghost || ent2.ghost) {
             if (ent1.ghost) {
@@ -38,7 +40,7 @@ class CollisionController extends CollisionAdapter {
             if (ent2.ghost) {
                 ent2.shape.setPaint(Paint.Style.FILL);
             }
-            return false;
+            return true;
         }
 
 
