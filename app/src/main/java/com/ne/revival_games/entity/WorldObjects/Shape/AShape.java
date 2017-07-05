@@ -113,13 +113,7 @@ public abstract class AShape implements Shape {
             this.world = world;
         }
 
-        /**
-         * Do this last
-         *
-         * @param x
-         * @param y
-         * @return
-         */
+
         public InitBuilder setXY(double x, double y) {
             this.x = x / MyWorld.SCALE;
             this.y = y / MyWorld.SCALE;
