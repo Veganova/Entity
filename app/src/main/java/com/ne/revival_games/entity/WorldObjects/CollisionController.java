@@ -23,7 +23,6 @@ class CollisionController extends CollisionAdapter {
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
-
         Entity ent1 = world.objectDatabase.get(body1);
         Entity ent2 = world.objectDatabase.get(body2);
 
@@ -39,20 +38,25 @@ class CollisionController extends CollisionAdapter {
 
 
         boolean continueContact = true;
+        double damage1 = ent1.getDamage(body1);
+        double damage2 = ent2.getDamage(body2);
 
-        if(ent1.health > 0 && ent2.health > 0) {
-            double damage1 = ent1.getDamage(body1);
-            double damage2 = ent2.getDamage(body2);
+        if(ent1.isCollisionAuthority) {
+            continueContact = ent1.onCollision(ent2, body1, damage2);
+            ent2.onCollision(ent1, body2, damage1);
+        }
+        else if(ent2.isCollisionAuthority){
+            continueContact = ent2.onCollision(ent1, body2, damage1);
+            ent1.onCollision(ent2, body1, damage2);
 
-            //if either entity wants to continue the contact
-           if(ent1.isCollisionAuthority || ent2.isCollisionAuthority) {
-               System.out.println("HHELLO");
-               continueContact = ent1.onCollision(ent2, body1, damage2) && ent2.onCollision(ent1, body2, damage1);
-           }
-           else{
-               continueContact = ent1.onCollision(ent2, body1, damage2);
-               continueContact = ent2.onCollision(ent1, body2, damage1) || continueContact;
-           }
+        }
+        else {
+            if (ent1.health > 0 && ent2.health > 0) {
+
+                //if either entity wants to continue the contact
+                    continueContact = ent1.onCollision(ent2, body1, damage2);
+                    continueContact = ent2.onCollision(ent1, body2, damage1) || continueContact;
+            }
         }
 
         if(!continueContact){
@@ -64,6 +68,10 @@ class CollisionController extends CollisionAdapter {
             }
         }
 
+        if(ent1.isCollisionAuthority || ent2.isCollisionAuthority){
+            if(continueContact)
+                System.out.println(continueContact);
+        }
         return continueContact;
         //ent1.health > 0 && ent2.health > 0
     }

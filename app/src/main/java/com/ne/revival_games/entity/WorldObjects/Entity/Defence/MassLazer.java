@@ -1,7 +1,6 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -9,13 +8,10 @@ import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
-import com.ne.revival_games.entity.WorldObjects.Entity.WorldObject;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.MassType;
@@ -23,9 +19,7 @@ import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by vishn on 6/30/2017.
@@ -180,7 +174,7 @@ public class MassLazer extends Projectile {
 
     //TODO: IMPLEMENT THIS FUNCTION
     @Override
-    public Projectile returnCustomizedCopy(Vector2 location, double direction, double speed, MyWorld world){
+    public Projectile returnCustomizedCopy(Projectile project, Vector2 location, double direction, double speed, MyWorld world){
         return new MassLazer(location.x, location.y, direction, world);
     }
 }

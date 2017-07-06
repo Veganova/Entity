@@ -35,7 +35,7 @@ public class Missile extends Projectile {
     }
 
     @Override
-    public Projectile returnCustomizedCopy(Vector2 location, double direction, double speed, MyWorld world){
+    public Projectile returnCustomizedCopy(Projectile project, Vector2 location, double direction, double speed, MyWorld world){
         return new Missile(location.x, location.y, direction, speed, world);
     }
 

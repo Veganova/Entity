@@ -14,6 +14,7 @@ import org.dyn4j.geometry.Vector2;
 public abstract class Projectile extends Entity {
 
     public static double MAX_RADIUS = 250;
+    public double barrel_pause = 0;
 
 
     public Projectile(double x, double y, int r, double direction, double speed,
@@ -28,7 +29,7 @@ public abstract class Projectile extends Entity {
         super(0, 0, direction, speed, health, false);
     }
 
-    abstract public Projectile returnCustomizedCopy(Vector2 location,
+    abstract public Projectile returnCustomizedCopy(Projectile project, Vector2 location,
                                                     double direction, double speed, MyWorld world);
 
 }

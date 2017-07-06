@@ -6,6 +6,7 @@ import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.MassLazer;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.SimpleLazer;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
@@ -100,7 +101,7 @@ public class MyWorld {
 //        turret3 = new Turret(new Vector2(400, 100), 30, this);
 //        turret4 = new Turret(new Vector2(200, -250), 30, this);
 
-        bam = new MassLazer(-200, -200, 30, this);
+//        bam = new MassLazer(-200, -200, 30, this);
         nex = new Nexus(100, 0, 50, this);
         nex.shape.setColor(Color.BLUE);
 //        this.ghostNexus = new GhostEntity(nex);
@@ -129,20 +130,25 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
-        turret.aim(nex.shape.body);
 
         for(Entity ent: this.objectDatabase.values()){
             ent.update(this);
         }
 
-        this.engineWorld.update(elapsedTime);
+        turret.aim(nex.shape.body);
 
         for(Body body: bodiestodelete){
-            objectDatabase.get(body).onDeath();
-            objectDatabase.remove(body);
+            System.out.println(bodiestodelete.size());
+            if(objectDatabase.get(body) != null){
+                objectDatabase.get(body).onDeath();
+                objectDatabase.remove(body);
+            }
             engineWorld.removeBody(body);
             bodiestodelete.remove(body);
         }
+
+        this.engineWorld.update(elapsedTime);
+
     }
 
     /**

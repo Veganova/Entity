@@ -90,17 +90,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.setOnTouchListener(new DoubleClickListener() {
             @Override
             void onSingleClick(MotionEvent event) {
-                System.out.println("SINGLE");
                 double canvasX = event.getX() / scaleX;
                 double canvasY = event.getY()  / scaleY;
-                world.bam.shape.body.translateToOrigin();
-                world.bam.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE,
+                world.nex.shape.body.translateToOrigin();
+                world.nex.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE,
                         -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
             }
 
             @Override
             void onDoubleClick(MotionEvent event) {
-                System.out.println("DOUBLE");
                 //world.ghostNexus.place();
             }
         });

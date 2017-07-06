@@ -15,10 +15,10 @@ import org.dyn4j.geometry.Vector2;
 
 public class Lazer extends Projectile {
     public double damage;
-    public double lazer_width = 20;
-    public double lazer_length;
-    public double lazer_angle;
-    public double lazer_speed;
+    public double lazer_width = 20;         //unscaled width
+    public double lazer_length;             //unscaled length
+    public double lazer_angle;              //angle in RADIANS
+    public double lazer_speed;              //raw speed
     private MyWorld world;
 
     public Lazer(double width, double direction, double speed, double health, MyWorld world) {
@@ -42,7 +42,6 @@ public class Lazer extends Projectile {
         double l = Util.getDistance(oldPoint, newPoint);
         lazer_angle = Util.absoluteAngle(oldPoint, newPoint);
         this.shape = new ObjRectangle(x * MyWorld.SCALE, y * MyWorld.SCALE, l  * MyWorld.SCALE, lazer_width * MyWorld.SCALE, this.world);
-        System.out.println(x * MyWorld.SCALE + " " + y * MyWorld.SCALE + " " + l * MyWorld.SCALE);
         shape.rotateBody(lazer_angle);
     }
 
@@ -52,7 +51,7 @@ public class Lazer extends Projectile {
     }
 
     @Override
-    public Projectile returnCustomizedCopy(Vector2 location, double direction, double speed, MyWorld world) {
+    public Projectile returnCustomizedCopy(Projectile project, Vector2 location, double direction, double speed, MyWorld world) {
         return null;
     }
 

@@ -8,7 +8,6 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -59,8 +58,7 @@ public class Barrel extends Entity{
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*shape.body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
-//        this.projectile.returnCustomizedCopy(new Vector2(x,y), angle, 30, this.world);
-        new SimpleLazer(new Vector2(x,y), Math.toRadians(angle), 400, 20, 300, 0, this.world);
+        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world);
         this.shape.body.setAsleep(false);
     }
 

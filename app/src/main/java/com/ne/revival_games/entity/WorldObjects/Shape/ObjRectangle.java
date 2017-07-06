@@ -66,6 +66,8 @@ public class ObjRectangle extends AShape {
         canvas.drawRect(rectangle, this.paint);
 
         canvas.restore();
+
+
     }
 
     @Override
