@@ -7,9 +7,12 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.collision.Fixture;
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+
+import java.util.Iterator;
 
 /**
  * Created by Veganova on 6/7/2017.
@@ -25,7 +28,7 @@ public abstract class AShape implements Shape {
      */
     private int test = 68;
     protected double angle;
-    protected Convex convex;
+    public Convex convex;
     protected Paint paint;
 
     AShape() {
@@ -245,4 +248,5 @@ public abstract class AShape implements Shape {
     public void translateFixture(double x, double y){
         this.convex.translate(x, y);
     }
+
 }

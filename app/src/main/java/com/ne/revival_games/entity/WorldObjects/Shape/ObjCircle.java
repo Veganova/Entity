@@ -13,14 +13,15 @@ import org.dyn4j.geometry.Vector2;
  */
 public class ObjCircle extends AShape {
 
-    //private Convex circ;
+    private Circle circ;
     /**
      * Constructor for the square object. Create an init builder and finish the job.
      * @param r  The radius
      */
     public ObjCircle(double r) {
         r = r/MyWorld.SCALE;
-        this.convex = new Circle(r);
+        circ = new Circle(r);
+        this.convex = circ;
     }
 
 //    private ObjCircle(double x, double y, double r, double density, MyWorld world) {

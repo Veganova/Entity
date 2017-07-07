@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.List;
@@ -34,10 +35,12 @@ public class ComplexShape extends AShape {
             fixtures.get(z).body = this.body;
             body.addFixture(fixtures.get(z).getShape());
         }
+
         shapes = fixtures;
         this.getBuilder(world, body).setXY(x, y).init();
         isComplexBody = false;
     }
+
 
     /**
      * constructor for a complex body which must be created externally to the function using joints

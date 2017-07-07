@@ -34,17 +34,17 @@ public class GhostFactory {
     public GhostEntity produce(Entities ent, double x, double y) {
         switch(ent) {
             case BARREL:
-                return new GhostEntity(new Barrel(Barrel.BarrelType.SINGLE, new Vector2(x, y), world, 0));
+                return new GhostEntity(new Barrel(Barrel.BarrelType.SINGLE, new Vector2(x, y), world, 0), world);
             case BARRIER:
-                return new GhostEntity(new Barrier(x, y, 0, world));
+                return new GhostEntity(new Barrier(x, y, 0, world), world);
             case MASSLAZER:
                 return null;
             case MISSLE: // TODO: 7/1/2017 what case will this be made from here?
-                return new GhostEntity(new Missile(x, y, Missile.SPEED, 0, world));
+                return new GhostEntity(new Missile(x, y, Missile.SPEED, 0, world), world);
             case NEXUS:
-                return new GhostEntity(new Nexus(x, y, 0, world));
+                return new GhostEntity(new Nexus(x, y, 0, world), world);
             case TURRET:
-                return new GhostEntity(new Turret(new Vector2(x, y), 0, world));
+                return new GhostEntity(new Turret(new Vector2(x, y), 0, world), world);
         }
         return null;
     }

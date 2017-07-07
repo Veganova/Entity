@@ -34,12 +34,15 @@ class CollisionController extends CollisionAdapter {
 
 
         if (ent1.ghost || ent2.ghost) {
-            if (ent1.ghost) {
-                ent1.shape.setPaint(Paint.Style.FILL);
-            }
-            if (ent2.ghost) {
-                ent2.shape.setPaint(Paint.Style.FILL);
-            }
+//            if (ent1.ghost) {
+//                GhostEntity g = world.ghosts.get(ent1);
+//                g.isColliding(true);
+//                //ent1.shape.setPaint(Paint.Style.FILL);
+//            }
+//            if (ent2.ghost) {
+//                ent2.shape.setPaint(Paint.Style.FILL);
+//            }
+            //System.out.println("FIRST COLLISION");
             return true;
         }
 

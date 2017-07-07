@@ -1,19 +1,13 @@
 package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
-import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Bullet;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -21,13 +15,16 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.DetectResult;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,7 +36,7 @@ public class MyWorld {
     public HashMap<Body, Entity> objectDatabase;
     public ArrayList<Body> bodiestodelete;
     public ArrayList<double []> coords;
-
+    public HashMap<Entity, GhostEntity> ghosts;
     /** The scale 45 pixels per meter */
     public static final double SCALE = 50.0;
 
@@ -87,32 +84,37 @@ public class MyWorld {
     protected void initializeWorld() {
         // create the engineWorld
         this.objectDatabase = new HashMap<>();
+        this.ghosts = new HashMap<>();
         this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();
 
 
         this.engineWorld.setGravity(new Vector2(0, 0));
-//        CollisionListener skip = new CollisionController(this);
-//        ContactListener contact = new ContactController(this);
-//        this.engineWorld.addListener(skip);
-//        this.engineWorld.addListener(contact);
+        CollisionListener skip = new CollisionController(this);
+        ContactListener contact = new ContactController(this);
+        ContactListener contactGhost = new GhostContactController();
+        this.engineWorld.addListener(skip);
+        this.engineWorld.addListener(contact);
+        this.engineWorld.addListener(contactGhost);
 
         //barrier = new Barrier(300, 400, 0, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
 //        rect = new Barrier(300, 300, 0, this);
 //        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
-        nex = new Nexus(100, 0, 50, this);
+//        nex = new Nexus(100, 0, 50, this);
 //        nex.shape.setColor(Color.BLUE);
-//        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
-//        this.ghost = new GhostEntity(nex);
-//
-//        GhostFactory factory = new GhostFactory(this);
-//
-//        // TODO: 7/1/2017 WHY IS NO COLLISION BETWEEN THE GHOST AND THE TURRET..
-//        //this.ghost = factory.produce(Entities.NEXUS, 0, 0);
-//        System.out.println("after - " + this.engineWorld.getBodies().size());
-//
-//        System.out.println("-----------------------------=====================----------------------------");
+        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
+        Nexus n = new Nexus(100, 0, 50, this);
+        this.ghost = new GhostEntity(n, this);
+        ghosts.put(n, ghost);
+
+       // GhostFactory factory = new GhostFactory(this);
+
+        // TODO: 7/1/2017 WHY IS NO COLLISION BETWEEN THE GHOST AND THE TURRET..
+        //this.ghost = factory.produce(Entities.NEXUS, 0, 0);
+        System.out.println("after - " + this.engineWorld.getBodies().size());
+
+        System.out.println("-----------------------------=====================----------------------------");
 
 //        circ = new ObjCircle(10);
 //        circ.getBuilder(true, this).setXY(0, 150).init();
@@ -134,6 +136,8 @@ public class MyWorld {
      * the game, graphics, and poll for input.
      */
     public void objectUpdate() {
+        this.ghost.isColliding();
+        //System.out.println(engineWorld.detect(ghost.entity.shape.convex, true, new ArrayList<DetectResult>()));
         // get the current time
         long time = System.nanoTime();
         // get the elapsed time from the last iteration
@@ -145,8 +149,9 @@ public class MyWorld {
         // update the engineWorld with the elapsed time
 //        if (nex != null)
 //            turret.aim(nex.shape.body);
-        if (nex != null)
-            turret.aim(nex.shape.body);
+        System.out.println(nex == null);
+        //if (nex != null)
+            //turret.aim(ghost.entity.shape.body);
 
         this.engineWorld.update(elapsedTime);
 
@@ -161,6 +166,7 @@ public class MyWorld {
 //            entity.update(this);
         }
 
+        //this.ghost.isColliding(false);
 
     }
 
@@ -173,17 +179,13 @@ public class MyWorld {
         //this might draw multiple of the same entities
         for (Entity entity : objectDatabase.values()) {
             if(!entity.invisible)
-            entity.draw(canvas);
+                entity.draw(canvas);
         }
 //        tri.draw(canvas);
 //        circ.draw(canvas);
-
-        Paint pent = new Paint();
-        pent.setColor(Color.RED);
-        for(double [] kek : coords){
-            canvas.drawCircle((float) kek[0], (float) kek[1], (float) (5/SCALE), pent);
-        }
-        //nex.shape.setPaint(Paint.Style.STROKE);
+//
+//        if (ghost.canPlace())
+//            ghost.entity.shape.setPaint(Paint.Style.STROKE);
 
     }
 

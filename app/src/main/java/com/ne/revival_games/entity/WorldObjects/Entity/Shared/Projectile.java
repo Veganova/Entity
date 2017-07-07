@@ -21,8 +21,7 @@ public abstract class Projectile extends Entity {
         super(x, y, direction, speed, health, false);
 
         shape = new ObjCircle(r);
-        AShape.InitBuilder builder = shape.getBuilder(true, world);
-        builder.setXY(x, y).init();
+        shape.getBuilder(true, world).setXY(x, y).init();
 
         shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
