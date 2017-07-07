@@ -39,15 +39,19 @@ public class GhostEntity {
         this.entity.invulnerable = false;
         Entity toPlace = this.entity;
         this.entity = null;
+        world.ghosts.remove(toPlace);
+        this.placeable = false;
         return toPlace;
     }
 
     // TODO: 7/7/2017 dont need to always call this method - can start calling it when the listeners find a collision with ghost
     public void isColliding() {
-        boolean all = false;
+        if (this.entity == null) {
+            return;
+        }
         for (Body body: world.engineWorld.getBodies()) {
             if (!world.objectDatabase.get(body).ghost) {
-                if (world.ghost.entity.shape.body.isInContact(body)) {
+                if (this.entity.shape.body.isInContact(body)) {
                     // the ghost object is colliding with another non-ghost object
                     entity.shape.setColor(CONTACTING);
                     entity.shape.setPaint(Paint.Style.FILL);

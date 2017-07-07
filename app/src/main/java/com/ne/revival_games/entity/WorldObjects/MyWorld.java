@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -92,12 +93,10 @@ public class MyWorld {
         this.engineWorld.setGravity(new Vector2(0, 0));
         CollisionListener skip = new CollisionController(this);
         ContactListener contact = new ContactController(this);
-        ContactListener contactGhost = new GhostContactController();
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
-        this.engineWorld.addListener(contactGhost);
 
-        //barrier = new Barrier(300, 400, 0, this);
+        barrier = new Barrier(300, 400, 0, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
 //        rect = new Barrier(300, 300, 0, this);
 //        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
@@ -136,8 +135,11 @@ public class MyWorld {
      * the game, graphics, and poll for input.
      */
     public void objectUpdate() {
-        this.ghost.isColliding();
-        //System.out.println(engineWorld.detect(ghost.entity.shape.convex, true, new ArrayList<DetectResult>()));
+        // TODO: 7/7/2017 this check can probably be done when the user clicks the "place" command
+        for (GhostEntity ghost :this.ghosts.values()) {
+            this.ghost.isColliding();
+        }
+
         // get the current time
         long time = System.nanoTime();
         // get the elapsed time from the last iteration
@@ -149,9 +151,7 @@ public class MyWorld {
         // update the engineWorld with the elapsed time
 //        if (nex != null)
 //            turret.aim(nex.shape.body);
-        System.out.println(nex == null);
-        //if (nex != null)
-            //turret.aim(ghost.entity.shape.body);
+        turret.aim(barrier.shape.body);
 
         this.engineWorld.update(elapsedTime);
 
