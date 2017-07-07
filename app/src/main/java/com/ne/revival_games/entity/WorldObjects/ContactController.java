@@ -1,11 +1,16 @@
 package com.ne.revival_games.entity.WorldObjects;
 
+import android.graphics.Paint;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.contact.ContactAdapter;
 import org.dyn4j.dynamics.contact.ContactPoint;
 import org.dyn4j.dynamics.contact.SolvedContactPoint;
+
+import java.sql.SQLOutput;
 
 /**
  * Created by vishn on 6/27/2017.
@@ -13,7 +18,7 @@ import org.dyn4j.dynamics.contact.SolvedContactPoint;
 
 public class ContactController extends ContactAdapter {
 
-    MyWorld world;
+    private MyWorld world;
 
     public ContactController(MyWorld world){
         this.world = world;
@@ -24,12 +29,32 @@ public class ContactController extends ContactAdapter {
         Entity ent1 = world.objectDatabase.get(point.getBody1());
         Entity ent2 = world.objectDatabase.get(point.getBody2());
 
-        if(ent1.health <= 0){
+
+        if(ent1.health <= 0) {
             world.bodiestodelete.add(ent1.shape.body);
         }
-        if(ent2.health <= 0){
+        if(ent2.health <= 0) {
             world.bodiestodelete.add(ent2.shape.body);
         }
+        System.out.println("ghost contact - " + (ent1.ghost || ent2.ghost));
+    }
 
+    @Override
+    public boolean preSolve(ContactPoint point) {
+        Entity ent1 = world.objectDatabase.get(point.getBody1());
+        Entity ent2 = world.objectDatabase.get(point.getBody2());
+        //System.out.println("SOLVED CONTACT");
+        if (ent1.ghost || ent2.ghost){
+            return false;
+        }
+        return true;
+    }
+
+
+    public boolean begin(ContactPoint point) {
+        //System.out.println("BEGIN");
+        Entity ent1 = world.objectDatabase.get(point.getBody1());
+        Entity ent2 = world.objectDatabase.get(point.getBody2());
+        return !(ent1.ghost || ent2.ghost);
     }
 }

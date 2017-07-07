@@ -5,9 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import org.dyn4j.collision.Fixture;
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
+
+import java.util.Iterator;
 
 /**
  * A interface representing different shapes.
@@ -40,6 +44,4 @@ public interface Shape {
     void setPaint(Paint.Style style);
 
     void setColor(int color);
-
-
 }

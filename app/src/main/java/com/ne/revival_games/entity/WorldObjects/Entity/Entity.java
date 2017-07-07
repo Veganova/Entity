@@ -28,6 +28,7 @@ public abstract class Entity implements WorldObject {
     boolean invulnerable;
     public boolean ghost = false;
 
+    // TODO: 7/5/2017 some fields here are not needed 
     public Entity(double x, double y, double direction,
                   double speed, int health, boolean invulnerable) {
         this.x = x;
@@ -38,12 +39,12 @@ public abstract class Entity implements WorldObject {
         this.invulnerable = invulnerable;
     }
 
-    // damage from speed;
     @Override
     public void update(MyWorld world) {
 
          //if anything has collided, reduce health - this can be put in Entity
     }
+
 
     @Override
     public void draw(Canvas canvas) {

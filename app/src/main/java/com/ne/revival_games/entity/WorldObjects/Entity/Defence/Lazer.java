@@ -37,11 +37,12 @@ public class Lazer extends Projectile {
      * is initialized
      */
     public void placeLazer(Vector2 oldPoint, Vector2 newPoint){
-        double x = (oldPoint.x + newPoint.x) / 2;
-        double y = (oldPoint.y + newPoint.y) / 2;
+        double x = (oldPoint.x + newPoint.x) / 2 * MyWorld.SCALE;
+        double y = (oldPoint.y + newPoint.y) / 2 * MyWorld.SCALE;
         double l = Util.getDistance(oldPoint, newPoint);
         lazer_angle = Util.absoluteAngle(oldPoint, newPoint);
-        this.shape = new ObjRectangle(x * MyWorld.SCALE, y * MyWorld.SCALE, l  * MyWorld.SCALE, lazer_width * MyWorld.SCALE, this.world);
+        this.shape = new ObjRectangle(l  * MyWorld.SCALE, lazer_width * MyWorld.SCALE);
+        this.shape.getBuilder(true, this.world).setXY(x,y).init();
         shape.rotateBody(lazer_angle);
     }
 

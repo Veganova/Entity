@@ -56,7 +56,9 @@ public class MassLazer extends Projectile {
             this.TYPE = ObjectType.OFFENSE;
 
 //        initializeHead(x, y);
-        this.shape = new ObjCircle(x, y, (double) 30, world);
+        this.shape = new ObjCircle(30);
+        this.shape.getBuilder(true, world).setXY(x, y).init();
+
         this.world.objectDatabase.put(this.shape.body, this);
         this.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
         this.setVelocity(20);
@@ -125,11 +127,11 @@ public class MassLazer extends Projectile {
         double y = (oldPoint.y + newPoint.y) / 2;
         double l = Util.getDistance(oldPoint, newPoint)  * MyWorld.SCALE;
         double ang = Util.absoluteAngle(oldPoint, newPoint);
-        ObjRectangle temp = new ObjRectangle(x * MyWorld.SCALE, y * MyWorld.SCALE, l+trailHeadStart, 20, this.world);
-        temp.rotateBody(ang);
-        temp.body.setAsleep(true);
-        this.world.objectDatabase.put(temp.body, this);
-        tail.add(temp);
+        ObjRectangle rect = new ObjRectangle(l+trailHeadStart, 20);
+        rect.getBuilder(true, world).setAngle(ang).setXY(x * MyWorld.SCALE, y * MyWorld.SCALE).init();
+        rect.body.setAsleep(true);
+        this.world.objectDatabase.put(rect.body, this);
+        tail.add(rect);
         this.lastPoint = newPoint;
     }
 

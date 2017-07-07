@@ -7,21 +7,12 @@ package com.ne.revival_games.entity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-
-import org.dyn4j.geometry.Transform;
-
-import java.util.List;
-
-import static com.ne.revival_games.entity.MainThread.canvas;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -92,18 +83,29 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             void onSingleClick(MotionEvent event) {
                 double canvasX = event.getX() / scaleX;
                 double canvasY = event.getY()  / scaleY;
-                world.nex.shape.body.translateToOrigin();
-                world.nex.shape.body.translate((canvasX - WIDTH/2)/MyWorld.SCALE,
-                        -1*(canvasY - HEIGHT/2)/MyWorld.SCALE);
+                if (world.ghost.entity != null) {
+                    world.ghost.entity.shape.body.translateToOrigin();
+                    world.ghost.entity.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
+                            -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
+                } else {
+                    world.nex.shape.body.translateToOrigin();
+                    world.nex.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
+                            -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
+                }
+                System.out.println(world.ghost.canPlace());
             }
 
             @Override
             void onDoubleClick(MotionEvent event) {
-                //world.ghostNexus.place();
+                System.out.println("DOUBLE");
+                if (world.ghost.canPlace()) {
+                    System.out.println("PLACED");
+                    world.nex = world.ghost.place();
+                }
             }
         });
 
-        //make gamePanel focusable so it can handle events
+        // make gamePanel focusable so it can handle events
         setFocusable(true);
     }
 

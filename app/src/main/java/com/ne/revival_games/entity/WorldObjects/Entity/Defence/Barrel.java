@@ -14,7 +14,7 @@ import org.dyn4j.geometry.Vector2;
  * Created by Veganova on 6/29/2017.
  */
 
-public class Barrel extends Entity{
+public class Barrel extends Entity {
 
     public enum BarrelType {
         SINGLE, LAZER, SIDE, SPIRIT_BOMB
@@ -25,7 +25,7 @@ public class Barrel extends Entity{
     private double magnitude;
     private Projectile projectile;
 
-    Barrel(Projectile projectile, BarrelType type, Vector2 location, MyWorld world, double angle) {
+    public Barrel(Projectile projectile, BarrelType type, Vector2 location, MyWorld world, double angle) {
         super(0, 0, 0, 0, 0, false);
         initBarrel(type, location, world, angle);
         this.world = world;
@@ -37,18 +37,21 @@ public class Barrel extends Entity{
         switch (type) {
             case SINGLE:
                 //magnitude needs to be specified here
-                this.shape = new ObjRectangle(location.x, location.y, 120, 20, world);
+                this.shape = new ObjRectangle(120, 20);
+                AShape.InitBuilder builderSingle = this.shape.getBuilder(true, world);
+                builderSingle.setXY(location.x, location.y).init();
                 magnitude = 150;
                 break;
             case SIDE:
-                this.shape = new ObjRectangle(50 + location.x, 100+location.y, 120, 20, world);
+                this.shape = new ObjRectangle(120, 20);
+                AShape.InitBuilder builderSide = this.shape.getBuilder(true, world);
+                builderSide.setXY(50 + location.x, 100 + location.y).init();
                 magnitude = 50;
 
                 this.shape.rotateBody(angle);
                 this.shape.body.getTransform().rotate(1);
                 break;
         }
-
     }
 
     protected void fire() {

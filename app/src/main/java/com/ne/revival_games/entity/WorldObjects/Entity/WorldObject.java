@@ -11,9 +11,9 @@ import org.dyn4j.dynamics.Body;
  */
 public interface WorldObject {
 
-    /**
-     * Updates the engineWorld object using its state values.
-     */
+//    /**
+//     * Updates the engineWorld object using its state values.
+//     */
     void update(MyWorld world);
 
     /**

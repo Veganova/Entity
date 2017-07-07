@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
@@ -21,8 +22,11 @@ public class Barrier extends Entity {
 
     public Barrier(double x, double y, double angle, MyWorld world) {
         super(x, y, angle, 0, HEALTH, false);
-        this.shape = new ObjRectangle(x, y, 200, 30, world);
-        this.shape.rotateBody(Math.toRadians(angle));
+        this.shape = new ObjRectangle(200, 30);
+        AShape.InitBuilder builder = this.shape.getBuilder(true, world);
+        builder.setAngle(angle).setXY(x, y).init();
+
+        //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
         TYPE = ObjectType.OFFENSE;
     }
