@@ -5,24 +5,16 @@ import android.graphics.Canvas;
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
-import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
-import com.ne.revival_games.entity.WorldObjects.Shape.Shape;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.World;
-import org.dyn4j.dynamics.joint.AngleJoint;
-import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.dynamics.joint.RevoluteJoint;
-import org.dyn4j.dynamics.joint.WeldJoint;
-import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
@@ -36,7 +28,7 @@ public class Turret extends Entity implements Aimable {
     public static int COST = 200;
     public static int MASS = 25;
     public static int HEALTH = 80;
-    public static ObjectType TYPE = ObjectType.DEFENCE;
+    public static Team TYPE = Team.DEFENCE;
     private static double reload = 3000;
     private double lastfired = 0;
 

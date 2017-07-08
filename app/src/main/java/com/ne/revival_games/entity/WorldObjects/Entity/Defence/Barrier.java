@@ -1,7 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -17,7 +17,7 @@ public class Barrier extends Entity {
     public static int COST = 100;
     public static int MASS = 20;
     public static int HEALTH = 100;
-//    public static ObjectType TYPE = ObjectType.OFFENSE;
+//    public static Team TYPE = Team.OFFENSE;
 
 
     public Barrier(double x, double y, double angle, MyWorld world) {
@@ -28,12 +28,12 @@ public class Barrier extends Entity {
 
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
-        TYPE = ObjectType.OFFENSE;
+        TYPE = Team.OFFENSE;
     }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE == ObjectType.DEFENCE){
+        if(contact.TYPE == Team.DEFENCE){
             this.health -= damage;
             if(this.health <= 0){
                 this.invisible = true;

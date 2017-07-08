@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
@@ -53,7 +53,7 @@ public class MassLazer extends Projectile {
             lastPoint = new Vector2(x/ MyWorld.SCALE, y/MyWorld.SCALE);
             points.add(lastPoint);
             this.world = world;
-            this.TYPE = ObjectType.OFFENSE;
+            this.TYPE = Team.OFFENSE;
 
 //        initializeHead(x, y);
         this.shape = new ObjCircle(30);

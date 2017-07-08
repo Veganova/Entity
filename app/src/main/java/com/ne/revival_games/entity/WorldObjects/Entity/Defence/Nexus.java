@@ -1,7 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.ObjectType;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
@@ -55,12 +55,12 @@ public class Nexus extends Entity {
 
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
-        TYPE = ObjectType.DEFENCE;
+        TYPE = Team.DEFENCE;
     }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE == ObjectType.DEFENCE){
+        if(contact.TYPE == Team.DEFENCE){
             this.health -= damage;
             if(this.health <= 0){
                 this.invisible = true;

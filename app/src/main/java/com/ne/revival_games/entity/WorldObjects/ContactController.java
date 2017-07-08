@@ -35,7 +35,7 @@ public class ContactController extends ContactAdapter {
         if(ent2.health <= 0) {
             world.bodiestodelete.add(ent2.shape.body);
         }
-        System.out.println("ghost contact - " + (ent1.ghost || ent2.ghost));
+        //System.out.println("ghost contact - " + (ent1.ghost || ent2.ghost));
     }
 
     @Override

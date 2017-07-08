@@ -15,7 +15,7 @@ public abstract class Entity implements WorldObject {
     public  int COST;
     public int MASS;
     public  int HEALTH;
-    public ObjectType TYPE;
+    public Team TYPE;
 
     double x;
     double y;

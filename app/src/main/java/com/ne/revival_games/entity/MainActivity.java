@@ -16,6 +16,12 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Player;
+
+import org.dyn4j.dynamics.World;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -26,7 +32,11 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(new GamePanel(this));
+        GamePanel view = new GamePanel(this);
+        MyWorld world = view.world;
+        Player player1 = new Player(1, Team.DEFENCE, world, view.scales, 0, 800 );
+        view.setOnTouchListener(player1);
+        setContentView(view);
 //        addContentView(new GamePanel(this));
     }
 
