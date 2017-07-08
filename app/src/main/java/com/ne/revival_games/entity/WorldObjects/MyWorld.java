@@ -115,15 +115,8 @@ public class MyWorld {
 //        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
 //        nex = new Nexus(100, 0, 50, this);
 //        nex.shape.setColor(Color.BLUE);
-        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
-
         GhostFactory factory = new GhostFactory(this);
-
-        // TODO: 7/1/2017 WHY IS NO COLLISION BETWEEN THE GHOST AND THE TURRET..
         this.ghost = factory.produce(Entities.NEXUS, 0, 0, 0);
-        System.out.println("after - " + this.engineWorld.getBodies().size());
-
-        System.out.println("-----------------------------=====================----------------------------");
 
 //        circ = new ObjCircle(10);
 //        circ.getBuilder(true, this).setXY(0, 150).init();
@@ -148,7 +141,7 @@ public class MyWorld {
     public void objectUpdate() {
         // TODO: 7/7/2017 this check can probably be done when the user clicks the "place" command
         for (GhostEntity ghost :this.ghosts.values()) {
-            this.ghost.isColliding();
+            ghost.isColliding();
         }
 
         // get the current time

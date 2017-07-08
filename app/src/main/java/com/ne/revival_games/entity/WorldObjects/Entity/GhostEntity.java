@@ -46,6 +46,7 @@ public class GhostEntity {
 
     // TODO: 7/7/2017 dont need to always call this method - can start calling it when the listeners find a collision with ghost
     public void isColliding() {
+        System.out.println(placeable);
         if (this.entity == null) {
             return;
         }

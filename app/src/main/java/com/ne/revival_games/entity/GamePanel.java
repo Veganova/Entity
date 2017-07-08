@@ -6,6 +6,7 @@ package com.ne.revival_games.entity;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -22,23 +23,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private static final float ADJUST = (float) 0.02;
     private MainThread thread;
     private Background bg;
-    MyWorld world;
-
-
-//    private class TouchListener implements OnTouchListener {
-//        private GestureDetector gestureDetector =
-//                new GestureDetector(Test.this, new GestureDetector.SimpleOnGestureListener() {
-//                    @Override
-//                    public boolean onDoubleTap(MotionEvent e) {
-//                        return super.onDoubleTap(e);
-//                    }
-//                });
-//        @Override
-//        public boolean onTouch(View v, MotionEvent event) {
-//            gestureDetector.onTouchEvent(event);
-//            return true;
-//        }
-//    }
+    private MyWorld world;
 
     private abstract class DoubleClickListener implements OnTouchListener {
 
@@ -76,6 +61,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
 
         thread = new MainThread(getHolder(), this);
+
         world = new MyWorld(thread.canvas);
 
         this.setOnTouchListener(new DoubleClickListener() {
@@ -128,9 +114,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
 
         }
-
     }
 
+    Camera c;
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getContext().getResources(),
@@ -141,6 +127,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         thread.setRunning(true);
         thread.start();
+        c = new Camera();
+
 
     }
 
@@ -161,7 +149,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void draw(Canvas canvas) {
+        //c.applyToCanvas(canvas); camera stuff.. could be usefull
+       // canvas.scale(1f, 0.5f);
+
         super.draw(canvas);
+
         //seems a bit inefficient
         scaleX = getWidth()  / WIDTH;
         scaleY = getHeight() / HEIGHT;

@@ -38,7 +38,8 @@ public class GhostFactory {
         switch(ent) {
             case BARREL:
 
-                entity = new Barrel(new Missile(0, 0, 0, 30, this.world), Barrel.BarrelType.SINGLE, new Vector2(x, y), world, angle);
+                entity = new Barrel(new Missile(0, 0, 0, 30, this.world),
+                        Barrel.BarrelType.SINGLE, new Vector2(x, y), world, angle);
                 break;
             case BARRIER:
                 entity =  (new Barrier(x, y, angle, world));

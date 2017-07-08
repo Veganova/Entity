@@ -29,7 +29,6 @@ public class ContactController extends ContactAdapter {
         Entity ent1 = world.objectDatabase.get(point.getBody1());
         Entity ent2 = world.objectDatabase.get(point.getBody2());
 
-
         if(ent1.health <= 0) {
             world.bodiestodelete.add(ent1.shape.body);
         }
@@ -44,10 +43,7 @@ public class ContactController extends ContactAdapter {
         Entity ent1 = world.objectDatabase.get(point.getBody1());
         Entity ent2 = world.objectDatabase.get(point.getBody2());
         //System.out.println("SOLVED CONTACT");
-        if (ent1.ghost || ent2.ghost){
-            return false;
-        }
-        return true;
+        return !(ent1.ghost || ent2.ghost);
     }
 
 

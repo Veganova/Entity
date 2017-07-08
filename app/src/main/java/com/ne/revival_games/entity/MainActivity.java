@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new GamePanel(this));
+//        addContentView(new GamePanel(this));
     }
 
 
