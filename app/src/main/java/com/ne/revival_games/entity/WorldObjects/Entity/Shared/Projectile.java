@@ -14,26 +14,39 @@ import org.dyn4j.geometry.Vector2;
 public abstract class Projectile extends Entity {
 
     public static double MAX_RADIUS = 250;
-    public double barrel_pause = 0;
+    public double barrel_sleepTime = 0;
+    private boolean inWorld;
 
 
-    public Projectile(double x, double y, int r, double direction, double speed,
+    public Projectile(boolean addToWorld, double x, double y, int r, double direction, double speed,
                       int health, MyWorld world) {
         super(x, y, direction, speed, health, false);
-
+        this.inWorld = addToWorld;
         shape = new ObjCircle(r);
-        shape.getBuilder(true, world).setXY(x, y).init();
+        if(addToWorld) {
+            shape.getBuilder(true, world).setXY(x, y).init();
 
 //        shape.body.setBullet(true);
-        world.objectDatabase.put(this.shape.body, this);
-        this.setVelocity(this.speed);
+
+            world.objectDatabase.put(this.shape.body, this);
+            this.setVelocity(this.speed);
+        }
+        else {
+            shape.getBuilder(false, world).setXY(x,y).init();
+        }
     }
 
-    public Projectile(double direction, double speed, int health, MyWorld world) {
+
+    public Projectile(boolean addedToWorld, double direction, double speed, int health, MyWorld world) {
         super(0, 0, direction, speed, health, false);
+        this.inWorld = addedToWorld;
     }
 
     abstract public Projectile returnCustomizedCopy(Projectile project, Vector2 location,
                                                     double direction, double speed, MyWorld world);
+
+    public double getSleepTime(){
+        return this.barrel_sleepTime;
+    }
 
 }

@@ -38,17 +38,17 @@ public class GhostFactory {
         switch(ent) {
             case BARREL:
 
-                entity = new Barrel(new Missile(0, 0, 0, 30, this.world),
+                entity = new Barrel(new Missile(0, 0, 0, 30, this.world, true),
                         Barrel.BarrelType.SINGLE, new Vector2(x, y), world, angle);
                 break;
             case BARRIER:
                 entity =  (new Barrier(x, y, angle, world));
                 break;
             case MASSLAZER:
-                entity =  (new MassLazer(x, y, angle, world));
+                entity =  (new MassLazer(x, y, angle, world, true));
                 break;
             case MISSLE: // TODO: 7/1/2angle17 what case will this be made from here?
-                entity =  (new Missile(x, y, Missile.SPEED, angle, world));
+                entity =  (new Missile(x, y, Missile.SPEED, angle, world, true));
                 break;
             case NEXUS:
                 entity =  (new Nexus(x, y, angle, world));

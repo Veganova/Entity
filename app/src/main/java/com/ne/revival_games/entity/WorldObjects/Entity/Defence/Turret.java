@@ -49,8 +49,9 @@ public class Turret extends Entity implements Aimable {
     };
 
     public void addBarrel(Barrel.BarrelType type) {
-        //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
-        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world);
+        Projectile projectile = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world, false);//
+//        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, false);
+//        Projectile projectile = new MassLazer(0, 0, 0, world, false);
         Barrel b = new Barrel(projectile, type, new Vector2(center.getX(), center.getY()), world, 3);
         this.barrels.add(b);
         RevoluteJoint joint = new RevoluteJoint(b.shape.body, this.center.body, this.getCenter());
@@ -95,7 +96,7 @@ public class Turret extends Entity implements Aimable {
     @Override
     public void aim(Body body) {
         if (this.mainBarrel != null) {
-            logic.aim(body, mainBarrel.shape);
+            logic.aim(body, mainBarrel);
         }
         //logic.aim(body, this.barrels.get(1).shape);
     }

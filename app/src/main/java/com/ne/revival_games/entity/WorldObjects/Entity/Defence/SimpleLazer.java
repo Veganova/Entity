@@ -1,19 +1,12 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
-
-import java.util.Iterator;
 
 /**
  * Created by vishn on 7/1/2017.
@@ -22,32 +15,44 @@ import java.util.Iterator;
 public class SimpleLazer extends Lazer {
     public double lifetime = 500, bornTime;
 
-    public SimpleLazer(Vector2 start, Vector2 end, double width, double health, double speed, MyWorld world) {
-        super(width, 0, speed, health, world);
+    public SimpleLazer(Vector2 start, Vector2 end, double width, double health,
+                       double speed, MyWorld world, boolean addToWorld) {
+        super(width, 0, speed, health, world, addToWorld);
         start = new Vector2(start.x/ MyWorld.SCALE, start.y/MyWorld.SCALE);
         end = new Vector2(end.x/ MyWorld.SCALE, end.y/MyWorld.SCALE);
-
         this.lazer_length = Util.getDistance(start, end);
-        placeLazer(start, end);
+
+        if(addToWorld){
+            placeLazer(start, end);
+            world.objectDatabase.put(this.shape.body, this);
+            this.setVelocity(speed);
+        }
+
         this.direction = Math.toDegrees(lazer_angle);
-        world.objectDatabase.put(this.shape.body, this);
-        this.setVelocity(speed);
         bornTime = System.currentTimeMillis();
-        this.barrel_pause = lifetime;
+        this.barrel_sleepTime = lifetime;
+        this.ghost = true;
     }
 
-    public SimpleLazer(Vector2 start, double angle, double length, double width, double health, double speed, MyWorld world) {
-        super(width, 0, speed, health, world);
+    public SimpleLazer(Vector2 start, double angle, double length, double width, double health,
+                       double speed, MyWorld world, boolean addToWorld) {
+        super(width, 0, speed, health, world, addToWorld);
         start = new Vector2(start.x/ MyWorld.SCALE, start.y/MyWorld.SCALE);
         length = length/MyWorld.SCALE;
         Vector2 end = new Vector2(start.x+length*Math.cos(angle), start.y+length*Math.sin(angle));
         this.lazer_length = Util.getDistance(start, end);
-        placeLazer(start, end);
+
+        if(addToWorld){
+            placeLazer(start, end);
+            world.objectDatabase.put(this.shape.body, this);
+            this.setVelocity(speed);
+        }
+
         this.direction = Math.toDegrees(lazer_angle);
-        world.objectDatabase.put(this.shape.body, this);
-        this.setVelocity(speed);
         bornTime = System.currentTimeMillis();
-        this.barrel_pause = lifetime;
+        this.barrel_sleepTime = lifetime;
+        this.ghost = true;
+
     }
 
 
@@ -56,7 +61,7 @@ public class SimpleLazer extends Lazer {
         if(project.getClass() == this.getClass()){
             SimpleLazer lazer = (SimpleLazer) project;
             return new SimpleLazer(location, Math.toRadians(direction),
-                    lazer.lazer_length*MyWorld.SCALE, lazer.lazer_width*MyWorld.SCALE, lazer.health, lazer.lazer_speed, world);
+                    lazer.lazer_length*MyWorld.SCALE, lazer.lazer_width*MyWorld.SCALE, lazer.health, lazer.lazer_speed, world, true);
         }
         return null;
     }

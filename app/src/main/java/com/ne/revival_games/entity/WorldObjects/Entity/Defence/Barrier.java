@@ -26,6 +26,7 @@ public class Barrier extends Entity {
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setAngle(angle).setXY(x, y).init();
 
+
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
         TYPE = Team.OFFENSE;

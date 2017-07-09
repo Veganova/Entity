@@ -69,10 +69,10 @@ public class Player implements View.OnTouchListener {
 
         // Only allow clicks on the player's half - remove later
         //System.out.println("click at (" + canvasX + ", " + canvasY + ")");
-        if (canvasY < lower || canvasY > higher) {
-            // out of bounds
-            return false;
-        }
+//        if (canvasY < lower || canvasY > higher) {
+//            // out of bounds
+//            return false;
+//        }
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             long clickTime = System.currentTimeMillis();
             if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
@@ -115,9 +115,13 @@ public class Player implements View.OnTouchListener {
         double canvasX = event.getX() / scales.x;
         double canvasY = event.getY()  / scales.y;
         if (world.ghost.entity != null) {
-            world.ghost.entity.shape.body.translateToOrigin();
-            world.ghost.entity.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
+//            world.ghost.entity.shape.body.translateToOrigin();
+//            world.ghost.entity.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
+//                    -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
+            world.barrier.shape.body.translateToOrigin();
+            world.barrier.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
                     -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
+
         } else {
             world.nex.shape.body.translateToOrigin();
             world.nex.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,

@@ -20,10 +20,11 @@ public class Barrel extends Entity {
         SINGLE, LAZER, SIDE, SPIRIT_BOMB
     }
 
-    AShape shape;
+    public AShape shape;
     private MyWorld world;
     private double magnitude;
     private Projectile projectile;
+    private double sleepUntil = 0;
 
     public Barrel(Projectile projectile, BarrelType type, Vector2 location, MyWorld world, double angle) {
         super(0, 0, 0, 0, 0, false);
@@ -61,13 +62,19 @@ public class Barrel extends Entity {
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*shape.body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
-        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world);
+        Projectile newProj= this.projectile.returnCustomizedCopy
+                (this.projectile, new Vector2(x,y), angle, 30, this.world);
         this.shape.body.setAsleep(false);
+        this.sleepUntil = System.currentTimeMillis() + newProj.getSleepTime();
     }
 
     @Override
     public void draw(Canvas canvas){
         this.shape.draw(canvas);
+    }
+
+    public boolean isSleeping(){
+        return this.sleepUntil > System.currentTimeMillis();
     }
 
 

@@ -29,21 +29,8 @@ public class Util {
                 - Math.pow(c, 2)) / (2 * a * b));
     }
 
-    public static double absoluteAngle(Vector2 vertex, Vector2 outerPoint){
-        Vector2 axisPoint = new Vector2(vertex.x + 20, vertex.y);
-        double getSign = (outerPoint.y - vertex.y);
-        double a = Util.getDistance(vertex, axisPoint);
-        double b = Util.getDistance(vertex, outerPoint);
-        double c = Util.getDistance(axisPoint, outerPoint);
-        if(getSign == 0){
-            if(vertex.x > outerPoint.x){
-                return 0;
-            }
-            return Math.PI;
-        }
-        double angleTo = getSign/Math.abs(getSign)*Util.lawofCosines(a,b,c);
-        return (Math.PI *2 + angleTo) % (Math.PI *2);
-
+    public static double absoluteAngle(Vector2 vertex, Vector2 outerPoint) {
+        return (Math.PI*2+Math.atan2(outerPoint.y - vertex.y, outerPoint.x - vertex.x)) % (Math.PI*2);
     }
 
 }
