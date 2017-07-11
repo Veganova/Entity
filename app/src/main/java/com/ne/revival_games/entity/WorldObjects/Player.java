@@ -76,7 +76,11 @@ public class Player implements View.OnTouchListener {
 
         if (holdingGhost && moving) {
             Vector2 newPos = new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
-            ghost.entity.shape.setBodyPosition(newPos, ghost.entity.shape.body.getWorldCenter());
+//            ghost.entity.shape.setBodyPosition(newPos, ghost.entity.shape.body.getWorldCenter());
+//            Vector2 newPos = new Vector2(mDownX/world.SCALE - ghost.entity.shape.getX(), mDownY/ world.SCALE-ghost.entity.shape.getY());
+//            double mag = Util.getDistance(newPos, new Vector2(0,0));
+//            Vector2 moveTo = new Vector2(newPos.x/mag * moveSpeed, newPos.y/mag * moveSpeed);
+            ghost.entity.shape.body.setLinearVelocity(new Vector2(50,50));
         }
         else if (holdingGhost && (System.currentTimeMillis() - timeSinceFirst) > DRAG_START) {
             // Dragging - change ghost angle

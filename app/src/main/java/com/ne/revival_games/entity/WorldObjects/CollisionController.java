@@ -24,7 +24,6 @@ class CollisionController extends CollisionAdapter {
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2,
                              BodyFixture fixture2, Penetration penetration) {
-
         Entity ent1 = world.objectDatabase.get(body1);
         Entity ent2 = world.objectDatabase.get(body2);
 

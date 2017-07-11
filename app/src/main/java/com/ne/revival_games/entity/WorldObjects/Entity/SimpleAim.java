@@ -60,13 +60,14 @@ public class SimpleAim implements AimLogic {
 
         if (Math.abs(angleDifference) <= 0.02) {
             this.turret.fire(angleTo);
-            //mainBarrel.shape.body.setAsleep(true);
+//            mainBarrel.shape.body.setAsleep(true);
+//            mainBarrel.shape.body.setAngularVelocity(0);
             return;
         }
 
         //better find a shortest distance algorithm
-        mainBarrel.shape.body.rotate(turnCounterClock * incrementFunction(Math.abs(angleDifference)),
-                this.turret.getCenter().x, this.turret.getCenter().y);
+        mainBarrel.shape.body.setAngularVelocity(turnCounterClock *10);
+        //new Turret(new Vector2(-200, 100), 30, this);
 
     }
 
