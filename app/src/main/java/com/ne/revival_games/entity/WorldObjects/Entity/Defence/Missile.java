@@ -18,10 +18,13 @@ public class Missile extends Projectile {
     public static int HEALTH = 30;
     public static int RADIUS = 10;
 
-    public Missile(double x, double y, double direction, double speed, MyWorld world, Team team) {
-        super(x, y, RADIUS, direction, speed, HEALTH, world, team);
+
+    public Missile(double x, double y, double direction, double speed,
+                   MyWorld world, Team team, boolean addToWorld) {
+        super(x, y, RADIUS, direction, speed, HEALTH, world, team, addToWorld);
         TYPE = team;
     }
+
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
@@ -37,8 +40,8 @@ public class Missile extends Projectile {
     @Override
     public Projectile returnCustomizedCopy(Projectile project,
                                            Vector2 location, double direction,
-                                           double speed, MyWorld world, Team team){
-        return new Missile(location.x, location.y, direction, speed, world, team);
+                                           double speed, MyWorld world, Team team) {
+        return new Missile(location.x, location.y, direction, speed, world, team, true);
     }
 
 }

@@ -83,7 +83,10 @@ public abstract class AShape implements Shape {
         }
 
         public void init() {
+
             // dealing with a part, not a whole body
+
+            // dealing with a part, not a whole body (fixture)
 
             if (!isBody && !premadeBody) {
                 rotateFixture(this.angle, new Vector2(0,0));
@@ -95,12 +98,16 @@ public abstract class AShape implements Shape {
                 // exit since the below deals with building a body
                 return;
             }
-            // 1st init
+            // 1st init (ex. complex shape)
             else if (!premadeBody) {
                 translateFixture(-1 * convex.getCenter().x, -1 * convex.getCenter().y);
 
                 body = new Body();
+                rotateBody(this.angle);
                 body.addFixture(convex, density, friction, restitution);
+            }
+            else{
+                rotateBody(this.angle);
             }
             // premade body
 

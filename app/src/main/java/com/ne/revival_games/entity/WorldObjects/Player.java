@@ -91,6 +91,7 @@ public class Player implements View.OnTouchListener {
 
         }
 
+
         //System.out.println(mDownY + " " + mDownX);
         if (!holdingGhost && mDownY < lower || mDownY > higher) {
             // out of bounds
@@ -128,6 +129,7 @@ public class Player implements View.OnTouchListener {
                 break;
             default:
                 break;
+
         }
         return true;
     }
@@ -195,11 +197,13 @@ public class Player implements View.OnTouchListener {
 //        return true;
 //    }
 
+
     public void update() {
         for (Entity entity: this.team.getTeamObjects()) {
             if (entity instanceof Aimable) {
                 ((Aimable) entity).aim();
             }
+
         }
     }
 

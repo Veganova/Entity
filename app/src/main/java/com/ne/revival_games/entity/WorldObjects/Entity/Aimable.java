@@ -19,4 +19,6 @@ public interface Aimable {
     Vector2 getCenter();
 
     void changeLogicTo(AimLogic logic);
+
+    boolean isSleeping();
 }

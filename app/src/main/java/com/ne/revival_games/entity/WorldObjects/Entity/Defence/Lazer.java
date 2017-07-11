@@ -22,9 +22,11 @@ public class Lazer extends Projectile {
     public double lazer_speed;              //raw speed
     private MyWorld world;
 
+
     public Lazer(double width, double direction, double speed,
-                 double health, MyWorld world, Team team) {
-        super(direction, speed, (int) health, world, team);
+                 double health, MyWorld world, Team team, boolean addToWorld) {
+        super(direction, speed, (int) health, world, team, addToWorld);
+
         this.world = world;
         this.isCollisionAuthority = true;
         this.lazer_speed = speed;
@@ -44,8 +46,7 @@ public class Lazer extends Projectile {
         double l = Util.getDistance(oldPoint, newPoint);
         lazer_angle = Util.absoluteAngle(oldPoint, newPoint);
         this.shape = new ObjRectangle(l  * MyWorld.SCALE, lazer_width * MyWorld.SCALE);
-        this.shape.getBuilder(true, this.world).setXY(x,y).init();
-        shape.rotateBody(lazer_angle);
+        this.shape.getBuilder(true, this.world).setXY(x,y).setAngle(Math.toDegrees(lazer_angle)).init();
     }
 
     @Override

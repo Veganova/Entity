@@ -13,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import com.ne.revival_games.entity.WorldObjects.CameraController;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Player;
 
@@ -30,6 +31,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private static final float ADJUST = (float) 0.02;
     private MainThread thread;
     private Background bg;
+    public CameraController camera;
     MyWorld world;
     private List<Player> players = new ArrayList<>();
     private abstract class DoubleClickListener implements OnTouchListener {
@@ -61,6 +63,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public GamePanel(Context context) {
         super(context);
         this.scales = new Vector2(1, 1);
+        camera = new CameraController(new Vector2(0,0), new Vector2(0,0));
         //add the callback to the surfaceholder to intercept events
         getHolder().addCallback(this);
 
@@ -150,10 +153,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
            canvas.scale((float)scales.x, (float)-scales.y);
             canvas.translate(WIDTH / 2, -HEIGHT / 2);
             canvas.scale((float)MyWorld.SCALE, (float) MyWorld.SCALE);
-
+//            camera.relativeMove(50,50);
+//            camera.relativeZoom(0.1, 0.1);
 
             bg.draw(canvas);
             world.drawObjects(canvas);
+
 
             canvas.restoreToCount(savedState);
         }

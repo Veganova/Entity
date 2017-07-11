@@ -32,6 +32,7 @@ public class GhostFactory {
                                       double y, double angle, MyWorld world, Team team) {
         Entity entity = null;
         switch(ent) {
+
 //            case BARREL:
 //
 //                entity = new Barrel(new Missile(0, 0, 0, 30, world, team),
@@ -45,14 +46,15 @@ public class GhostFactory {
 //                break;
             case BARRIER:
                 entity =  (new Barrier(x, y, angle, world, team));
+
                 break;
 
             case NEXUS:
                 entity =  (new Nexus(x, y, angle, world, team));
                 break;
-//            case TURRET:
-//                entity =  (new Turret(new Vector2(x, y), angle, world, team));
-//                break;
+            case TURRET:
+                entity =  (new Turret(new Vector2(x, y), angle, world, team));
+                break;
             case COMET:
                 entity = new Comet(x, y, angle, 0, world, team);
                 break;

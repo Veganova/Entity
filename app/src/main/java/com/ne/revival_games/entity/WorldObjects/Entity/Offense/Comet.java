@@ -25,7 +25,7 @@ public class Comet extends Projectile implements Aimable {
     private AimLogic logic;
 
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
-        super(x, y, RADIUS, direction, speed, HEALTH, world, team);
+        super(x, y, RADIUS, direction, speed, HEALTH, world, team, true);
         TYPE = team;
         this.logic = new SimpleAim(this, team);
     }
@@ -50,7 +50,7 @@ public class Comet extends Projectile implements Aimable {
 
     @Override
     public void aim() {
-        this.logic.aim(this.shape);
+        this.logic.aim(this);
     }
 
     @Override
@@ -69,5 +69,10 @@ public class Comet extends Projectile implements Aimable {
     @Override
     public void changeLogicTo(AimLogic logic) {
         this.logic = logic;
+    }
+
+    @Override
+    public boolean isSleeping() {
+        return false;
     }
 }

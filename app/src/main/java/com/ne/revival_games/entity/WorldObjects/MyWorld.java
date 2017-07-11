@@ -61,8 +61,8 @@ public class MyWorld {
     /** The time stamp for the last iteration */
     protected long last;
 
-    CustomEntity up, down, left, right;
 
+    CustomEntity up, down, left, right;
 
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
@@ -106,19 +106,7 @@ public class MyWorld {
 //        circ = new ObjCircle(0, 150, 10, this);
 //        List<AShape> objects = new ArrayList<AShape>();
 
-//        barrier = new Barrier(300, 400, 0, this, Team.DEFENCE);
-//        turret = new Turret(new Vector2(-200, 100), 30, this, Team.DEFENCE);
-////        rect = new Barrier(300, 300, 0, this);
-////        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
-////        nex = new Nexus(100, 0, 50, this);
-////        nex.shape.setColor(Color.BLUE);
-//        this.ghost = GhostFactory.produce(Entities.NEXUS, 0, 0, 0, this, Team.DEFENCE);
-//
-////        circ = new ObjCircle(10);
-////        circ.getBuilder(true, this).setXY(0, 150).init();
-//
-//        coords = new ArrayList<double[]>();
-//        List<AShape> objects = new ArrayList<AShape>();
+
 
 //        double [] points = {0, 100, -100, -100, 100, -100};
 //        tri = new ObjTriangle(points);
@@ -179,7 +167,7 @@ public class MyWorld {
         }
 
 
-        // delete logic
+
         for(Body body: bodiestodelete){
             System.out.println(bodiestodelete.size());
             Entity toDelete = objectDatabase.get(body);

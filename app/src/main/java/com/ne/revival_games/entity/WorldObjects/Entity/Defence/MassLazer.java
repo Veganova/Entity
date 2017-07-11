@@ -43,25 +43,28 @@ public class MassLazer extends Projectile {
     private MyWorld world;
     private double trailHeadStart = 30;
 
-    public MassLazer(double x, double y, double direction, MyWorld world, Team team){
-        super(direction, 10, MAZER_HEALTH, world, team);
+
+    public MassLazer(double x, double y, double direction, MyWorld world, Team team, boolean addToWorld){
+        super(direction, 10, MAZER_HEALTH, world, team, addToWorld);
             this.isCollisionAuthority = true;
+        if(addToWorld) {
             fired = System.currentTimeMillis();
             tail = new ArrayList<>();
             points = new ArrayList<>();
             pointstoPlace = new LinkedList<>();
-            lastPoint = new Vector2(x/ MyWorld.SCALE, y/MyWorld.SCALE);
+            lastPoint = new Vector2(x / MyWorld.SCALE, y / MyWorld.SCALE);
             points.add(lastPoint);
             this.world = world;
             this.TYPE = team;
 
 //        initializeHead(x, y);
-        this.shape = new ObjCircle(30);
-        this.shape.getBuilder(true, world).setXY(x, y).init();
+            this.shape = new ObjCircle(30);
+            this.shape.getBuilder(true, world).setXY(x, y).init();
 
-        this.world.objectDatabase.put(this.shape.body, this);
-        this.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
-        this.setVelocity(20);
+            this.world.objectDatabase.put(this.shape.body, this);
+            this.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
+            this.setVelocity(20);
+        }
 
     }
 
@@ -146,8 +149,6 @@ public class MassLazer extends Projectile {
             }
         }
 
-//        placeTrail(lastPoint, this.shape.body.getWorldCenter());
-//        lastPoint = this.shape.body.getWorldCenter();
 
         while (tail.size() > 10) {
             points.remove(0);
@@ -174,10 +175,11 @@ public class MassLazer extends Projectile {
         return TRAIL_DAMAGE;
     }
 
-    //TODO: IMPLEMENT THIS FUNCTION
+
     @Override
     public Projectile returnCustomizedCopy(Projectile project, Vector2 location,
                                            double direction, double speed, MyWorld world, Team team){
-        return new MassLazer(location.x, location.y, direction, world, team);
+        return new MassLazer(location.x, location.y, direction, world, team, true);
+
     }
 }

@@ -2,6 +2,8 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import android.graphics.Canvas;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -15,7 +17,7 @@ import org.dyn4j.geometry.Vector2;
  * Created by Veganova on 6/29/2017.
  */
 
-public class Barrel extends Entity {
+public class Barrel extends Entity implements Aimable {
 
     public enum BarrelType {
         SINGLE, LAZER, SIDE, SPIRIT_BOMB
@@ -24,6 +26,7 @@ public class Barrel extends Entity {
     private MyWorld world;
     private double magnitude;
     private Projectile projectile;
+    private double sleepUntil = 0;
 
     public Barrel(Projectile projectile, BarrelType type,
                   Vector2 location, MyWorld world, double angle, Team team) {
@@ -47,6 +50,7 @@ public class Barrel extends Entity {
                 this.shape = new ObjRectangle(120, 20);
                 AShape.InitBuilder builderSide = this.shape.getBuilder(true, world);
                 builderSide.setXY(50 + (location.x), 100 + (location.y)).setAngle(Math.toDegrees(angle)).init();
+
                 magnitude = 50;
 
 //                this.shape.rotateBody(angle);
@@ -56,20 +60,46 @@ public class Barrel extends Entity {
         this.health = 100;
     }
 
-    protected void fire() {
-        double angle = shape.body.getTransform().getRotation();
+
+
+    @Override
+    public void draw(Canvas canvas){
+        this.shape.draw(canvas);
+    }
+
+    @Override
+    public void aim() {
+        // done in the turret that controls this
+    }
+
+    @Override
+    public void fire(double angle) {
+        //double angle = shape.body.getTransform().getRotation();
         double x, y;
         //magnitude of 90 away
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*shape.body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
+
         this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, TYPE);
+
         this.shape.body.setAsleep(false);
+        this.sleepUntil = System.currentTimeMillis() + 0;
     }
 
     @Override
-    public void draw(Canvas canvas){
-        this.shape.draw(canvas);
+    public Vector2 getCenter() {
+        return this.shape.body.getWorldCenter();
+    }
+
+    @Override
+    public void changeLogicTo(AimLogic logic) {
+        // logic in the turret that controls this
+    }
+
+    @Override
+    public boolean isSleeping() {
+        return false;
     }
 
 

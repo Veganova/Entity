@@ -51,15 +51,16 @@ public class Turret extends Entity implements Aimable {
 
     private void addBarrel(Barrel.BarrelType type, Vector2 location) {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
-        Projectile projectile = new Missile(-10000, -10000, Missile.SPEED, 0, world, TYPE);
+        Projectile projectile = new Missile(-10000, -10000, Missile.SPEED, 0, world, TYPE, false);
         Barrel b = new Barrel(projectile, type, location, world, 3, TYPE);
+
         this.barrels.add(b);
-//        WeldJoint joint = new WeldJoint(b.shape.body, this.center.body, location);
-//        world.engineWorld.addJoint(joint);
+        WeldJoint joint = new WeldJoint(b.shape.body, this.center.body, location);
+        world.engineWorld.addJoint(joint);
         this.components.add(b.shape);
 
-        this.shape = new ComplexShape(components, location.x, location.y, world);
-        this.world.objectDatabase.put(b.shape.body, this);
+        //this.shape = new ComplexShape(components, location.x, location.y, world);
+        //this.world.objectDatabase.put(b.shape.body, this);
 
     }
 
@@ -88,8 +89,8 @@ public class Turret extends Entity implements Aimable {
         //this.shape = center;
         //this.shape = new ComplexShape(components);
 
-        // this.addBarrel(Barrel.BarrelType.SIDE, location);
-//        this.setMainBarrel(this.barrels.get(0));
+         this.addBarrel(Barrel.BarrelType.SIDE, location);
+        this.setMainBarrel(this.barrels.get(0));
 
         //this.addBarrel(Barrel.BarrelType.SINGLE);
 
@@ -98,7 +99,7 @@ public class Turret extends Entity implements Aimable {
     @Override
     public void aim() {
         if (this.mainBarrel != null) {
-            //logic.aim(mainBarrel.shape);
+            logic.aim(mainBarrel);
         }
         //logic.aim(body, this.barrels.get(1).shape);
     }
@@ -110,7 +111,7 @@ public class Turret extends Entity implements Aimable {
         }
 
         for (Barrel barrel: barrels) {
-            barrel.fire();
+            barrel.fire(angle);
         }
 
         lastfired = System.currentTimeMillis();
@@ -124,6 +125,11 @@ public class Turret extends Entity implements Aimable {
     @Override
     public void changeLogicTo(AimLogic logic) {
         this.logic = logic;
+    }
+
+    @Override
+    public boolean isSleeping() {
+        return false;
     }
 
     public boolean inContact(Body contact){

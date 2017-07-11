@@ -1,5 +1,6 @@
 package com.ne.revival_games.entity.WorldObjects.Entity;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrel;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.Body;
@@ -9,7 +10,7 @@ import org.dyn4j.dynamics.Body;
  */
 public interface AimLogic {
 
-    public void aim(AShape mainBarrel);
+    public void aim(Aimable mainBarrel);
 
     public void choose();
 
