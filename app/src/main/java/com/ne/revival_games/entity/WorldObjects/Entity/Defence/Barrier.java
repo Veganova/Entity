@@ -20,20 +20,19 @@ public class Barrier extends Entity {
 //    public static Team TYPE = Team.OFFENSE;
 
 
-    public Barrier(double x, double y, double angle, MyWorld world) {
-        super(x, y, angle, 0, HEALTH, false);
+    public Barrier(double x, double y, double angle, MyWorld world, Team team) {
+        super(angle, 0, HEALTH, false, team);
         this.shape = new ObjRectangle(200, 30);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setAngle(angle).setXY(x, y).init();
 
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
-        TYPE = Team.OFFENSE;
     }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE == Team.DEFENCE){
+        if(contact.TYPE.opposite(this.TYPE)){
             this.health -= damage;
             if(this.health <= 0){
                 this.invisible = true;

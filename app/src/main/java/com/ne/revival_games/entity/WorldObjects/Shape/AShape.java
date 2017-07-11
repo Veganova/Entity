@@ -37,7 +37,7 @@ public abstract class AShape implements Shape {
 
     //a + b = c
     //b = c - a
-    private void setBodyPosition(Vector2 pos, Vector2 curCenter) {
+    public void setBodyPosition(Vector2 pos, Vector2 curCenter) {
         Vector2 newHeading = pos.difference(curCenter);
         body.translate(newHeading.x, newHeading.y);
     }
@@ -84,21 +84,27 @@ public abstract class AShape implements Shape {
 
         public void init() {
             // dealing with a part, not a whole body
+
             if (!isBody && !premadeBody) {
                 rotateFixture(this.angle, new Vector2(0,0));
                 translateFixture(x, y);
+
+//                body = new Body();
+//                body.addFixture(convex);
+//                world.engineWorld.addBody(body);
                 // exit since the below deals with building a body
                 return;
             }
             // 1st init
             else if (!premadeBody) {
                 translateFixture(-1 * convex.getCenter().x, -1 * convex.getCenter().y);
-                rotateFixture(this.angle, new Vector2(0,0));
+
                 body = new Body();
                 body.addFixture(convex, density, friction, restitution);
             }
             // premade body
 
+            body.rotate(angle);
             body.setMass(type);
             setBodyPosition(new Vector2(x, y), body.getWorldCenter());
             // TODO: 7/4/2017 could be adding several times.. 

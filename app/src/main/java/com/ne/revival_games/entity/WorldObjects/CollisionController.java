@@ -28,7 +28,6 @@ class CollisionController extends CollisionAdapter {
         Entity ent1 = world.objectDatabase.get(body1);
         Entity ent2 = world.objectDatabase.get(body2);
 
-
         if (ent1.ghost || ent2.ghost) {
             return true;
         }

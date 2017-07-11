@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -21,8 +22,9 @@ public class Lazer extends Projectile {
     public double lazer_speed;              //raw speed
     private MyWorld world;
 
-    public Lazer(double width, double direction, double speed, double health, MyWorld world) {
-        super(direction, speed, (int) health, world);
+    public Lazer(double width, double direction, double speed,
+                 double health, MyWorld world, Team team) {
+        super(direction, speed, (int) health, world, team);
         this.world = world;
         this.isCollisionAuthority = true;
         this.lazer_speed = speed;
@@ -52,7 +54,9 @@ public class Lazer extends Projectile {
     }
 
     @Override
-    public Projectile returnCustomizedCopy(Projectile project, Vector2 location, double direction, double speed, MyWorld world) {
+    public Projectile returnCustomizedCopy(Projectile project,
+                                           Vector2 location, double direction,
+                                           double speed, MyWorld world, Team team) {
         return null;
     }
 

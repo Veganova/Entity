@@ -1,8 +1,8 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Shared;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.geometry.Vector2;
@@ -18,8 +18,8 @@ public abstract class Projectile extends Entity {
 
 
     public Projectile(double x, double y, int r, double direction, double speed,
-                      int health, MyWorld world) {
-        super(x, y, direction, speed, health, false);
+                      int health, MyWorld world, Team team) {
+        super(direction, speed, health, false, team);
 
         shape = new ObjCircle(r);
         shape.getBuilder(true, world).setXY(x, y).init();
@@ -29,11 +29,12 @@ public abstract class Projectile extends Entity {
         this.setVelocity(this.speed);
     }
 
-    public Projectile(double direction, double speed, int health, MyWorld world) {
-        super(0, 0, direction, speed, health, false);
+    public Projectile(double direction, double speed, int health, MyWorld world, Team team) {
+        super(direction, speed, health, false, team);
     }
 
     abstract public Projectile returnCustomizedCopy(Projectile project, Vector2 location,
-                                                    double direction, double speed, MyWorld world);
+                                                    double direction, double speed,
+                                                    MyWorld world, Team team);
 
 }

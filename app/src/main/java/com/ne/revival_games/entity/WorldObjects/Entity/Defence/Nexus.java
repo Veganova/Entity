@@ -18,13 +18,13 @@ import java.util.List;
  */
 
 public class Nexus extends Entity {
-    public static int HEALTH = Integer.MAX_VALUE;
+    public static int HEALTH = 100;
     public static int MASS;
     public static int COST;
     public List<AShape> components;
 
-    public Nexus(double x, double y, double angle, MyWorld world) {
-        super(x, y, angle, 0, HEALTH, false);
+    public Nexus(double x, double y, double angle, MyWorld world, Team team) {
+        super(angle, 0, HEALTH, false, team);
         components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(120, 120);
@@ -55,12 +55,12 @@ public class Nexus extends Entity {
 
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
-        TYPE = Team.DEFENCE;
+        TYPE = team;
     }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE == Team.DEFENCE){
+        if(contact.TYPE.opposite(this.TYPE)){
             this.health -= damage;
             if(this.health <= 0){
                 this.invisible = true;

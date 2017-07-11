@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -20,13 +21,13 @@ public class Barrel extends Entity {
         SINGLE, LAZER, SIDE, SPIRIT_BOMB
     }
 
-    AShape shape;
     private MyWorld world;
     private double magnitude;
     private Projectile projectile;
 
-    public Barrel(Projectile projectile, BarrelType type, Vector2 location, MyWorld world, double angle) {
-        super(0, 0, 0, 0, 0, false);
+    public Barrel(Projectile projectile, BarrelType type,
+                  Vector2 location, MyWorld world, double angle, Team team) {
+        super(0, 0, 0, false, team);
         initBarrel(type, location, world, angle);
         this.world = world;
         this.projectile = projectile;
@@ -45,13 +46,14 @@ public class Barrel extends Entity {
             case SIDE:
                 this.shape = new ObjRectangle(120, 20);
                 AShape.InitBuilder builderSide = this.shape.getBuilder(true, world);
-                builderSide.setXY(50 + location.x, 100 + location.y).init();
+                builderSide.setXY(50 + (location.x), 100 + (location.y)).setAngle(Math.toDegrees(angle)).init();
                 magnitude = 50;
 
-                this.shape.rotateBody(angle);
-                this.shape.body.getTransform().rotate(1);
+//                this.shape.rotateBody(angle);
+//                this.shape.body.getTransform().rotate(1);
                 break;
         }
+        this.health = 100;
     }
 
     protected void fire() {
@@ -61,7 +63,7 @@ public class Barrel extends Entity {
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*shape.body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
-        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world);
+        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, TYPE);
         this.shape.body.setAsleep(false);
     }
 

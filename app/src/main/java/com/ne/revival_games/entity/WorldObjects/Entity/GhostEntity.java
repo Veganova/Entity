@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.joint.Joint;
 
 /**
  * Created by Veganova on 6/30/2017.
@@ -24,6 +25,24 @@ public class GhostEntity {
 
         this.entity.shape.setPaint(Paint.Style.STROKE);
         this.entity.ghost = true;
+
+        int num = 0;
+        for (Joint joint: this.entity.shape.body.getJoints()) {
+            Entity ent1 = world.objectDatabase.get(joint.getBody1());
+            Entity ent2 = world.objectDatabase.get(joint.getBody2());
+            ent1.shape.setPaint(Paint.Style.STROKE);
+            ent2.shape.setPaint(Paint.Style.STROKE);
+            ent1.ghost = true;
+            ent1.invulnerable = true;
+            ent2.ghost = true;
+            ent2.invulnerable = true;
+            world.ghosts.put(ent1, this);
+            world.ghosts.put(ent2, this);
+            num++;
+        }
+        System.out.println("NUM JOINTS - " + num);
+        System.out.println(entity);
+
         this.entity.invulnerable = true;
     }
 
@@ -33,9 +52,21 @@ public class GhostEntity {
     }
 
     public Entity place() {
-        System.out.println("Born: " + this.entity);
         this.entity.shape.setPaint(Paint.Style.FILL);
         this.entity.ghost = false;
+        for (Joint joint: this.entity.shape.body.getJoints()) {
+            Entity ent1 = world.objectDatabase.get(joint.getBody1());
+            Entity ent2 = world.objectDatabase.get(joint.getBody2());
+            ent1.shape.setPaint(Paint.Style.FILL);
+            ent2.shape.setPaint(Paint.Style.FILL);
+
+            ent1.ghost = false;
+            ent1.invulnerable = false;
+            ent2.ghost = false;
+            ent2.invulnerable = false;
+            world.ghosts.remove(ent1);
+            world.ghosts.remove(ent2);
+        }
         this.entity.invulnerable = false;
         Entity toPlace = this.entity;
         this.entity = null;
@@ -54,16 +85,29 @@ public class GhostEntity {
             if (!world.objectDatabase.get(body).ghost) {
                 if (this.entity.shape.body.isInContact(body)) {
                     // the ghost object is colliding with another non-ghost object
-                    entity.shape.setColor(CONTACTING);
-                    entity.shape.setPaint(Paint.Style.FILL);
+
+//                    entity.shape.setColor(CONTACTING);
+//                    entity.shape.setPaint(Paint.Style.FILL);
+//
+//                    for (Joint joint: this.entity.shape.body.getJoints()) {
+//                        Entity ent1 = world.objectDatabase.get(joint.getBody1());
+//                        Entity ent2 = world.objectDatabase.get(joint.getBody2());
+//                        ent1.shape.setColor(CONTACTING);
+//                        ent1.shape.setPaint(Paint.Style.FILL);
+//                        ent2.shape.setColor(CONTACTING);
+//                        ent2.shape.setPaint(Paint.Style.FILL);
+//                    }
+                    entity.setColor(CONTACTING, world);
+                    entity.setPaint(Paint.Style.FILL, world);
+
                     this.placeable = false;
                     return;
                 }
             }
         }
         this.placeable = true;
-        entity.shape.setColor(PLACEABLE);
-        entity.shape.setPaint(Paint.Style.STROKE);
+        entity.setColor(PLACEABLE, world);
+        entity.setPaint(Paint.Style.STROKE, world);
 
     }
 }

@@ -43,8 +43,8 @@ public class MassLazer extends Projectile {
     private MyWorld world;
     private double trailHeadStart = 30;
 
-    public MassLazer(double x, double y, double direction, MyWorld world){
-        super(direction, 10, MAZER_HEALTH, world);
+    public MassLazer(double x, double y, double direction, MyWorld world, Team team){
+        super(direction, 10, MAZER_HEALTH, world, team);
             this.isCollisionAuthority = true;
             fired = System.currentTimeMillis();
             tail = new ArrayList<>();
@@ -53,7 +53,7 @@ public class MassLazer extends Projectile {
             lastPoint = new Vector2(x/ MyWorld.SCALE, y/MyWorld.SCALE);
             points.add(lastPoint);
             this.world = world;
-            this.TYPE = Team.OFFENSE;
+            this.TYPE = team;
 
 //        initializeHead(x, y);
         this.shape = new ObjCircle(30);
@@ -176,7 +176,8 @@ public class MassLazer extends Projectile {
 
     //TODO: IMPLEMENT THIS FUNCTION
     @Override
-    public Projectile returnCustomizedCopy(Projectile project, Vector2 location, double direction, double speed, MyWorld world){
-        return new MassLazer(location.x, location.y, direction, world);
+    public Projectile returnCustomizedCopy(Projectile project, Vector2 location,
+                                           double direction, double speed, MyWorld world, Team team){
+        return new MassLazer(location.x, location.y, direction, world, team);
     }
 }

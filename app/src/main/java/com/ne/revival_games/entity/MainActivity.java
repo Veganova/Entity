@@ -34,8 +34,11 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         GamePanel view = new GamePanel(this);
         MyWorld world = view.world;
-        Player player1 = new Player(1, Team.DEFENCE, world, view.scales, 0, 800 );
-        view.setOnTouchListener(player1);
+        Player player1 = new Player(1, Team.DEFENCE, world, view.scales, 0, 800);
+        view.addPlayerListener(player1);
+        Player player2 = new Player(2, Team.OFFENSE, world, view.scales, -800, 0);
+        view.addPlayerListener(player2);
+
         setContentView(view);
 //        addContentView(new GamePanel(this));
     }

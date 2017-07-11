@@ -1,12 +1,10 @@
 package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.MassLazer;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.SimpleLazer;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -14,6 +12,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -21,16 +20,16 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
-import org.dyn4j.dynamics.DetectResult;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactListener;
+import org.dyn4j.dynamics.joint.Joint;
+import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -43,6 +42,7 @@ public class MyWorld {
     public HashMap<Body, Entity> objectDatabase;
     public ArrayList<Body> bodiestodelete;
     public ArrayList<double []> coords;
+    private List<Player> players;
     public HashMap<Entity, GhostEntity> ghosts;
     /** The scale 45 pixels per meter */
     public static final double SCALE = 50.0;
@@ -61,17 +61,9 @@ public class MyWorld {
     /** The time stamp for the last iteration */
     protected long last;
 
-    //List<Entity> entities;
+    CustomEntity up, down, left, right;
 
-    public ObjRectangle rect;
-    public ObjTriangle tri;
-    public ObjCircle circ;
-    public Entity barrier;
-    public Turret turret, turret1, turret2, turret3, turret4;
-    public ComplexShape complex;
-    public Entity nex;
-    public GhostEntity ghost;
-    public MassLazer bam;
+
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
@@ -82,6 +74,11 @@ public class MyWorld {
 //        canvas.drawCircle((float) 50.0, (float) 50.0, (float) 30.0, paint);
         initializeWorld();
     };
+
+    public void addPlayers(List<Player> players) {
+        this.players = players;
+    }
+
     /**
      * Creates game objects and adds them to the engineWorld.
      * <p>
@@ -95,7 +92,7 @@ public class MyWorld {
         this.ghosts = new HashMap<>();
         this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();
-
+        this.players = new ArrayList<>();
 
         this.engineWorld.setGravity(new Vector2(0, 0));
         CollisionListener skip = new CollisionController(this);
@@ -109,20 +106,19 @@ public class MyWorld {
 //        circ = new ObjCircle(0, 150, 10, this);
 //        List<AShape> objects = new ArrayList<AShape>();
 
-        barrier = new Barrier(300, 400, 0, this);
-        turret = new Turret(new Vector2(-200, 100), 30, this);
-//        rect = new Barrier(300, 300, 0, this);
-//        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
-//        nex = new Nexus(100, 0, 50, this);
-//        nex.shape.setColor(Color.BLUE);
-        GhostFactory factory = new GhostFactory(this);
-        this.ghost = factory.produce(Entities.NEXUS, 0, 0, 0);
-
-//        circ = new ObjCircle(10);
-//        circ.getBuilder(true, this).setXY(0, 150).init();
-
-        coords = new ArrayList<double[]>();
-        List<AShape> objects = new ArrayList<AShape>();
+//        barrier = new Barrier(300, 400, 0, this, Team.DEFENCE);
+//        turret = new Turret(new Vector2(-200, 100), 30, this, Team.DEFENCE);
+////        rect = new Barrier(300, 300, 0, this);
+////        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
+////        nex = new Nexus(100, 0, 50, this);
+////        nex.shape.setColor(Color.BLUE);
+//        this.ghost = GhostFactory.produce(Entities.NEXUS, 0, 0, 0, this, Team.DEFENCE);
+//
+////        circ = new ObjCircle(10);
+////        circ.getBuilder(true, this).setXY(0, 150).init();
+//
+//        coords = new ArrayList<double[]>();
+//        List<AShape> objects = new ArrayList<AShape>();
 
 //        double [] points = {0, 100, -100, -100, 100, -100};
 //        tri = new ObjTriangle(points);
@@ -130,6 +126,26 @@ public class MyWorld {
 
 //        objects.add(new ObjCircle(0, 0, 50, 0));
 //        testlocation(-500, 500, -500, 500, 10, tri);
+
+        //MAKE THE STADIUM - TEMPORARY SO THAT THINGS DOING GO FLYING OUT
+//        ObjRectangle up = new ObjRectangle(800, 20);
+//        up.getBuilder(true, this).setXY(0, 750).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.up = new CustomEntity(up, 0, 100, true, Team.NEUTRAL, this);
+//
+//        ObjRectangle down = new ObjRectangle(800, 20);
+//        down.getBuilder(true, this).setXY(0, -750).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.down = new CustomEntity(down, 0, 100, true, Team.NEUTRAL, this);
+//
+//        ObjRectangle left = new ObjRectangle(20, 1350);
+//        left.getBuilder(true, this).setXY(-400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.left = new CustomEntity(left, 0, 100, true, Team.NEUTRAL, this);
+//
+//        ObjRectangle right = new ObjRectangle(20, 1350);
+//        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
+
+        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
+        Team.DEFENCE.add(turret);
     }
 
     //need a way to add an object (check what kind of object it is, etc.)
@@ -154,19 +170,21 @@ public class MyWorld {
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
 
+        for (Player player : this.players) {
+            player.update();
+        }
+
         for(Entity ent: this.objectDatabase.values()){
             ent.update(this);
         }
 
 
-//        if (nex != null)
-//            turret.aim(nex.shape.body);
-        turret.aim(barrier.shape.body);
-
+        // delete logic
         for(Body body: bodiestodelete){
             System.out.println(bodiestodelete.size());
-            if(objectDatabase.get(body) != null){
-                objectDatabase.get(body).onDeath();
+            Entity toDelete = objectDatabase.get(body);
+            if(toDelete != null){
+                toDelete.onDeath();
                 objectDatabase.remove(body);
             }
             engineWorld.removeBody(body);
@@ -188,6 +206,7 @@ public class MyWorld {
             if(!entity.invisible)
                 entity.draw(canvas);
         }
+        // up.draw(canvas);
 //        tri.draw(canvas);
 //        circ.draw(canvas);
 //

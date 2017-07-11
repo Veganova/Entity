@@ -6,6 +6,8 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.List;
+
 /**
  * Created by Veganova on 6/29/2017.
  */
@@ -13,14 +15,21 @@ public class SimpleAim implements AimLogic {
 
     // Doesnt have to be a turret
     private Aimable turret;
+    private Team team;
+    private Entity enemy;
 
-    public SimpleAim(Aimable turret) {
+
+    public SimpleAim(Aimable turret, Team team) {
         this.turret = turret;
+        this.team = team;
     }
 
     @Override
-    public void aim(Body body, AShape mainBarrel) {
-        
+    public void aim(AShape mainBarrel) {
+        if (enemy == null || enemy.health <= 0) {
+            this.choose();
+        }
+        Body body = enemy.shape.body;
         Vector2 centerofRotation = mainBarrel.body.getWorldCenter();
         Vector2 pointonX = new Vector2(centerofRotation.x + 50/ MyWorld.SCALE, centerofRotation.y);
         Vector2 targetPoint = body.getWorldCenter();
@@ -89,5 +98,13 @@ public class SimpleAim implements AimLogic {
             }
         }
 
+    }
+
+    @Override
+    public void choose() {
+        List<Entity> enemies = this.team.getOpposite().getTeamObjects();
+        if (enemies.size() > 0) {
+            this.enemy = enemies.get(0);
+        }
     }
 }

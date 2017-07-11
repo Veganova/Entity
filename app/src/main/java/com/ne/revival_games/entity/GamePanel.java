@@ -14,8 +14,12 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Player;
 
 import org.dyn4j.geometry.Vector2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -27,7 +31,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private Background bg;
     MyWorld world;
-
+    private List<Player> players = new ArrayList<>();
     private abstract class DoubleClickListener implements OnTouchListener {
 
         private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
@@ -63,37 +67,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         thread = new MainThread(getHolder(), this);
 
         world = new MyWorld(thread.canvas);
-
-//        this.setOnTouchListener(new DoubleClickListener() {
-//            @Override
-//            void onSingleClick(MotionEvent event) {
-//                double canvasX = event.getX() / scaleX;
-//                double canvasY = event.getY()  / scaleY;
-//                if (world.ghost.entity != null) {
-//                    world.ghost.entity.shape.body.translateToOrigin();
-//                    world.ghost.entity.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
-//                            -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
-//                } else {
-//                    world.nex.shape.body.translateToOrigin();
-//                    world.nex.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
-//                            -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
-//                }
-//                System.out.println(world.ghost.canPlace());
-//            }
-//
-//            @Override
-//            void onDoubleClick(MotionEvent event) {
-//                System.out.println("DOUBLE");
-//                if (world.ghost.canPlace()) {
-//                    System.out.println("PLACED");
-//                    world.nex = world.ghost.place();
-//                }
-//            }
-//        });
-
+        world.addPlayers(players);
         // make gamePanel focusable so it can handle events
         setFocusable(true);
     }
+
+    public void addPlayerListener(Player player) {
+        this.players.add(player);
+    }
+
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -135,11 +117,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-            return true;
+        for (Player player: players) {
+            player.onTouch(this, event);
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
     public void update() {

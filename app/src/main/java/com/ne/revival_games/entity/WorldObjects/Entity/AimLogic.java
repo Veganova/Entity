@@ -9,7 +9,8 @@ import org.dyn4j.dynamics.Body;
  */
 public interface AimLogic {
 
-    public void aim(Body body, AShape mainBarrel);
+    public void aim(AShape mainBarrel);
 
+    public void choose();
 
 }

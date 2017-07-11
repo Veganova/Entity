@@ -12,7 +12,7 @@ import org.dyn4j.geometry.Vector2;
 
 public interface Aimable {
 
-    void aim(Body body);
+    void aim();
 
     void fire(double angle);
 

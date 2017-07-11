@@ -5,6 +5,7 @@ import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -22,8 +23,9 @@ import java.util.Iterator;
 public class SimpleLazer extends Lazer {
     public double lifetime = 500, bornTime;
 
-    public SimpleLazer(Vector2 start, Vector2 end, double width, double health, double speed, MyWorld world) {
-        super(width, 0, speed, health, world);
+    public SimpleLazer(Vector2 start, Vector2 end, double width,
+                       double health, double speed, MyWorld world, Team team) {
+        super(width, 0, speed, health, world, team);
         start = new Vector2(start.x/ MyWorld.SCALE, start.y/MyWorld.SCALE);
         end = new Vector2(end.x/ MyWorld.SCALE, end.y/MyWorld.SCALE);
 
@@ -36,8 +38,9 @@ public class SimpleLazer extends Lazer {
         this.barrel_pause = lifetime;
     }
 
-    public SimpleLazer(Vector2 start, double angle, double length, double width, double health, double speed, MyWorld world) {
-        super(width, 0, speed, health, world);
+    public SimpleLazer(Vector2 start, double angle, double length,
+                       double width, double health, double speed, MyWorld world, Team team) {
+        super(width, 0, speed, health, world, team);
         start = new Vector2(start.x/ MyWorld.SCALE, start.y/MyWorld.SCALE);
         length = length/MyWorld.SCALE;
         Vector2 end = new Vector2(start.x+length*Math.cos(angle), start.y+length*Math.sin(angle));
@@ -52,11 +55,13 @@ public class SimpleLazer extends Lazer {
 
 
     @Override
-    public Projectile returnCustomizedCopy(Projectile project, Vector2 location, double direction, double speed, MyWorld world) {
+    public Projectile returnCustomizedCopy(Projectile project, Vector2 location, double direction,
+                                           double speed, MyWorld world, Team team) {
         if(project.getClass() == this.getClass()){
             SimpleLazer lazer = (SimpleLazer) project;
             return new SimpleLazer(location, Math.toRadians(direction),
-                    lazer.lazer_length*MyWorld.SCALE, lazer.lazer_width*MyWorld.SCALE, lazer.health, lazer.lazer_speed, world);
+                    lazer.lazer_length*MyWorld.SCALE, lazer.lazer_width*MyWorld.SCALE,
+                    lazer.health, lazer.lazer_speed, world, team);
         }
         return null;
     }

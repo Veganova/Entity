@@ -8,9 +8,13 @@ import android.graphics.Camera;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ne.revival_games.entity.GamePanel;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
+import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 
 import org.dyn4j.geometry.Vector2;
 
@@ -34,8 +38,8 @@ public class Player implements View.OnTouchListener {
     int playerNumber;
     Team team;
 
-    private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
-    private long lastClickTime = 0;
+
+
 
     private static final float WIDTH = 900;
     private static final float HEIGHT = 1600;
@@ -43,6 +47,7 @@ public class Player implements View.OnTouchListener {
     private float higher = HEIGHT;
     private Vector2 scales;
 
+    private GhostEntity ghost;
 
     public Player(int id, Team team, MyWorld world, Vector2 scales, int lower, int higher) {
         this.playerNumber = id;
@@ -53,56 +58,135 @@ public class Player implements View.OnTouchListener {
         this.lower = lower;
     }
 
+    private double mDownX, mDownY;
+    private final float SCROLL_THRESHOLD = 10;
+    private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
+    private static final long DRAG_START = 200;//milliseconds
+    private long timeSinceFirst = 0;
+    private boolean holdingGhost = false;
+    private boolean moving = false;
 
+    @Override
+    public boolean onTouch(View view, MotionEvent ev) {
+        //System.out.println("Player " + playerNumber);
+        mDownX = ev.getX() / scales.x;
+        mDownY = ev.getY() / scales.y;
+        mDownX = mDownX - WIDTH/2;
+        mDownY = -1*(mDownY - HEIGHT/2);
 
+        if (holdingGhost && moving) {
+            Vector2 newPos = new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
+            ghost.entity.shape.setBodyPosition(newPos, ghost.entity.shape.body.getWorldCenter());
+        }
+        else if (holdingGhost && (System.currentTimeMillis() - timeSinceFirst) > DRAG_START) {
+            // Dragging - change ghost angle
+            double angle = Util.absoluteAngle(this.ghost.entity.shape.body.getWorldCenter(),
+                    new Vector2(mDownX, mDownY));
+//                    Math.atan2(mDownY - ghost.entity.shape.getY(),
+//                    mDownX - ghost.entity.shape.getX());
+            //System.out.println(Math.toDegrees(angle));
+            ghost.entity.shape.body.getTransform().setRotation((angle + 2*Math.PI) % (2*Math.PI));
 
+        } else {
+
+        }
+
+        //System.out.println(mDownY + " " + mDownX);
+        if (!holdingGhost && mDownY < lower || mDownY > higher) {
+            // out of bounds
+            return false;
+        }
+
+        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                System.out.println("ACTION DOWN");
+                if (!holdingGhost) {
+                    // First time holding down (no entity possessed yet)
+                    holdingGhost = true;
+                    timeSinceFirst = System.currentTimeMillis();
+                    Entities randomEntity = Entities.random();
+                    //System.out.println(randomEntity);
+                    ghost = GhostFactory.produce(randomEntity, mDownX, mDownY, 0, world, team);
+                    moving = true;
+                }
+                break;
+           // case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                if (moving) {
+                    moving = false;
+                }
+                else if (holdingGhost) {
+                    System.out.println("ACTION UP");
+
+                    // if a ghost is being held by the player
+                    if (ghost.canPlace()) {
+                        this.team.add(ghost.place());
+
+                        holdingGhost = false;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
 
 
     /*
     User input handling
      */
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        double canvasX = event.getX() / scales.x;
-        double canvasY = event.getY()  / scales.y;
-
-        // Only allow clicks on the player's half - remove later
-        //System.out.println("click at (" + canvasX + ", " + canvasY + ")");
-        if (canvasY < lower || canvasY > higher) {
-            // out of bounds
-            return false;
-        }
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            long clickTime = System.currentTimeMillis();
-            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-                onDoubleClick(event);
-            } else {
-                onSingleClick(event);
-            }
-            lastClickTime = clickTime;
-            return true;
-        }
-        return false;
-    }
-//    private float mDownX;
-//    private float mDownY;
-//    private final float SCROLL_THRESHOLD = 10;
-//    private boolean isOnClick;
 //    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        double canvasX = event.getX() / scales.x;
+//        double canvasY = event.getY()  / scales.y;
+//
+//        // Only allow clicks on the player's half - remove later
+//        //System.out.println("click at (" + canvasX + ", " + canvasY + ")");
+//        if (canvasY < lower || canvasY > higher) {
+//            // out of bounds
+//            return false;
+//        }
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            long clickTime = System.currentTimeMillis();
+//            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+//                onDoubleClick(event);
+//            } else {
+//                onSingleClick(event);
+//            }
+//            lastClickTime = clickTime;
+//            return true;
+//        }
+//        return false;
+//    }
+
+    //@Override
 //    public boolean onTouch(View view, MotionEvent ev) {
+//        mDownX = ev.getX() / scales.x;
+//        mDownY = ev.getY() / scales.x;
+//        if (mDownY < lower || mDownY > higher) {
+//            // out of bounds
+//            return false;
+//        }
+//
 //        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
 //            case MotionEvent.ACTION_DOWN:
 //                System.out.println("ACTION DOWN");
-//                mDownX = ev.getX();
-//                mDownY = ev.getY();
-//                isOnClick = true;
+//                if (!holdingGhost) {
+//                    // First time holding down (no entity possessed yet)
+//                    holdingGhost = true;
+//                    Entities randomEntity = Entities.random();
+//                    ghost = GhostFactory.produce(randomEntity, mDownX, mDownY, 0, world, team);
+//                }
 //                break;
 //           // case MotionEvent.ACTION_CANCEL:
 //            case MotionEvent.ACTION_UP:
-//                if (isOnClick) {
-//                    System.out.println("REGULAR CLICK?");
-//                    //TODO onClick code
+//                if (holdingGhost) {
+//                    // if a ghost is being held by the player
+//                    if (ghost.canPlace()) {
+//                        ghost.place();
+//                    }
 //                }
 //                break;
 //            default:
@@ -111,26 +195,12 @@ public class Player implements View.OnTouchListener {
 //        return true;
 //    }
 
-    private void onSingleClick(MotionEvent event) {
-        double canvasX = event.getX() / scales.x;
-        double canvasY = event.getY()  / scales.y;
-        if (world.ghost.entity != null) {
-            world.ghost.entity.shape.body.translateToOrigin();
-            world.ghost.entity.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
-                    -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
-        } else {
-            world.nex.shape.body.translateToOrigin();
-            world.nex.shape.body.translate((canvasX - WIDTH / 2) / MyWorld.SCALE,
-                    -1 * (canvasY - HEIGHT / 2) / MyWorld.SCALE);
+    public void update() {
+        for (Entity entity: this.team.getTeamObjects()) {
+            if (entity instanceof Aimable) {
+                ((Aimable) entity).aim();
+            }
         }
-        System.out.println(world.ghost.canPlace());
     }
 
-    private void onDoubleClick(MotionEvent event) {
-        System.out.println("DOUBLE");
-        if (world.ghost.canPlace()) {
-            System.out.println("PLACED");
-            world.nex = world.ghost.place();
-        }
-    }
 }
