@@ -46,7 +46,7 @@ public class Barrel extends Entity {
             case SIDE:
                 this.shape = new ObjRectangle(120, 20);
                 AShape.InitBuilder builderSide = this.shape.getBuilder(true, world);
-                builderSide.setXY(50 + location.x, 100 + location.y).init();
+                builderSide.setXY(50 + (location.x)* MyWorld.SCALE, 100 + location.y* MyWorld.SCALE).init();
                 magnitude = 50;
 
                 this.shape.rotateBody(angle);

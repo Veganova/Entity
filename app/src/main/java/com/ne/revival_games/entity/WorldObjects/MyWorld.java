@@ -67,7 +67,7 @@ public class MyWorld {
     public ObjTriangle tri;
     public ObjCircle circ;
     public Entity barrier;
-    public Turret turret, turret1, turret2, turret3, turret4;
+    public Turret turret, turret2;
     public ComplexShape complex;
     public Entity nex;
     public GhostEntity ghost;
@@ -111,6 +111,7 @@ public class MyWorld {
 
         barrier = new Barrier(300, 400, 0, this);
         turret = new Turret(new Vector2(-200, 100), 30, this);
+//        turret2 = new Turret(new Vector2(300, 300), 30, this);
 //        rect = new Barrier(300, 300, 0, this);
 //        System.out.println("BEFORE - " + this.engineWorld.getBodies().size());
 //        nex = new Nexus(100, 0, 50, this);
@@ -161,7 +162,8 @@ public class MyWorld {
 
 //        if (nex != null)
 //            turret.aim(nex.shape.body);
-        turret.aim(barrier.shape.body);
+        turret.aim(turret2.shape.body);
+        turret2.aim(turret.shape.body);
 
         for(Body body: bodiestodelete){
             System.out.println(bodiestodelete.size());

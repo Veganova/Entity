@@ -5,5 +5,7 @@ package com.ne.revival_games.entity.WorldObjects;
  */
 
 public class MoveListener {
-
+    //if(touch is within x distance of the screen)
+    //increase relativecamera by x amount
+    //for each camera is matters ! kekekekekkekek
 }
