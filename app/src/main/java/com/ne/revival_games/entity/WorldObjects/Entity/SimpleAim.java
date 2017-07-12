@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 /**
@@ -27,13 +28,20 @@ public class SimpleAim implements AimLogic {
     @Override
 
     public void aim(Aimable barrel) {
-
         if(barrel.isSleeping()){
             return;
         }
         if (enemy == null || enemy.health <= 0) {
             this.choose();
         }
+        // TODO: 7/12/2017 take out these errors
+//        if (enemy == null) {
+//            return;
+//        }
+//        if (this.team.getOpposite().getTeamObjects().size() == 0) {
+//            // case where there are no enemies
+//            return;
+//        }
         Body body = enemy.shape.body;
         Entity mainBarrel = (Entity)barrel;
         Vector2 centerofRotation = mainBarrel.shape.body.getWorldCenter();
@@ -67,6 +75,7 @@ public class SimpleAim implements AimLogic {
 
         //better find a shortest distance algorithm
         mainBarrel.shape.body.setAngularVelocity(turnCounterClock *10);
+        // System.out.println("ANGLE - " + mainBarrel.shape.body.getTransform().getRotation());
         //new Turret(new Vector2(-200, 100), 30, this);
 
     }

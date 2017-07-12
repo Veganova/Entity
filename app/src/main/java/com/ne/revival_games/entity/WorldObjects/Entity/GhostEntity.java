@@ -72,6 +72,8 @@ public class GhostEntity {
         this.entity = null;
         world.ghosts.remove(toPlace);
         this.placeable = false;
+
+        // TODO: 7/11/2017 might want to place the entity created into the team lists right here
         return toPlace;
     }
 

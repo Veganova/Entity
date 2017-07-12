@@ -132,8 +132,8 @@ public class MyWorld {
 //        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
 //        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
 
-        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
-        Team.DEFENCE.add(turret);
+//        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
+//        Team.DEFENCE.add(turret);
     }
 
     //need a way to add an object (check what kind of object it is, etc.)

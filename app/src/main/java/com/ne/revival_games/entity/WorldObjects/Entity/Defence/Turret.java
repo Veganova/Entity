@@ -89,7 +89,7 @@ public class Turret extends Entity implements Aimable {
         //this.shape = center;
         //this.shape = new ComplexShape(components);
 
-         this.addBarrel(Barrel.BarrelType.SIDE, location);
+        this.addBarrel(Barrel.BarrelType.SIDE, location);
         this.setMainBarrel(this.barrels.get(0));
 
         //this.addBarrel(Barrel.BarrelType.SINGLE);
