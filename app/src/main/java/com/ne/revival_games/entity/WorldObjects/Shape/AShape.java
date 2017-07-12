@@ -12,6 +12,7 @@ import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -92,12 +93,17 @@ public abstract class AShape implements Shape {
                 rotateFixture(this.angle, new Vector2(0,0));
                 translateFixture(x, y);
 
+                HashMap<String, Double> valueMap = new HashMap<>();
+                valueMap.put("friction", friction);
+                valueMap.put("density", density);
+                valueMap.put("restitution", restitution);
+                convex.setUserData(valueMap);
 
 //                world.engineWorld.addBody(body);
                 // exit since the below deals with building a body
                 return;
             }
-            // 1st init (ex. complex shape)
+            // 1st aoeJoint (ex. complex shape)
             else if (!premadeBody) {
                 translateFixture(-1 * convex.getCenter().x, -1 * convex.getCenter().y);
 

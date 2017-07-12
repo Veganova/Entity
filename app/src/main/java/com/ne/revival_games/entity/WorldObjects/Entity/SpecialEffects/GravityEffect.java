@@ -5,9 +5,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
-import org.dyn4j.geometry.AABB;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -28,7 +26,7 @@ public class GravityEffect extends Effect{
      */
     public GravityEffect(Entity applier, AShape zone, double gravityValue,
                          Vector2 jointDisplacement, MyWorld world){
-        init(applier, zone, effectType.GRAVITY, jointDisplacement, world);
+        aoeJoint(applier, zone, effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
     }
 
@@ -43,7 +41,7 @@ public class GravityEffect extends Effect{
      */
     public GravityEffect(Entity applier, double radius, double gravityValue,
                          Vector2 jointDisplacement, MyWorld world){
-        init(applier, new ObjCircle(radius), effectType.GRAVITY, jointDisplacement, world);
+        aoeJoint(applier, new ObjCircle(radius), effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
     }
 

@@ -65,10 +65,7 @@ public class ObjRectangle extends AShape {
                 (float)(this.getX() + this.rect.getCenter().x), (float)(this.getY() + this.rect.getCenter().y));
 
         canvas.drawRect(rectangle, this.paint);
-
         canvas.restore();
-
-
     }
 
     @Override

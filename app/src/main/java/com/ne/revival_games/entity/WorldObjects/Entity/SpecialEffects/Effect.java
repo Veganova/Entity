@@ -15,11 +15,10 @@ public abstract class Effect {
     public AShape zone;
     protected Entity applier;
 
-    public void init(Entity applier, AShape zone, EffectType type,
-                     Vector2 jointDisplacement, MyWorld world){
+    public void aoeJoint(Entity applier, AShape zone, EffectType type,
+                         Vector2 jointDisplacement, MyWorld world){
         this.applier = applier;
         this.effectType = type;
-
         this.zone = zone;
         //TODO: there may be an error relating to initialize prior to joint adding
         this.zone.getBuilder(true, world).setXY(applier.shape.getX()* MyWorld.SCALE + jointDisplacement.x,

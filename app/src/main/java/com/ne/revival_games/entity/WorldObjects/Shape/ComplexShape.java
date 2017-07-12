@@ -10,6 +10,7 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,7 +39,11 @@ public class ComplexShape extends AShape {
         }
 
         for(BodyFixture fixture: this.body.getFixtures()){
-            fixture.setRestitution(0.0D);
+            HashMap<String, Double> values = (HashMap<String, Double>)fixture.getShape().getUserData();
+
+            fixture.setRestitution(values.get("restitution"));
+            fixture.setFriction(values.get("friction"));
+            fixture.setDensity(values.get("density"));
         }
 
         shapes = fixtures;

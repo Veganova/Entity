@@ -24,7 +24,7 @@ public class SlowEffect extends Effect {
 
     public SlowEffect(Entity applier, AShape zone, Vector2 jointDisplacement,
                       double slowFactor, MyWorld world) {
-        init(applier, zone, effectType.SLOW, jointDisplacement, world);
+        aoeJoint(applier, zone, effectType.SLOW, jointDisplacement, world);
         this.slowFactor = slowFactor;
     }
 

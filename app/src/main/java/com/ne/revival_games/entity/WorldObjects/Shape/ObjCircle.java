@@ -15,7 +15,7 @@ public class ObjCircle extends AShape {
 
     private Circle circ;
     /**
-     * Constructor for the square object. Create an init builder and finish the job.
+     * Constructor for the square object. Create an aoeJoint builder and finish the job.
      * @param r  The radius
      */
     public ObjCircle(double r) {

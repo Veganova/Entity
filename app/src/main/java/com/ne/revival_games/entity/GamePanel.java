@@ -34,6 +34,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public CameraController camera;
     MyWorld world;
     private List<Player> players = new ArrayList<>();
+    private List<OnTouchListener> listeners = new ArrayList<>();
+
     private abstract class DoubleClickListener implements OnTouchListener {
 
         private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
@@ -79,6 +81,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.players.add(player);
     }
 
+    public void addListeners(OnTouchListener listener) {
+        this.listeners.add(listener);
+    }
+
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -101,7 +107,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    Camera c;
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getContext().getResources(),
@@ -112,7 +117,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         thread.setRunning(true);
         thread.start();
-        c = new Camera();
 
     }
 
@@ -122,6 +126,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         for (Player player: players) {
             player.onTouch(this, event);
+        }
+        for (OnTouchListener listener: listeners) {
+            listener.onTouch(this, event);
         }
         return true;
     }
