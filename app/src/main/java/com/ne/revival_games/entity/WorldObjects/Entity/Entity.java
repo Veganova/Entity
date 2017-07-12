@@ -3,20 +3,26 @@ package com.ne.revival_games.entity.WorldObjects.Entity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effects;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.Joint;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Represents the common behaviors that are shared by all engineWorld objects
  */
-public abstract class Entity implements WorldObject {
+public class Entity implements WorldObject, Effector {
 
     public  int COST;
 
-    public Team TYPE;
+    public Team team;
 
     public AShape shape;
     protected double direction;
@@ -26,6 +32,7 @@ public abstract class Entity implements WorldObject {
     public boolean invisible = false;
     boolean invulnerable;
     public boolean ghost = false;
+    private HashMap<Effects, Effect> effects;
 
     // TODO: 7/5/2017 some fields here are not needed 
     public Entity(double direction, double speed, int health, boolean invulnerable, Team team) {
@@ -33,7 +40,7 @@ public abstract class Entity implements WorldObject {
         this.speed = speed;
         this.health = health;
         this.invulnerable = invulnerable;
-        this.TYPE = team;
+        this.team = team;
     }
 
     @Override
@@ -57,7 +64,7 @@ public abstract class Entity implements WorldObject {
     @Override
     public String toString() {
         String result = "";
-        result += "Team: " + this.TYPE + "\n";
+        result += "Team: " + this.team + "\n";
         result += "Type: " + this.getClass() + "\n";
         result += "Health: " + this.health + "\n";
        // result += "Location: " + this.shape.body.getWorldCenter().toString() + "\n";
@@ -68,17 +75,20 @@ public abstract class Entity implements WorldObject {
 
     @Override
     public void onDeath(){
-        this.TYPE.remove(this);
+        this.team.remove(this);
     };
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
+        for (Effect effect: this.effects.values()) {
+            effect.apply(contact);
+        }
         return true;
-    };
+    }
 
     @Override
     public double getDamage(Body componentHit){
-        if (this.TYPE == Team.NEUTRAL)
+        if (this.team == Team.NEUTRAL)
             return 0;
         return this.health;
     }

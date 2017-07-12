@@ -81,7 +81,7 @@ public class Barrel extends Entity implements Aimable {
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
         angle = Math.toDegrees(angle);
 
-        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, TYPE);
+        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, team);
 
         this.shape.body.setAsleep(false);
         this.sleepUntil = System.currentTimeMillis() + 0;

@@ -2,7 +2,6 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
@@ -10,7 +9,6 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.Force;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -26,13 +24,13 @@ public class Comet extends Projectile implements Aimable {
 
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
         super(x, y, RADIUS, direction, speed, HEALTH, world, team, true);
-        TYPE = team;
+        this.team = team;
         this.logic = new SimpleAim(this, team);
     }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE.opposite(this.TYPE)){
+        if(contact.team.opposite(this.team)){
             this.health = 0;
             this.invisible = true;
             return false;

@@ -10,11 +10,9 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Vector2;
 
@@ -46,13 +44,13 @@ public class Turret extends Entity implements Aimable {
         super(angle, 0, HEALTH, false, team);
         this.world = world;
         initializeTurret(location, world);
-        this.logic = new SimpleAim(this, TYPE);
+        this.logic = new SimpleAim(this, this.team);
     };
 
     private void addBarrel(Barrel.BarrelType type, Vector2 location) {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
-        Projectile projectile = new Missile(-10000, -10000, Missile.SPEED, 0, world, TYPE, false);
-        Barrel b = new Barrel(projectile, type, location, world, 3, TYPE);
+        Projectile projectile = new Missile(-10000, -10000, Missile.SPEED, 0, world, team, false);
+        Barrel b = new Barrel(projectile, type, location, world, 3, team);
 
         this.barrels.add(b);
         WeldJoint joint = new WeldJoint(b.shape.body, this.center.body, location);

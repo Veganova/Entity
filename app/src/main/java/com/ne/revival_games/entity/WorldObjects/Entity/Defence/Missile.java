@@ -22,13 +22,13 @@ public class Missile extends Projectile {
     public Missile(double x, double y, double direction, double speed,
                    MyWorld world, Team team, boolean addToWorld) {
         super(x, y, RADIUS, direction, speed, HEALTH, world, team, addToWorld);
-        TYPE = team;
+        this.team = team;
     }
 
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE.opposite(this.TYPE)){
+        if(contact.team.opposite(this.team)){
             this.health = 0;
             this.invisible = true;
             return false;

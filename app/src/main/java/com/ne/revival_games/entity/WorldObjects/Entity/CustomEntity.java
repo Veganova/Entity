@@ -8,7 +8,6 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 /**
  * Created by Veganova on 7/9/2017.
  */
-
 public class CustomEntity extends Entity {
 
     public CustomEntity(AShape shape, double speed,

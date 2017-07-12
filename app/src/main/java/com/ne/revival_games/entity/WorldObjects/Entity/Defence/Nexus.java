@@ -55,12 +55,12 @@ public class Nexus extends Entity {
 
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
-        TYPE = team;
+        this.team = team;
     }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE.opposite(this.TYPE)){
+        if(contact.team.opposite(this.team)){
             this.health -= damage;
             if(this.health <= 0){
                 this.invisible = true;

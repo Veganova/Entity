@@ -17,7 +17,7 @@ public class Barrier extends Entity {
     public static int COST = 100;
     public static int MASS = 20;
     public static int HEALTH = 100;
-//    public static Team TYPE = Team.OFFENSE;
+//    public static Team team = Team.OFFENSE;
 
 
     public Barrier(double x, double y, double angle, MyWorld world, Team team) {
@@ -33,7 +33,7 @@ public class Barrier extends Entity {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.TYPE.opposite(this.TYPE)){
+        if(contact.team.opposite(this.team)){
             this.health -= damage;
             if(this.health <= 0){
                 this.invisible = true;

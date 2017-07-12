@@ -55,7 +55,7 @@ public class MassLazer extends Projectile {
             lastPoint = new Vector2(x / MyWorld.SCALE, y / MyWorld.SCALE);
             points.add(lastPoint);
             this.world = world;
-            this.TYPE = team;
+            this.team = team;
 
 //        initializeHead(x, y);
             this.shape = new ObjCircle(30);
