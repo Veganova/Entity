@@ -42,6 +42,7 @@ public class Turret extends Entity implements Aimable {
     public Turret(Vector2 location, double angle, MyWorld world, Team team){
 
         super(angle, 0, HEALTH, false, team);
+        this.frictionCoefficent = 3;
         this.world = world;
         initializeTurret(location, world);
         this.logic = new SimpleAim(this, this.team);

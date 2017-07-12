@@ -1,19 +1,30 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by Veganova on 7/12/2017.
  */
-public class SlowEffect implements Effect {
-
-    private Entity applier;
+public class SlowEffect extends Effect {
     private double slowFactor;
 
-    public SlowEffect(Entity applier, double slowFactor) {
-        this.applier = applier;
+    /**
+     * joins a given shape to the applier at a given displacement from the center using a weldjoint
+     *
+     * @param applier
+     * @param zone uninitialized shape, unplaced (but set angles and other properties)
+     * @param jointDisplacement displacement from the center point of the applier to join at
+     * @param slowFactor
+     * @param world
+     */
+
+    public SlowEffect(Entity applier, AShape zone, Vector2 jointDisplacement,
+                      double slowFactor, MyWorld world) {
+        init(applier, zone, effectType.SLOW, jointDisplacement, world);
         this.slowFactor = slowFactor;
     }
 

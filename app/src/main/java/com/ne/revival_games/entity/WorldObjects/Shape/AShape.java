@@ -59,7 +59,7 @@ public abstract class AShape implements Shape {
 
         // fixture values
         private double fx = 0, fy = 0;
-        private double density = 0.5D, friction = 0.2D, restitution = 2.0D;
+        private double density = 0.5D, friction = 0.2D, restitution = 0.0001D;
         private double angle = 0.0D;
         private boolean premadeBody = false;
         private MassType type = MassType.NORMAL;
@@ -92,8 +92,7 @@ public abstract class AShape implements Shape {
                 rotateFixture(this.angle, new Vector2(0,0));
                 translateFixture(x, y);
 
-//                body = new Body();
-//                body.addFixture(convex);
+
 //                world.engineWorld.addBody(body);
                 // exit since the below deals with building a body
                 return;
@@ -158,7 +157,11 @@ public abstract class AShape implements Shape {
             return this;
         }
 
-
+        public void initFixture(BodyFixture fixture){
+            fixture.setRestitution(restitution);
+            fixture.setDensity(density);
+            fixture.setFriction(friction);
+        }
     }
 
 

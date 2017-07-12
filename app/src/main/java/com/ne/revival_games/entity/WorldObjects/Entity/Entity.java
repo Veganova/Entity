@@ -5,7 +5,7 @@ import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effects;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -13,7 +13,6 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.Joint;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Represents the common behaviors that are shared by all engineWorld objects
@@ -32,7 +31,9 @@ public class Entity implements WorldObject, Effector {
     public boolean invisible = false;
     boolean invulnerable;
     public boolean ghost = false;
-    private HashMap<Effects, Effect> effects;
+    public double frictionCoefficent = 1;
+    public HashMap<EffectType, Effect> effects;
+    public HashMap<Body, Effect> zoneToEffect;
 
     // TODO: 7/5/2017 some fields here are not needed 
     public Entity(double direction, double speed, int health, boolean invulnerable, Team team) {
@@ -41,6 +42,8 @@ public class Entity implements WorldObject, Effector {
         this.health = health;
         this.invulnerable = invulnerable;
         this.team = team;
+        this.effects = new HashMap<>();
+        this.zoneToEffect = new HashMap<>();
     }
 
     @Override
@@ -74,14 +77,23 @@ public class Entity implements WorldObject, Effector {
     }
 
     @Override
-    public void onDeath(){
+    public void onDeath(MyWorld world){
+        for(Effect effect: effects.values()){
+            world.objectDatabase.remove(effect);
+            world.engineWorld.removeBody(effect.zone.body);
+        }
         this.team.remove(this);
     };
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        for (Effect effect: this.effects.values()) {
-            effect.apply(contact);
+        if(componentHit == null || this == null)
+            return false;
+
+        Effect activeEffect = zoneToEffect.get(componentHit);
+        if(activeEffect != null){
+            activeEffect.apply(contact);
+            return false;
         }
         return true;
     }
@@ -103,8 +115,10 @@ public class Entity implements WorldObject, Effector {
         for (Joint joint: this.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            ent1.shape.setPaint(style);
-            ent2.shape.setPaint(style);
+            if(ent1 != null && ent2 != null){
+                ent1.shape.setPaint(style);
+                ent2.shape.setPaint(style);
+            }
         }
     }
 
@@ -118,9 +132,32 @@ public class Entity implements WorldObject, Effector {
         for (Joint joint: this.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            ent1.shape.setColor(color);
-            ent2.shape.setColor(color);
+            if(ent1 != null && ent2 !=null){
+                ent1.shape.setColor(color);
+                ent2.shape.setColor(color);
+            }
+
         }
     }
+
+    @Override
+    public boolean isEffect(Body effectBody) {
+        return this.zoneToEffect.containsKey(effectBody);
+    }
+
+    @Override
+    public void addEffect(Effect effect) {
+        this.removeEffect(effect);
+        this.effects.put(effect.effectType, effect);
+        this.zoneToEffect.put(effect.zone.body, effect);
+    }
+
+    @Override
+    public void removeEffect(Effect effect) {
+        this.zoneToEffect.remove(effect.zone.body);
+        this.effects.remove(effect.effectType);
+    }
+
+
 
 }

@@ -44,6 +44,13 @@ public class MyWorld {
     public ArrayList<double []> coords;
     private List<Player> players;
     public HashMap<Entity, GhostEntity> ghosts;
+
+    /**static friction */
+    public static double staticFriction = 20;
+
+    /**kinetic friction */
+    public static double kineticFriction = 10;
+
     /** The scale 45 pixels per meter */
     public static final double SCALE = 50.0;
 
@@ -172,7 +179,7 @@ public class MyWorld {
             System.out.println(bodiestodelete.size());
             Entity toDelete = objectDatabase.get(body);
             if(toDelete != null){
-                toDelete.onDeath();
+                toDelete.onDeath(this);
                 objectDatabase.remove(body);
             }
             engineWorld.removeBody(body);

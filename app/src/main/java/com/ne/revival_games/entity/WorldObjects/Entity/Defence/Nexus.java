@@ -1,6 +1,10 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import android.graphics.Canvas;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.GravityEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -9,6 +13,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +61,18 @@ public class Nexus extends Entity {
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
         this.team = team;
+        GravityEffect gravEffect = new GravityEffect(this, 1000, 50, new Vector2(0,0), world);
+        this.addEffect(gravEffect);
+        world.objectDatabase.put(gravEffect.zone.body, this);
     }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
+        Effect activeEffect = zoneToEffect.get(componentHit);
+        if(activeEffect != null){
+            activeEffect.apply(contact);
+            return false;
+        }
         if(contact.team.opposite(this.team)){
             this.health -= damage;
             if(this.health <= 0){
@@ -71,5 +84,11 @@ public class Nexus extends Entity {
         return true;
     }
 
-
+@Override
+    public void draw(Canvas canvas){
+    this.shape.draw(canvas);
+//    for(Effect effect : this.effects.values()){
+//        effect.zone.draw(canvas);
+//    }
+}
 }

@@ -30,14 +30,17 @@ public class GhostEntity {
         for (Joint joint: this.entity.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            ent1.shape.setPaint(Paint.Style.STROKE);
-            ent2.shape.setPaint(Paint.Style.STROKE);
-            ent1.ghost = true;
-            ent1.invulnerable = true;
-            ent2.ghost = true;
-            ent2.invulnerable = true;
-            world.ghosts.put(ent1, this);
-            world.ghosts.put(ent2, this);
+            if(ent1 != null && ent2 != null){
+                ent1.shape.setPaint(Paint.Style.STROKE);
+                ent2.shape.setPaint(Paint.Style.STROKE);
+                ent1.ghost = true;
+                ent1.invulnerable = true;
+                ent2.ghost = true;
+                ent2.invulnerable = true;
+                world.ghosts.put(ent1, this);
+                world.ghosts.put(ent2, this);
+            }
+
             num++;
         }
         System.out.println("NUM JOINTS - " + num);
@@ -57,15 +60,17 @@ public class GhostEntity {
         for (Joint joint: this.entity.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            ent1.shape.setPaint(Paint.Style.FILL);
-            ent2.shape.setPaint(Paint.Style.FILL);
+            if(ent1 != null && ent2 != null){
+                ent1.shape.setPaint(Paint.Style.FILL);
+                ent2.shape.setPaint(Paint.Style.FILL);
 
-            ent1.ghost = false;
-            ent1.invulnerable = false;
-            ent2.ghost = false;
-            ent2.invulnerable = false;
-            world.ghosts.remove(ent1);
-            world.ghosts.remove(ent2);
+                ent1.ghost = false;
+                ent1.invulnerable = false;
+                ent2.ghost = false;
+                ent2.invulnerable = false;
+                world.ghosts.remove(ent1);
+                world.ghosts.remove(ent2);
+            }
         }
         this.entity.invulnerable = false;
         Entity toPlace = this.entity;
@@ -84,7 +89,7 @@ public class GhostEntity {
             return;
         }
         for (Body body: world.engineWorld.getBodies()) {
-            if (!world.objectDatabase.get(body).ghost) {
+            if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {
                 if (this.entity.shape.body.isInContact(body)) {
                     // the ghost object is colliding with another non-ghost object
 

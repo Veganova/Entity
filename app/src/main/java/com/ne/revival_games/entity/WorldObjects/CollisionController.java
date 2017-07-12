@@ -27,14 +27,30 @@ class CollisionController extends CollisionAdapter {
         Entity ent1 = world.objectDatabase.get(body1);
         Entity ent2 = world.objectDatabase.get(body2);
 
-        if (ent1.ghost || ent2.ghost) {
+        if (ent1.ghost && !ent2.isEffect(body2) || ent2.ghost && !ent1.isEffect(body1)) {
             return true;
         }
+        else if(ent1.ghost || ent2.ghost){
+            return false;
+        }
+
 
 
         boolean continueContact = true;
         double damage1 = ent1.getDamage(body1);
         double damage2 = ent2.getDamage(body2);
+
+        if(ent1.isEffect(body1) && ent2.isEffect(body2)){
+            return false;
+        }
+        else if(ent1.isEffect(body1)){
+            ent1.onCollision(ent2, body1, 0);
+            return false;
+        }
+        else if(ent2.isEffect(body2)){
+            ent2.onCollision(ent1, body2, 0);
+            return false;
+        }
 
         if(ent1.isCollisionAuthority) {
             continueContact = ent1.onCollision(ent2, body1, damage2);

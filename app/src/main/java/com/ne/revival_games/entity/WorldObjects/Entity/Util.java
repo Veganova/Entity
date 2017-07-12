@@ -33,4 +33,8 @@ public class Util {
         return (Math.PI*2+Math.atan2(outerPoint.y - vertex.y, outerPoint.x - vertex.x)) % (Math.PI*2);
     }
 
+    public static boolean nearValue(double value, double targetvalue, double delta){
+        return Math.abs(value-targetvalue) <= delta;
+    }
+
 }

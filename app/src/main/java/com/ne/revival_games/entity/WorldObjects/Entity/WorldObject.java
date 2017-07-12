@@ -25,7 +25,7 @@ public interface WorldObject {
 
     void setVelocity(double speed);
 
-    void onDeath();
+    void onDeath(MyWorld world);
 
     /**
      *

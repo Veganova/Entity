@@ -35,9 +35,9 @@ public class SimpleAim implements AimLogic {
             this.choose();
         }
         // TODO: 7/12/2017 take out these errors
-//        if (enemy == null) {
-//            return;
-//        }
+        if (enemy == null) {
+            return;
+        }
 //        if (this.team.getOpposite().getTeamObjects().size() == 0) {
 //            // case where there are no enemies
 //            return;

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
 
@@ -34,6 +35,10 @@ public class ComplexShape extends AShape {
         for(int z=0; z<fixtures.size(); z++) {
             fixtures.get(z).body = this.body;
             body.addFixture(fixtures.get(z).getShape());
+        }
+
+        for(BodyFixture fixture: this.body.getFixtures()){
+            fixture.setRestitution(0.0D);
         }
 
         shapes = fixtures;
