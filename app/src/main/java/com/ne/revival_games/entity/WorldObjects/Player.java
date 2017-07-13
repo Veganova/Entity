@@ -64,7 +64,9 @@ public class Player implements View.OnTouchListener {
     private static final long DRAG_START = 200;//milliseconds
     private long timeSinceFirst = 0;
     private boolean holdingGhost = false;
-    private boolean moving = false;
+    // 0 - havent moved yet. 1 - moving currently. 2 - already moved (in rotation stage)
+    private int moving = 0;
+    private Vector2 pullTowards;
 
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
@@ -74,30 +76,15 @@ public class Player implements View.OnTouchListener {
         mDownX = mDownX - WIDTH/2;
         mDownY = -1*(mDownY - HEIGHT/2);
 
-        if (holdingGhost && moving) {
-            System.out.println("SPEED: " + ghost.entity.shape.body.getLinearVelocity());
-//            Vector2 newPos = new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
-//            ghost.entity.shape.setBodyPosition(newPos, ghost.entity.shape.body.getWorldCenter());
-            Vector2 newPos = new Vector2(mDownX/world.SCALE - ghost.entity.shape.getX(), mDownY/ world.SCALE-ghost.entity.shape.getY());
-            double mag = Util.getDistance(newPos, new Vector2(0,0));
-            Vector2 moveTo = new Vector2(newPos.x, newPos.y);
-            ghost.entity.shape.body.setLinearVelocity(moveTo);
+        if (holdingGhost && moving == 1) {
+            pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
         }
-        else if (holdingGhost && (System.currentTimeMillis() - timeSinceFirst) > DRAG_START) {
+        else if (holdingGhost && moving == 2) {
             // Dragging - change ghost angle
             double angle = Util.absoluteAngle(this.ghost.entity.shape.body.getWorldCenter(),
                     new Vector2(mDownX, mDownY));
-//                    Math.atan2(mDownY - ghost.entity.shape.getY(),
-//                    mDownX - ghost.entity.shape.getX());
-            //System.out.println(Math.toDegrees(angle));
             ghost.entity.shape.body.getTransform().setRotation((angle + 2*Math.PI) % (2*Math.PI));
-
-        } else {
-
         }
-
-
-        //System.out.println(mDownY + " " + mDownX);
         if (!holdingGhost && mDownY < lower || mDownY > higher) {
             // out of bounds
             return false;
@@ -105,30 +92,29 @@ public class Player implements View.OnTouchListener {
 
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                System.out.println("ACTION DOWN");
-                if (!holdingGhost) {
-                    // First time holding down (no entity possessed yet)
-                    holdingGhost = true;
-                    timeSinceFirst = System.currentTimeMillis();
-                    Entities randomEntity = Entities.random();
-                    //System.out.println(randomEntity);
-                    ghost = GhostFactory.produce(randomEntity, mDownX, mDownY, 0, world, team);
-                    moving = true;
+                if (holdingGhost && moving == 0) {
+                    moving = 1;
+                    pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
                 }
                 break;
            // case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (moving) {
-                    moving = false;
+                if (moving == 1) {
+                    moving = 2;
+                    this.ghost.entity.shape.body.setLinearVelocity(0, 0);
+                    this.ghost.entity.shape.body.setAngularVelocity(0);
+                    this.ghost.entity.shape.body.clearAccumulatedForce();
+
+                    this.ghost.entity.shape.body.clearAccumulatedTorque();
                 }
-                else if (holdingGhost) {
-                    System.out.println("ACTION UP");
+                else if (holdingGhost && moving == 2) {
 
                     // if a ghost is being held by the player
                     if (ghost.canPlace()) {
                         this.team.add(ghost.place());
 
                         holdingGhost = false;
+                        moving = 0;
                     }
                 }
                 break;
@@ -140,75 +126,30 @@ public class Player implements View.OnTouchListener {
     }
 
 
-
-    /*
-    User input handling
-     */
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        double canvasX = event.getX() / scales.x;
-//        double canvasY = event.getY()  / scales.y;
-//
-//        // Only allow clicks on the player's half - remove later
-//        //System.out.println("click at (" + canvasX + ", " + canvasY + ")");
-//        if (canvasY < lower || canvasY > higher) {
-//            // out of bounds
-//            return false;
-//        }
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            long clickTime = System.currentTimeMillis();
-//            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-//                onDoubleClick(event);
-//            } else {
-//                onSingleClick(event);
-//            }
-//            lastClickTime = clickTime;
-//            return true;
-//        }
-//        return false;
-//    }
-
-    //@Override
-//    public boolean onTouch(View view, MotionEvent ev) {
-//        mDownX = ev.getX() / scales.x;
-//        mDownY = ev.getY() / scales.x;
-//        if (mDownY < lower || mDownY > higher) {
-//            // out of bounds
-//            return false;
-//        }
-//
-//        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-//                System.out.println("ACTION DOWN");
-//                if (!holdingGhost) {
-//                    // First time holding down (no entity possessed yet)
-//                    holdingGhost = true;
-//                    Entities randomEntity = Entities.random();
-//                    ghost = GhostFactory.produce(randomEntity, mDownX, mDownY, 0, world, team);
-//                }
-//                break;
-//           // case MotionEvent.ACTION_CANCEL:
-//            case MotionEvent.ACTION_UP:
-//                if (holdingGhost) {
-//                    // if a ghost is being held by the player
-//                    if (ghost.canPlace()) {
-//                        ghost.place();
-//                    }
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//        return true;
-//    }
-
-
     public void update() {
         for (Entity entity: this.team.getTeamObjects()) {
             if (entity instanceof Aimable) {
                 ((Aimable) entity).aim();
             }
+        }
+        if (holdingGhost && moving == 1) {
+            Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
+                    pullTowards.y - ghost.entity.shape.getY());
+            ghost.entity.shape.body.setLinearVelocity(10 * delta.x, 10 * delta.y);
+            System.out.println(ghost.entity.shape.body.getFixtureCount());
+        }
+    }
 
+    public void setGhost(Entities type) {
+        if(this.holdingGhost) {
+            System.out.println("ALREADY HOLDING A GHOST!");
+        } else {
+            double x = 0;
+            double y = (this.higher + this.lower) / 2;
+            this.ghost = GhostFactory.produce(type, x / this.scales.x, y / this.scales.y, 0, world, team);
+            System.out.println(ghost.entity);
+            this.holdingGhost = true;
+            this.moving = 0;
         }
     }
 
