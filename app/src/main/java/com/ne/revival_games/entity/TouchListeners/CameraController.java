@@ -1,10 +1,11 @@
-package com.ne.revival_games.entity.WorldObjects;
+package com.ne.revival_games.entity.TouchListeners;
 
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.ne.revival_games.entity.MainThread;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.Vector2;
 
@@ -17,7 +18,7 @@ public class CameraController{
        public Vector2 translateXY;
 
         public CameraController(Vector2 relativeZoomXY, Vector2 relativeTranslationXY){
-                zoomXY = new Vector2(relativeZoomXY.x/MyWorld.SCALE, relativeZoomXY.y/MyWorld.SCALE);
+                zoomXY = new Vector2(relativeZoomXY.x/ MyWorld.SCALE, relativeZoomXY.y/MyWorld.SCALE);
                 translateXY = new Vector2(relativeTranslationXY.x/MyWorld.SCALE,
                         relativeTranslationXY.y/MyWorld.SCALE);
         }

@@ -60,7 +60,7 @@ public abstract class AShape implements Shape {
 
         // fixture values
         private double fx = 0, fy = 0;
-        private double density = 0.5D, friction = 0.2D, restitution = 0.0001D;
+        private double density = 0.5D, friction = 0.2D, restitution = 0.5D;
         private double angle = 0.0D;
         private boolean premadeBody = false;
         private MassType type = MassType.NORMAL;

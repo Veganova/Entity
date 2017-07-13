@@ -6,14 +6,13 @@ package com.ne.revival_games.entity;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import com.ne.revival_games.entity.WorldObjects.CameraController;
+import com.ne.revival_games.entity.TouchListeners.CameraController;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Player;
 

@@ -8,6 +8,7 @@ import android.graphics.Camera;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ne.revival_games.entity.TouchListeners.TouchHandler;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -21,6 +22,7 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +34,7 @@ import java.util.List;
  -has its own menu
  -one ghost object - have this ghost class implement the listener as well?
  */
-public class Player implements View.OnTouchListener {
+public class Player implements View.OnTouchListener, TouchHandler{
     private List<Entity> entities;
     private Camera camera;
     private int money;
@@ -162,4 +164,18 @@ public class Player implements View.OnTouchListener {
         }
     }
 
+    @Override
+    public boolean multiTouch(ArrayList<Integer> pointers, MotionEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
 }

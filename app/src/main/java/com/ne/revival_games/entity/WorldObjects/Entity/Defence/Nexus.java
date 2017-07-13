@@ -67,11 +67,8 @@ public class Nexus extends Entity {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        Effect activeEffect = zoneToEffect.get(componentHit);
-        if(activeEffect != null){
-            activeEffect.apply(contact);
-            return false;
-        }
+        super.onCollision(contact, componentHit, damage);
+
         if(contact.team.opposite(this.team)){
             this.health -= damage;
             if(this.health <= 0){

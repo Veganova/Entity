@@ -65,6 +65,9 @@ class CollisionController extends CollisionAdapter {
             if (ent1.health > 0 && ent2.health > 0) {
 
                 //if either entity wants to continue the contact
+                System.out.println(ent1.getClass().getName());
+                System.out.println(ent1.getClass().getName());
+                System.out.println("-----------------------------------");
                     continueContact = ent1.onCollision(ent2, body1, damage2);
                     continueContact = ent2.onCollision(ent1, body2, damage1) || continueContact;
             }
