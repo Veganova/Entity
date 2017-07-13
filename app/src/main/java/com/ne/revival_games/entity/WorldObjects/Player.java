@@ -16,6 +16,9 @@ import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.List;
@@ -101,11 +104,16 @@ public class Player implements View.OnTouchListener {
             case MotionEvent.ACTION_UP:
                 if (moving == 1) {
                     moving = 2;
-                    this.ghost.entity.shape.body.setLinearVelocity(0, 0);
-                    this.ghost.entity.shape.body.setAngularVelocity(0);
-                    this.ghost.entity.shape.body.clearAccumulatedForce();
+                    this.ghost.entity.shape.body.setAsleep(true);
+                    this.ghost.entity.shape.body.setAsleep(false);
+//
+                    for (Joint joint: this.ghost.entity.shape.body.getJoints()) {
+                        joint.getBody1().setAsleep(true);
+                        joint.getBody1().setAsleep(false);
 
-                    this.ghost.entity.shape.body.clearAccumulatedTorque();
+                        joint.getBody2().setAsleep(true);
+                        joint.getBody2().setAsleep(false);
+                    }
                 }
                 else if (holdingGhost && moving == 2) {
 
@@ -136,7 +144,8 @@ public class Player implements View.OnTouchListener {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
             ghost.entity.shape.body.setLinearVelocity(10 * delta.x, 10 * delta.y);
-            System.out.println(ghost.entity.shape.body.getFixtureCount());
+            System.out.println(ghost.entity.shape.body.getLinearVelocity());
+//            System.out.println(ghost.entity.shape.body.getFixtureCount());
         }
     }
 
@@ -147,7 +156,7 @@ public class Player implements View.OnTouchListener {
             double x = 0;
             double y = (this.higher + this.lower) / 2;
             this.ghost = GhostFactory.produce(type, x / this.scales.x, y / this.scales.y, 0, world, team);
-            System.out.println(ghost.entity);
+//            System.out.println(ghost.entity);
             this.holdingGhost = true;
             this.moving = 0;
         }

@@ -41,7 +41,7 @@ public class MainThread extends Thread
             startTime = System.nanoTime();
             canvas = null;
 
-            //try locking the canvas for pixel editing
+            // try locking the canvas for pixel editing
             try {
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
@@ -51,11 +51,12 @@ public class MainThread extends Thread
                     this.gamePanel.update();
 
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("ERROR IN CANVAS CREATION");
             }
-            finally{
+            finally {
                 if(canvas!=null)
                 {
                     try {
@@ -64,9 +65,6 @@ public class MainThread extends Thread
                     catch(Exception e){e.printStackTrace();}
                 }
             }
-
-
-
 
             timeMillis = (System.nanoTime() - startTime) / 1000000;
             waitTime = targetTime-timeMillis;

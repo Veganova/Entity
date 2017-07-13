@@ -17,7 +17,7 @@ import java.util.HashMap;
 /**
  * Represents the common behaviors that are shared by all engineWorld objects
  */
-public class Entity implements WorldObject, Effector {
+public class Entity implements Effector {
 
     public  int COST;
 
@@ -46,25 +46,21 @@ public class Entity implements WorldObject, Effector {
         this.zoneToEffect = new HashMap<>();
     }
 
-    @Override
     public void update(MyWorld world) {
 
          //if anything has collided, reduce health - this can be put in Entity
     }
 
 
-    @Override
     public void draw(Canvas canvas) {
         this.shape.draw(canvas);
     }
 
-    @Override
     public void setVelocity(double speed) {
             this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
                 speed * Math.sin(Math.toRadians(this.direction)));
     }
 
-    @Override
     public String toString() {
         String result = "";
         result += "Team: " + this.team + "\n";
@@ -76,7 +72,6 @@ public class Entity implements WorldObject, Effector {
         return result;
     }
 
-    @Override
     public void onDeath(MyWorld world){
         for(Effect effect: effects.values()){
             world.objectDatabase.remove(effect);
@@ -85,8 +80,7 @@ public class Entity implements WorldObject, Effector {
         this.team.remove(this);
     };
 
-    @Override
-    public boolean onCollision(Entity contact, Body componentHit, double damage){
+    public boolean onCollision(Entity contact, Body componentHit, double damage) {
         if(componentHit == null || this == null)
             return false;
 
@@ -98,7 +92,6 @@ public class Entity implements WorldObject, Effector {
         return true;
     }
 
-    @Override
     public double getDamage(Body componentHit){
         if (this.team == Team.NEUTRAL)
             return 0;
@@ -158,6 +151,16 @@ public class Entity implements WorldObject, Effector {
         this.effects.remove(effect.effectType);
     }
 
+    public void disableAllEffects() {
+        for (Effect effect: this.effects.values()) {
+            effect.disable();
+        }
+    }
 
+    public void enableAllEffects() {
+        for (Effect effect: this.effects.values()) {
+            effect.enable();
+        }
+    }
 
 }

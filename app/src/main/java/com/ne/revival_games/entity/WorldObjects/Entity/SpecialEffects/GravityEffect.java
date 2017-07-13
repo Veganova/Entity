@@ -40,14 +40,18 @@ public class GravityEffect extends Effect{
      * @param world
      */
     public GravityEffect(Entity applier, double radius, double gravityValue,
-                         Vector2 jointDisplacement, MyWorld world){
+                         Vector2 jointDisplacement, MyWorld world) {
         aoeJoint(applier, new ObjCircle(radius), effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
+        world.objectDatabase.put(this.zone.body, applier);
     }
 
 
     @Override
     public void apply(Entity other) {
+        if (!canApply(other)) {
+            return;
+        }
         double distance =
                 Util.getDistance(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter());
 
@@ -57,7 +61,7 @@ public class GravityEffect extends Effect{
         double magnitude = gravityValue
                 * this.zone.body.getMass().getMass()
                 * other.shape.body.getMass().getMass()
-                /(Math.pow(distance, 2));
+                / (Math.pow(distance, 2));
 
 
         if(Util.nearValue(other.shape.body.getLinearVelocity().x, 0, 0.001)

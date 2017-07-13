@@ -36,8 +36,7 @@ public class Nexus extends Entity {
         rect.getBuilder(false, world).setXY(0, 0).init();
 
         components.add(rect);
-        
-        
+
         double [] points1 = {0, 40, 0, -40, 40, 0};
         ObjTriangle tri1 = new ObjTriangle(points1);
         tri1.getBuilder(false, world).setXY(50, 0).init();
@@ -63,7 +62,7 @@ public class Nexus extends Entity {
         this.team = team;
         GravityEffect gravEffect = new GravityEffect(this, 1000, 50, new Vector2(0,0), world);
         this.addEffect(gravEffect);
-        world.objectDatabase.put(gravEffect.zone.body, this);
+
     }
 
     @Override

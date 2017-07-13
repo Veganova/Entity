@@ -47,6 +47,7 @@ public class GhostEntity {
         System.out.println(entity);
 
         this.entity.invulnerable = true;
+        this.entity.disableAllEffects();
     }
 
     public boolean canPlace() {
@@ -74,9 +75,11 @@ public class GhostEntity {
         }
         this.entity.invulnerable = false;
         Entity toPlace = this.entity;
+        this.entity.enableAllEffects();
         this.entity = null;
         world.ghosts.remove(toPlace);
         this.placeable = false;
+
 
         // TODO: 7/11/2017 might want to place the entity created into the team lists right here
         return toPlace;
@@ -93,17 +96,6 @@ public class GhostEntity {
                 if (this.entity.shape.body.isInContact(body)) {
                     // the ghost object is colliding with another non-ghost object
 
-//                    entity.shape.setColor(CONTACTING);
-//                    entity.shape.setPaint(Paint.Style.FILL);
-//
-//                    for (Joint joint: this.entity.shape.body.getJoints()) {
-//                        Entity ent1 = world.objectDatabase.get(joint.getBody1());
-//                        Entity ent2 = world.objectDatabase.get(joint.getBody2());
-//                        ent1.shape.setColor(CONTACTING);
-//                        ent1.shape.setPaint(Paint.Style.FILL);
-//                        ent2.shape.setColor(CONTACTING);
-//                        ent2.shape.setPaint(Paint.Style.FILL);
-//                    }
                     entity.setColor(CONTACTING, world);
                     entity.setPaint(Paint.Style.FILL, world);
 

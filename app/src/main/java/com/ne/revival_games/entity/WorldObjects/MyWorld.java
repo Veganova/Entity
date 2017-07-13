@@ -175,8 +175,8 @@ public class MyWorld {
 
 
 
-        for(Body body: bodiestodelete){
-            System.out.println(bodiestodelete.size());
+        for (int i = 0; i < bodiestodelete.size(); i += 1) {
+            Body body = bodiestodelete.get(i);
             Entity toDelete = objectDatabase.get(body);
             if(toDelete != null){
                 toDelete.onDeath(this);
@@ -185,7 +185,6 @@ public class MyWorld {
             engineWorld.removeBody(body);
             bodiestodelete.remove(body);
         }
-
 
         this.engineWorld.update(elapsedTime);
     }

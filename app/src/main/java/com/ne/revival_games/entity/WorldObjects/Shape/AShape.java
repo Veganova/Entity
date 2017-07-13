@@ -116,6 +116,7 @@ public abstract class AShape implements Shape {
             }
             // premade body
 
+            body.setAutoSleepingEnabled(false);
             body.rotate(angle);
             body.setMass(type);
             setBodyPosition(new Vector2(x, y), body.getWorldCenter());

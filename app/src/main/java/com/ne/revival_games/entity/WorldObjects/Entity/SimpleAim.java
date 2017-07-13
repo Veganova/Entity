@@ -28,9 +28,6 @@ public class SimpleAim implements AimLogic {
     @Override
 
     public void aim(Aimable barrel) {
-        if(barrel.isSleeping()){
-            return;
-        }
         if (enemy == null || enemy.health <= 0) {
             this.choose();
         }
@@ -38,10 +35,7 @@ public class SimpleAim implements AimLogic {
         if (enemy == null) {
             return;
         }
-//        if (this.team.getOpposite().getTeamObjects().size() == 0) {
-//            // case where there are no enemies
-//            return;
-//        }
+
         Body body = enemy.shape.body;
         Entity mainBarrel = (Entity)barrel;
         Vector2 centerofRotation = mainBarrel.shape.body.getWorldCenter();

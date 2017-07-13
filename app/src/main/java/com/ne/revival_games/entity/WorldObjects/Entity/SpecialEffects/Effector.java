@@ -15,4 +15,8 @@ public interface Effector {
     void addEffect(Effect effect);
 
     void removeEffect(Effect effect);
+
+    void disableAllEffects();
+
+    void enableAllEffects();
 }

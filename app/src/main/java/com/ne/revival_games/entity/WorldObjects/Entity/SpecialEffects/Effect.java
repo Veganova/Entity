@@ -14,6 +14,7 @@ public abstract class Effect {
     public EffectType effectType;
     public AShape zone;
     protected Entity applier;
+    protected boolean status = true;
 
     public void aoeJoint(Entity applier, AShape zone, EffectType type,
                          Vector2 jointDisplacement, MyWorld world){
@@ -27,4 +28,17 @@ public abstract class Effect {
     }
 
     public abstract void apply(Entity other);
+
+    public void disable() {
+        status = false;
+    }
+
+    public void enable() {
+        status = true;
+    }
+
+    protected boolean canApply(Entity other) {
+        return this.status && other != applier;
+    }
+
 }
