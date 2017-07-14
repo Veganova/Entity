@@ -157,7 +157,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         setScales();
         //draw game objects and background
         if (canvas != null) {
-           // canvas.drawColor(Color.WHITE);
+
 
 
             final int savedState = canvas.save();
@@ -171,7 +171,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.translate(WIDTH / 2, -HEIGHT / 2);
             canvas.scale((float)MyWorld.SCALE, (float) MyWorld.SCALE);
 
-            bg.draw(canvas);
+           // bg.draw(canvas);
+            canvas.drawColor(Color.rgb(39,40,34));
             world.drawObjects(canvas);
 
 
