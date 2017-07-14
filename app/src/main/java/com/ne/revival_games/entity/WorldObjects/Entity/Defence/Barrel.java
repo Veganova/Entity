@@ -36,8 +36,6 @@ public class Barrel extends Entity implements Aimable {
         this.world = world;
         this.projectile = projectile;
         this.world.objectDatabase.put(this.shape.body, this);
-
-
     }
 
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
@@ -98,5 +96,10 @@ public class Barrel extends Entity implements Aimable {
         return false;
     }
 
+//    @Override
+//    public void addToTeam(Team team) {
+//        this.team = Team.NEUTRAL;
+//        this.team.add(this);
+//    }
 
 }

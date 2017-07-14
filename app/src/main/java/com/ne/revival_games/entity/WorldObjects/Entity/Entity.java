@@ -92,15 +92,32 @@ public class Entity implements Effector {
     };
 
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        if(componentHit == null || this == null)
+        if(componentHit == null)
             return false;
 
         Effect activeEffect = zoneToEffect.get(componentHit);
-        if(activeEffect != null){
+        if (activeEffect != null) {
             activeEffect.apply(contact);
             return false;
         }
+
+        if(contact.team.opposite(this.team)) {
+            this.health -= damage;
+            if (this.health <= 0) {
+                this.invisible = true;
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    public void addToTeam(Team team) {
+        if (team != null) {
+            this.team.remove(this);
+            this.team = team;
+            this.team.add(this);
+        }
     }
 
     public double getDamage(Body componentHit){

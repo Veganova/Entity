@@ -16,22 +16,30 @@ public class SimpleAim implements AimLogic {
 
     // Doesnt have to be a turret
     private Aimable turret;
-    private Team team;
     private Entity enemy;
 
 
-    public SimpleAim(Aimable turret, Team team) {
+    public SimpleAim(Aimable turret) {
         this.turret = turret;
-        this.team = team;
+    }
+
+    private Team getTeam() {
+        return ((Entity)this.turret).team;
     }
 
     @Override
-
     public void aim(Aimable barrel) {
-        if (enemy == null || enemy.health <= 0) {
+        // if currently focused on a dead enemy, forget about it
+        if (enemy == null || enemy.health <= 0 || enemy.team == getTeam()) {
+            enemy = null;
+        }
+
+        // if no enemy, choose one
+        if (enemy == null) {
             this.choose();
         }
-        // TODO: 7/12/2017 take out these errors
+
+        // if even after choosing it is still null, no targetable enemy
         if (enemy == null) {
             return;
         }
@@ -49,11 +57,9 @@ public class SimpleAim implements AimLogic {
                 targetPoint.x - centerofRotation.x);
         angleTo = (2 * Math.PI + angleTo) % (2 * Math.PI);
 
-
         double angleDifference = (Math.PI * 2 + angle - angleTo) % (Math.PI * 2);
         double counterclockDist = (Math.PI * 2 + angleTo - angle) % (Math.PI * 2);
         double turnCounterClock = -1;               //false
-
 
         if (counterclockDist < angleDifference) {
             angleDifference = counterclockDist;
@@ -83,7 +89,8 @@ public class SimpleAim implements AimLogic {
 
     @Override
     public void choose() {
-        List<Entity> enemies = this.team.getOpposite().getTeamObjects();
+        Team team = getTeam();
+        List<Entity> enemies = team.getOpposite().getTeamObjects();
         if (enemies.size() > 0) {
             this.enemy = enemies.get(0);
         }

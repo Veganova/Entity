@@ -63,23 +63,8 @@ public class Nexus extends Entity {
         this.team = team;
         GravityEffect gravEffect = new GravityEffect(this, 1000, 50, new Vector2(0,0), world);
         this.addEffect(gravEffect);
+
         this.bar = new ActiveBar(this);
-
-    }
-
-    @Override
-    public boolean onCollision(Entity contact, Body componentHit, double damage){
-        super.onCollision(contact, componentHit, damage);
-
-        if(contact.team.opposite(this.team)){
-            this.health -= damage;
-            if(this.health <= 0){
-                this.invisible = true;
-                return false;
-            }
-        }
-
-        return true;
     }
 
 }

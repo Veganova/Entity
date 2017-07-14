@@ -45,7 +45,7 @@ public class Turret extends Entity implements Aimable {
         this.frictionCoefficent = 3;
         this.world = world;
         initializeTurret(location, world);
-        this.logic = new SimpleAim(this, this.team);
+        this.logic = new SimpleAim(this);
 
         this.bar = new ActiveBar(this);
     };
@@ -94,7 +94,6 @@ public class Turret extends Entity implements Aimable {
         this.setMainBarrel(this.barrels.get(0));
 
         //this.addBarrel(Barrel.BarrelType.SINGLE);
-
     }
 
     @Override
@@ -133,8 +132,16 @@ public class Turret extends Entity implements Aimable {
         return false;
     }
 
-    public boolean inContact(Body contact){
-        return this.barrels.get(0).shape.body.isInContact(contact) || center.body.isInContact(contact);
+//    public boolean inContact(Body contact){
+//        return this.barrels.get(0).shape.body.isInContact(contact) || center.body.isInContact(contact);
+//    }
+
+    @Override
+    public void addToTeam(Team team) {
+        super.addToTeam(team);
+        for (Barrel barrel: this.barrels) {
+            barrel.addToTeam(team);
+        }
     }
 
 //    @Override

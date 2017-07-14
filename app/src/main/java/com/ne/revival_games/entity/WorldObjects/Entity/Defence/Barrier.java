@@ -19,6 +19,8 @@ public class Barrier extends Entity {
     public static int HEALTH = 100;
 //    public static Team team = Team.OFFENSE;
 
+    public static double WIDTH = 200;
+    public static double HEIGHT = 30;
 
     public Barrier(double x, double y, double angle, MyWorld world, Team team) {
         super(angle, 0, HEALTH, false, team);
@@ -26,23 +28,8 @@ public class Barrier extends Entity {
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setAngle(angle).setXY(x, y).init();
 
-
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
     }
-
-    @Override
-    public boolean onCollision(Entity contact, Body componentHit, double damage){
-        if(contact.team.opposite(this.team)){
-            this.health -= damage;
-            if(this.health <= 0){
-                this.invisible = true;
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 
 }

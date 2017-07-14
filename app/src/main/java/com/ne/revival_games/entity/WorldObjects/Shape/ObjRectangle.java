@@ -22,27 +22,6 @@ public class ObjRectangle extends AShape {
         //initValues(rect, x, y, DEFAULT_DENSITY, world);
     }
 
-//    public ObjRectangle(double x, double y, double w, double l, double density, MyWorld world) {
-//        w = w/MyWorld.SCALE;
-//        l = l/MyWorld.SCALE;
-//        rect = new Rectangle(w, l);
-//        initValues(rect, x, y, density, world);
-//    }
-//
-//
-//    public ObjRectangle(double x, double y, double w, double l, double fixtureangle) {
-//        w = w/MyWorld.SCALE;
-//        l = l/MyWorld.SCALE;
-//
-//        rect = new Rectangle(w, l);
-//        initValues(this.rect, x, y, fixtureangle);
-//    }
-
-//    //this is a fixture right now
-//    public ObjRectangle(double x, double y, int w, int l, Body newBody) {
-//        rect = new Rectangle(w, l);
-//        newBody.addFixture(rect);
-//    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -65,7 +44,7 @@ public class ObjRectangle extends AShape {
                 (float)(this.getX() + this.rect.getCenter().x), (float)(this.getY() + this.rect.getCenter().y));
 
         // canvas.drawRect(rectangle, this.paint);
-        canvas.drawRoundRect(rectangle, 0.08f, 0.08f, paint);
+        canvas.drawRoundRect(rectangle, 0.13f, 0.13f, paint);
         canvas.restore();
     }
 

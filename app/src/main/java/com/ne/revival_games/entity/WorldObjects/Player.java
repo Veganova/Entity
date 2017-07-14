@@ -105,12 +105,10 @@ public class Player implements View.OnTouchListener, TouchHandler{
                 // entity selection
                 else if (!holdingGhost) {
                     Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
-                   // System.out.println("click at " + mDownX + " " + mDownY);
                     for (Entity teamEntity: this.entities) {
-                        //System.out.println(teamEntity.getClass().getSimpleName() + " " + teamEntity.shape.body.getWorldCenter());
                         if (teamEntity.shape.body.contains(clickPos)) {
                             teamEntity.interact();
-                            System.out.println("CLICKING ON " + teamEntity.getClass().getSimpleName());
+                            break;
                         }
                     }
                 }
@@ -135,8 +133,7 @@ public class Player implements View.OnTouchListener, TouchHandler{
 
                     // if a ghost is being held by the player
                     if (ghost.canPlace()) {
-                        this.team.add(ghost.place());
-
+                        ghost.place().addToTeam(team);
                         holdingGhost = false;
                         moving = 0;
                     }
