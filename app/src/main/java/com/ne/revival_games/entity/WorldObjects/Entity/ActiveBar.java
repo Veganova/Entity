@@ -1,14 +1,11 @@
 package com.ne.revival_games.entity.WorldObjects.Entity;
 
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
-
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 /**
  * Class that represents the health bar and the status of the entity that it is tied to.
@@ -22,7 +19,12 @@ public class ActiveBar {
     private float startingAngle = 225f;
     private Entity entity;
     private boolean on;
-    private Paint paint;
+    private Paint paint, selected, blur;
+
+    public enum PathType {
+        CIRCLE, RECTANGLE, ROUNDED_RECTANGLE;
+    }
+    private PathType pathType = PathType.CIRCLE;
 
     public ActiveBar(Entity entity) {
         this.entity = entity;
@@ -34,6 +36,20 @@ public class ActiveBar {
         paint.setColor(ACTIVE_COLOR);
         paint.setStrokeWidth(0.16f);
         paint.setStyle(Paint.Style.STROKE);
+
+        blur = new Paint();
+        blur.set(paint);
+        blur.setStrokeJoin(Paint.Join.ROUND);
+        blur.setStrokeCap(Paint.Cap.ROUND);
+        blur.setColor(Color.WHITE);
+        blur.setStrokeWidth(0.45f);
+        blur.setMaskFilter(new BlurMaskFilter(1.4f, BlurMaskFilter.Blur.INNER));
+
+        selected = new Paint();
+        selected.set(paint);
+        selected.setColor(Color.BLACK);
+        selected.setStrokeWidth(0.16f);
+        selected.setMaskFilter(new BlurMaskFilter(0.8f, BlurMaskFilter.Blur.NORMAL));
     }
 
     ActiveBar(Entity entity, boolean state) {
@@ -43,6 +59,10 @@ public class ActiveBar {
         }
     }
 
+    public void setPathType(PathType type) {
+        this.pathType = type;
+    }
+
     public void draw(Canvas c) {
         float cx = (float)this.entity.shape.getX();
         float cy = (float)this.entity.shape.getY();
@@ -50,10 +70,30 @@ public class ActiveBar {
         RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
 
         // opacity
-        //p.setAlpha(0x80); //
-        //canvas.drawOval(rectF, p);
+        //p.setAlpha(0x80);
+        // if want to draw red for health missing
+        //canvas.drawOval(rectF, redpaint);
+
+        // calculated percentage health remaining
         float sweepAngle = (360f * entity.health) / entity.MAX_HEALTH;
-        c.drawArc (rectangle, startingAngle, sweepAngle, false, paint);
+
+        Path path = new Path();
+
+        switch(pathType) {
+            case CIRCLE:
+                path.addArc(rectangle, startingAngle, sweepAngle);
+                break;
+            case RECTANGLE:
+                // how to move only partway along a given path
+                break;
+        }
+
+        c.drawPath(path, blur);
+        c.drawPath(path, paint);
+
+        // c.drawArc (rectangle, startingAngle, sweepAngle, false, blur);
+       // c.drawArc (rectangle, startingAngle, sweepAngle, false, paint);
+
     }
 
     /**

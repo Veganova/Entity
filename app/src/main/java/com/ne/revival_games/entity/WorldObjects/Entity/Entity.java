@@ -61,6 +61,12 @@ public class Entity implements Effector {
         }
     }
 
+    public void interact() {
+        if (this.bar != null) {
+            this.bar.toggle();
+        }
+    }
+
     public void setVelocity(double speed) {
             this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
                 speed * Math.sin(Math.toRadians(this.direction)));

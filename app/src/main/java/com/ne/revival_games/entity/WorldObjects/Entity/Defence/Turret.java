@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import android.graphics.Canvas;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -26,7 +27,6 @@ import java.util.List;
 public class Turret extends Entity implements Aimable {
     public static int COST = 200;
     public static int MASS = 25;
-    public static int HEALTH = 80;
     private static double reload = 3000;
     private double lastfired = 0;
 
@@ -41,11 +41,13 @@ public class Turret extends Entity implements Aimable {
     //need to include the angle somehow
     public Turret(Vector2 location, double angle, MyWorld world, Team team){
 
-        super(angle, 0, HEALTH, false, team);
+        super(angle, 0, 80, false, team);
         this.frictionCoefficent = 3;
         this.world = world;
         initializeTurret(location, world);
         this.logic = new SimpleAim(this, this.team);
+
+        this.bar = new ActiveBar(this);
     };
 
     private void addBarrel(Barrel.BarrelType type, Vector2 location) {

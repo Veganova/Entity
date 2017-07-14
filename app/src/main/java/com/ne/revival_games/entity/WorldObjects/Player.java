@@ -61,6 +61,7 @@ public class Player implements View.OnTouchListener, TouchHandler{
         this.scales = scales;
         this.higher = higher;
         this.lower = lower;
+        this.entities = team.getTeamObjects();
     }
 
     private double mDownX, mDownY;
@@ -101,6 +102,19 @@ public class Player implements View.OnTouchListener, TouchHandler{
                     moving = 1;
                     pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
                 }
+                // entity selection
+                else if (!holdingGhost) {
+                    Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
+                   // System.out.println("click at " + mDownX + " " + mDownY);
+                    for (Entity teamEntity: this.entities) {
+                        //System.out.println(teamEntity.getClass().getSimpleName() + " " + teamEntity.shape.body.getWorldCenter());
+                        if (teamEntity.shape.body.contains(clickPos)) {
+                            teamEntity.interact();
+                            System.out.println("CLICKING ON " + teamEntity.getClass().getSimpleName());
+                        }
+                    }
+                }
+
                 break;
            // case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:

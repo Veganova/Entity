@@ -51,7 +51,7 @@ public class ObjRectangle extends AShape {
         double right = this.getX() + 0.5 * this.rect.getWidth() + this.rect.getCenter().x - this.body.getLocalCenter().x;
         double top = this.getY() + 0.5 * this.rect.getHeight() + this.rect.getCenter().y - this.body.getLocalCenter().y;
 //       this.angle = this.body.getTransform().getRotation() + this.rect.getRotation();
-        RectF rectangle = new RectF((float) left, (float) top, (float) right, (float) bottom);
+        RectF rectangle = new RectF((float) left, (float) bottom, (float) right, (float) top);
 
         this.angle = this.body.getTransform().getRotation();
         canvas.save();
@@ -64,7 +64,8 @@ public class ObjRectangle extends AShape {
         canvas.rotate((float)Math.toDegrees(this.rect.getRotation()),
                 (float)(this.getX() + this.rect.getCenter().x), (float)(this.getY() + this.rect.getCenter().y));
 
-        canvas.drawRect(rectangle, this.paint);
+        // canvas.drawRect(rectangle, this.paint);
+        canvas.drawRoundRect(rectangle, 0.08f, 0.08f, paint);
         canvas.restore();
     }
 
