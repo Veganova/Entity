@@ -19,8 +19,8 @@ import java.util.HashMap;
  */
 public class Entity implements Effector {
 
-    public  int COST;
-
+    public int COST;
+    public int MAX_HEALTH;
     public Team team;
 
     public AShape shape;
@@ -34,12 +34,14 @@ public class Entity implements Effector {
     public double frictionCoefficent = 1;
     public HashMap<EffectType, Effect> effects;
     public HashMap<Body, Effect> zoneToEffect;
+    protected ActiveBar bar;
 
     // TODO: 7/5/2017 some fields here are not needed 
     public Entity(double direction, double speed, int health, boolean invulnerable, Team team) {
         this.direction = direction;
         this.speed = speed;
         this.health = health;
+        this.MAX_HEALTH = health;
         this.invulnerable = invulnerable;
         this.team = team;
         this.effects = new HashMap<>();
@@ -54,6 +56,9 @@ public class Entity implements Effector {
 
     public void draw(Canvas canvas) {
         this.shape.draw(canvas);
+        if (this.bar != null) {
+            this.bar.draw(canvas);
+        }
     }
 
     public void setVelocity(double speed) {

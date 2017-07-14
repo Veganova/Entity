@@ -135,9 +135,9 @@ public class Turret extends Entity implements Aimable {
         return this.barrels.get(0).shape.body.isInContact(contact) || center.body.isInContact(contact);
     }
 
-    @Override
-    public void draw(Canvas canvas){
-        this.center.draw(canvas);
-    }
+//    @Override
+//    public void draw(Canvas canvas){
+//        this.center.draw(canvas);
+//    }
 
 }

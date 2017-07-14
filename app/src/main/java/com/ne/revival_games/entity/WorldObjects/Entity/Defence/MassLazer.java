@@ -122,6 +122,7 @@ public class MassLazer extends Projectile {
             canvas.drawLine((float) points.get(end).x, (float) points.get(end).y, (float) this.shape.getX(), (float) this.shape.getY(),
                     paint);
 
+//        super.draw();
         this.shape.draw(canvas);
     }
 

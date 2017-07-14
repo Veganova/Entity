@@ -7,6 +7,9 @@ package com.ne.revival_games.entity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -154,16 +157,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         setScales();
         //draw game objects and background
         if (canvas != null) {
+           // canvas.drawColor(Color.WHITE);
+
+
             final int savedState = canvas.save();
+
+
+
+
+
             //scaling does funky stuff to length / width so be careful LMAO
            canvas.scale((float)scales.x, (float)-scales.y);
             canvas.translate(WIDTH / 2, -HEIGHT / 2);
             canvas.scale((float)MyWorld.SCALE, (float) MyWorld.SCALE);
-//            camera.relativeMove(50,50);
-//            camera.relativeZoom(0.1, 0.1);
 
             bg.draw(canvas);
             world.drawObjects(canvas);
+
+
+
+
 
 
             canvas.restoreToCount(savedState);

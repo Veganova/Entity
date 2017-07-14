@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import android.graphics.Canvas;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.GravityEffect;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 
 public class Nexus extends Entity {
-    public static int HEALTH = 100;
+    public static int HEALTH = 200;
     public static int MASS;
     public static int COST;
     public List<AShape> components;
@@ -62,6 +63,7 @@ public class Nexus extends Entity {
         this.team = team;
         GravityEffect gravEffect = new GravityEffect(this, 1000, 50, new Vector2(0,0), world);
         this.addEffect(gravEffect);
+        this.bar = new ActiveBar(this);
 
     }
 
@@ -80,11 +82,4 @@ public class Nexus extends Entity {
         return true;
     }
 
-@Override
-    public void draw(Canvas canvas){
-    this.shape.draw(canvas);
-//    for(Effect effect : this.effects.values()){
-//        effect.zone.draw(canvas);
-//    }
-}
 }

@@ -28,13 +28,16 @@ public class Barrel extends Entity implements Aimable {
     private Projectile projectile;
     private double sleepUntil = 0;
 
+
     public Barrel(Projectile projectile, BarrelType type,
                   Vector2 location, MyWorld world, double angle, Team team) {
-        super(0, 0, 0, false, team);
+        super(0, 0, 70, false, team);
         initBarrel(type, location, world, angle);
         this.world = world;
         this.projectile = projectile;
         this.world.objectDatabase.put(this.shape.body, this);
+
+
     }
 
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
@@ -58,13 +61,6 @@ public class Barrel extends Entity implements Aimable {
                 break;
         }
         this.health = 100;
-    }
-
-
-
-    @Override
-    public void draw(Canvas canvas){
-        this.shape.draw(canvas);
     }
 
     @Override
