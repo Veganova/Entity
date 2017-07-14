@@ -5,10 +5,14 @@ package com.ne.revival_games.entity.WorldObjects;
  */
 
 import android.graphics.Camera;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.TouchListeners.TouchHandler;
+import com.ne.revival_games.entity.TouchListeners.TwoTouchListener;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -34,7 +38,7 @@ import java.util.List;
  -has its own menu
  -one ghost object - have this ghost class implement the listener as well?
  */
-public class Player implements View.OnTouchListener, TouchHandler{
+public class Player extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener{
     private List<Entity> entities;
     private Camera camera;
     private int money;
@@ -51,10 +55,10 @@ public class Player implements View.OnTouchListener, TouchHandler{
     private float lower = 0;
     private float higher = HEIGHT;
     private Vector2 scales;
-
+    private GestureDetectorCompat mDetector;
     private GhostEntity ghost;
 
-    public Player(int id, Team team, MyWorld world, Vector2 scales, int lower, int higher) {
+    public Player(int id, Team team, MyWorld world, Vector2 scales, int lower, int higher, MainActivity activity){
         this.playerNumber = id;
         this.team = team;
         this.world = world;
@@ -62,9 +66,9 @@ public class Player implements View.OnTouchListener, TouchHandler{
         this.higher = higher;
         this.lower = lower;
         this.entities = team.getTeamObjects();
+        mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
     }
 
-    private double mDownX, mDownY;
     private final float SCROLL_THRESHOLD = 10;
     private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
     private static final long DRAG_START = 200;//milliseconds
@@ -73,76 +77,37 @@ public class Player implements View.OnTouchListener, TouchHandler{
     // 0 - havent moved yet. 1 - moving currently. 2 - already moved (in rotation stage)
     private int moving = 0;
     private Vector2 pullTowards;
+    private double previousAngle = 0;
 
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
+        if(ev.getPointerCount() > 1) {
+            if(holdingGhost) {
+                    //rotate
+                System.out.println("HELLO -- MULTI-TOUCH");
+                double p1x = ev.getX(0);
+                double p1y = ev.getY(0);
+                double p2x = ev.getX(1);
+                double p2y = ev.getY(1);
+                double direction = 1;
+                double currentAngle = Util.absoluteAngle(new Vector2(p2x, p2y), new Vector2(p1x, p1y));
+                if(Math.abs(currentAngle - previousAngle) > Math.PI ){
+                    direction = -1;
+                }
+                System.out.println("ANGLE: " + currentAngle);
+                this.ghost.entity.shape.body.getTransform().setRotation(currentAngle);
+                previousAngle = currentAngle;
+            }
+        }
+        else{
+            this.mDetector.onTouchEvent(ev);
+        }
+
         //System.out.println("Player " + playerNumber);
-        mDownX = ev.getX() / scales.x;
-        mDownY = ev.getY() / scales.y;
-        mDownX = mDownX - WIDTH/2;
-        mDownY = -1*(mDownY - HEIGHT/2);
-
-        if (holdingGhost && moving == 1) {
-            pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
-        }
-        else if (holdingGhost && moving == 2) {
-            // Dragging - change ghost angle
-            double angle = Util.absoluteAngle(this.ghost.entity.shape.body.getWorldCenter(),
-                    new Vector2(mDownX, mDownY));
-            ghost.entity.shape.body.getTransform().setRotation((angle + 2*Math.PI) % (2*Math.PI));
-        }
-        if (!holdingGhost && mDownY < lower || mDownY > higher) {
-            // out of bounds
-            return false;
-        }
-
-        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                if (holdingGhost && moving == 0) {
-                    moving = 1;
-                    pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
-                }
-                // entity selection
-                else if (!holdingGhost) {
-                    Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
-                    for (Entity teamEntity: this.entities) {
-                        if (teamEntity.shape.body.contains(clickPos)) {
-                            teamEntity.interact();
-                            break;
-                        }
-                    }
-                }
-
-                break;
-           // case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-                if (moving == 1) {
-                    moving = 2;
-                    this.ghost.entity.shape.body.setAsleep(true);
-                    this.ghost.entity.shape.body.setAsleep(false);
-//
-                    for (Joint joint: this.ghost.entity.shape.body.getJoints()) {
-                        joint.getBody1().setAsleep(true);
-                        joint.getBody1().setAsleep(false);
-
-                        joint.getBody2().setAsleep(true);
-                        joint.getBody2().setAsleep(false);
-                    }
-                }
-                else if (holdingGhost && moving == 2) {
-
-                    // if a ghost is being held by the player
-                    if (ghost.canPlace()) {
-                        ghost.place().addToTeam(team);
-                        holdingGhost = false;
-                        moving = 0;
-                    }
-                }
-                break;
-            default:
-                break;
-
-        }
+//        mDownX = ev.getX() / scales.x;
+//        mDownY = ev.getY() / scales.y;
+//        mDownX = mDownX - WIDTH/2;
+//        mDownY = -1*(mDownY - HEIGHT/2);
         return true;
     }
 
@@ -153,11 +118,10 @@ public class Player implements View.OnTouchListener, TouchHandler{
                 ((Aimable) entity).aim();
             }
         }
-        if (holdingGhost && moving == 1) {
+        if (holdingGhost) {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
             ghost.entity.shape.body.setLinearVelocity(10 * delta.x, 10 * delta.y);
-            System.out.println(ghost.entity.shape.body.getLinearVelocity());
 //            System.out.println(ghost.entity.shape.body.getFixtureCount());
         }
     }
@@ -169,24 +133,52 @@ public class Player implements View.OnTouchListener, TouchHandler{
             double x = 0;
             double y = (this.higher + this.lower) / 2;
             this.ghost = GhostFactory.produce(type, x / this.scales.x, y / this.scales.y, 0, world, team);
+            this.pullTowards = this.ghost.entity.shape.body.getWorldCenter();
 //            System.out.println(ghost.entity);
             this.holdingGhost = true;
-            this.moving = 0;
+            this.previousAngle = 0;
         }
     }
 
     @Override
-    public boolean multiTouch(ArrayList<Integer> pointers, MotionEvent event) {
-        return false;
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        System.out.println("SCROLLING");
+        double mDownX = e2.getX() / scales.x;
+        double mDownY = e2.getY() / scales.y;
+        mDownX = mDownX - WIDTH/2;
+        mDownY = -1*(mDownY - HEIGHT/2);
+        System.out.println("");
+        if(holdingGhost){
+            if(e2.getPointerCount() < 2 && e1.getPointerCount() < 2){
+                System.out.println("MOVING");
+                pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
+            }
+            else {
+                //multitouch rotation
+
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        System.out.println("FLINGING");
+        if(holdingGhost) {
+            return false;
+        }
         return false;
     }
 
     @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+    public void onLongPress(MotionEvent e) {
+        System.out.println("LONG PRESS");
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        System.out.println("SINGLE TAP");
         return false;
     }
+
 }
