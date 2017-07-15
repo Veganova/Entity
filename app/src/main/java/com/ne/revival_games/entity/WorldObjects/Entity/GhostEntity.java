@@ -131,6 +131,8 @@ public class GhostEntity {
     }
 
     public void clearForces(Entity ent) {
+        ent.shape.body.setAsleep(true);
+        ent.shape.body.setAsleep(false);
         for (Joint joint : ent.shape.body.getJoints()) {
             joint.getBody1().setAsleep(true);
             joint.getBody1().setAsleep(false);
