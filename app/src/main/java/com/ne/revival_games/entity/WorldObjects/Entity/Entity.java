@@ -31,6 +31,8 @@ public class Entity implements Effector {
     public boolean invisible = false;
     boolean invulnerable;
     public boolean ghost = false;
+    public boolean untargetable = false;
+
     public double frictionCoefficent = 1;
     public HashMap<EffectType, Effect> effects;
     public HashMap<Body, Effect> zoneToEffect;
@@ -89,9 +91,12 @@ public class Entity implements Effector {
             world.engineWorld.removeBody(effect.zone.body);
         }
         this.team.remove(this);
-    };
+    }
 
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
+        if (this.untargetable) {
+            return false;
+        }
         if(componentHit == null)
             return false;
 

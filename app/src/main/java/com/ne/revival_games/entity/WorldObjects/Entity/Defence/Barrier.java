@@ -1,6 +1,8 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -22,6 +24,8 @@ public class Barrier extends Entity {
     public static double WIDTH = 200;
     public static double HEIGHT = 30;
 
+    private Effect barrierDown;
+
     public Barrier(double x, double y, double angle, MyWorld world, Team team) {
         super(angle, 0, HEALTH, false, team);
         this.shape = new ObjRectangle(200, 30);
@@ -30,6 +34,34 @@ public class Barrier extends Entity {
 
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
+
+        this.bar = new ActiveBar(this);
+        this.bar.setPathType(ActiveBar.PathType.LINE, 200);
     }
 
+    @Override
+    public void interact() {
+        super.interact();
+        this.untargetable = !untargetable;
+    }
+
+//    private class BarrierDown extends Effect {
+//
+//        private Barrier barrier;
+//
+//        BarrierDown(Barrier barrier) {
+//            this.barrier = barrier;
+//        }
+//
+//        @Override
+//        public void apply() {
+//            this.untargetable = true;
+//        }
+//
+//        @Override
+//        public void apply(Entity other) {
+//        }
+//    }
+
 }
+

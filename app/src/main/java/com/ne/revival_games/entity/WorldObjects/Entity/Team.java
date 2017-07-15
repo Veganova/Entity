@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public enum Team {
-    DEFENCE(Color.rgb(167,119,208)), OFFENSE(Color.rgb(236,38,101)), NEUTRAL(Color.MAGENTA);
+    DEFENCE(Color.rgb(40,240,200)), OFFENSE(Color.rgb(236,38,101)), NEUTRAL(Color.MAGENTA);
 
     Team(int color) {
         this.teamColor = color;

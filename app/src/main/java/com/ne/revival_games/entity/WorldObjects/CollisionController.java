@@ -70,6 +70,7 @@ class CollisionController extends CollisionAdapter {
             }
         }
 
+
         if(!continueContact){
             if(ent1.health <= 0){
                 world.bodiestodelete.add(ent1.shape.body);

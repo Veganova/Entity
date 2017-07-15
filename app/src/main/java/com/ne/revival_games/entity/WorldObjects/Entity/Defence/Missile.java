@@ -28,7 +28,11 @@ public class Missile extends Projectile {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
-        super.onCollision(contact, componentHit, damage);
+        boolean regular = super.onCollision(contact, componentHit, damage);
+
+        if (!regular) {
+            return false;
+        }
 
         if(contact.team.opposite(this.team)){
             this.health = 0;

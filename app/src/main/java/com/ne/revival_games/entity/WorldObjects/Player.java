@@ -157,7 +157,7 @@ public class Player implements View.OnTouchListener, TouchHandler{
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
             ghost.entity.shape.body.setLinearVelocity(10 * delta.x, 10 * delta.y);
-            System.out.println(ghost.entity.shape.body.getLinearVelocity());
+            // System.out.println(ghost.entity.shape.body.getLinearVelocity());
 //            System.out.println(ghost.entity.shape.body.getFixtureCount());
         }
     }

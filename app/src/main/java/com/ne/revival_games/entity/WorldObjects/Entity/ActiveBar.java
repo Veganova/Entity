@@ -7,6 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
+
 /**
  * Class that represents the health bar and the status of the entity that it is tied to.
  * Status refers to whether its ability has been turned on or not. Class does not do much in terms
@@ -22,8 +25,10 @@ public class ActiveBar {
     private Paint paint, selected, blur;
 
     public enum PathType {
-        CIRCLE, RECTANGLE, ROUNDED_RECTANGLE;
+        CIRCLE, RECTANGLE, ROUNDED_RECTANGLE, LINE;
     }
+
+    // default
     private PathType pathType = PathType.CIRCLE;
 
     public ActiveBar(Entity entity) {
@@ -47,7 +52,7 @@ public class ActiveBar {
 
         selected = new Paint();
         selected.set(paint);
-        selected.setColor(Color.BLACK);
+        selected.setColor(Color.WHITE);
         selected.setStrokeWidth(0.16f);
         selected.setMaskFilter(new BlurMaskFilter(0.8f, BlurMaskFilter.Blur.NORMAL));
     }
@@ -59,40 +64,69 @@ public class ActiveBar {
         }
     }
 
-    public void setPathType(PathType type) {
+    private double x, y;
+
+    /**
+     * Use this for lines and circles.
+     *
+     * @param type
+     * @param x
+     */
+    public void setPathType(PathType type, double x) {
         this.pathType = type;
+        this.x = x / MyWorld.SCALE;
+    }
+
+    /**
+     * Use this for rectangles and other such shapes that require two inputs
+     *
+     * @param type
+     * @param x
+     * @param y
+     */
+    public void setPathType(PathType type, double x, double y) {
+        this.pathType = type;
+        this.x = x / MyWorld.SCALE;
+        this.y = y / MyWorld.SCALE;
     }
 
     public void draw(Canvas c) {
         float cx = (float)this.entity.shape.getX();
         float cy = (float)this.entity.shape.getY();
-        float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
-        RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
+        float angle = (float) this.entity.shape.body.getTransform().getRotation();
 
-        // opacity
-        //p.setAlpha(0x80);
-        // if want to draw red for health missing
-        //canvas.drawOval(rectF, redpaint);
-
-        // calculated percentage health remaining
-        float sweepAngle = (360f * entity.health) / entity.MAX_HEALTH;
 
         Path path = new Path();
-
         switch(pathType) {
             case CIRCLE:
-                path.addArc(rectangle, startingAngle, sweepAngle);
+                float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
+                RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
+                float sweepAngle = (360f * entity.health) / entity.MAX_HEALTH;
+
+                path.addArc(rectangle, startingAngle - angle, sweepAngle);
                 break;
             case RECTANGLE:
                 // how to move only partway along a given path
+                break;
+            case LINE:
+                double width = x;
+
+                // System.out.println(height + " " + width);
+                float p1x, p1y, p2x, p2y;
+                p1x = (float)(cx + Math.cos(angle) * width / 2);
+                p1y = (float)(cy + Math.sin(angle) * width / 2);
+
+                p2x = (float)(cx - Math.cos(angle) * width / 2);
+                p2y = (float)(cy - Math.sin(angle) * width / 2);
+                path.moveTo(p1x, p1y);
+                path.lineTo(p2x, p2y);
                 break;
         }
 
         c.drawPath(path, blur);
         c.drawPath(path, paint);
+        // c.drawPath(path, selected);
 
-        // c.drawArc (rectangle, startingAngle, sweepAngle, false, blur);
-       // c.drawArc (rectangle, startingAngle, sweepAngle, false, paint);
 
     }
 

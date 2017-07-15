@@ -46,7 +46,6 @@ public class GravityEffect extends Effect{
         world.objectDatabase.put(this.zone.body, applier);
     }
 
-
     @Override
     public void apply(Entity other) {
         if (!canApply(other)) {

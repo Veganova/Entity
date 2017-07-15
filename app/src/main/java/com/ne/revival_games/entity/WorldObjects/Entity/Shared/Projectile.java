@@ -5,6 +5,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
+import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -47,6 +48,14 @@ public abstract class Projectile extends Entity {
 
     public double getSleepTime(){
         return this.barrel_sleepTime;
+    }
+
+    @Override
+    public boolean onCollision(Entity contact, Body componentHit, double damage) {
+        if (contact.untargetable) {
+            return false;
+        }
+        return super.onCollision(contact, componentHit, damage);
     }
 
 }
