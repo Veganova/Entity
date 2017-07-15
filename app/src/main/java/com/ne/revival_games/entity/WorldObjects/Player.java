@@ -4,15 +4,15 @@ package com.ne.revival_games.entity.WorldObjects;
  * Created by Veganova on 7/7/2017.
  */
 
+import android.content.Context;
 import android.graphics.Camera;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.ne.revival_games.entity.MainActivity;
-import com.ne.revival_games.entity.TouchListeners.TouchHandler;
-import com.ne.revival_games.entity.TouchListeners.TwoTouchListener;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -21,12 +21,10 @@ import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 
-import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.joint.Joint;
+import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +41,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     private Camera camera;
     private int money;
     private MyWorld world;
+    private Context context;
 
     int playerNumber;
     Team team;
@@ -66,7 +65,8 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         this.higher = higher;
         this.lower = lower;
         this.entities = team.getTeamObjects();
-        mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
+        this.context = activity.getApplicationContext();
+        mDetector = new GestureDetectorCompat(context, this);
     }
 
     private final float SCROLL_THRESHOLD = 10;
@@ -78,31 +78,41 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     private int moving = 0;
     private Vector2 pullTowards;
     private double previousAngle = 0;
+    private double lastDownPress  = 0;
+    private double lastMultiPress = 0;
+    private boolean waitForMultiTouch = false;
 
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
-        if(ev.getPointerCount() > 1) {
-            if(holdingGhost) {
-                    //rotate
-                System.out.println("HELLO -- MULTI-TOUCH");
-                double p1x = ev.getX(0);
-                double p1y = ev.getY(0);
-                double p2x = ev.getX(1);
-                double p2y = ev.getY(1);
-                double direction = 1;
-                double currentAngle = Util.absoluteAngle(new Vector2(p2x, p2y), new Vector2(p1x, p1y));
-                if(Math.abs(currentAngle - previousAngle) > Math.PI ){
-                    direction = -1;
-                }
-                System.out.println("ANGLE: " + currentAngle);
-                this.ghost.entity.shape.body.getTransform().setRotation(currentAngle);
-                previousAngle = currentAngle;
-            }
+        int mask = (ev.getAction() & MotionEvent.ACTION_MASK);
+
+        if( mask == MotionEvent.ACTION_DOWN){
+            lastDownPress = System.currentTimeMillis();
         }
-        else{
-            this.mDetector.onTouchEvent(ev);
+        else if( mask == MotionEvent.ACTION_UP || mask == MotionEvent.ACTION_POINTER_UP){
+            previousAngle = 0;
         }
 
+            if (ev.getPointerCount() > 1) {
+                if (holdingGhost) {
+                    //we need this line unfortunately for turret
+                    this.ghost.entity.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
+                    //rotate
+                    double p1x = ev.getX(0);
+                    double p1y = ev.getY(0);
+                    double p2x = ev.getX(1);
+                    double p2y = ev.getY(1);
+                    double direction = 1;
+                    double currentAngle = Util.absoluteAngle(new Vector2(p2x, p2y), new Vector2(p1x, p1y));
+                    if(previousAngle != 0)
+                    this.ghost.setAngle(-1 * (currentAngle - previousAngle), this.ghost.entity.shape.body);
+                    previousAngle = currentAngle;
+                    lastMultiPress = System.currentTimeMillis();
+                    lastDownPress = lastMultiPress;
+                }
+            } else {
+                this.mDetector.onTouchEvent(ev);
+            }
         //System.out.println("Player " + playerNumber);
 //        mDownX = ev.getX() / scales.x;
 //        mDownY = ev.getY() / scales.y;
@@ -121,7 +131,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         if (holdingGhost) {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
-            ghost.entity.shape.body.setLinearVelocity(10 * delta.x, 10 * delta.y);
+            ghost.setLinearVelocity(10 * delta.x, 10 * delta.y);
 //            System.out.println(ghost.entity.shape.body.getFixtureCount());
         }
     }
@@ -142,20 +152,14 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        System.out.println("SCROLLING");
         double mDownX = e2.getX() / scales.x;
         double mDownY = e2.getY() / scales.y;
         mDownX = mDownX - WIDTH/2;
         mDownY = -1*(mDownY - HEIGHT/2);
         System.out.println("");
-        if(holdingGhost){
+        if(holdingGhost && lastDownPress + 200 < System.currentTimeMillis()){
             if(e2.getPointerCount() < 2 && e1.getPointerCount() < 2){
-                System.out.println("MOVING");
                 pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
-            }
-            else {
-                //multitouch rotation
-
             }
         }
         return true;
@@ -163,21 +167,34 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        System.out.println("FLINGING");
-        if(holdingGhost) {
-            return false;
+        float maxFlingVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
+        velocityX = velocityX / maxFlingVelocity;
+        velocityY = velocityY /maxFlingVelocity;
+        System.out.println(velocityX);
+//        velocityY = velocityY / maxFlingVelocity;
+        if(holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
+            holdingGhost = false;
+            this.ghost.removeGhost();
+            this.ghost = null;
         }
         return false;
     }
 
     @Override
     public void onLongPress(MotionEvent e) {
-        System.out.println("LONG PRESS");
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent e) {
+        return false;
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        System.out.println("SINGLE TAP");
+        if(lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2 && holdingGhost && this.ghost.canPlace()){
+            holdingGhost = false;
+            this.ghost.place();
+        }
         return false;
     }
 

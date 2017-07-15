@@ -58,6 +58,7 @@ public class GhostEntity {
     public Entity place() {
         this.entity.shape.setPaint(Paint.Style.FILL);
         this.entity.ghost = false;
+        this.clearForces(this.entity);
         for (Joint joint: this.entity.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
@@ -108,5 +109,50 @@ public class GhostEntity {
         entity.setColor(PLACEABLE, world);
         entity.setPaint(Paint.Style.STROKE, world);
 
+    }
+
+
+    public void setLinearVelocity(double x, double y){
+        this.entity.shape.body.setLinearVelocity(x,y);
+        clearForces(this.entity);
+        for (Joint joint: this.entity.shape.body.getJoints()) {
+            joint.getBody1().setLinearVelocity(x,y);
+            joint.getBody2().setLinearVelocity(x, y);
+        }
+    }
+
+    //will break if x connects to y connects to z connects to x cases
+    public void setAngle(double angleChange, Body caller){
+        this.entity.shape.body.getTransform().setRotation(
+                this.entity.shape.body.getTransform().getRotation() + angleChange);
+        clearForces(this.entity);
+//        this.entity.shape.body.setAngularVelocity(angleChange);
+
+    }
+
+    public void clearForces(Entity ent) {
+        for (Joint joint : ent.shape.body.getJoints()) {
+            joint.getBody1().setAsleep(true);
+            joint.getBody1().setAsleep(false);
+            joint.getBody2().setAsleep(true);
+            joint.getBody2().setAsleep(false);
+        }
+    }
+
+    public void removeGhost(){
+        for (Joint joint : this.entity.shape.body.getJoints()) {
+            if(joint.getBody1() != this.entity.shape.body){
+                this.world.objectDatabase.remove(joint.getBody1());
+                this.world.engineWorld.removeBody(joint.getBody1());
+            }
+            else {
+                this.world.objectDatabase.remove(joint.getBody2());
+                this.world.engineWorld.removeBody(joint.getBody2());
+            }
+
+        }
+        this.world.objectDatabase.remove(this.entity.shape.body);
+        this.world.engineWorld.removeBody(this.entity.shape.body);
+        this.entity = null;
     }
 }

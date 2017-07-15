@@ -33,7 +33,6 @@ public class BlankStateDetector extends GestureDetector.SimpleOnGestureListener 
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        System.out.println("FLINGING");
         return false;
     }
 
@@ -44,7 +43,6 @@ public class BlankStateDetector extends GestureDetector.SimpleOnGestureListener 
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        System.out.println("SINGLE TAP");
         return false;
     }
 
