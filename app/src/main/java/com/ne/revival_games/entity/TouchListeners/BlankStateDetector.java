@@ -12,12 +12,12 @@ import com.ne.revival_games.entity.MainActivity;
  * Created by vishn on 7/13/2017.
  */
 
-public class SwipeListener extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
+public class BlankStateDetector extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
     private GestureDetectorCompat mDetector;
 
-    public SwipeListener(MainActivity activity){
+    public BlankStateDetector(MainActivity activity){
         mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
-    }
+}
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -27,11 +27,23 @@ public class SwipeListener extends GestureDetector.SimpleOnGestureListener imple
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        throw new RuntimeException("Stub!");
+
+        return true;
     }
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        throw new RuntimeException("Stub!");
+        return false;
     }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        System.out.println("LONG PRESS");
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
 }

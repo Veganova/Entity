@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public interface TouchHandler {
      boolean multiTouch(ArrayList<Integer> pointers, MotionEvent event);
+     boolean singleTap(MotionEvent event);
      boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
      boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
-
 
 }
