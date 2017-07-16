@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import android.graphics.Canvas;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -12,6 +13,8 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.geometry.Vector2;
+
+import static com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar.PathType.LINE;
 
 /**
  * Created by Veganova on 6/29/2017.
@@ -58,7 +61,8 @@ public class Barrel extends Entity implements Aimable {
 //                this.shape.body.getTransform().rotate(1);
                 break;
         }
-        this.health = 100;
+        this.bar = new ActiveBar(this);
+        this.bar.setPathType(LINE, 120);
     }
 
     @Override
@@ -79,6 +83,7 @@ public class Barrel extends Entity implements Aimable {
 
         this.shape.body.setAsleep(false);
         this.sleepUntil = System.currentTimeMillis() + 0;
+
     }
 
     @Override

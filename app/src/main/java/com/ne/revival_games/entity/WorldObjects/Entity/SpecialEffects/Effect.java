@@ -39,6 +39,10 @@ public abstract class Effect {
         status = true;
     }
 
+    public void toggle() {
+        status = !status;
+    }
+
     protected boolean canApply(Entity other) {
         return this.status && other != applier;
     }

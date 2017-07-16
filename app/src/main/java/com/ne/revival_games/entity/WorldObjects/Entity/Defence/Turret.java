@@ -37,6 +37,7 @@ public class Turret extends Entity implements Aimable {
     private AimLogic logic;
 
     private List<AShape> components = new ArrayList<AShape>();
+    private boolean aiming = true;
 
     //need to include the angle somehow
     public Turret(Vector2 location, double angle, MyWorld world, Team team){
@@ -53,12 +54,12 @@ public class Turret extends Entity implements Aimable {
     private void addBarrel(Barrel.BarrelType type, Vector2 location) {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
         Projectile projectile = new Missile(-10000, -10000, Missile.SPEED, 0, world, team, false);
-        Barrel b = new Barrel(projectile, type, location, world, 3, team);
+        Barrel b = new Barrel(projectile, type, location, world, 0, team);
 
         this.barrels.add(b);
         WeldJoint joint = new WeldJoint(b.shape.body, this.center.body, location);
         world.engineWorld.addJoint(joint);
-        this.components.add(b.shape);
+//        this.components.add(b.shape);
 
         //this.shape = new ComplexShape(components, location.x, location.y, world);
         //this.world.objectDatabase.put(b.shape.body, this);
@@ -71,26 +72,19 @@ public class Turret extends Entity implements Aimable {
      */
     public void setMainBarrel(Barrel mainBarrel) {
         this.mainBarrel = mainBarrel;
-//        for (Barrel barrel: barrels) {
-//            if (barrel == mainBarrel) {
-//
-//            }
-//        }
     }
 
     private void initializeTurret(Vector2 location, MyWorld world){
-
         this.center = new ObjRectangle(50, 50);
         AShape.InitBuilder builder = this.center.getBuilder(true, world);
         builder.setXY(location.x, location.y).init();
         this.shape = this.center;
         // TODO: 7/11/2017 take off and try
         this.world.objectDatabase.put(this.shape.body, this);
-        this.components.add(shape);
-        //this.shape = center;
-        //this.shape = new ComplexShape(components);
+//        this.components.add(shape);
 
         this.addBarrel(Barrel.BarrelType.SIDE, location);
+//        this.addBarrel(Barrel.BarrelType.SINGLE, location);
         this.setMainBarrel(this.barrels.get(0));
 
         //this.addBarrel(Barrel.BarrelType.SINGLE);
@@ -98,7 +92,7 @@ public class Turret extends Entity implements Aimable {
 
     @Override
     public void aim() {
-        if (this.mainBarrel != null) {
+        if (this.mainBarrel != null && this.aiming) {
             logic.aim(mainBarrel);
         }
         //logic.aim(body, this.barrels.get(1).shape);
@@ -142,6 +136,12 @@ public class Turret extends Entity implements Aimable {
         for (Barrel barrel: this.barrels) {
             barrel.addToTeam(team);
         }
+    }
+
+    @Override
+    public void interact() {
+        super.interact();
+        this.aiming = !this.aiming;
     }
 
 //    @Override

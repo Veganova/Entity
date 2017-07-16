@@ -27,7 +27,9 @@ public class Nexus extends Entity {
     public static int HEALTH = 200;
     public static int MASS;
     public static int COST;
-    public List<AShape> components;
+    private List<AShape> components;
+
+    private GravityEffect gravEffect;
 
     public Nexus(double x, double y, double angle, MyWorld world, Team team) {
         super(angle, 0, HEALTH, false, team);
@@ -61,10 +63,16 @@ public class Nexus extends Entity {
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
         this.team = team;
-        GravityEffect gravEffect = new GravityEffect(this, 1000, 50, new Vector2(0,0), world);
+        gravEffect = new GravityEffect(this, 1000, 50, new Vector2(0,0), world);
         this.addEffect(gravEffect);
 
         this.bar = new ActiveBar(this);
+    }
+
+    @Override
+    public void interact() {
+        super.interact();
+        this.gravEffect.toggle();
     }
 
 }

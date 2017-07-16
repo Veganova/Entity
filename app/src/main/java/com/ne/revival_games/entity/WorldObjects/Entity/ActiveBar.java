@@ -94,14 +94,14 @@ public class ActiveBar {
         float cx = (float)this.entity.shape.getX();
         float cy = (float)this.entity.shape.getY();
         float angle = (float) this.entity.shape.body.getTransform().getRotation();
-
+        float healthPercentage = (1.0f * entity.health) / entity.MAX_HEALTH;
 
         Path path = new Path();
         switch(pathType) {
             case CIRCLE:
                 float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
                 RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
-                float sweepAngle = (360f * entity.health) / entity.MAX_HEALTH;
+                float sweepAngle = (360 * healthPercentage);
 
                 path.addArc(rectangle, startingAngle - angle, sweepAngle);
                 break;
@@ -109,7 +109,8 @@ public class ActiveBar {
                 // how to move only partway along a given path
                 break;
             case LINE:
-                double width = x;
+                double percentage = 0.75;
+                double width = x * percentage * healthPercentage;
 
                 // System.out.println(height + " " + width);
                 float p1x, p1y, p2x, p2y;
@@ -126,8 +127,6 @@ public class ActiveBar {
         c.drawPath(path, blur);
         c.drawPath(path, paint);
         // c.drawPath(path, selected);
-
-
     }
 
     /**
