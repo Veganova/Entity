@@ -87,6 +87,9 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         mDownY = -1*(mDownY - HEIGHT/2); //centers y
         mDownX /= camera.zoomXY.x;
         mDownY /= camera.zoomXY.y;
+        mDownX -= camera.translateXY.x*MyWorld.SCALE;
+        mDownY -= camera.translateXY.y*MyWorld.SCALE;
+
 
         int mask = (ev.getAction() & MotionEvent.ACTION_MASK);
 
@@ -160,6 +163,9 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         mDownY = -1*(mDownY - HEIGHT/2);
         mDownX /= camera.zoomXY.x;
         mDownY /= camera.zoomXY.y;
+        mDownX -= camera.translateXY.x*MyWorld.SCALE;
+        mDownY -= camera.translateXY.y*MyWorld.SCALE;
+
         if(holdingGhost && lastDownPress + 30 < System.currentTimeMillis()){
             if(e2.getPointerCount() < 2 && e1.getPointerCount() < 2){
                 pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
