@@ -3,24 +3,34 @@ package com.ne.revival_games.entity;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.ne.revival_games.entity.TouchListeners.BlankStateDetector;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Player;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private Player player1, player2, curPlayer;
     private MyWorld world;
+    private MainThread myThread;
+    public float SCREEN_WIDTH;
+    public float SCREEN_HEIGHT;
+    public float MAP_WIDTH;
+    public float MAP_HEIGHT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,19 +39,87 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        GamePanel view = new GamePanel(this);
-        world = view.world;
-        player1 = new Player(1, Team.DEFENCE, world, view.scales, 0, 800, this);
-        view.addPlayerListener(player1);
-        player2 = new Player(2, Team.OFFENSE, world, view.scales, -800, 0, this);
+        world = new MyWorld();
+        myThread = new MainThread(this.world);
 
-        view.addPlayerListener(player2);
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
+        SCREEN_WIDTH = displaymetrics.widthPixels;
+        SCREEN_HEIGHT = displaymetrics.heightPixels;
+
+        initTwoPlayer();
+//        initOnePlayer();
+    }
+
+    public void initOnePlayer(){
+        this.MAP_HEIGHT = 2400;
+        this.MAP_WIDTH = 1350;
+
+        GamePanel gamePanel1 = new GamePanel(this, world);
+
+        player1 = new Player(1, Team.DEFENCE, world, gamePanel1, this);
+        player2 = new Player(2, Team.OFFENSE, world, gamePanel1, this);
+
         curPlayer = player1;
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        world.addPlayers(players);
 
-//        view.addListeners(new TwoTouchListener(new Vector2(0,0), new Vector2(1000,1000)));
-        view.addListeners(new BlankStateDetector(this));
-        setContentView(view);
-//        addContentView(new GamePanel(this));
+        ViewGroup myGroup = new DoubleScreen(this);
+
+        DoubleScreen.LayoutParams parms = new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT);
+        gamePanel1.setLayoutParams(parms);
+
+
+        myGroup.addView(gamePanel1);
+        setContentView(myGroup);
+
+        myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
+        myThread.setRunning(true);
+        myThread.start();
+    }
+
+    public void initTwoPlayer(){
+        this.MAP_HEIGHT = 1600;
+        this.MAP_WIDTH = 1800;
+
+        GamePanel gamePanel1 = new GamePanel(this, world);
+        GamePanel gamePanel2 = new GamePanel(this, world);
+
+        player1 = new Player(1, Team.DEFENCE, world, gamePanel1, this);
+        gamePanel1.addPlayerListener(player1);
+        player2 = new Player(2, Team.OFFENSE, world, gamePanel2, this);
+        gamePanel2.addPlayerListener(player2);
+
+        curPlayer = player1;
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player2);
+        world.addPlayers(players);
+
+        ViewGroup myGroup = new DoubleScreen(this);
+
+
+        DoubleScreen.LayoutParams parms =
+                new DoubleScreen.LayoutParams(SCREEN_WIDTH,SCREEN_HEIGHT/2);
+        parms.topMargin = 10;
+        gamePanel1.setLayoutParams(parms);
+
+        DoubleScreen.LayoutParams parms2 =
+                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT/2);
+        parms2.topMargin = (int) (SCREEN_HEIGHT/2 + 50);
+        gamePanel2.setLayoutParams(parms2);
+
+        myGroup.addView(gamePanel2);
+        myGroup.addView(gamePanel1);
+        setContentView(myGroup);
+
+        myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
+        myThread.addNewPanel(gamePanel2, gamePanel2.getHolder());
+        myThread.setRunning(true);
+        myThread.start();
     }
 
     @Override
@@ -77,5 +155,25 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //similar logic to be used for end game, should also implement an 'onPause' etc.
+    @Override
+    public void onDestroy(){
+            boolean retry = true;
+            int counter = 0;
+            while (retry && counter < 1000) {
+                counter++;
+                try {
+                    myThread.setRunning(false);
+                    myThread.join();
+                    retry = false;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        super.onDestroy();
+    }
+
 
 }

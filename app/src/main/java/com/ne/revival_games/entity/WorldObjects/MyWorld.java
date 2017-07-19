@@ -1,6 +1,8 @@
 package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.MassLazer;
@@ -75,10 +77,7 @@ public class MyWorld {
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
      */
-    public MyWorld(Canvas canvas){
-//        Paint paint =  new Paint();
-//        paint.setStyle(Paint.Style.FILL);
-//        canvas.drawCircle((float) 50.0, (float) 50.0, (float) 30.0, paint);
+    public MyWorld(){
         initializeWorld();
     };
 
@@ -139,8 +138,11 @@ public class MyWorld {
 //        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).aoeJoint();
 //        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
 
-//        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
-//        Team.DEFENCE.add(turret);
+        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
+        Team.DEFENCE.add(turret);
+
+        Turret turret2 = new Turret(new Vector2(300, 300), 0, this, Team.OFFENSE);
+        Team.OFFENSE.add(turret2);
     }
 
     //need a way to add an object (check what kind of object it is, etc.)
@@ -196,6 +198,15 @@ public class MyWorld {
      */
     public void drawObjects(Canvas canvas){
         //this might draw multiple of the same entities
+        Paint paint2 =  new Paint();
+        paint2.setStyle(Paint.Style.FILL);
+        paint2.setColor(Color.RED);
+        canvas.drawCircle((float) 0.0, (float) 0.0, (float) 1.0, paint2);
+        canvas.drawCircle((float) 9.0, (float) 0.0, (float) 1.0, paint2);
+        canvas.drawCircle((float) -9.0, (float) 0.0, (float) 1.0, paint2);
+        canvas.drawCircle((float) 0.0, (float) 8.0, (float) 1.0, paint2);
+        canvas.drawCircle((float) 0.0, (float) -8.0, (float) 1.0, paint2);
+
         for (Entity entity : objectDatabase.values()) {
             if(!entity.invisible)
                 entity.draw(canvas);

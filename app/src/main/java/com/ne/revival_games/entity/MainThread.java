@@ -7,6 +7,11 @@ package com.ne.revival_games.entity;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * Created by vishn on 6/26/2016.
  */
@@ -15,16 +20,15 @@ public class MainThread extends Thread
 {
     private int FPS = 40;
     private double averageFPS;
-    private SurfaceHolder surfaceHolder;
-    public GamePanel gamePanel;
     private boolean running;
+    private MyWorld world;
     public static Canvas canvas;
+    public HashMap<GamePanel, SurfaceHolder> screens = new HashMap<>();
 
-    public MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel)
+    public MainThread(MyWorld world)
     {
         super();
-        this.surfaceHolder = surfaceHolder;
-        this.gamePanel = gamePanel;
+        this.world = world;
     }
 
     @Override
@@ -40,32 +44,31 @@ public class MainThread extends Thread
         while(running) {
             startTime = System.nanoTime();
             canvas = null;
-
-            // try locking the canvas for pixel editing
-            try {
-                canvas = this.surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder) {
-                    //main thread runs functions of game panel
+            update();
+            for(GamePanel gamePanel : screens.keySet()) {
+                // try locking the canvas for pixel editing
+                try {
+                    canvas = screens.get(gamePanel).lockCanvas();
+                    synchronized (screens.get(gamePanel)) {
+                        //main thread runs functions of game panel
 //                    System.out.println("Updating!");
-                    this.gamePanel.draw(canvas);
-                    this.gamePanel.update();
+                        gamePanel.draw(canvas);
 
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("ERROR IN CANVAS CREATION");
-            }
-            finally {
-                if(canvas!=null)
-                {
-                    try {
-                        surfaceHolder.unlockCanvasAndPost(canvas);
                     }
-                    catch(Exception e){e.printStackTrace();}
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("ERROR IN CANVAS CREATION");
+                } finally {
+                    if (canvas != null) {
+                        try {
+                            screens.get(gamePanel).unlockCanvasAndPost(canvas);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
-
             timeMillis = (System.nanoTime() - startTime) / 1000000;
             waitTime = targetTime-timeMillis;
 
@@ -82,6 +85,15 @@ public class MainThread extends Thread
                 totalTime = 0;
             }
         }
+    }
+
+    public void addNewPanel(GamePanel gamePanel, SurfaceHolder surfaceHolder){
+        screens.put(gamePanel, surfaceHolder);
+    }
+
+    public void update() {
+        //where we update individual game objects (ex. move them, etc.)
+        world.objectUpdate();
     }
 
     public void setRunning(boolean b)

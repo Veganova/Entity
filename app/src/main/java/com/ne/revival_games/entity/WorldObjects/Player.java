@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.ne.revival_games.entity.CameraController;
+import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
@@ -30,7 +32,7 @@ import java.util.List;
 /**
  *
  -list of entities
- -Camera object that stores info about how to display the scene (zoom, translation)
+ -Camera object that stores info about how to display the scene (setCenter, translation)
  -money
  -has listeners specific to it
  -has its own menu
@@ -38,58 +40,53 @@ import java.util.List;
  */
 public class Player extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener{
     private List<Entity> entities;
-    private Camera camera;
-    private int money;
+    public CameraController camera;
     private MyWorld world;
     private Context context;
 
     int playerNumber;
     Team team;
-
-
-
-
-    private static final float WIDTH = 900;
-    private static final float HEIGHT = 1600;
-    private float lower = 0;
-    private float higher = HEIGHT;
+    private float WIDTH = 900;
+    private float HEIGHT = 1600;
+    private float VIEW_WIDTH = 900;
+    private float VIEW_HEIGHT = 1600;
     private Vector2 scales;
     private GestureDetectorCompat mDetector;
     private GhostEntity ghost;
 
-    public Player(int id, Team team, MyWorld world, Vector2 scales, int lower, int higher, MainActivity activity){
+    public Player(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity){
         this.playerNumber = id;
         this.team = team;
         this.world = world;
-        this.scales = scales;
-        this.higher = higher;
-        this.lower = lower;
+        this.scales = gamePanel.scales;
+        System.out.println(gamePanel.scales);
+        this.camera = gamePanel.camera;
+        gamePanel.addPlayerListener(this);
         this.entities = team.getTeamObjects();
         this.context = activity.getApplicationContext();
-        mDetector = new GestureDetectorCompat(context, this);
+        this.WIDTH = activity.MAP_WIDTH;
+        this.HEIGHT = activity.MAP_HEIGHT;
+        this.VIEW_HEIGHT = gamePanel.getHeight();
+        this.VIEW_WIDTH = gamePanel.getWidth();
+         this.mDetector = new GestureDetectorCompat(context, this);
     }
 
-    private final float SCROLL_THRESHOLD = 10;
-    private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
-    private static final long DRAG_START = 200;//milliseconds
-    private long timeSinceFirst = 0;
     private boolean holdingGhost = false;
-    // 0 - havent moved yet. 1 - moving currently. 2 - already moved (in rotation stage)
-    private int moving = 0;
     private Vector2 pullTowards;
     private double previousAngle = 0;
     private double lastDownPress  = 0;
     private double lastMultiPress = 0;
-    private boolean waitForMultiTouch = false;
 
     private double mDownX, mDownY;
 
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
-        mDownX = ev.getX() / scales.x;
-        mDownY = ev.getY() / scales.y;
-        mDownX = mDownX - WIDTH/2;
-        mDownY = -1*(mDownY - HEIGHT/2);
+        mDownX = ev.getX() / scales.x;   //scales coordinates 0 to map width
+        mDownY = ev.getY() / scales.y;   //scales coordinates 0 to map height
+        mDownX = (mDownX - WIDTH/2);     //centers x
+        mDownY = -1*(mDownY - HEIGHT/2); //centers y
+        mDownX /= camera.zoomXY.x;
+        mDownY /= camera.zoomXY.y;
 
         int mask = (ev.getAction() & MotionEvent.ACTION_MASK);
 
@@ -102,7 +99,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
             if (ev.getPointerCount() > 1) {
                 if (holdingGhost) {
-                    //we need this line unfortunately for turret
+                    //we need this line unfortunately for turret TODO: change it back on place!
                     this.ghost.entity.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
                     //rotate
                     double p1x = ev.getX(0);
@@ -120,11 +117,6 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
             } else {
                 this.mDetector.onTouchEvent(ev);
             }
-        //System.out.println("Player " + playerNumber);
-//        mDownX = ev.getX() / scales.x;
-//        mDownY = ev.getY() / scales.y;
-//        mDownX = mDownX - WIDTH/2;
-//        mDownY = -1*(mDownY - HEIGHT/2);
         return true;
     }
 
@@ -148,9 +140,11 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         if(this.holdingGhost) {
             System.out.println("ALREADY HOLDING A GHOST!");
         } else {
+            //center of the screen
             double x = 0;
-            double y = (this.higher + this.lower) / 2;
-            this.ghost = GhostFactory.produce(type, x / this.scales.x, y / this.scales.y, 0, world, team);
+            double y = 0;
+//            this.ghost = GhostFactory.produce(type, x / this.scales.x, y / this.scales.y, 0, world, team);
+            this.ghost = GhostFactory.produce(type, 0, 0, 0, world, team);
             this.pullTowards = this.ghost.entity.shape.body.getWorldCenter();
 //            System.out.println(ghost.entity);
             this.holdingGhost = true;
@@ -164,7 +158,8 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         double mDownY = e2.getY() / scales.y;
         mDownX = mDownX - WIDTH/2;
         mDownY = -1*(mDownY - HEIGHT/2);
-        System.out.println("");
+        mDownX /= camera.zoomXY.x;
+        mDownY /= camera.zoomXY.y;
         if(holdingGhost && lastDownPress + 30 < System.currentTimeMillis()){
             if(e2.getPointerCount() < 2 && e1.getPointerCount() < 2){
                 pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
@@ -179,7 +174,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         velocityX = velocityX / maxFlingVelocity;
         velocityY = velocityY /maxFlingVelocity;
         System.out.println(velocityX);
-//        velocityY = velocityY / maxFlingVelocity;
+
         if(holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
             holdingGhost = false;
             this.ghost.removeGhost();
@@ -214,5 +209,6 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         }
         return false;
     }
+
 
 }

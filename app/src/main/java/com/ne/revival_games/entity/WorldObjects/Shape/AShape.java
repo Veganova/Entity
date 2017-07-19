@@ -33,6 +33,7 @@ public abstract class AShape implements Shape {
 
     AShape() {
         this.paint = new Paint();
+        this.paint.setColor(Color.GREEN);
         this.paint.setAntiAlias(true);
     }
 
