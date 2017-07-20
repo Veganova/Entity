@@ -12,6 +12,8 @@ public enum Entities {
 //    BARRIER, NEXUS, TURRET, COMET;
     COMET, NEXUS, BARRIER, TURRET;
 
+
+
     public static Entities random() {
        return Entities.values()[new Random().nextInt(Entities.values().length)];
     }

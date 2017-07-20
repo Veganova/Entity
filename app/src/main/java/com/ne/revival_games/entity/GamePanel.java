@@ -22,9 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-
-
     //need a perspective type where we control what is drawn and when and why
+
     //private float scaleX = 1, scaleY = 1;
     public Vector2 scales;
     private Player myPlayer; //create an enum maybe ?
@@ -51,8 +50,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.myPlayers.add(player);
     }
 
-
-
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
     }
@@ -73,6 +70,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 //                }
 //
 //            }
+
     }
 
     @Override
@@ -95,6 +93,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return true;
     }
 
+
     @Override
     public void draw(Canvas canvas) {
         //c.applyToCanvas(canvas); camera stuff.. could be usefull
@@ -108,13 +107,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.translate(mainActivity.MAP_WIDTH / 2, -mainActivity.MAP_HEIGHT / 2);
             canvas.scale((float) MyWorld.SCALE, (float) MyWorld.SCALE);
 
+
             camera.applyTransforms(canvas);
 
             canvas.drawColor(Color.rgb(39,40,34));
             world.drawObjects(canvas);
-
-
-
             canvas.restoreToCount(savedState);
         }
     }

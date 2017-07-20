@@ -1,16 +1,30 @@
 package com.ne.revival_games.entity;
 
+import android.animation.ValueAnimator;
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 
@@ -18,12 +32,14 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Player;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private Player player1, player2, curPlayer;
     private MyWorld world;
+
     private MainThread myThread;
     public float SCREEN_WIDTH;
     public float SCREEN_HEIGHT;
@@ -73,7 +89,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         myGroup.addView(gamePanel1);
-        setContentView(myGroup);
+       // setContentView(myGroup);
+
+        WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int height = size.y;
+
+        setContentView(R.layout.activity_main_thread);
+        RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+        relativeLayout.addView(myGroup);
+
+        // loop over all players and do this..
+        relativeLayout.addView(player1.getMenu());
+        relativeLayout.addView(player2.getMenu());
 
         myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
         myThread.setRunning(true);
@@ -111,7 +141,18 @@ public class MainActivity extends AppCompatActivity {
 
         myGroup.addView(gamePanel2);
         myGroup.addView(gamePanel1);
-        setContentView(myGroup);
+//        setContentView(myGroup);
+
+
+        setContentView(R.layout.activity_main_thread);
+        RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+        relativeLayout.addView(myGroup);
+
+        // loop over all players and do this..
+        relativeLayout.addView(player1.getMenu());
+        relativeLayout.addView(player2.getMenu());
+
+
 
         myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
         myThread.addNewPanel(gamePanel2, gamePanel2.getHolder());
@@ -119,39 +160,8 @@ public class MainActivity extends AppCompatActivity {
         myThread.start();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main_thread, menu);
-
-        return true;
-    }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.P1:
-                this.curPlayer = player1;
-                return true;
-            case R.id.P2:
-                this.curPlayer = player2;
-                return true;
-            case R.id.barrier:
-                this.curPlayer.setGhost(Entities.BARRIER);
-                return true;
-            case R.id.comet:
-                this.curPlayer.setGhost(Entities.COMET);
-                return true;
-            case R.id.nexus:
-                this.curPlayer.setGhost(Entities.NEXUS);
-                return true;
-            case R.id.turret:
-                this.curPlayer.setGhost(Entities.TURRET);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     //similar logic to be used for end game, should also implement an 'onPause' etc.
     @Override

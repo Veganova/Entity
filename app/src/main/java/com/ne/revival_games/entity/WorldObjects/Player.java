@@ -6,16 +6,22 @@ package com.ne.revival_games.entity.WorldObjects;
 
 import android.content.Context;
 import android.graphics.Camera;
+import android.graphics.Point;
 import android.support.v4.view.GestureDetectorCompat;
+import android.text.Layout;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import com.ne.revival_games.entity.CameraController;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.Menu;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -75,7 +81,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         this.VIEW_HEIGHT = gamePanel.getHeight();
         this.VIEW_WIDTH = gamePanel.getWidth();
         this.mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
-//        this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
+        this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
     }
 
     private boolean holdingGhost = false;
@@ -124,7 +130,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
                     lastDownPress = lastMultiPress;
                 }
                 else{
-//                    this.scaleGestureDetector.onTouchEvent(ev);
+                    this.scaleGestureDetector.onTouchEvent(ev);
                 }
             } else {
                 this.mDetector.onTouchEvent(ev);
@@ -166,7 +172,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        System.out.println("SCROLLING");
+//        System.out.println("SCROLLING");
         double scrollSpeed = 3000 / camera.zoomXY.x;
         double marginDetection = 30;
         double mDownX = e2.getX() / scales.x;
@@ -265,6 +271,22 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         @Override
         public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
                 lastDownPress = System.currentTimeMillis();
+        }
+    }
+
+    public Menu getMenu() {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int height = size.y;
+
+        if (this.playerNumber == 1) {
+            return new Menu(context, this, 0);
+        } else if (this.playerNumber == 2) {
+            return new Menu(context, this, height - 300);
+        } else {
+            return new Menu(context, this, 0);
         }
     }
 }
