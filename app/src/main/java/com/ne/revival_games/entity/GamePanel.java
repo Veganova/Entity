@@ -6,9 +6,12 @@ package com.ne.revival_games.entity;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnDragListener;
 
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Player;
@@ -35,7 +38,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         super(mainActivity);
         this.mainActivity = mainActivity;
         this.scales = new Vector2(1, 1);
-        camera = new CameraController(new Vector2(2,2), new Vector2(300, 300), this);
+        camera = new CameraController(new Vector2(1,1), new Vector2(300, 300), this);
         getHolder().addCallback(this);
         this.world = world;
 
@@ -97,7 +100,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //c.applyToCanvas(canvas); camera stuff.. could be usefull
 //        canvas.scale(1f, 0.5f);
         super.draw(canvas);
-
+        camera.update();
         //draw game objects and background
         if (canvas != null) {
             final int savedState = canvas.save();
@@ -115,4 +118,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.restoreToCount(savedState);
         }
     }
+
 }
+

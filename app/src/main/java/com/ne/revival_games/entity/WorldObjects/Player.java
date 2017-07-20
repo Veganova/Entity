@@ -9,6 +9,7 @@ import android.graphics.Camera;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
 
@@ -52,15 +53,19 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     private float VIEW_HEIGHT = 1600;
     private Vector2 scales;
     private GestureDetectorCompat mDetector;
+    private ScaleGestureDetector scaleGestureDetector;
     private GhostEntity ghost;
+    private boolean oldScroll = false;
+    private Vector2 initialTranslate = new Vector2(0,0);
 
-    public Player(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity){
+    public Player(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity, boolean addListenertoPanel){
         this.playerNumber = id;
         this.team = team;
         this.world = world;
         this.scales = gamePanel.scales;
         System.out.println(gamePanel.scales);
         this.camera = gamePanel.camera;
+        if(addListenertoPanel)
         gamePanel.addPlayerListener(this);
         this.entities = team.getTeamObjects();
         this.context = activity.getApplicationContext();
@@ -68,7 +73,8 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         this.HEIGHT = activity.MAP_HEIGHT;
         this.VIEW_HEIGHT = gamePanel.getHeight();
         this.VIEW_WIDTH = gamePanel.getWidth();
-         this.mDetector = new GestureDetectorCompat(context, this);
+        this.mDetector = new GestureDetectorCompat(gamePanel.getContext(), this);
+        this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
     }
 
     private boolean holdingGhost = false;
@@ -76,7 +82,6 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     private double previousAngle = 0;
     private double lastDownPress  = 0;
     private double lastMultiPress = 0;
-
     private double mDownX, mDownY;
 
     @Override
@@ -116,6 +121,9 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
                     previousAngle = currentAngle;
                     lastMultiPress = System.currentTimeMillis();
                     lastDownPress = lastMultiPress;
+                }
+                else{
+                    this.scaleGestureDetector.onTouchEvent(ev);
                 }
             } else {
                 this.mDetector.onTouchEvent(ev);
@@ -157,21 +165,37 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        System.out.println("SCROLLING");
+        double scrollSpeed = 3000 / camera.zoomXY.x;
+        double marginDetection = 30;
         double mDownX = e2.getX() / scales.x;
         double mDownY = e2.getY() / scales.y;
         mDownX = mDownX - WIDTH/2;
         mDownY = -1*(mDownY - HEIGHT/2);
+        double realDownx = mDownX;
+        double realDowny = mDownY;
         mDownX /= camera.zoomXY.x;
         mDownY /= camera.zoomXY.y;
         mDownX -= camera.translateXY.x*MyWorld.SCALE;
         mDownY -= camera.translateXY.y*MyWorld.SCALE;
 
-        if(holdingGhost && lastDownPress + 30 < System.currentTimeMillis()){
-            if(e2.getPointerCount() < 2 && e1.getPointerCount() < 2){
-                pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
+        if(holdingGhost){
+            if(lastDownPress + 30 < System.currentTimeMillis()){
+                if(e2.getPointerCount() < 2 && e1.getPointerCount() < 2){
+                    pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
+                }
             }
+            if(camera.nearEdge(e2.getX(), e2.getY(), marginDetection)) {
+                camera.relativeMove(realDownx, realDowny);
+            }
+            return false;
         }
-        return true;
+        else if(lastDownPress + 30 < System.currentTimeMillis()){
+            camera.relativeMove(scrollSpeed*distanceX/MyWorld.SCALE, -1*scrollSpeed*distanceY/MyWorld.SCALE);
+        }
+
+
+        return false;
     }
 
     @Override
@@ -179,12 +203,16 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         float maxFlingVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
         velocityX = velocityX / maxFlingVelocity;
         velocityY = velocityY /maxFlingVelocity;
-        System.out.println(velocityX);
 
         if(holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
             holdingGhost = false;
             this.ghost.removeGhost();
             this.ghost = null;
+        }
+        else if(!holdingGhost) {
+            if(velocityX > 0.3 || velocityY > 0.3) {
+
+            }
         }
         return false;
     }
@@ -216,5 +244,25 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         return false;
     }
 
+    public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
 
+
+        @Override
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+            double scaleFactor = scaleGestureDetector.getScaleFactor();
+            scaleFactor = ((float)((int)(scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
+            camera.relativeZoom(scaleFactor, scaleFactor);
+            return true;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+            return true;
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+                lastDownPress = System.currentTimeMillis();
+        }
+    }
 }
