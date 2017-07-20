@@ -123,21 +123,21 @@ public class MyWorld {
 //        testlocation(-500, 500, -500, 500, 10, tri);
 
         //MAKE THE STADIUM - TEMPORARY SO THAT THINGS DOING GO FLYING OUT
-//        ObjRectangle up = new ObjRectangle(800, 20);
-//        up.getBuilder(true, this).setXY(0, 750).setMassType(MassType.INFINITE).setRestitution(0).aoeJoint();
-//        this.up = new CustomEntity(up, 0, 100, true, Team.NEUTRAL, this);
-//
-//        ObjRectangle down = new ObjRectangle(800, 20);
-//        down.getBuilder(true, this).setXY(0, -750).setMassType(MassType.INFINITE).setRestitution(0).aoeJoint();
-//        this.down = new CustomEntity(down, 0, 100, true, Team.NEUTRAL, this);
-//
-//        ObjRectangle left = new ObjRectangle(20, 1350);
-//        left.getBuilder(true, this).setXY(-400, 0).setMassType(MassType.INFINITE).setRestitution(0).aoeJoint();
-//        this.left = new CustomEntity(left, 0, 100, true, Team.NEUTRAL, this);
-//
-//        ObjRectangle right = new ObjRectangle(20, 1350);
-//        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).aoeJoint();
-//        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
+        ObjRectangle up = new ObjRectangle(800, 20);
+        up.getBuilder(true, this).setXY(0, 750).setMassType(MassType.INFINITE).setRestitution(0).init();
+        this.up = new CustomEntity(up, 0, 100, true, Team.NEUTRAL, this);
+
+        ObjRectangle down = new ObjRectangle(800, 20);
+        down.getBuilder(true, this).setXY(0, -750).setMassType(MassType.INFINITE).setRestitution(0).init();
+        this.down = new CustomEntity(down, 0, 100, true, Team.NEUTRAL, this);
+
+        ObjRectangle left = new ObjRectangle(20, 1350);
+        left.getBuilder(true, this).setXY(-400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
+        this.left = new CustomEntity(left, 0, 100, true, Team.NEUTRAL, this);
+
+        ObjRectangle right = new ObjRectangle(20, 1350);
+        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
+        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
 
 //        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
 //        Team.DEFENCE.add(turret);

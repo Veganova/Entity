@@ -1,14 +1,26 @@
 package com.ne.revival_games.entity;
 
+import android.animation.ValueAnimator;
+import android.content.Context;
 import android.os.Bundle;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.ne.revival_games.entity.TouchListeners.BlankStateDetector;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
@@ -21,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Player player1, player2, curPlayer;
     private MyWorld world;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,44 +51,22 @@ public class MainActivity extends AppCompatActivity {
         view.addPlayerListener(player2);
         curPlayer = player1;
 
-//        view.addListeners(new TwoTouchListener(new Vector2(0,0), new Vector2(1000,1000)));
-        view.addListeners(new BlankStateDetector(this));
-        setContentView(view);
-//        addContentView(new GamePanel(this));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main_thread, menu);
-
-        return true;
-    }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.P1:
-                this.curPlayer = player1;
-                return true;
-            case R.id.P2:
-                this.curPlayer = player2;
-                return true;
-            case R.id.barrier:
-                this.curPlayer.setGhost(Entities.BARRIER);
-                return true;
-            case R.id.comet:
-                this.curPlayer.setGhost(Entities.COMET);
-                return true;
-            case R.id.nexus:
-                this.curPlayer.setGhost(Entities.NEXUS);
-                return true;
-            case R.id.turret:
-                this.curPlayer.setGhost(Entities.TURRET);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+
+
+
+        // ------------------------ good code
+        setContentView(R.layout.activity_main_thread);
+        RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+        relativeLayout.addView(view);
+
+        LinearLayout linearLayout = new com.ne.revival_games.entity.Menu(getApplicationContext(), player1, 0);
+        relativeLayout.addView(linearLayout);
+        LinearLayout linearLayout2 = new com.ne.revival_games.entity.Menu(getApplicationContext(),
+                player2, (int)GamePanel.HEIGHT - 200);
+        relativeLayout.addView(linearLayout2);
+
     }
 
 }

@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-
     public static final float WIDTH = 900;
     public static final float HEIGHT = 1600;
     //private float scaleX = 1, scaleY = 1;
@@ -37,32 +36,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     MyWorld world;
     private List<Player> players = new ArrayList<>();
     private List<OnTouchListener> listeners = new ArrayList<>();
-
-    private abstract class DoubleClickListener implements OnTouchListener {
-
-        private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
-
-        private long lastClickTime = 0;
-
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                long clickTime = System.currentTimeMillis();
-                if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-                    onDoubleClick(event);
-                } else {
-                    onSingleClick(event);
-                }
-                lastClickTime = clickTime;
-                return true;
-            }
-            return false;
-        }
-
-        abstract void onSingleClick(MotionEvent v);
-        abstract void onDoubleClick(MotionEvent v);
-    }
 
     public GamePanel(Context context) {
         super(context);
@@ -105,7 +78,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -119,7 +91,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         thread.setRunning(true);
         thread.start();
-
     }
 
     @Override
@@ -135,7 +106,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         //where we update individual game objects (ex. move them, etc.)
-
         world.objectUpdate();
     }
 
@@ -156,27 +126,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //draw game objects and background
         if (canvas != null) {
 
-
-
             final int savedState = canvas.save();
 
-
-
-
-
             //scaling does funky stuff to length / width so be careful LMAO
-           canvas.scale((float)scales.x, (float)-scales.y);
+            canvas.scale((float)scales.x, (float)-scales.y);
             canvas.translate(WIDTH / 2, -HEIGHT / 2);
             canvas.scale((float)MyWorld.SCALE, (float) MyWorld.SCALE);
 
-           // bg.draw(canvas);
+            // bg.draw(canvas);
             canvas.drawColor(Color.rgb(39,40,34));
             world.drawObjects(canvas);
-
-
-
-
-
 
             canvas.restoreToCount(savedState);
         }
