@@ -65,16 +65,17 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         this.scales = gamePanel.scales;
         System.out.println(gamePanel.scales);
         this.camera = gamePanel.camera;
-        if(addListenertoPanel)
-        gamePanel.addPlayerListener(this);
+        if(addListenertoPanel){
+            gamePanel.addPlayerListener(this);
+        }
         this.entities = team.getTeamObjects();
         this.context = activity.getApplicationContext();
         this.WIDTH = activity.MAP_WIDTH;
         this.HEIGHT = activity.MAP_HEIGHT;
         this.VIEW_HEIGHT = gamePanel.getHeight();
         this.VIEW_WIDTH = gamePanel.getWidth();
-        this.mDetector = new GestureDetectorCompat(gamePanel.getContext(), this);
-        this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
+        this.mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
+//        this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
     }
 
     private boolean holdingGhost = false;
@@ -123,12 +124,12 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
                     lastDownPress = lastMultiPress;
                 }
                 else{
-                    this.scaleGestureDetector.onTouchEvent(ev);
+//                    this.scaleGestureDetector.onTouchEvent(ev);
                 }
             } else {
                 this.mDetector.onTouchEvent(ev);
             }
-        return true;
+        return false;
     }
 
 
@@ -219,6 +220,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     @Override
     public void onLongPress(MotionEvent e) {
+        
     }
 
     @Override

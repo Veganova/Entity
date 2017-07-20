@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         SCREEN_WIDTH = displaymetrics.widthPixels;
         SCREEN_HEIGHT = displaymetrics.heightPixels;
 
-//        initTwoPlayer();
-        initOnePlayer();
+        initTwoPlayer();
+//        initOnePlayer();
     }
 
     public void initOnePlayer(){
@@ -88,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
         GamePanel gamePanel2 = new GamePanel(this, world);
 
         player1 = new Player(1, Team.DEFENCE, world, gamePanel1, this, true);
-        gamePanel1.addPlayerListener(player1);
         player2 = new Player(2, Team.OFFENSE, world, gamePanel2, this, true);
-        gamePanel2.addPlayerListener(player2);
 
         curPlayer = player1;
         ArrayList<Player> players = new ArrayList<>();
