@@ -112,9 +112,9 @@ public class Turret extends Entity implements Aimable {
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
         boolean answer = super.onCollision(contact, componentHit, damage);
         if(this.health <= 0) {
-            for(Barrel myBarrel : barrels){
-                barrels.remove(myBarrel);
-                myBarrel.myTurret = null;
+            while(barrels.size() > 0){
+                barrels.get(0).myTurret = null;
+                barrels.remove(0);
             }
         }
         return answer;
@@ -130,10 +130,10 @@ public class Turret extends Entity implements Aimable {
     @Override
     public void onDeath(MyWorld world){
         if(this.health <= 0) {
-            for(Barrel myBarrel : barrels){
-                barrels.remove(myBarrel);
-                myBarrel.myTurret = null;
-            }
+                while(barrels.size() > 0){
+                    barrels.get(0).myTurret = null;
+                    barrels.remove(0);
+                }
         }
         super.onDeath(world);
     }
