@@ -81,6 +81,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         this.VIEW_HEIGHT = gamePanel.getHeight();
         this.VIEW_WIDTH = gamePanel.getWidth();
         this.mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
+        this.mDetector.setIsLongpressEnabled(false);
         this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
     }
 
@@ -159,12 +160,9 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
             System.out.println("ALREADY HOLDING A GHOST!");
         } else {
             //center of the screen
-            double x = 0;
-            double y = 0;
-//            this.ghost = GhostFactory.produce(type, x / this.scales.x, y / this.scales.y, 0, world, team);
-            this.ghost = GhostFactory.produce(type, 0, 0, 0, world, team);
+            this.ghost = GhostFactory.produce(type, -1*camera.translateXY.x*MyWorld.SCALE,
+                    -1*camera.translateXY.y*MyWorld.SCALE, 0, world, team);
             this.pullTowards = this.ghost.entity.shape.body.getWorldCenter();
-//            System.out.println(ghost.entity);
             this.holdingGhost = true;
             this.previousAngle = 0;
         }
