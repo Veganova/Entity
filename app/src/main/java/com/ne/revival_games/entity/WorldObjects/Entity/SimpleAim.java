@@ -1,12 +1,10 @@
 package com.ne.revival_games.entity.WorldObjects.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrel;
-import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 /**
@@ -45,7 +43,7 @@ public class SimpleAim implements AimLogic {
         }
 
         Body body = enemy.shape.body;
-        Entity mainBarrel = (Entity)barrel;
+        Entity mainBarrel = (Entity) barrel;
         Vector2 centerofRotation = mainBarrel.shape.body.getWorldCenter();
 
         Vector2 targetPoint = body.getWorldCenter();
@@ -66,15 +64,31 @@ public class SimpleAim implements AimLogic {
             turnCounterClock = 1;
         }
 
-        if (Math.abs(angleDifference) <= 0.02) {
+        if (Math.abs(angleDifference) <= 0.03) {
             this.turret.fire(angleTo);
-//            mainBarrel.shape.body.setAsleep(true);
-//            mainBarrel.shape.body.setAngularVelocity(0);
+//            mainBarrel.shape.body.clearAccumulatedTorque();
+//            mainBarrel.shape.body.clearAccumulatedForce();
+            mainBarrel.shape.body.setAngularVelocity(0);
+            if(mainBarrel instanceof Barrel){
+                Barrel thisBarrel = ((Barrel) mainBarrel);
+                if(thisBarrel.myTurret == null || thisBarrel.myTurret.shape == null){
+                    return;
+                }
+                thisBarrel.myTurret.setMotion(0);
+            }
             return;
         }
 
         //better find a shortest distance algorithm
-        mainBarrel.shape.body.setAngularVelocity(turnCounterClock *10);
+        if(mainBarrel instanceof Barrel){
+            Barrel thisBarrel = ((Barrel) mainBarrel);
+            if(thisBarrel.myTurret == null || thisBarrel.myTurret.shape == null){
+                return;
+            }
+            thisBarrel.myTurret.setMotion(turnCounterClock * 10);
+            return;
+        }
+            mainBarrel.shape.body.setAngularVelocity(turnCounterClock *10);
         // System.out.println("ANGLE - " + mainBarrel.shape.body.getTransform().getRotation());
         //new Turret(new Vector2(-200, 100), 30, this);
 

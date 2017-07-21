@@ -27,10 +27,10 @@ public class GhostEntity {
         this.entity.ghost = true;
 
         int num = 0;
-        for (Joint joint: this.entity.shape.body.getJoints()) {
+        for (Joint joint : this.entity.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            if(ent1 != null && ent2 != null){
+            if (ent1 != null && ent2 != null) {
                 ent1.shape.setPaint(Paint.Style.STROKE);
                 ent2.shape.setPaint(Paint.Style.STROKE);
                 ent1.ghost = true;
@@ -59,10 +59,10 @@ public class GhostEntity {
         this.entity.shape.setPaint(Paint.Style.FILL);
         this.entity.ghost = false;
         this.clearForces(this.entity);
-        for (Joint joint: this.entity.shape.body.getJoints()) {
+        for (Joint joint : this.entity.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            if(ent1 != null && ent2 != null){
+            if (ent1 != null && ent2 != null) {
                 ent1.shape.setPaint(Paint.Style.FILL);
                 ent2.shape.setPaint(Paint.Style.FILL);
 
@@ -92,7 +92,7 @@ public class GhostEntity {
         if (this.entity == null) {
             return;
         }
-        for (Body body: world.engineWorld.getBodies()) {
+        for (Body body : world.engineWorld.getBodies()) {
             if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {
                 if (this.entity.shape.body.isInContact(body)) {
                     // the ghost object is colliding with another non-ghost object
@@ -112,19 +112,19 @@ public class GhostEntity {
     }
 
 
-    public void setLinearVelocity(double x, double y){
+    public void setLinearVelocity(double x, double y) {
         clearForces(this.entity);
 
-        this.entity.shape.body.setLinearVelocity(x,y);
+        this.entity.shape.body.setLinearVelocity(x, y);
 
-        for (Joint joint: this.entity.shape.body.getJoints()) {
-            joint.getBody1().setLinearVelocity(x,y);
+        for (Joint joint : this.entity.shape.body.getJoints()) {
+            joint.getBody1().setLinearVelocity(x, y);
             joint.getBody2().setLinearVelocity(x, y);
         }
     }
 
     //will break if x connects to y connects to z connects to x cases
-    public void setAngle(double angleChange, Body caller){
+    public void setAngle(double angleChange, Body caller) {
         this.entity.shape.body.getTransform().setRotation(
                 this.entity.shape.body.getTransform().getRotation() + angleChange);
         clearForces(this.entity);
@@ -143,20 +143,21 @@ public class GhostEntity {
         }
     }
 
-    public void removeGhost(){
-        for (Joint joint : this.entity.shape.body.getJoints()) {
-            if(joint.getBody1() != this.entity.shape.body){
-                this.world.objectDatabase.remove(joint.getBody1());
-                this.world.engineWorld.removeBody(joint.getBody1());
-            }
-            else {
-                this.world.objectDatabase.remove(joint.getBody2());
-                this.world.engineWorld.removeBody(joint.getBody2());
-            }
+    public void removeGhost() {
+        if (this.entity != null && this.entity.shape != null) {
+            for (Joint joint : this.entity.shape.body.getJoints()) {
+                if (joint.getBody1() != this.entity.shape.body) {
+                    this.world.objectDatabase.remove(joint.getBody1());
+                    this.world.engineWorld.removeBody(joint.getBody1());
+                } else {
+                    this.world.objectDatabase.remove(joint.getBody2());
+                    this.world.engineWorld.removeBody(joint.getBody2());
+                }
 
+            }
+            this.world.objectDatabase.remove(this.entity.shape.body);
+            this.world.engineWorld.removeBody(this.entity.shape.body);
+            this.entity = null;
         }
-        this.world.objectDatabase.remove(this.entity.shape.body);
-        this.world.engineWorld.removeBody(this.entity.shape.body);
-        this.entity = null;
     }
 }

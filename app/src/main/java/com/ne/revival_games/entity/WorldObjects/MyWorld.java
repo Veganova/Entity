@@ -198,14 +198,14 @@ public class MyWorld {
      */
     public void drawObjects(Canvas canvas){
         //this might draw multiple of the same entities
-        Paint paint2 =  new Paint();
-        paint2.setStyle(Paint.Style.FILL);
-        paint2.setColor(Color.RED);
-        canvas.drawCircle((float) 0.0, (float) 0.0, (float) 1.0, paint2);
-        canvas.drawCircle((float) 9.0, (float) 0.0, (float) 1.0, paint2);
-        canvas.drawCircle((float) -9.0, (float) 0.0, (float) 1.0, paint2);
-        canvas.drawCircle((float) 0.0, (float) 8.0, (float) 1.0, paint2);
-        canvas.drawCircle((float) 0.0, (float) -8.0, (float) 1.0, paint2);
+//        Paint paint2 =  new Paint();
+//        paint2.setStyle(Paint.Style.FILL);
+//        paint2.setColor(Color.RED);
+//        canvas.drawCircle((float) 0.0, (float) 0.0, (float) 1.0, paint2);
+//        canvas.drawCircle((float) 9.0, (float) 0.0, (float) 1.0, paint2);
+//        canvas.drawCircle((float) -9.0, (float) 0.0, (float) 1.0, paint2);
+//        canvas.drawCircle((float) 0.0, (float) 8.0, (float) 1.0, paint2);
+//        canvas.drawCircle((float) 0.0, (float) -8.0, (float) 1.0, paint2);
 
         for (Entity entity : objectDatabase.values()) {
             if(!entity.invisible)

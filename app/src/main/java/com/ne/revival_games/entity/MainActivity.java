@@ -63,11 +63,11 @@ public class MainActivity extends AppCompatActivity {
         SCREEN_WIDTH = displaymetrics.widthPixels;
         SCREEN_HEIGHT = displaymetrics.heightPixels;
 
-        initTwoPlayer();
-//        initOnePlayer();
+//        initTwoPlayer();
+        initOnePlayer();
     }
 
-    public void initOnePlayer(){
+    public void initOnePlayer() {
         this.MAP_HEIGHT = 2400;
         this.MAP_WIDTH = 1350;
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         myGroup.addView(gamePanel1);
-       // setContentView(myGroup);
+        // setContentView(myGroup);
 
         WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         int height = size.y;
 
         setContentView(R.layout.activity_main_thread);
-        RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+        RelativeLayout relativeLayout = (RelativeLayout) this.findViewById(R.id.main);
         relativeLayout.addView(myGroup);
 
         // loop over all players and do this..
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         myThread.start();
     }
 
-    public void initTwoPlayer(){
+    public void initTwoPlayer() {
         this.MAP_HEIGHT = 1600;
         this.MAP_WIDTH = 1800;
 
@@ -130,13 +130,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         DoubleScreen.LayoutParams parms =
-                new DoubleScreen.LayoutParams(SCREEN_WIDTH,SCREEN_HEIGHT/2);
-        parms.topMargin = 10;
+                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT / 2);
+        parms.topMargin = 0;
         gamePanel1.setLayoutParams(parms);
 
         DoubleScreen.LayoutParams parms2 =
-                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT/2);
-        parms2.topMargin = (int) (SCREEN_HEIGHT/2 + 50);
+                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT / 2);
+        parms2.topMargin = (int) (SCREEN_HEIGHT / 2);
         gamePanel2.setLayoutParams(parms2);
 
         myGroup.addView(gamePanel2);
@@ -145,13 +145,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_main_thread);
-        RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+        RelativeLayout relativeLayout = (RelativeLayout) this.findViewById(R.id.main);
         relativeLayout.addView(myGroup);
 
         // loop over all players and do this..
         relativeLayout.addView(player1.getMenu());
         relativeLayout.addView(player2.getMenu());
-
 
 
         myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
@@ -161,24 +160,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     //similar logic to be used for end game, should also implement an 'onPause' etc.
     @Override
-    public void onDestroy(){
-            boolean retry = true;
-            int counter = 0;
-            while (retry && counter < 1000) {
-                counter++;
-                try {
-                    myThread.setRunning(false);
-                    myThread.join();
-                    retry = false;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+    public void onDestroy() {
+        boolean retry = true;
+        int counter = 0;
+        while (retry && counter < 1000) {
+            counter++;
+            try {
+                myThread.setRunning(false);
+                myThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+        }
         super.onDestroy();
     }
 

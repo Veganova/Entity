@@ -52,7 +52,6 @@ public class Entity implements Effector {
 
     public void update(MyWorld world) {
 
-         //if anything has collided, reduce health - this can be put in Entity
     }
 
 
