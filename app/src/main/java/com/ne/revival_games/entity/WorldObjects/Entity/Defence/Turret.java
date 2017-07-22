@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import android.graphics.Canvas;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
@@ -12,6 +14,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Vector2;
 
@@ -59,6 +62,7 @@ public class Turret extends Entity implements Aimable {
         this.barrels.add(b);
         WeldJoint joint = new WeldJoint(b.shape.body, this.center.body, location);
         world.engineWorld.addJoint(joint);
+
 //        this.components.add(b.shape);
 
         //this.shape = new ComplexShape(components, location.x, location.y, world);
@@ -84,14 +88,14 @@ public class Turret extends Entity implements Aimable {
 //        this.components.add(shape);
 
 //        this.addBarrel(Barrel.BarrelType.SIDE, location, 0);
-        this.addBarrel(Barrel.BarrelType.SINGLE, location, -30);
-          this.addBarrel(Barrel.BarrelType.SINGLE, location, 30);
+        //very weird behavior with angle (each angle is like x2 what it is expected to be)
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(-50+location.x, location.y), 30);
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(50+location.x, location.y), -30);
+        this.world.engineWorld.addJoint(new WeldJoint(barrels.get(0).shape.body, barrels.get(1).shape.body, location));
 //        this.addBarrel(Barrel.BarrelType.SINGLE, location, 270);
 //        this.addBarrel(Barrel.BarrelType.SINGLE, location);
           this.setMainBarrel(this.barrels.get(0));
 
-
-        //this.addBarrel(Barrel.BarrelType.SINGLE);
     }
 
     @Override
@@ -103,7 +107,7 @@ public class Turret extends Entity implements Aimable {
     }
 
     public void selectNewMainBarrel(Barrel deadBarrel){
-        if(deadBarrel == mainBarrel){
+        if(deadBarrel == mainBarrel && barrels.size() > 0){
             this.mainBarrel = barrels.get(0);
         }
     }
@@ -111,12 +115,11 @@ public class Turret extends Entity implements Aimable {
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
         boolean answer = super.onCollision(contact, componentHit, damage);
-        if(this.health <= 0) {
-            while(barrels.size() > 0){
-                barrels.get(0).myTurret = null;
-                barrels.remove(0);
-            }
-        }
+//        for(Barrel myBarrel: barrels) {
+//            if(myBarrel == contact) {
+//                return false;
+//            }
+//        }
         return answer;
     }
 
@@ -195,4 +198,10 @@ public class Turret extends Entity implements Aimable {
 //        this.center.draw(canvas);
 //    }
 
+
+    @Override
+    public void draw(Canvas canvas){
+//        System.out.println(this.shape.body.getJoints().size());
+        super.draw(canvas);
+    }
 }

@@ -23,6 +23,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.dynamics.joint.Joint;
@@ -105,6 +106,10 @@ public class MyWorld {
         ContactListener contact = new ContactController(this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
+//        Settings settings = new Settings();
+//        settings.setAngularTolerance(50*settings.getAngularTolerance());
+//        settings.setLinearTolerance(50*settings.getLinearTolerance());
+//        this.engineWorld.setSettings(settings);
 
 //        bam = new MassLazer(-200, -200, 30, this);
 //        this.ghostNexus = new GhostEntity(nex);

@@ -75,9 +75,11 @@ public class SimpleAim implements AimLogic {
                     return;
                 }
                 thisBarrel.myTurret.setMotion(0);
+                return;
             }
-            return;
+            mainBarrel.shape.body.setAngularVelocity(0);
         }
+
 
         //better find a shortest distance algorithm
         if(mainBarrel instanceof Barrel){
@@ -86,6 +88,7 @@ public class SimpleAim implements AimLogic {
                 return;
             }
             thisBarrel.myTurret.setMotion(turnCounterClock * 10);
+//            thisBarrel.shape.body.setAngularVelocity(turnCounterClock * 10);
             return;
         }
             mainBarrel.shape.body.setAngularVelocity(turnCounterClock *10);

@@ -111,23 +111,26 @@ public class Barrel extends Entity implements Aimable {
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
         if(contact instanceof Barrel) {
-            if(((Barrel) contact).myTurret == this.myTurret){
+            if(((Barrel) contact).myTurret == this.myTurret && this.myTurret != null){
                 return false;
             }
         }
+
+//        if(this.myTurret == contact) {
+//            return false;
+//        }
+
         return super.onCollision(contact, componentHit, damage);
 
     }
 
     @Override
     public void onDeath(MyWorld world){
-        if(this.health <= 0) {
            if(this.myTurret != null){
                myTurret.barrels.remove(this);
                myTurret.selectNewMainBarrel(this);
            }
            this.myTurret = null;
-        }
         super.onDeath(world);
     }
 
