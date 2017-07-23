@@ -16,6 +16,12 @@ public abstract class Effect {
     protected Entity applier;
     protected boolean status = true;
 
+    public void basicInit(Entity applier, AShape zone, EffectType type) {
+        this.applier = applier;
+        this.effectType = type;
+        this.zone = zone;
+    }
+
     public void aoeJoint(Entity applier, AShape zone, EffectType type,
                          Vector2 jointDisplacement, MyWorld world){
         this.applier = applier;

@@ -50,6 +50,14 @@ public class ObjCircle extends AShape {
         canvas.drawCircle(cx, cy, r, this.paint);
     }
 
+    public void draw(Canvas canvas, double radius) {
+        //might have to modify coordinates as needed
+        Vector2 coord = this.body.getWorldCenter();
+        float cx = (float) (coord.x + this.convex.getCenter().x - this.body.getLocalCenter().x);
+        float cy = (float) (coord.y + this.convex.getCenter().y - this.body.getLocalCenter().y);
+        canvas.drawCircle(cx, cy, (float) (radius/MyWorld.SCALE), this.paint);
+    }
+
 
     @Override
     public double getOrientation(){

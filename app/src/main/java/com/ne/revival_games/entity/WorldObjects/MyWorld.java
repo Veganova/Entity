@@ -106,6 +106,7 @@ public class MyWorld {
         ContactListener contact = new ContactController(this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
+        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
 //        Settings settings = new Settings();
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
 //        settings.setLinearTolerance(50*settings.getLinearTolerance());

@@ -96,6 +96,7 @@ public class Entity implements Effector {
         if (this.untargetable) {
             return false;
         }
+
         if(componentHit == null)
             return false;
 
@@ -105,7 +106,7 @@ public class Entity implements Effector {
             return false;
         }
 
-        if(contact.team.opposite(this.team)) {
+        if(contact.team.opposite(this.team) && !this.invulnerable) {
             this.health -= damage;
             if (this.health <= 0) {
                 this.invisible = true;
