@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
@@ -110,6 +111,16 @@ public class Turret extends Entity implements Aimable {
         if(deadBarrel == mainBarrel && barrels.size() > 0){
             this.mainBarrel = barrels.get(0);
         }
+    }
+
+    @Override
+    public boolean update(MyWorld world){
+        if(super.update(world)){
+            this.logic.aim(mainBarrel);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

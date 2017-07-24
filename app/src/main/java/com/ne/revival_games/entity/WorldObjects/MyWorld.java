@@ -14,6 +14,8 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.*;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
@@ -106,7 +108,7 @@ public class MyWorld {
         ContactListener contact = new ContactController(this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
-        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
+//        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
 //        Settings settings = new Settings();
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
 //        settings.setLinearTolerance(50*settings.getLinearTolerance());
@@ -127,22 +129,27 @@ public class MyWorld {
 //        objects.add(new ObjCircle(0, 0, 50, 0));
 //        testlocation(-500, 500, -500, 500, 10, tri);
 
+        ObjCircle hi = new ObjCircle(20);
+        hi.getBuilder(true, this).setXY(100, 100).setRestitution(0).init();
+        CustomEntity wow = new CustomEntity(hi, 0, 100, true, Team.NEUTRAL, this);
+//        wow.addEffect( new EMP(wow, new Vector2(100,100), 0.1, 0.01, 10, 500, 200, wow.team, this, 2000));
+
         //MAKE THE STADIUM - TEMPORARY SO THAT THINGS DOING GO FLYING OUT
-        ObjRectangle up = new ObjRectangle(800, 20);
-        up.getBuilder(true, this).setXY(0, 750).setMassType(MassType.INFINITE).setRestitution(0).init();
-        this.up = new CustomEntity(up, 0, 100, true, Team.NEUTRAL, this);
-
-        ObjRectangle down = new ObjRectangle(800, 20);
-        down.getBuilder(true, this).setXY(0, -750).setMassType(MassType.INFINITE).setRestitution(0).init();
-        this.down = new CustomEntity(down, 0, 100, true, Team.NEUTRAL, this);
-
-        ObjRectangle left = new ObjRectangle(20, 1350);
-        left.getBuilder(true, this).setXY(-400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
-        this.left = new CustomEntity(left, 0, 100, true, Team.NEUTRAL, this);
-
-        ObjRectangle right = new ObjRectangle(20, 1350);
-        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
-        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
+//        ObjRectangle up = new ObjRectangle(800, 20);
+//        up.getBuilder(true, this).setXY(0, 750).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.up = new CustomEntity(up, 0, 100, true, Team.NEUTRAL, this);
+//
+//        ObjRectangle down = new ObjRectangle(800, 20);
+//        down.getBuilder(true, this).setXY(0, -750).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.down = new CustomEntity(down, 0, 100, true, Team.NEUTRAL, this);
+//
+//        ObjRectangle left = new ObjRectangle(20, 1350);
+//        left.getBuilder(true, this).setXY(-400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.left = new CustomEntity(left, 0, 100, true, Team.NEUTRAL, this);
+//
+//        ObjRectangle right = new ObjRectangle(20, 1350);
+//        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
+//        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
 
         Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
         Team.DEFENCE.add(turret);
@@ -159,7 +166,7 @@ public class MyWorld {
      */
     public void objectUpdate() {
         // TODO: 7/7/2017 this check can probably be done when the user clicks the "place" command
-        for (GhostEntity ghost :this.ghosts.values()) {
+        for (GhostEntity ghost:this.ghosts.values()) {
             ghost.isColliding();
         }
 

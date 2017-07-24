@@ -138,10 +138,6 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     public void update() {
         for (Entity entity : this.team.getTeamObjects()) {
-            if (entity instanceof Aimable) {
-                ((Aimable) entity).aim();
-            }
-
             entity.update(world);
         }
         if (holdingGhost) {

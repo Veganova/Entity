@@ -5,5 +5,5 @@ package com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects;
  */
 
 public enum EffectType {
-    SLOW, GRAVITY, EXPLOSIVE;
+    SLOW, GRAVITY, EXPLOSIVE, SHOCKWAVE;
 }
