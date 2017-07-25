@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         DoubleScreen.LayoutParams parms = new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT);
         gamePanel1.setLayoutParams(parms);
 
-
         myGroup.addView(gamePanel1);
        // setContentView(myGroup);
 
@@ -151,17 +150,13 @@ public class MainActivity extends AppCompatActivity {
         // loop over all players and do this..
         relativeLayout.addView(player1.getMenu());
         relativeLayout.addView(player2.getMenu());
-
-
+        relativeLayout.addView(new PlayPauseButton(getApplicationContext(), myThread));
 
         myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
         myThread.addNewPanel(gamePanel2, gamePanel2.getHolder());
         myThread.setRunning(true);
         myThread.start();
     }
-
-
-
 
     //similar logic to be used for end game, should also implement an 'onPause' etc.
     @Override

@@ -11,6 +11,7 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.SynchronousQueue;
 
 /**
  * Created by vishn on 6/26/2016.
@@ -24,6 +25,9 @@ public class MainThread extends Thread
     private MyWorld world;
     public static Canvas canvas;
     public HashMap<GamePanel, SurfaceHolder> screens = new HashMap<>();
+    private boolean doWait = false;
+    private Thread waitFor;
+
 
     public MainThread(MyWorld world)
     {
@@ -31,16 +35,17 @@ public class MainThread extends Thread
         this.world = world;
     }
 
+    //    private boolean locked = false;
+    private long startTime;
+    private long timeMillis;
+    private long waitTime;
+    private long totalTime = 0;
+    private int frameCount =0;
+    private long targetTime = 1000/FPS;
     @Override
     public void run()
     {
-        long startTime;
-        long timeMillis;
-        long waitTime;
-        long totalTime = 0;
-        int frameCount =0;
-        long targetTime = 1000/FPS;
-
+        running = true;
         while(running) {
             startTime = System.nanoTime();
             canvas = null;
@@ -49,7 +54,9 @@ public class MainThread extends Thread
                 // try locking the canvas for pixel editing
                 try {
                     canvas = screens.get(gamePanel).lockCanvas();
-                    synchronized (screens.get(gamePanel)) {
+                    // TODO: 7/25/2017 see if this ever breaks
+                    synchronized (this) {//screens.get(gamePanel)) {
+
                         //main thread runs functions of game panel
 //                    System.out.println("Updating!");
                         gamePanel.draw(canvas);
@@ -85,6 +92,21 @@ public class MainThread extends Thread
                 totalTime = 0;
             }
         }
+
+        System.out.println("WAITING");
+        if(doWait) {
+            try {
+                synchronized (waitFor) {
+                    waitFor.wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                doWait = false;
+                this.run();
+            }
+        }
+        System.out.println("NOT WAITING");
     }
 
     public void addNewPanel(GamePanel gamePanel, SurfaceHolder surfaceHolder){
@@ -99,5 +121,11 @@ public class MainThread extends Thread
     public void setRunning(boolean b)
     {
         running=b;
+    }
+
+    public void pause(Thread a) throws InterruptedException {
+        this.doWait = true;
+        this.waitFor = a;
+        this.setRunning(false);
     }
 }

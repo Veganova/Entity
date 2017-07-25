@@ -167,6 +167,8 @@ public class MyWorld {
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
 
+        // deals with concurrent modification error by creating all the projectile objects
+        // (things that are shot) before the database loop
         for (Player player : this.players) {
             player.update();
         }
@@ -174,8 +176,6 @@ public class MyWorld {
         for(Entity ent: this.objectDatabase.values()){
             ent.update(this);
         }
-
-
 
         for (int i = 0; i < bodiestodelete.size(); i += 1) {
             Body body = bodiestodelete.get(i);
