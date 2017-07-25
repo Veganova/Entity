@@ -185,9 +185,11 @@ public class MyWorld {
             player.update();
         }
 
-//        for(Entity entity:objectDatabase.values()) {
-//            entity.update(this);
-//        }
+        ArrayList<Entity> updater = new ArrayList<>(objectDatabase.values());
+
+        for (int x = 0; x < updater.size(); x++){
+            updater.get(x).update(this);
+        }
 
         for (int i = 0; i < bodiestodelete.size(); i += 1) {
             Body body = bodiestodelete.get(i);

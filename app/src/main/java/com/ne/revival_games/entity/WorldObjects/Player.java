@@ -137,9 +137,9 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
 
     public void update() {
-        for (Entity entity : this.team.getTeamObjects()) {
-            entity.update(world);
-        }
+//        for (Entity entity : this.team.getTeamObjects()) {
+//            entity.update(world);
+//        }
 
         if (holdingGhost) {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
