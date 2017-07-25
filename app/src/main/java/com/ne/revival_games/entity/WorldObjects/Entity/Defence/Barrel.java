@@ -50,7 +50,7 @@ public class Barrel extends Entity implements Aimable {
         switch (type) {
             case SINGLE:
                 //magnitude needs to be specified here
-                this.shape = new ObjRectangle(120, 20);
+                this.shape = new ObjRectangle(90, 20);
                 AShape.InitBuilder builderSingle = this.shape.getBuilder(true, world);
                 builderSingle.setXY(location.x, location.y).setAngle(angle).init();
                 magnitude = 130;

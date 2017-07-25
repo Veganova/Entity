@@ -12,6 +12,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
@@ -61,7 +62,8 @@ public class Turret extends Entity implements Aimable {
         Barrel b = new Barrel(projectile, type, this, world, angle, team, location);
 
         this.barrels.add(b);
-        WeldJoint joint = new WeldJoint(b.shape.body, this.center.body, location);
+        WeldJoint joint = new WeldJoint(b.shape.body,
+                this.center.body, new Vector2(location.x/MyWorld.SCALE, location.y/MyWorld.SCALE));
         world.engineWorld.addJoint(joint);
 
 //        this.components.add(b.shape);
@@ -80,7 +82,7 @@ public class Turret extends Entity implements Aimable {
     }
 
     private void initializeTurret(Vector2 location, MyWorld world){
-        this.center = new ObjRectangle(50, 50);
+        this.center = new ObjCircle(30);
         AShape.InitBuilder builder = this.center.getBuilder(true, world);
         builder.setXY(location.x, location.y).init();
         this.shape = this.center;
@@ -90,9 +92,10 @@ public class Turret extends Entity implements Aimable {
 
 //        this.addBarrel(Barrel.BarrelType.SIDE, location, 0);
         //very weird behavior with angle (each angle is like x2 what it is expected to be)
-        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(-50+location.x, location.y), 30);
-        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(50+location.x, location.y), -30);
-        this.world.engineWorld.addJoint(new WeldJoint(barrels.get(0).shape.body, barrels.get(1).shape.body, location));
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(location.x, 32+location.y), 45);
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(-36+location.x, 30+location.y), 45);
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(36+location.x, 30+location.y), 45);
+//        this.world.engineWorld.addJoint(new WeldJoint(barrels.get(0).shape.body, barrels.get(1).shape.body, location));
 //        this.addBarrel(Barrel.BarrelType.SINGLE, location, 270);
 //        this.addBarrel(Barrel.BarrelType.SINGLE, location);
           this.setMainBarrel(this.barrels.get(0));
@@ -216,3 +219,5 @@ public class Turret extends Entity implements Aimable {
         super.draw(canvas);
     }
 }
+
+

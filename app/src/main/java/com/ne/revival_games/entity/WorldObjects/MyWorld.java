@@ -35,6 +35,7 @@ import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -129,9 +130,9 @@ public class MyWorld {
 //        objects.add(new ObjCircle(0, 0, 50, 0));
 //        testlocation(-500, 500, -500, 500, 10, tri);
 
-        ObjCircle hi = new ObjCircle(20);
-        hi.getBuilder(true, this).setXY(100, 100).setRestitution(0).init();
-        CustomEntity wow = new CustomEntity(hi, 0, 100, true, Team.NEUTRAL, this);
+//        ObjCircle hi = new ObjCircle(20);
+//        hi.getBuilder(true, this).setXY(100, 100).setRestitution(0).init();
+//        CustomEntity wow = new CustomEntity(hi, 0, 100, true, Team.NEUTRAL, this);
 //        wow.addEffect( new EMP(wow, new Vector2(100,100), 0.1, 0.01, 10, 500, 200, wow.team, this, 2000));
 
         //MAKE THE STADIUM - TEMPORARY SO THAT THINGS DOING GO FLYING OUT
@@ -184,11 +185,9 @@ public class MyWorld {
             player.update();
         }
 
-        for(Entity ent: this.objectDatabase.values()){
-            ent.update(this);
-        }
-
-
+//        for(Entity entity:objectDatabase.values()) {
+//            entity.update(this);
+//        }
 
         for (int i = 0; i < bodiestodelete.size(); i += 1) {
             Body body = bodiestodelete.get(i);
