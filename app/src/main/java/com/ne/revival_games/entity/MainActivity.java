@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
 
         ViewGroup myGroup = new DoubleScreen(this);
 
-
         DoubleScreen.LayoutParams parms =
                 new DoubleScreen.LayoutParams(SCREEN_WIDTH,SCREEN_HEIGHT/2);
         parms.topMargin = 10;
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
         myGroup.addView(gamePanel2);
         myGroup.addView(gamePanel1);
 //        setContentView(myGroup);
-
 
         setContentView(R.layout.activity_main_thread);
         RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);

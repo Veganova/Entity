@@ -56,7 +56,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) throws RuntimeException {
-        throw new RuntimeException("GG");
+        // TODO: 7/26/2017 do something here?
+//        throw new RuntimeException("GG");
 //            boolean retry = true;
 //            int counter = 0;
 //            while (retry && counter < 1000) {
