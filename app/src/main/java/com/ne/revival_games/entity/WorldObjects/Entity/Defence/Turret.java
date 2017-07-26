@@ -6,14 +6,17 @@ import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Vector2;
 
@@ -29,12 +32,14 @@ public class Turret extends Entity implements Aimable {
     public static int MASS = 25;
     private static double reload = 3000;
     private double lastfired = 0;
+    private double range = 500;
 
     private MyWorld world;
-    private List<Barrel> barrels = new ArrayList<>();
+    public List<Barrel> barrels = new ArrayList<>();
     private Barrel mainBarrel = null;
     private AShape center;
     private AimLogic logic;
+    private Projectile myProjectile;
 
     private List<AShape> components = new ArrayList<AShape>();
     private boolean aiming = true;
@@ -46,19 +51,21 @@ public class Turret extends Entity implements Aimable {
         this.frictionCoefficent = 3;
         this.world = world;
         initializeTurret(location, world);
-        this.logic = new SimpleAim(this);
+        this.logic = new SimpleAim(this, range);
 
         this.bar = new ActiveBar(this);
     };
 
-    private void addBarrel(Barrel.BarrelType type, Vector2 location) {
+    private void addBarrel(Barrel.BarrelType type, Vector2 location, double angle) {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
-        Projectile projectile = new Missile(-10000, -10000, Missile.SPEED, 0, world, team, false);
-        Barrel b = new Barrel(projectile, type, location, world, 0, team);
+        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, team, false);
+        Barrel b = new Barrel(projectile, type, this, world, angle, team, location);
 
         this.barrels.add(b);
-        WeldJoint joint = new WeldJoint(b.shape.body, this.center.body, location);
+        WeldJoint joint = new WeldJoint(b.shape.body,
+                this.center.body, new Vector2(location.x/MyWorld.SCALE, location.y/MyWorld.SCALE));
         world.engineWorld.addJoint(joint);
+
 //        this.components.add(b.shape);
 
         //this.shape = new ComplexShape(components, location.x, location.y, world);
@@ -75,7 +82,7 @@ public class Turret extends Entity implements Aimable {
     }
 
     private void initializeTurret(Vector2 location, MyWorld world){
-        this.center = new ObjRectangle(50, 50);
+        this.center = new ObjCircle(30);
         AShape.InitBuilder builder = this.center.getBuilder(true, world);
         builder.setXY(location.x, location.y).init();
         this.shape = this.center;
@@ -83,19 +90,69 @@ public class Turret extends Entity implements Aimable {
         this.world.objectDatabase.put(this.shape.body, this);
 //        this.components.add(shape);
 
-        this.addBarrel(Barrel.BarrelType.SIDE, location);
+//        this.addBarrel(Barrel.BarrelType.SIDE, location, 0);
+        //very weird behavior with angle (each angle is like x2 what it is expected to be)
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(location.x, 32+location.y), 45);
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(-36+location.x, 30+location.y), 45);
+        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(36+location.x, 30+location.y), 45);
+//        this.world.engineWorld.addJoint(new WeldJoint(barrels.get(0).shape.body, barrels.get(1).shape.body, location));
+//        this.addBarrel(Barrel.BarrelType.SINGLE, location, 270);
 //        this.addBarrel(Barrel.BarrelType.SINGLE, location);
-        this.setMainBarrel(this.barrels.get(0));
+          this.setMainBarrel(this.barrels.get(0));
 
-        //this.addBarrel(Barrel.BarrelType.SINGLE);
     }
 
     @Override
     public void aim() {
-        if (this.mainBarrel != null && this.aiming) {
+        if (this.mainBarrel != null && this.aiming && !this.isSleeping()) {
             logic.aim(mainBarrel);
         }
         //logic.aim(body, this.barrels.get(1).shape);
+    }
+
+    public void selectNewMainBarrel(Barrel deadBarrel){
+        if(deadBarrel == mainBarrel && barrels.size() > 0){
+            this.mainBarrel = barrels.get(0);
+        }
+    }
+
+    @Override
+    public boolean update(MyWorld world){
+        if(super.update(world)){
+            this.logic.aim(mainBarrel);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onCollision(Entity contact, Body componentHit, double damage) {
+        boolean answer = super.onCollision(contact, componentHit, damage);
+//        for(Barrel myBarrel: barrels) {
+//            if(myBarrel == contact) {
+//                return false;
+//            }
+//        }
+        return answer;
+    }
+
+    public void setMotion(double angularVel){
+        this.shape.body.setAngularVelocity(angularVel);
+//        for(Barrel barrel : barrels) {
+//            barrel.shape.body.setAngularVelocity(angularVel);
+//        }
+    }
+
+    @Override
+    public void onDeath(MyWorld world){
+        if(this.health <= 0) {
+                while(barrels.size() > 0){
+                    barrels.get(0).myTurret = null;
+                    barrels.remove(0);
+                }
+        }
+        super.onDeath(world);
     }
 
     @Override
@@ -105,7 +162,12 @@ public class Turret extends Entity implements Aimable {
         }
 
         for (Barrel barrel: barrels) {
-            barrel.fire(angle);
+            if(barrel == mainBarrel){
+                barrel.fire(angle);
+            }
+            else {
+                barrel.fire(barrel.shape.body.getTransform().getRotation());
+            }
         }
 
         lastfired = System.currentTimeMillis();
@@ -123,12 +185,13 @@ public class Turret extends Entity implements Aimable {
 
     @Override
     public boolean isSleeping() {
-        return false;
+        return mainBarrel != null && this.mainBarrel.isSleeping();
     }
 
 //    public boolean inContact(Body contact){
 //        return this.barrels.get(0).shape.body.isInContact(contact) || center.body.isInContact(contact);
 //    }
+
 
     @Override
     public void addToTeam(Team team) {
@@ -149,4 +212,12 @@ public class Turret extends Entity implements Aimable {
 //        this.center.draw(canvas);
 //    }
 
+
+    @Override
+    public void draw(Canvas canvas){
+//        System.out.println(this.shape.body.getJoints().size());
+        super.draw(canvas);
+    }
 }
+
+

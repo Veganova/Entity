@@ -58,9 +58,14 @@ public class MainMenu extends LinearLayout {
                 public void onClick(View v) {
                     intent.putExtra("GameMode", mode);
 //                    activity.myThread.end();
+//                    try {
+//                        activity.myThread.join();
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                     activity.finish();
-//                        activity.myThread.pause(Thread.currentThread());
 
+//                        activity.myThread.pause(Thread.currentThread());
                     //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(intent);
 

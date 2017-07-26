@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects;
 
+import android.graphics.Canvas;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -13,13 +15,22 @@ import org.dyn4j.geometry.Vector2;
 public abstract class Effect {
     public EffectType effectType;
     public AShape zone;
+    public MyWorld world;
     protected Entity applier;
     protected boolean status = true;
+
+    public void basicInit(Entity applier, AShape zone, EffectType type, MyWorld world) {
+        this.applier = applier;
+        this.effectType = type;
+        this.world = world;
+        this.zone = zone;
+    }
 
     public void aoeJoint(Entity applier, AShape zone, EffectType type,
                          Vector2 jointDisplacement, MyWorld world){
         this.applier = applier;
         this.effectType = type;
+        this.world = world;
         this.zone = zone;
         //TODO: there may be an error relating to initialize prior to joint adding
         this.zone.getBuilder(true, world).setXY(applier.shape.getX()* MyWorld.SCALE + jointDisplacement.x,
@@ -47,4 +58,11 @@ public abstract class Effect {
         return this.status && other != applier;
     }
 
+    public void draw(Canvas canvas) {}
+
+    public void update(MyWorld world) {}
+
+    public void onRemove(){
+        this.world.engineWorld.removeBody(this.zone.body);
+    }
 }

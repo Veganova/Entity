@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         SCREEN_WIDTH = displaymetrics.widthPixels;
         SCREEN_HEIGHT = displaymetrics.heightPixels;
 
+
         setContentView(R.layout.activity_main_thread);
         relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
 
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initOnePlayer(boolean playerSelection){
+
         this.MAP_HEIGHT = 2400;
         this.MAP_WIDTH = 1350;
 
@@ -204,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         gamePanel1.setLayoutParams(parms);
 
         myGroup.addView(gamePanel1);
-       // setContentView(myGroup);
+        // setContentView(myGroup);
 
         WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -229,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         myThread.start();
     }
 
+
     public void initTwoPlayer(boolean playerSelection){
         this.MAP_HEIGHT = 1600;
         this.MAP_WIDTH = 1800;
@@ -248,18 +251,19 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup myGroup = new DoubleScreen(this);
 
         DoubleScreen.LayoutParams parms =
-                new DoubleScreen.LayoutParams(SCREEN_WIDTH,SCREEN_HEIGHT/2);
-        parms.topMargin = 10;
+                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT / 2);
+        parms.topMargin = 0;
         gamePanel1.setLayoutParams(parms);
 
         DoubleScreen.LayoutParams parms2 =
-                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT/2);
-        parms2.topMargin = (int) (SCREEN_HEIGHT/2 + 50);
+                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT / 2);
+        parms2.topMargin = (int) (SCREEN_HEIGHT / 2);
         gamePanel2.setLayoutParams(parms2);
 
         myGroup.addView(gamePanel2);
         myGroup.addView(gamePanel1);
 //        setContentView(myGroup);
+
 
         relativeLayout.addView(myGroup);
 
@@ -272,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.addPlayPause();
 
+
         myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
         myThread.addNewPanel(gamePanel2, gamePanel2.getHolder());
         myThread.setRunning(true);
@@ -280,20 +285,20 @@ public class MainActivity extends AppCompatActivity {
 
     //similar logic to be used for end game, should also implement an 'onPause' etc.
     @Override
-    public void onDestroy(){
-            boolean retry = true;
-            int counter = 0;
-            while (retry && counter < 1000) {
-                counter++;
-                try {
-                    myThread.setRunning(false);
-                    myThread.join();
-                    retry = false;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+    public void onDestroy() {
+        boolean retry = true;
+        int counter = 0;
+        while (retry && counter < 1000) {
+            counter++;
+            try {
+                myThread.setRunning(false);
+                myThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+        }
         super.onDestroy();
     }
 

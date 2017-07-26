@@ -37,15 +37,14 @@ import org.dyn4j.geometry.Vector2;
 import java.util.List;
 
 /**
- *
- -list of entities
- -Camera object that stores info about how to display the scene (setCenter, translation)
- -money
- -has listeners specific to it
- -has its own menu
- -one ghost object - have this ghost class implement the listener as well?
+ * -list of entities
+ * -Camera object that stores info about how to display the scene (setCenter, translation)
+ * -money
+ * -has listeners specific to it
+ * -has its own menu
+ * -one ghost object - have this ghost class implement the listener as well?
  */
-public class Player extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener{
+public class Player extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
     private List<Entity> entities;
     public CameraController camera;
     private MyWorld world;
@@ -62,16 +61,16 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     private ScaleGestureDetector scaleGestureDetector;
     private GhostEntity ghost;
     private boolean oldScroll = false;
-    private Vector2 initialTranslate = new Vector2(0,0);
+    private Vector2 initialTranslate = new Vector2(0, 0);
 
-    public Player(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity, boolean addListenertoPanel){
+    public Player(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity, boolean addListenertoPanel) {
         this.playerNumber = id;
         this.team = team;
         this.world = world;
         this.scales = gamePanel.scales;
         System.out.println(gamePanel.scales);
         this.camera = gamePanel.camera;
-        if(addListenertoPanel){
+        if (addListenertoPanel) {
             gamePanel.addPlayerListener(this);
         }
         this.entities = team.getTeamObjects();
@@ -81,13 +80,14 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         this.VIEW_HEIGHT = gamePanel.getHeight();
         this.VIEW_WIDTH = gamePanel.getWidth();
         this.mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
+        this.mDetector.setIsLongpressEnabled(false);
         this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
     }
 
     private boolean holdingGhost = false;
     private Vector2 pullTowards;
     private double previousAngle = 0;
-    private double lastDownPress  = 0;
+    private double lastDownPress = 0;
     private double lastMultiPress = 0;
     private double mDownX, mDownY;
 
@@ -95,56 +95,52 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     public boolean onTouch(View view, MotionEvent ev) {
         mDownX = ev.getX() / scales.x;   //scales coordinates 0 to map width
         mDownY = ev.getY() / scales.y;   //scales coordinates 0 to map height
-        mDownX = (mDownX - WIDTH/2);     //centers x
-        mDownY = -1*(mDownY - HEIGHT/2); //centers y
+        mDownX = (mDownX - WIDTH / 2);     //centers x
+        mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
         mDownX /= camera.zoomXY.x;
         mDownY /= camera.zoomXY.y;
-        mDownX -= camera.translateXY.x*MyWorld.SCALE;
-        mDownY -= camera.translateXY.y*MyWorld.SCALE;
+        mDownX -= camera.translateXY.x * MyWorld.SCALE;
+        mDownY -= camera.translateXY.y * MyWorld.SCALE;
 
 
         int mask = (ev.getAction() & MotionEvent.ACTION_MASK);
 
-        if( mask == MotionEvent.ACTION_DOWN){
+        if (mask == MotionEvent.ACTION_DOWN) {
             lastDownPress = System.currentTimeMillis();
-        }
-        else if( mask == MotionEvent.ACTION_UP || mask == MotionEvent.ACTION_POINTER_UP){
+        } else if (mask == MotionEvent.ACTION_UP || mask == MotionEvent.ACTION_POINTER_UP) {
             previousAngle = 0;
         }
 
-            if (ev.getPointerCount() > 1) {
-                if (holdingGhost) {
-                    //we need this line unfortunately for turret TODO: change it back on place!
-                    this.ghost.entity.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
-                    //rotate
-                    double p1x = ev.getX(0);
-                    double p1y = ev.getY(0);
-                    double p2x = ev.getX(1);
-                    double p2y = ev.getY(1);
-                    double direction = 1;
-                    double currentAngle = Util.absoluteAngle(new Vector2(p2x, p2y), new Vector2(p1x, p1y));
-                    if(previousAngle != 0)
+        if (ev.getPointerCount() > 1) {
+            if (holdingGhost) {
+                //we need this line unfortunately for turret TODO: change it back on place!
+                this.ghost.entity.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
+                //rotate
+                double p1x = ev.getX(0);
+                double p1y = ev.getY(0);
+                double p2x = ev.getX(1);
+                double p2y = ev.getY(1);
+                double currentAngle = Util.absoluteAngle(new Vector2(p2x, p2y), new Vector2(p1x, p1y));
+                if (previousAngle != 0)
                     this.ghost.setAngle(-1 * (currentAngle - previousAngle), this.ghost.entity.shape.body);
-                    previousAngle = currentAngle;
-                    lastMultiPress = System.currentTimeMillis();
-                    lastDownPress = lastMultiPress;
-                }
-                else{
-                    this.scaleGestureDetector.onTouchEvent(ev);
-                }
+                previousAngle = currentAngle;
+                lastMultiPress = System.currentTimeMillis();
+                lastDownPress = lastMultiPress;
             } else {
-                this.mDetector.onTouchEvent(ev);
+                this.scaleGestureDetector.onTouchEvent(ev);
             }
+        } else {
+            this.mDetector.onTouchEvent(ev);
+        }
         return false;
     }
 
 
     public void update() {
-        for (Entity entity: this.team.getTeamObjects()) {
-            if (entity instanceof Aimable) {
-                ((Aimable) entity).aim();
-            }
-        }
+//        for (Entity entity : this.team.getTeamObjects()) {
+//            entity.update(world);
+//        }
+
         if (holdingGhost) {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
@@ -155,16 +151,13 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     }
 
     public void setGhost(Entities type) {
-        if(this.holdingGhost) {
+        if (this.holdingGhost) {
             System.out.println("ALREADY HOLDING A GHOST!");
         } else {
             //center of the screen
-            double x = 0;
-            double y = 0;
-//            this.ghost = GhostFactory.produce(type, x / this.scales.x, y / this.scales.y, 0, world, team);
-            this.ghost = GhostFactory.produce(type, 0, 0, 0, world, team);
+            this.ghost = GhostFactory.produce(type, -1 * camera.translateXY.x * MyWorld.SCALE,
+                    -1 * camera.translateXY.y * MyWorld.SCALE, 0, world, team);
             this.pullTowards = this.ghost.entity.shape.body.getWorldCenter();
-//            System.out.println(ghost.entity);
             this.holdingGhost = true;
             this.previousAngle = 0;
         }
@@ -177,28 +170,27 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         double marginDetection = 30;
         double mDownX = e2.getX() / scales.x;
         double mDownY = e2.getY() / scales.y;
-        mDownX = mDownX - WIDTH/2;
-        mDownY = -1*(mDownY - HEIGHT/2);
+        mDownX = mDownX - WIDTH / 2;
+        mDownY = -1 * (mDownY - HEIGHT / 2);
         double realDownx = mDownX;
         double realDowny = mDownY;
         mDownX /= camera.zoomXY.x;
         mDownY /= camera.zoomXY.y;
-        mDownX -= camera.translateXY.x*MyWorld.SCALE;
-        mDownY -= camera.translateXY.y*MyWorld.SCALE;
+        mDownX -= camera.translateXY.x * MyWorld.SCALE;
+        mDownY -= camera.translateXY.y * MyWorld.SCALE;
 
-        if(holdingGhost){
-            if(lastDownPress + 30 < System.currentTimeMillis()){
-                if(e2.getPointerCount() < 2 && e1.getPointerCount() < 2){
-                    pullTowards= new Vector2(mDownX/world.SCALE, mDownY/ world.SCALE);
+        if (holdingGhost) {
+            if (lastDownPress + 30 < System.currentTimeMillis()) {
+                if (e2.getPointerCount() < 2 && e1.getPointerCount() < 2) {
+                    pullTowards = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
                 }
             }
-            if(camera.nearEdge(e2.getX(), e2.getY(), marginDetection)) {
+            if (camera.nearEdge(e2.getX(), e2.getY(), marginDetection)) {
                 camera.relativeMove(realDownx, realDowny);
             }
             return false;
-        }
-        else if(lastDownPress + 30 < System.currentTimeMillis()){
-            camera.relativeMove(scrollSpeed*distanceX/MyWorld.SCALE, -1*scrollSpeed*distanceY/MyWorld.SCALE);
+        } else if (lastDownPress + 30 < System.currentTimeMillis()) {
+            camera.relativeMove(scrollSpeed * (int)(distanceX) / MyWorld.SCALE, -1 * scrollSpeed * (int)(distanceY) / MyWorld.SCALE);
         }
 
 
@@ -209,15 +201,14 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float maxFlingVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
         velocityX = velocityX / maxFlingVelocity;
-        velocityY = velocityY /maxFlingVelocity;
+        velocityY = velocityY / maxFlingVelocity;
 
-        if(holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
+        if (holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
             holdingGhost = false;
             this.ghost.removeGhost();
             this.ghost = null;
-        }
-        else if(!holdingGhost) {
-            if(velocityX > 0.3 || velocityY > 0.3) {
+        } else if (!holdingGhost) {
+            if (velocityX > 0.3 || velocityY > 0.3) {
 
             }
         }
@@ -226,7 +217,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     @Override
     public void onLongPress(MotionEvent e) {
-        
+
     }
 
     @Override
@@ -236,13 +227,13 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        if(lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
-                && holdingGhost && this.ghost.canPlace()){
+        if (lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
+                && holdingGhost && this.ghost.canPlace()) {
             ghost.place().addToTeam(team);
             holdingGhost = false;
         } else if (!holdingGhost) {
             Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
-            for (Entity teamEntity: this.entities) {
+            for (Entity teamEntity : this.entities) {
                 if (teamEntity.shape.body.contains(clickPos)) {
                     teamEntity.interact();
                     break;
@@ -258,7 +249,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         @Override
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
             double scaleFactor = scaleGestureDetector.getScaleFactor();
-            scaleFactor = ((float)((int)(scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
+            scaleFactor = ((float) ((int) (scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
             camera.relativeZoom(scaleFactor, scaleFactor);
             return true;
         }
@@ -270,7 +261,7 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
 
         @Override
         public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
-                lastDownPress = System.currentTimeMillis();
+            lastDownPress = System.currentTimeMillis();
         }
     }
 

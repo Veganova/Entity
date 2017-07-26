@@ -58,19 +58,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) throws RuntimeException {
         // TODO: 7/26/2017 do something here?
 //        throw new RuntimeException("GG");
-//            boolean retry = true;
-//            int counter = 0;
-//            while (retry && counter < 1000) {
-//                counter++;
-//                try {
-//                    thread.setRunning(false);
-//                    thread.join();
-//                    retry = false;
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
+            getHolder().removeCallback(this);
 
     }
 

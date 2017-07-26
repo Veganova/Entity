@@ -29,7 +29,9 @@ public class Entity implements Effector {
     public int health;
     public boolean isCollisionAuthority = false;
     public boolean invisible = false;
-    boolean invulnerable;
+    public boolean invulnerable;
+    public boolean isActive = true;
+    public double isDisabledUntil = 0;
     public boolean ghost = false;
     public boolean untargetable = false;
 
@@ -50,14 +52,36 @@ public class Entity implements Effector {
         this.zoneToEffect = new HashMap<>();
     }
 
-    public void update(MyWorld world) {
+    /**
+     * Method is called every game loop on all entities
+     *
+     * @param world
+     * @return true if the update occurred successfully, false if entity is disabled
+     */
+    public boolean update(MyWorld world) {
+        for (Effect effect : effects.values()) {
+            effect.update(world);
+        }
 
-         //if anything has collided, reduce health - this can be put in Entity
+        if (isDisabledUntil < System.currentTimeMillis() && isDisabledUntil != -1) {
+            this.isActive = true;
+        }
+
+        if(this.isActive) {
+            return true;
+        }
+
+        return false;
     }
 
 
     public void draw(Canvas canvas) {
         this.shape.draw(canvas);
+
+        for(Effect effect : effects.values()){
+            effect.draw(canvas);
+        }
+
         if (this.bar != null) {
             this.bar.draw(canvas);
         }
@@ -97,6 +121,7 @@ public class Entity implements Effector {
         if (this.untargetable) {
             return false;
         }
+
         if(componentHit == null)
             return false;
 
@@ -106,7 +131,7 @@ public class Entity implements Effector {
             return false;
         }
 
-        if(contact.team.opposite(this.team)) {
+        if(contact.team.opposite(this.team) && !this.invulnerable) {
             this.health -= damage;
             if (this.health <= 0) {
                 this.invisible = true;
@@ -180,7 +205,10 @@ public class Entity implements Effector {
 
     @Override
     public void removeEffect(Effect effect) {
-        this.zoneToEffect.remove(effect.zone.body);
+        Effect thisEffect = this.zoneToEffect.remove(effect.zone.body);
+        if(thisEffect != null) {
+            thisEffect.onRemove();
+        }
         this.effects.remove(effect.effectType);
     }
 

@@ -12,6 +12,7 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
+import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 import static com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar.PathType.LINE;
@@ -29,31 +30,35 @@ public class Barrel extends Entity implements Aimable {
     private MyWorld world;
     private double magnitude;
     private Projectile projectile;
+    public Turret myTurret = null;
     private double sleepUntil = 0;
 
 
     public Barrel(Projectile projectile, BarrelType type,
-                  Vector2 location, MyWorld world, double angle, Team team) {
+                  Entity turret, MyWorld world, double angle, Team team, Vector2 location) {
         super(0, 0, 70, false, team);
         initBarrel(type, location, world, angle);
         this.world = world;
         this.projectile = projectile;
         this.world.objectDatabase.put(this.shape.body, this);
+        if(turret instanceof Turret){
+            this.myTurret = ((Turret)turret);
+        }
     }
 
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
         switch (type) {
             case SINGLE:
                 //magnitude needs to be specified here
-                this.shape = new ObjRectangle(120, 20);
+                this.shape = new ObjRectangle(90, 20);
                 AShape.InitBuilder builderSingle = this.shape.getBuilder(true, world);
-                builderSingle.setXY(location.x, location.y).init();
-                magnitude = 150;
+                builderSingle.setXY(location.x, location.y).setAngle(angle).init();
+                magnitude = 130;
                 break;
             case SIDE:
                 this.shape = new ObjRectangle(120, 20);
                 AShape.InitBuilder builderSide = this.shape.getBuilder(true, world);
-                builderSide.setXY(50 + (location.x), 100 + (location.y)).setAngle(Math.toDegrees(angle)).init();
+                builderSide.setXY(50 + (location.x), 100 + (location.y)).setAngle(angle).init();
 
                 magnitude = 50;
 
@@ -64,6 +69,8 @@ public class Barrel extends Entity implements Aimable {
         this.bar = new ActiveBar(this);
         this.bar.setPathType(LINE, 120);
     }
+
+
 
     @Override
     public void aim() {
@@ -82,7 +89,7 @@ public class Barrel extends Entity implements Aimable {
         this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, team);
 
         this.shape.body.setAsleep(false);
-        this.sleepUntil = System.currentTimeMillis() + 0;
+        this.sleepUntil = System.currentTimeMillis() + this.projectile.getSleepTime();
 
     }
 
@@ -98,8 +105,35 @@ public class Barrel extends Entity implements Aimable {
 
     @Override
     public boolean isSleeping() {
-        return false;
+        return sleepUntil > System.currentTimeMillis();
     }
+
+    @Override
+    public boolean onCollision(Entity contact, Body componentHit, double damage) {
+        if(contact instanceof Barrel) {
+            if(((Barrel) contact).myTurret == this.myTurret && this.myTurret != null){
+                return false;
+            }
+        }
+
+//        if(this.myTurret == contact) {
+//            return false;
+//        }
+
+        return super.onCollision(contact, componentHit, damage);
+
+    }
+
+    @Override
+    public void onDeath(MyWorld world){
+           if(this.myTurret != null){
+               myTurret.barrels.remove(this);
+               myTurret.selectNewMainBarrel(this);
+           }
+           this.myTurret = null;
+        super.onDeath(world);
+    }
+
 
 //    @Override
 //    public void addToTeam(Team team) {

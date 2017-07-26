@@ -42,7 +42,6 @@ public class ContactController extends ContactAdapter {
     public boolean preSolve(ContactPoint point) {
         Entity ent1 = world.objectDatabase.get(point.getBody1());
         Entity ent2 = world.objectDatabase.get(point.getBody2());
-        //System.out.println("SOLVED CONTACT");
         return !(ent1.ghost || ent2.ghost);
     }
 

@@ -140,16 +140,15 @@ public class MassLazer extends Projectile {
     }
 
     @Override
-    public void update(MyWorld world){
+    public boolean update(MyWorld world){
         //can optimize here (ex. don't place if point has no hope or too many points)
-        while(pointstoPlace.size() > 0){
-            Vector2 temp = pointstoPlace.poll();
-            if(Util.getDistance(temp, lastPoint) > 5/ MyWorld.SCALE) {
-                placeTrail(lastPoint, temp);
-                points.add(temp);
+            while (pointstoPlace.size() > 0) {
+                Vector2 temp = pointstoPlace.poll();
+                if (Util.getDistance(temp, lastPoint) > 5 / MyWorld.SCALE) {
+                    placeTrail(lastPoint, temp);
+                    points.add(temp);
+                }
             }
-        }
-
 
         while (tail.size() > 10) {
             points.remove(0);
@@ -157,7 +156,7 @@ public class MassLazer extends Projectile {
             tail.remove(0);
         }
 
-
+        return true;
     }
 
     @Override

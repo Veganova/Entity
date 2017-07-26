@@ -77,11 +77,13 @@ public class SimpleLazer extends Lazer {
 
 
     @Override
-    public void update(MyWorld world){
+    public boolean update(MyWorld world){
 
         if(lifetime!=0 && this.bornTime + lifetime < System.currentTimeMillis()){
             world.bodiestodelete.add(this.shape.body);
         }
+
+        return true;
     }
 
     /**

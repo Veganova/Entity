@@ -19,16 +19,14 @@ import org.dyn4j.geometry.Vector2;
 public class CameraController {
     public Vector2 zoomXY;
     public Vector2 translateXY;
-    private Vector2 scales;
     private GamePanel panel;
-    private Vector2 translateUpdate = new Vector2(0,0);
+    private Vector2 translateUpdate = new Vector2(0, 0);
     private double zoom_max = 4;
     private double zoom_min = 0.5;
 
     public CameraController(Vector2 relativeZoomXY, Vector2 relativeTranslationXY, GamePanel gamePanel) {
         zoomXY = new Vector2(relativeZoomXY.x, relativeZoomXY.y);
         //set to 1,1 default early
-        this.scales = gamePanel.scales;
         translateXY = new Vector2(relativeTranslationXY.x / MyWorld.SCALE,
                 relativeTranslationXY.y / MyWorld.SCALE);
         this.panel = gamePanel;
@@ -45,8 +43,8 @@ public class CameraController {
     }
 
     public void relativeMove(double x, double y) {
-        x = x/MyWorld.SCALE;
-        y = y/MyWorld.SCALE;
+        x = x / MyWorld.SCALE;
+        y = y / MyWorld.SCALE;
         translateXY.x -= (float) (x / MyWorld.SCALE);
         translateXY.y -= (float) (y / MyWorld.SCALE);
     }
@@ -72,10 +70,9 @@ public class CameraController {
                 || Util.nearValue(panel.getHeight(), y, delta) || Util.nearValue(panel.getWidth(), x, delta));
     }
 
-    public void update(){
+    public void update() {
         this.relativeMove(translateUpdate.x, translateUpdate.y);
     }
-
 
 
 }

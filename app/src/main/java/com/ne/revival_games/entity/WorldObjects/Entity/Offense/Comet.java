@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.SeekerAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -20,12 +21,13 @@ public class Comet extends Projectile implements Aimable {
     public static double SPEED = 30.0;
     public static int HEALTH = 30;
     public static int RADIUS = 10;
+    private double range = 1000;
     private AimLogic logic;
 
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
         super(x, y, RADIUS, direction, speed, HEALTH, world, team, true);
         this.team = team;
-        this.logic = new SimpleAim(this);
+        this.logic = new SeekerAim(this, range);
     }
 
     @Override
@@ -53,6 +55,12 @@ public class Comet extends Projectile implements Aimable {
     }
 
     @Override
+    public boolean update(MyWorld world){
+        this.logic.aim(this);
+        return true;
+    }
+
+    @Override
     public void aim() {
         this.logic.aim(this);
     }
@@ -60,8 +68,8 @@ public class Comet extends Projectile implements Aimable {
     @Override
     public void fire(double angle) {
         //get the heading
-        double x = Math.cos(this.shape.body.getTransform().getRotation()) * 10;
-        double y = Math.sin(this.shape.body.getTransform().getRotation()) * 10;
+        double x = Math.cos(angle) * 10;
+        double y = Math.sin(angle) * 10;
         this.shape.body.applyForce(new Vector2(x, y));
     }
 

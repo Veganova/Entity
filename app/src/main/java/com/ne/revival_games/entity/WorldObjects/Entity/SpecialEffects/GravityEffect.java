@@ -51,6 +51,7 @@ public class GravityEffect extends Effect{
         if (!canApply(other)) {
             return;
         }
+
         double distance =
                 Util.getDistance(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter());
 
