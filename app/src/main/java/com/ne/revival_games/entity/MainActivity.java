@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 //        setContentView(myGroup);
 
 
-        setContentView(R.layout.activity_main_thread);
+//        setContentView(R.layout.activity_main_thread);
         RelativeLayout relativeLayout = (RelativeLayout) this.findViewById(R.id.main);
         relativeLayout.addView(myGroup);
 
