@@ -35,6 +35,7 @@ import com.ne.revival_games.entity.WorldObjects.Player;
 import java.io.Serializable;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -95,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("THREADS - " + Thread.activeCount());
+                    Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+                    System.out.println("THREADS - " + Thread.activeCount() + " | " + threadSet.size());
                 }
             }
         });
@@ -301,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         if (this.myThread != null) {
             this.myThread.end();
         }
-//        relativeLayout.removeAllViews();
+        relativeLayout.removeAllViews();
     }
 
     @Override
@@ -318,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
         if (this.myThread != null) {
             this.myThread.end();
         }
-//        relativeLayout.removeAllViews();
+        relativeLayout.removeAllViews();
     }
 
 

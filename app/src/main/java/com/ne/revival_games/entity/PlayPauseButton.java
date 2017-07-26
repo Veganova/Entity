@@ -106,6 +106,11 @@ public class PlayPauseButton extends LinearLayout {
             public void onClick(View v) {
                 System.out.println("END");
                 game.end();
+                try {
+                    game.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 System.out.println("ALIVE " + game.isAlive());
             }

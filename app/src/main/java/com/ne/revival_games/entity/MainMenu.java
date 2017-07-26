@@ -57,10 +57,13 @@ public class MainMenu extends LinearLayout {
                 @Override
                 public void onClick(View v) {
                     intent.putExtra("GameMode", mode);
-                    activity.myThread.end();
+//                    activity.myThread.end();
+                    activity.finish();
 //                        activity.myThread.pause(Thread.currentThread());
+
                     //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(intent);
+
                 }
             };
             MainMenuButton button = new MainMenuButton(context, mode.toString(), listener);
