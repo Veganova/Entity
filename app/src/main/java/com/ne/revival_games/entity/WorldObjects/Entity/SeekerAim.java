@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity;
 
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
+
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
@@ -12,9 +14,11 @@ import java.util.List;
 public class SeekerAim implements AimLogic {
     private Entity enemy;
     private Aimable mainBody;
+    private double range;
 
-    public SeekerAim(Aimable mainBody) {
+    public SeekerAim(Aimable mainBody, double range) {
         this.mainBody = mainBody;
+        this.range = range/ MyWorld.SCALE;
     }
 
     private Team getTeam() {
@@ -53,8 +57,22 @@ public class SeekerAim implements AimLogic {
     public void choose() {
         Team team = getTeam();
         List<Entity> enemies = team.getOpposite().getTeamObjects();
-        if (enemies.size() > 0) {
-            this.enemy = enemies.get(0);
+        if(enemies.size() > 0){
+            Vector2 myPosition = ((Entity)this.mainBody).shape.body.getWorldCenter();
+            int index = 0;
+            double distance = Util.getDistance(enemies.get(0).shape.body.getWorldCenter(), myPosition);
+            for(int x = 1; x < enemies.size(); x++){
+                double otherDist = Util.getDistance(enemies.get(x).shape.body.getWorldCenter(), myPosition);
+                if(distance > otherDist){
+                    index = x;
+                    distance = otherDist;
+                }
+            }
+            if(distance < this.range) {
+                this.enemy = enemies.get(index);
+                return;
+            }
         }
+        this.enemy = null;
     }
 }

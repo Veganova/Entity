@@ -21,12 +21,13 @@ public class Comet extends Projectile implements Aimable {
     public static double SPEED = 30.0;
     public static int HEALTH = 30;
     public static int RADIUS = 10;
+    private double range = 1000;
     private AimLogic logic;
 
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
         super(x, y, RADIUS, direction, speed, HEALTH, world, team, true);
         this.team = team;
-        this.logic = new SeekerAim(this);
+        this.logic = new SeekerAim(this, range);
     }
 
     @Override

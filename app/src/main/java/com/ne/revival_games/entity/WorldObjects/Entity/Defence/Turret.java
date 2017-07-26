@@ -32,7 +32,7 @@ public class Turret extends Entity implements Aimable {
     public static int MASS = 25;
     private static double reload = 3000;
     private double lastfired = 0;
-    private double range = 8;
+    private double range = 500;
 
     private MyWorld world;
     public List<Barrel> barrels = new ArrayList<>();
@@ -51,7 +51,7 @@ public class Turret extends Entity implements Aimable {
         this.frictionCoefficent = 3;
         this.world = world;
         initializeTurret(location, world);
-        this.logic = new SimpleAim(this);
+        this.logic = new SimpleAim(this, range);
 
         this.bar = new ActiveBar(this);
     };
