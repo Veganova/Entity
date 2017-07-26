@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class MainMenu extends LinearLayout {
                 }
             };
             MainMenuButton button = new MainMenuButton(context, mode.toString(), listener);
+            button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             verticle.addView(button);
         }
 

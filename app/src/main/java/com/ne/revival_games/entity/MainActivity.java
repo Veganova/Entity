@@ -85,6 +85,21 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("THREADS - " + Thread.activeCount());
+                }
+            }
+        });
+        t.start();
     }
 
     protected View menu;
@@ -286,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
         if (this.myThread != null) {
             this.myThread.end();
         }
+//        relativeLayout.removeAllViews();
     }
 
     @Override
@@ -302,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
         if (this.myThread != null) {
             this.myThread.end();
         }
+//        relativeLayout.removeAllViews();
     }
 
 

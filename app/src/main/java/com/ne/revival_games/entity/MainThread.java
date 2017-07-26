@@ -135,5 +135,8 @@ public class MainThread extends Thread
 
     public void end() {
         this.setRunning(false);
+        for(GamePanel panel: screens.keySet()){
+            screens.get(panel).removeCallback(panel);
+        }
     }
 }
