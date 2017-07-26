@@ -216,5 +216,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (this.myThread != null) {
+            this.myThread.end();
+        }
+    }
+
 
 }

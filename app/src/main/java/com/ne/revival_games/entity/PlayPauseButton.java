@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,26 +22,43 @@ public class PlayPauseButton extends LinearLayout {
     private final Thread game;
 
 
-    public PlayPauseButton(Context context, final MainThread game) {
+    public PlayPauseButton(final Context context, final MainThread game) {
         super(context);
         this.game = game;
 
+        this.setOrientation(HORIZONTAL);
         this.setGravity(Gravity.RIGHT);
+        this.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+
+
+        float weight;
+
 
 //        LinearLayout padding = new LinearLayout(context);
 //        padding.setOrientation(HORIZONTAL);
-//        float weight = 3.0f;
+//        weight = 1.0f;
 //        padding.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
 //                LinearLayout.LayoutParams.MATCH_PARENT, weight));
 //        this.addView(padding);
-//
-        this.setPadding(700, 0, 0, 0);
-        float weight = 1.0f;
 
+        LinearLayout horizontal = new LinearLayout(context);
+        horizontal.setOrientation(VERTICAL);
+        horizontal.setGravity(Gravity.CENTER);
+        horizontal.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+
+
+        weight = 1.0f;
+        LinearLayout verticle = new LinearLayout(context);
+        verticle.setOrientation(VERTICAL);
+        verticle.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT));
+       
 
         Button play = new Button(context);
-        play.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT, weight));
+        play.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
         play.setText("||");
         play.setOnClickListener(new OnClickListener() {
             @Override
@@ -49,19 +67,19 @@ public class PlayPauseButton extends LinearLayout {
                 synchronized (game) {
                     try {
                         game.pause(Thread.currentThread());
-                        System.out.println("ALIVE " + game.isAlive() );
+                        System.out.println("ALIVE " + game.isAlive());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-        this.addView(play);
+        verticle.addView(play);
 
         Button pause = new Button(context);
         pause.setText(">");
-        pause.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT, weight));
+        pause.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
         pause.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,25 +89,47 @@ public class PlayPauseButton extends LinearLayout {
                     Thread.currentThread().notify();
 //                    game.run();
 
-                    System.out.println("ALIVE " + game.isAlive() );
+                    System.out.println("ALIVE " + game.isAlive());
                 }
             }
         });
-        this.addView(pause);
+        verticle.addView(pause);
 
         Button end = new Button(context);
         end.setText("X");
-        end.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT, weight));
+        end.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
         end.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("END");
                 game.end();
 
-                System.out.println("ALIVE " + game.isAlive() );
+                System.out.println("ALIVE " + game.isAlive());
             }
         });
-        this.addView(end);
+        verticle.addView(end);
+
+
+        final Intent intent = new Intent(context, MainMenuActivity.class);
+
+        OnClickListener listener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                game.end();
+//                        activity.myThread.pause(Thread.currentThread());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        };
+        Button button = new Button(context);
+        button.setText("<");
+        button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        button.setOnClickListener(listener);
+        verticle.addView(button);
+
+        horizontal.addView(verticle);
+        this.addView(horizontal);
     }
 }

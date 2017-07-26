@@ -47,6 +47,7 @@ public class MainThread extends Thread
     {
         running = true;
         while(running) {
+            System.out.println("IN thread LOOP");
             startTime = System.nanoTime();
             canvas = null;
             update();
