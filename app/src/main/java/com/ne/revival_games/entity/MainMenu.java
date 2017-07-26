@@ -38,7 +38,15 @@ public class MainMenu extends LinearLayout {
         this.setLayoutParams(new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
         this.setGravity(Gravity.CENTER);
-        this.setOrientation(VERTICAL);
+        this.setOrientation(HORIZONTAL);
+
+
+        LinearLayout verticle = new LinearLayout(context);
+        verticle.setLayoutParams(new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        verticle.setGravity(Gravity.CENTER);
+        verticle.setOrientation(VERTICAL);
+
 
         final Intent intent = new Intent(context, MainActivity.class);
         boolean current = false;
@@ -47,12 +55,6 @@ public class MainMenu extends LinearLayout {
             OnClickListener listener = new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    try {
-//                        activity.myThread.endThread();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-
                     intent.putExtra("GameMode", mode);
                     activity.myThread.end();
 //                        activity.myThread.pause(Thread.currentThread());
@@ -61,8 +63,10 @@ public class MainMenu extends LinearLayout {
                 }
             };
             MainMenuButton button = new MainMenuButton(context, mode.toString(), listener);
-            this.addView(button);
+            verticle.addView(button);
         }
+
+        this.addView(verticle);
     }
 }
 
@@ -72,6 +76,7 @@ class MainMenuButton extends Button {
         super(context);
 
         this.setTextColor(Color.YELLOW);
+        this.setBackgroundColor(Color.TRANSPARENT);
         this.setText(name);
         this.setOnClickListener(listener);
     }

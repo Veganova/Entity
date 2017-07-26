@@ -20,11 +20,13 @@ public class PlayPauseButton extends LinearLayout {
 
 
     private final Thread game;
+    private final MainActivity activity;
 
 
-    public PlayPauseButton(final Context context, final MainThread game) {
+    public PlayPauseButton(final Context context, final MainThread game, final MainActivity activity) {
         super(context);
         this.game = game;
+        this.activity = activity;
 
         this.setOrientation(HORIZONTAL);
         this.setGravity(Gravity.RIGHT);
@@ -116,7 +118,8 @@ public class PlayPauseButton extends LinearLayout {
         OnClickListener listener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                game.end();
+                game.end(); // thread
+                activity.finish();
 //                        activity.myThread.pause(Thread.currentThread());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);

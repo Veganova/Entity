@@ -75,17 +75,16 @@ public class MainActivity extends AppCompatActivity {
             MainMenu.GameMode choice = (MainMenu.GameMode)message;
             switch(choice) {
                 case SINGLEPLAYER:
-                    initOnePlayer();
+//                    initOnePlayer();
+                    initPlayers(true, 1);
                     break;
+
                 case MULTIPLAYER:
-                    initTwoPlayer();
+//                    initTwoPlayer(true);
+                    initPlayers(true, 2);
                     break;
             }
         }
-
-
-//        initTwoPlayer();
-//        initOnePlayer();
     }
 
     protected View menu;
@@ -96,19 +95,78 @@ public class MainActivity extends AppCompatActivity {
 
     private View playPauseButton;
     private void addPlayPause(){
-        playPauseButton = new PlayPauseButton(getApplicationContext(), myThread);
+        playPauseButton = new PlayPauseButton(getApplicationContext(), myThread, this);
         relativeLayout.addView(playPauseButton);
     }
 
     private void removeSavedView(View view) {
-        // If not null, then it must have been set
+        // If not null, then it must have been set. Look at above methods.
         if (view != null) {
             relativeLayout.removeView(view);
         }
     }
 
 
-    public void initOnePlayer(){
+    public void initPlayers(boolean playerSelection, int numPlayers) {
+
+        if (numPlayers == 1) {
+            this.MAP_HEIGHT = 2400;
+            this.MAP_WIDTH = 1350;
+        } else {
+            this.MAP_HEIGHT = 1600;
+            this.MAP_WIDTH = 1800;
+        }
+
+        Team curTeam = Team.DEFENCE;
+        ArrayList<Player> players = new ArrayList<>();
+        ViewGroup myGroup = new DoubleScreen(this);
+        for (int i = 0; i < numPlayers; i += 1) {
+            GamePanel panel = new GamePanel(this, world);
+
+            DoubleScreen.LayoutParams parms = new DoubleScreen.LayoutParams(SCREEN_WIDTH,
+                    SCREEN_HEIGHT / numPlayers);
+
+            if (i != 0) {
+                // first player doesnt want padding at top
+                parms.topMargin = (int) (i * SCREEN_HEIGHT / numPlayers + 5);
+
+            } else {
+                parms.topMargin = (int) (i * SCREEN_HEIGHT / numPlayers);
+            }
+            if (i != numPlayers - 1) {
+                // last player doesnt want padding at bottom
+                parms.bottomMargin = 5;
+            }
+
+            panel.setLayoutParams(parms);
+            myGroup.addView(panel);
+
+            Player player = new Player(i + 1, curTeam, world, panel, this, true);
+            curTeam = curTeam.getOpposite();
+            players.add(player);
+
+            myThread.addNewPanel(panel, panel.getHolder());
+        }
+
+
+        relativeLayout.addView(myGroup);
+
+        if (playerSelection) {
+            // loop over all players and do this..
+            for (Player player: players) {
+                relativeLayout.addView(player.getMenu());
+            }
+        }
+
+        world.addPlayers(players);
+
+        this.addPlayPause();
+
+        myThread.setRunning(true);
+        myThread.start();
+    }
+
+    public void initOnePlayer(boolean playerSelection){
         this.MAP_HEIGHT = 2400;
         this.MAP_WIDTH = 1350;
 
@@ -139,9 +197,12 @@ public class MainActivity extends AppCompatActivity {
 
         relativeLayout.addView(myGroup);
 
-        // loop over all players and do this..
-        relativeLayout.addView(player1.getMenu());
-        relativeLayout.addView(player2.getMenu());
+        if (playerSelection) {
+            // loop over all players and do this..
+            for (Player player: players) {
+                relativeLayout.addView(player.getMenu());
+            }
+        }
 
 //        this.addMenu();
         this.addPlayPause();
@@ -151,17 +212,17 @@ public class MainActivity extends AppCompatActivity {
         myThread.start();
     }
 
-    public void initTwoPlayer(){
+    public void initTwoPlayer(boolean playerSelection){
         this.MAP_HEIGHT = 1600;
         this.MAP_WIDTH = 1800;
 
         GamePanel gamePanel1 = new GamePanel(this, world);
         GamePanel gamePanel2 = new GamePanel(this, world);
 
-        player1 = new Player(1, Team.DEFENCE, world, gamePanel1, this, true);
-        player2 = new Player(2, Team.OFFENSE, world, gamePanel2, this, true);
+        Player player1 = new Player(1, Team.DEFENCE, world, gamePanel1, this, true);
+        Player player2 = new Player(2, Team.OFFENSE, world, gamePanel2, this, true);
 
-        curPlayer = player1;
+        Player curPlayer = player1;
         ArrayList<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
@@ -185,9 +246,12 @@ public class MainActivity extends AppCompatActivity {
 
         relativeLayout.addView(myGroup);
 
-        // loop over all players and do this..
-        relativeLayout.addView(player1.getMenu());
-        relativeLayout.addView(player2.getMenu());
+        if (playerSelection) {
+            // loop over all players and do this..
+            for (Player player: players) {
+                relativeLayout.addView(player.getMenu());
+            }
+        }
 
         this.addPlayPause();
 
@@ -219,6 +283,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+        if (this.myThread != null) {
+            this.myThread.end();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (this.myThread != null) {
+            this.myThread.end();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
         if (this.myThread != null) {
             this.myThread.end();
         }

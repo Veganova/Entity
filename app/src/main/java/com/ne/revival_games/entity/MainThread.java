@@ -47,7 +47,7 @@ public class MainThread extends Thread
     {
         running = true;
         while(running) {
-            System.out.println("IN thread LOOP");
+//            System.out.println("IN thread LOOP");
             startTime = System.nanoTime();
             canvas = null;
             update();
@@ -56,14 +56,14 @@ public class MainThread extends Thread
                 try {
                     canvas = screens.get(gamePanel).lockCanvas();
                     // TODO: 7/25/2017 see if this ever breaks
-                    synchronized (this) {//screens.get(gamePanel)) {
+                    synchronized (this) {
 
                         //main thread runs functions of game panel
-//                    System.out.println("Updating!");
-                        if (canvas !=null) {
-                            gamePanel.draw(canvas);
+                        synchronized (screens.get(gamePanel)) {
+                            if (canvas != null) {
+                                gamePanel.draw(canvas);
+                            }
                         }
-
                     }
 
                 } catch (Exception e) {
@@ -135,6 +135,5 @@ public class MainThread extends Thread
 
     public void end() {
         this.setRunning(false);
-
     }
 }
