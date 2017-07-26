@@ -32,6 +32,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Player;
 
+import java.io.Serializable;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 
@@ -40,12 +41,13 @@ public class MainActivity extends AppCompatActivity {
     private Player player1, player2, curPlayer;
     private MyWorld world;
 
-    private MainThread myThread;
+    public MainThread myThread;
     public float SCREEN_WIDTH;
     public float SCREEN_HEIGHT;
     public float MAP_WIDTH;
     public float MAP_HEIGHT;
 
+    protected RelativeLayout relativeLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +65,48 @@ public class MainActivity extends AppCompatActivity {
         SCREEN_WIDTH = displaymetrics.widthPixels;
         SCREEN_HEIGHT = displaymetrics.heightPixels;
 
-        initTwoPlayer();
+        setContentView(R.layout.activity_main_thread);
+        relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+
+        Serializable message = getIntent().getSerializableExtra("GameMode");
+        if (message != null) {
+            // case where the actual game has been started (when it is null we are still in the main menu)i
+            System.out.println("GAME " + message.toString());
+            MainMenu.GameMode choice = (MainMenu.GameMode)message;
+            switch(choice) {
+                case SINGLEPLAYER:
+                    initOnePlayer();
+                    break;
+                case MULTIPLAYER:
+                    initTwoPlayer();
+                    break;
+            }
+        }
+
+
+//        initTwoPlayer();
 //        initOnePlayer();
     }
+
+    protected View menu;
+    protected void addMenu(){
+        menu = new MainMenu(getApplicationContext(), this);
+        relativeLayout.addView(menu);
+    }
+
+    private View playPauseButton;
+    private void addPlayPause(){
+        playPauseButton = new PlayPauseButton(getApplicationContext(), myThread);
+        relativeLayout.addView(playPauseButton);
+    }
+
+    private void removeSavedView(View view) {
+        // If not null, then it must have been set
+        if (view != null) {
+            relativeLayout.removeView(view);
+        }
+    }
+
 
     public void initOnePlayer(){
         this.MAP_HEIGHT = 2400;
@@ -96,13 +137,14 @@ public class MainActivity extends AppCompatActivity {
         display.getSize(size);
         int height = size.y;
 
-        setContentView(R.layout.activity_main_thread);
-        RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
         relativeLayout.addView(myGroup);
 
         // loop over all players and do this..
         relativeLayout.addView(player1.getMenu());
         relativeLayout.addView(player2.getMenu());
+
+//        this.addMenu();
+        this.addPlayPause();
 
         myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
         myThread.setRunning(true);
@@ -141,14 +183,13 @@ public class MainActivity extends AppCompatActivity {
         myGroup.addView(gamePanel1);
 //        setContentView(myGroup);
 
-        setContentView(R.layout.activity_main_thread);
-        RelativeLayout relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
         relativeLayout.addView(myGroup);
 
         // loop over all players and do this..
         relativeLayout.addView(player1.getMenu());
         relativeLayout.addView(player2.getMenu());
-        relativeLayout.addView(new PlayPauseButton(getApplicationContext(), myThread));
+
+        this.addPlayPause();
 
         myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
         myThread.addNewPanel(gamePanel2, gamePanel2.getHolder());

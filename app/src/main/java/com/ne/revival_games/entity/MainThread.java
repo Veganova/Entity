@@ -59,7 +59,9 @@ public class MainThread extends Thread
 
                         //main thread runs functions of game panel
 //                    System.out.println("Updating!");
-                        gamePanel.draw(canvas);
+                        if (canvas !=null) {
+                            gamePanel.draw(canvas);
+                        }
 
                     }
 
@@ -91,6 +93,7 @@ public class MainThread extends Thread
                 frameCount =0;
                 totalTime = 0;
             }
+
         }
 
         System.out.println("WAITING");
@@ -127,5 +130,10 @@ public class MainThread extends Thread
         this.doWait = true;
         this.waitFor = a;
         this.setRunning(false);
+    }
+
+    public void end() {
+        this.setRunning(false);
+
     }
 }

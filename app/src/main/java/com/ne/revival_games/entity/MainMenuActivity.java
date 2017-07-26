@@ -1,0 +1,18 @@
+package com.ne.revival_games.entity;
+
+import android.os.Bundle;
+
+/**
+ * Created by Veganova on 7/26/2017.
+ */
+
+public class MainMenuActivity extends MainActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //set screen to fullscreen
+        this.initOnePlayer();
+        this.addMenu();
+    }
+}
