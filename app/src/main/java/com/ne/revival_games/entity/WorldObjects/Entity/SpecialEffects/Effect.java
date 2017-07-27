@@ -38,7 +38,6 @@ public abstract class Effect {
         world.engineWorld.addJoint(new WeldJoint(zone.body, applier.shape.body, zone.body.getWorldCenter()));
     }
 
-
     public abstract void apply(Entity other);
 
 

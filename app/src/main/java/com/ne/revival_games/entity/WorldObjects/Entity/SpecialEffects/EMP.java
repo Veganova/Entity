@@ -30,6 +30,13 @@ public class EMP extends ExpandingEffect {
         this.duration = duration;
     }
 
+    public EMP(double percentStartSize,
+               double growth_rate, double damage, double max_radius, double explosionPower, Team team,
+               MyWorld world, double duration) {
+        super(percentStartSize, growth_rate, damage, max_radius, explosionPower, team, world, EffectType.SHOCKWAVE);
+        this.duration = duration;
+    }
+
     @Override
     public boolean inRange(Entity other) {
         //TODO: will break for complex shapes / look crappy since we use shape.convex

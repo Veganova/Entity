@@ -19,11 +19,14 @@ public abstract class ExpandingEffect extends Effect {
     protected double growth_rate;
     protected double max_radius;
     protected double damage;
+    protected boolean active = false;
     protected double explosionPower = 0;
+    protected double startTime;
 
     public ExpandingEffect(Entity applier, Vector2 location, double percentStartSize, double growth_rate, double damage,
                            double max_radius, double explosionPower, Team team, MyWorld world, EffectType type){
         basicInit(applier, zone, type, world);
+        this.active = true;
         this.damage = damage;
         this.max_radius = max_radius;
         this.percent_size = percentStartSize;
@@ -32,8 +35,29 @@ public abstract class ExpandingEffect extends Effect {
         this.zone = new ObjCircle(max_radius);
         this.zone.getBuilder(true, world).setXY(location.x, location.y).init();
         this.damage = damage;
-//        this.addEffect(new ExplosiveEffect(this, this.shape, explosionPower, world));
         world.objectDatabase.put(this.zone.body, this.applier);
+        this.startTime = System.currentTimeMillis();
+    }
+
+    public ExpandingEffect(double percentStartSize, double growth_rate, double damage,
+                           double max_radius, double explosionPower, Team team, MyWorld world, EffectType type){
+        basicInit(null, zone, type, world);
+        this.active = false;
+        this.damage = damage;
+        this.max_radius = max_radius;
+        this.percent_size = percentStartSize;
+        this.growth_rate = growth_rate;
+        this.explosionPower = explosionPower;
+        this.zone = new ObjCircle(max_radius);
+    }
+
+    public void addToWorld(Vector2 location, Entity applier, MyWorld world) {
+        this.active = true;
+        this.applier = applier;
+        this.zone.getBuilder(true, world).setXY(location.x, location.y).init();
+        this.applier.zoneToEffect.put(this.zone.body, this);
+        world.objectDatabase.put(this.zone.body, this.applier);
+        this.startTime = System.currentTimeMillis();
     }
 
     @Override
@@ -43,7 +67,6 @@ public abstract class ExpandingEffect extends Effect {
         }
 
         if(inRange(other)){
-            System.out.println("APPLYING!");
            applyEffect(other);
         }
 
@@ -54,12 +77,20 @@ public abstract class ExpandingEffect extends Effect {
 
 
     public void draw(Canvas canvas) {
+        if(!active){
+            return;
+        }
         ((ObjCircle) this.zone).draw(canvas, this.percent_size*max_radius);
     }
 
     @Override
     public void update(MyWorld world){
+        if(!active){
+            return;
+        }
+
         this.percent_size += growth_rate;
+
         if(percent_size >= 1) {
             this.applier.removeEffect(this);
         }

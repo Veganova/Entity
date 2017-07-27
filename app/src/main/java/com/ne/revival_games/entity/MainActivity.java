@@ -1,45 +1,32 @@
 package com.ne.revival_games.entity;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Player;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
+import com.ne.revival_games.entity.WorldObjects.Players.PlayerDefense;
 
 import java.io.Serializable;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Player player1, player2, curPlayer;
+    private PlayerDefense player1, player2, curPlayer;
     private MyWorld world;
 
     public MainThread myThread;
@@ -159,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             panel.setLayoutParams(parms);
             myGroup.addView(panel);
 
-            Player player = new Player(i + 1, curTeam, world, panel, this, true);
+            PlayerDefense player = new PlayerDefense(i + 1, curTeam, world, panel, this, true);
             curTeam = curTeam.getOpposite();
             players.add(player);
 
@@ -191,8 +178,8 @@ public class MainActivity extends AppCompatActivity {
 
         GamePanel gamePanel1 = new GamePanel(this, world);
 
-        player1 = new Player(1, Team.DEFENCE, world, gamePanel1, this, true);
-        player2 = new Player(2, Team.OFFENSE, world, gamePanel1, this, false);
+        player1 = new PlayerDefense(1, Team.DEFENCE, world, gamePanel1, this, true);
+        player2 = new PlayerDefense(2, Team.OFFENSE, world, gamePanel1, this, false);
 
         curPlayer = player1;
         ArrayList<Player> players = new ArrayList<>();
@@ -239,8 +226,8 @@ public class MainActivity extends AppCompatActivity {
         GamePanel gamePanel1 = new GamePanel(this, world);
         GamePanel gamePanel2 = new GamePanel(this, world);
 
-        Player player1 = new Player(1, Team.DEFENCE, world, gamePanel1, this, true);
-        Player player2 = new Player(2, Team.OFFENSE, world, gamePanel2, this, true);
+        Player player1 = new PlayerDefense(1, Team.DEFENCE, world, gamePanel1, this, true);
+        Player player2 = new PlayerDefense(2, Team.OFFENSE, world, gamePanel2, this, true);
 
         Player curPlayer = player1;
         ArrayList<Player> players = new ArrayList<>();

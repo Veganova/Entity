@@ -1,13 +1,9 @@
 package com.ne.revival_games.entity;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -17,8 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
-import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Player;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import java.util.Arrays;
 import java.util.List;

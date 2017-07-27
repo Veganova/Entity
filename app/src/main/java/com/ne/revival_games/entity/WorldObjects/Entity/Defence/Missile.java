@@ -34,13 +34,13 @@ public class Missile extends Projectile {
             return false;
         }
 
-        if(contact.team.opposite(this.team)){
+        if(contact.team.opposite(this.team) || this.dead){
             this.health = 0;
             this.invisible = true;
             return false;
         }
 
-        return true;
+        return regular;
     }
 
     @Override
@@ -48,6 +48,12 @@ public class Missile extends Projectile {
                                            Vector2 location, double direction,
                                            double speed, MyWorld world, Team team) {
         return new Missile(location.x, location.y, direction, speed, world, team, true);
+    }
+
+    @Override
+    public void applyDamage(double damage){
+        this.dead = true;
+        super.applyDamage(damage);
     }
 
 }

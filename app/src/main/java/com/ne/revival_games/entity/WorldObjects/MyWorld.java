@@ -1,41 +1,29 @@
 package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.CustomEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.MassLazer;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
+import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ExplosiveMissile;
+import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ShockwaveCanister;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.*;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.CollisionListener;
-import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactListener;
-import org.dyn4j.dynamics.joint.Joint;
-import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -130,10 +118,10 @@ public class MyWorld {
 //        objects.add(new ObjCircle(0, 0, 50, 0));
 //        testlocation(-500, 500, -500, 500, 10, tri);
 
-        ObjCircle hi = new ObjCircle(20);
-        hi.getBuilder(true, this).setXY(100, 100).setRestitution(0).init();
-        CustomEntity wow = new CustomEntity(hi, 0, 100, true, Team.NEUTRAL, this);
-        wow.addEffect( new EMP(wow, new Vector2(100,100), 0.1, 0.01, 10, 500, 200, wow.team, this, 6000));
+//        ObjCircle hi = new ObjCircle(20);
+//        hi.getBuilder(true, this).setXY(100, 100).setRestitution(0).init();
+//        CustomEntity wow = new CustomEntity(hi, 0, 100, true, Team.NEUTRAL, this);
+//        wow.addEffect( new EMP(wow, new Vector2(100,100), 0.1, 0.01, 10, 500, 200, wow.team, this, 6000));
 
         //MAKE THE STADIUM - TEMPORARY SO THAT THINGS DOING GO FLYING OUT
 //        ObjRectangle up = new ObjRectangle(800, 20);
@@ -152,6 +140,9 @@ public class MyWorld {
 //        right.getBuilder(true, this).setXY(400, 0).setMassType(MassType.INFINITE).setRestitution(0).init();
 //        this.right = new CustomEntity(right, 0, 100, true, Team.NEUTRAL, this);
 
+//        new ShockwaveCanister(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
+
+        new ExplosiveMissile(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
         Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
         Team.DEFENCE.add(turret);
 
@@ -191,6 +182,7 @@ public class MyWorld {
         ArrayList<Entity> updater = new ArrayList<>(objectDatabase.values());
 
         for (int x = 0; x < updater.size(); x++){
+            if(!updater.get(x).ghost)
             updater.get(x).update(this);
         }
 
@@ -198,6 +190,8 @@ public class MyWorld {
             Body body = bodiestodelete.get(i);
             Entity toDelete = objectDatabase.get(body);
             if(toDelete != null){
+                if(toDelete.team != null)
+                    toDelete.team.getTeamObjects().remove(toDelete);
                 toDelete.onDeath(this);
                 objectDatabase.remove(body);
             }

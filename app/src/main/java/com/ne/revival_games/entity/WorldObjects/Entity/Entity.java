@@ -34,6 +34,7 @@ public class Entity implements Effector {
     public double isDisabledUntil = 0;
     public boolean ghost = false;
     public boolean untargetable = false;
+    public boolean dead = false;
 
     public double frictionCoefficent = 1;
     public HashMap<EffectType, Effect> effects;
@@ -59,6 +60,11 @@ public class Entity implements Effector {
      * @return true if the update occurred successfully, false if entity is disabled
      */
     public boolean update(MyWorld world) {
+        if(this.dead){
+            world.bodiestodelete.add(this.shape.body);
+            return true;
+        }
+
         for (Effect effect : effects.values()) {
             effect.update(world);
         }
@@ -94,7 +100,7 @@ public class Entity implements Effector {
     }
 
     public void setVelocity(double speed) {
-            this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
+        this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
                 speed * Math.sin(Math.toRadians(this.direction)));
     }
 
@@ -103,7 +109,7 @@ public class Entity implements Effector {
         result += "Team: " + this.team + "\n";
         result += "Type: " + this.getClass() + "\n";
         result += "Health: " + this.health + "\n";
-       // result += "Location: " + this.shape.body.getWorldCenter().toString() + "\n";
+        // result += "Location: " + this.shape.body.getWorldCenter().toString() + "\n";
         result += "Direction: " + this.direction + "\n";
         result += "----------------------------\n";
         return result;
@@ -118,7 +124,7 @@ public class Entity implements Effector {
     }
 
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        if (this.untargetable) {
+        if (this.untargetable || (this.isCollisionAuthority = this.dead)) {
             return false;
         }
 
@@ -131,15 +137,11 @@ public class Entity implements Effector {
             return false;
         }
 
-        if(contact.team.opposite(this.team) && !this.invulnerable) {
-            this.health -= damage;
-            if (this.health <= 0) {
-                this.invisible = true;
-                return false;
-            }
+        if(contact.team.opposite(this.team)) {
+            applyDamage(damage);
         }
 
-        return true;
+        return this.health <= 0;
     }
 
     public void addToTeam(Team team) {
@@ -206,9 +208,11 @@ public class Entity implements Effector {
     @Override
     public void removeEffect(Effect effect) {
         Effect thisEffect = this.zoneToEffect.remove(effect.zone.body);
+
         if(thisEffect != null) {
             thisEffect.onRemove();
         }
+
         this.effects.remove(effect.effectType);
     }
 
@@ -224,4 +228,12 @@ public class Entity implements Effector {
         }
     }
 
+    public void applyDamage(double damage) {
+        if(!this.ghost && !this.untargetable && !this.invulnerable)
+            this.health -= damage;
+        if (this.health <= 0) {
+            this.invisible = true;
+            this.dead = true;
+        }
+    }
 }

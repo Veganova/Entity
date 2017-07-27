@@ -6,15 +6,12 @@ package com.ne.revival_games.entity;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnDragListener;
 
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Player;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import org.dyn4j.geometry.Vector2;
 

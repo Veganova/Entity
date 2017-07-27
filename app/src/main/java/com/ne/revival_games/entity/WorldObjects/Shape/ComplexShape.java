@@ -36,6 +36,7 @@ public class ComplexShape extends AShape {
         for(int z=0; z<fixtures.size(); z++) {
             fixtures.get(z).body = this.body;
             body.addFixture(fixtures.get(z).getShape());
+            myConvexes.add(fixtures.get(z).convex);
         }
 
         for(BodyFixture fixture: this.body.getFixtures()){

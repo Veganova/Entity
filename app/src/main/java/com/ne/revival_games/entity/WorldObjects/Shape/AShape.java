@@ -12,8 +12,10 @@ import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Veganova on 6/7/2017.
@@ -23,6 +25,7 @@ public abstract class AShape implements Shape {
     private static final float STROKE_WIDTH = 0.1f;
     public static final double DEFAULT_DENSITY = 0.5D;
     public Body body;
+    public List<Convex> myConvexes = new ArrayList<>();
 
     /**
     * RADIANS
@@ -70,6 +73,7 @@ public abstract class AShape implements Shape {
         private InitBuilder(boolean body, MyWorld world, Convex shape) {
             this.isBody = body;
             this.world = world;
+            myConvexes.add(convex);
             convex = shape;
         }
 
@@ -134,6 +138,7 @@ public abstract class AShape implements Shape {
 
         public InitBuilder setConvex(Convex shape) {
             convex = shape;
+
             if (isBody) {
                 body = new Body();
                 translateFixture(-1 * convex.getCenter().x, -1 * convex.getCenter().y);

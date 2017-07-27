@@ -18,6 +18,7 @@ import org.dyn4j.geometry.Vector2;
  */
 
 public class ExplosiveEffect extends ExpandingEffect {
+    public boolean primed = false;
 
     /**
      *
@@ -35,7 +36,16 @@ public class ExplosiveEffect extends ExpandingEffect {
     public ExplosiveEffect(Entity applier, Vector2 location, double percentStartSize,
                            double growth_rate, double damage, double max_radius, double explosionPower, Team team, MyWorld world) {
         super(applier, location, percentStartSize, growth_rate, damage, max_radius, explosionPower, team, world, EffectType.EXPLOSIVE);
+        this.active = true;
     }
+
+    public ExplosiveEffect(double percentStartSize,
+                           double growth_rate, double damage, double max_radius, double explosionPower, Team team,
+                           MyWorld world) {
+        super(percentStartSize, growth_rate, damage, max_radius, explosionPower, team, world, EffectType.EXPLOSIVE);
+        this.active = false;
+    }
+
 
 
     //this needs to corrected somehow
@@ -44,14 +54,19 @@ public class ExplosiveEffect extends ExpandingEffect {
         //is this optimizing or not?
         double current_radius = max_radius/MyWorld.SCALE*percent_size;
             Gjk detector = new Gjk();
-            return detector.detect(other.shape.convex, other.shape.body.getTransform(),
-                    new Circle(current_radius), this.zone.body.getTransform());
+            for(Convex convex : other.shape.myConvexes){
+                if(detector.detect(convex, other.shape.body.getTransform(),
+                        new Circle(current_radius), this.zone.body.getTransform())){
+                    return true;
+                }
+            }
+
+            return false;
+
     }
 
     @Override
     public void applyEffect(Entity other){
-        other.onCollision(other, other.shape.body, damage);
-
         double distance =
                 Util.getDistance(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter());
 
@@ -60,9 +75,11 @@ public class ExplosiveEffect extends ExpandingEffect {
 
         double magnitude = explosionPower / (distance) / other.shape.body.getMass().getMass();
 
+        other.applyDamage(this.damage);
 
         other.shape.body.applyForce(new Vector2(-1*magnitude*Math.cos(angle),
                 -1*magnitude*Math.max(magnitude, 0) * Math.sin(angle)));
+
     }
 
 
