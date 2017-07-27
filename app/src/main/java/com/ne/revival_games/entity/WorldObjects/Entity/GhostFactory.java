@@ -7,6 +7,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Comet;
+import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ExplosiveMissile;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.Vector2;
@@ -56,9 +57,11 @@ public class GhostFactory {
                 entity =  (new Turret(new Vector2(x, y), angle, world, team));
                 break;
             case COMET:
-                entity = new Comet(x, y, angle, 0, world, team);
+//                entity = new Comet(x, y, angle, 0, world, team);
+                entity = new ExplosiveMissile(new Vector2(x,y), 0, 0, 0, team, world );
                 break;
         }
+
         GhostEntity ghost = new GhostEntity(entity, world);
 
         if (entity != null) {

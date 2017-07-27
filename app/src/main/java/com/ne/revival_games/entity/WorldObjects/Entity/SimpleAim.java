@@ -97,8 +97,6 @@ public class SimpleAim implements AimLogic {
             return;
         }
             mainBarrel.shape.body.setAngularVelocity(turnCounterClock *10);
-        // System.out.println("ANGLE - " + mainBarrel.shape.body.getTransform().getRotation());
-        //new Turret(new Vector2(-200, 100), 30, this);
 
     }
 

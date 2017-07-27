@@ -32,7 +32,7 @@ public class Turret extends Entity implements Aimable {
     public static int MASS = 25;
     private static double reload = 3000;
     private double lastfired = 0;
-    private double range = 500;
+    private double range = 800;
 
     private MyWorld world;
     public List<Barrel> barrels = new ArrayList<>();

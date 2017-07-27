@@ -30,7 +30,8 @@ class CollisionController extends CollisionAdapter {
         if (ent1.ghost && !ent2.isEffect(body2) || ent2.ghost && !ent1.isEffect(body1)) {
             return true;
         }
-        else if(ent1.ghost || ent2.ghost){
+
+        else if(ent1.ghost || ent2.ghost || ent1.dead || ent2.dead){
             return false;
         }
 

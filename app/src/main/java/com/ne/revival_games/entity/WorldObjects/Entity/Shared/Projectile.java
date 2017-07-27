@@ -55,6 +55,7 @@ public abstract class Projectile extends Entity {
         if (contact.untargetable) {
             return false;
         }
+
         return super.onCollision(contact, componentHit, damage);
     }
 

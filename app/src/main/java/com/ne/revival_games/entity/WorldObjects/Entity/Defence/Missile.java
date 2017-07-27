@@ -35,12 +35,11 @@ public class Missile extends Projectile {
         }
 
         if(contact.team.opposite(this.team) || this.dead){
-            this.health = 0;
-            this.invisible = true;
+            this.applyDamage(damage);
             return false;
         }
 
-        return regular;
+        return true;
     }
 
     @Override
@@ -53,6 +52,8 @@ public class Missile extends Projectile {
     @Override
     public void applyDamage(double damage){
         this.dead = true;
+        this.invisible = true;
+        this.health = 0;
         super.applyDamage(damage);
     }
 

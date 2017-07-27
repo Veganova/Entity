@@ -82,6 +82,7 @@ public class Entity implements Effector {
 
 
     public void draw(Canvas canvas) {
+        if(!this.invisible){
         this.shape.draw(canvas);
 
         for(Effect effect : effects.values()){
@@ -90,6 +91,7 @@ public class Entity implements Effector {
 
         if (this.bar != null) {
             this.bar.draw(canvas);
+        }
         }
     }
 
@@ -124,7 +126,8 @@ public class Entity implements Effector {
     }
 
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        if (this.untargetable || (this.isCollisionAuthority = this.dead)) {
+        if (this.untargetable || this.dead) {
+            this.isCollisionAuthority = true;
             return false;
         }
 
@@ -229,11 +232,12 @@ public class Entity implements Effector {
     }
 
     public void applyDamage(double damage) {
-        if(!this.ghost && !this.untargetable && !this.invulnerable)
+        if(!this.ghost && !this.untargetable && !this.invulnerable){
             this.health -= damage;
         if (this.health <= 0) {
             this.invisible = true;
             this.dead = true;
+        }
         }
     }
 }

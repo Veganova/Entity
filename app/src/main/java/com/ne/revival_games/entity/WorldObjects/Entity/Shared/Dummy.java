@@ -32,7 +32,13 @@ public class Dummy extends ConditionalDestructible {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit,  double damage){
-        super.onCollision(contact, componentHit, 0);
+//        super.onCollision(contact, componentHit, 0);
+
+        Effect activeEffect = zoneToEffect.get(componentHit);
+        if (activeEffect != null) {
+            activeEffect.apply(contact);
+        }
+
         return false;
     }
 

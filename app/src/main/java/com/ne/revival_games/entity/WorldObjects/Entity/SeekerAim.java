@@ -7,6 +7,7 @@ import org.dyn4j.geometry.Vector2;
 
 import java.util.List;
 
+
 /**
  * Created by vishn on 7/26/2017.
  */
@@ -15,10 +16,12 @@ public class SeekerAim implements AimLogic {
     private Entity enemy;
     private Aimable mainBody;
     private double range;
+    public boolean orientable = false;
 
-    public SeekerAim(Aimable mainBody, double range) {
+    public SeekerAim(Aimable mainBody, double range, boolean orientable) {
         this.mainBody = mainBody;
         this.range = range/ MyWorld.SCALE;
+        this.orientable = orientable;
     }
 
     private Team getTeam() {
@@ -26,7 +29,7 @@ public class SeekerAim implements AimLogic {
     }
 
     @Override
-    public void aim(Aimable mainBarrel) {
+    public void aim(Aimable missile) {
         if (enemy == null || enemy.health <= 0 || enemy.team == getTeam()) {
             enemy = null;
         }
@@ -50,7 +53,34 @@ public class SeekerAim implements AimLogic {
         double angleTo = Math.atan2(targetPoint.y - centerofRotation.y,
                 targetPoint.x - centerofRotation.x);
 
-        mainBody.fire(angleTo);
+        if(!orientable){
+            mainBody.fire(angleTo);
+        }
+        else {
+            Entity thisMissile = ((Entity) missile);
+            double angle = (Math.PI * 2 + thisMissile.shape.getOrientation()
+                    + thisMissile.shape.body.getTransform().getRotation()) % (Math.PI * 2);
+
+            double angleDifference = (Math.PI * 2 + angle - angleTo) % (Math.PI * 2);
+            double counterclockDist = (Math.PI * 2 + angleTo - angle) % (Math.PI * 2);
+            double turnCounterClock = -1;               //false
+
+
+            if (counterclockDist < angleDifference) {
+                angleDifference = counterclockDist;
+                turnCounterClock = 1;
+            }
+
+            mainBody.fire(turnCounterClock*angleDifference/4);
+        }
+
+    }
+
+    private double incrementFunction(double angleDifference){
+        if(Util.nearValue(angleDifference, 0, 0.01)){
+            return 0;
+        }
+        return  (0.5 / Math.pow(Math.E, Math.PI)) * Math.pow(Math.E, (angleDifference));
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.SeekerAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
-import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
@@ -27,7 +26,7 @@ public class Comet extends Projectile implements Aimable {
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
         super(x, y, RADIUS, direction, speed, HEALTH, world, team, true);
         this.team = team;
-        this.logic = new SeekerAim(this, range);
+        this.logic = new SeekerAim(this, range, false);
     }
 
     @Override

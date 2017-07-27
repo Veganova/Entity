@@ -219,7 +219,6 @@ public class MyWorld {
 //        canvas.drawCircle((float) 0.0, (float) -8.0, (float) 1.0, paint2);
 
         for (Entity entity : objectDatabase.values()) {
-            if(!entity.invisible)
                 entity.draw(canvas);
         }
         // up.draw(canvas);
