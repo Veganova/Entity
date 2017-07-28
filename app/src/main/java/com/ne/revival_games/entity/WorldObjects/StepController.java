@@ -24,9 +24,8 @@ public class StepController extends StepAdapter {
         // (things that are shot) before the database loop
         ArrayList<GhostEntity> ghosts = new ArrayList<>(earth.ghosts.values());
 
-        //can't iterate through the list above because it hits null value ghosts?!
-        for (GhostEntity ghost : earth.ghosts.values()) {
-            ghost.isColliding();
+        for (int x = 0; x < ghosts.size(); x++) {
+            ghosts.get(x).isColliding();
         }
 
         for (Player player : this.earth.players) {
