@@ -63,7 +63,7 @@ public class Nexus extends Entity {
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
         this.team = team;
-        gravEffect = new GravityEffect(this, 1000, 20, new Vector2(0,0), world);
+        gravEffect = new GravityEffect(this, 1000, 30, new Vector2(0,0), world);
         this.addEffect(gravEffect);
 
         this.bar = new ActiveBar(this);

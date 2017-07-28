@@ -30,11 +30,11 @@ public class Missile extends Projectile {
     public boolean onCollision(Entity contact, Body componentHit, double damage){
         boolean regular = super.onCollision(contact, componentHit, damage);
 
-        if (!regular) {
+        if (!regular || this.dead) {
             return false;
         }
 
-        if(contact.team.opposite(this.team) || this.dead){
+        if(contact.team.opposite(this.team)){
             this.applyDamage(damage);
             return false;
         }

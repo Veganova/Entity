@@ -118,7 +118,7 @@ public class Turret extends Entity implements Aimable {
 
     @Override
     public boolean update(MyWorld world){
-        if(super.update(world)){
+        if(super.update(world) && this.logic != null){
             this.logic.aim(mainBarrel);
             return true;
         }

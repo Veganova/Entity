@@ -156,7 +156,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         if (this.playerNumber == 1) {
             return new Menu(context, this, 0);
         } else if (this.playerNumber == 2) {
-            return new Menu(context, this, height - 300);
+            return new Menu(context, this, height - 400);
         } else {
             return new Menu(context, this, 0);
         }

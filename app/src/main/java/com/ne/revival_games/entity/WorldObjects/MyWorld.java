@@ -161,7 +161,6 @@ public class MyWorld {
      */
     public void objectUpdate() {
         // TODO: 7/7/2017 this check can probably be done when the user clicks the "place" command
-
         // get the current time
         long time = System.nanoTime();
         // get the elapsed time from the last iteration
@@ -197,6 +196,12 @@ public class MyWorld {
         for (int x = 0; x < drawer.size(); x++){
                 drawer.get(x).draw(canvas);
         }
+        // up.draw(canvas);
+//        tri.draw(canvas);
+//        circ.draw(canvas);
+//
+//        if (ghost.canPlace())
+//            ghost.entity.shape.setPaint(Paint.Style.STROKE);
 
     }
 

@@ -127,7 +127,6 @@ public class Entity implements Effector {
 
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
         if (this.untargetable || this.dead) {
-            this.isCollisionAuthority = true;
             return false;
         }
 
@@ -144,7 +143,7 @@ public class Entity implements Effector {
             applyDamage(damage);
         }
 
-        return this.health <= 0;
+        return !this.dead;
     }
 
     public void addToTeam(Team team) {

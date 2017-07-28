@@ -64,7 +64,6 @@ class CollisionController extends CollisionAdapter {
         }
         else {
             if (ent1.health > 0 && ent2.health > 0) {
-
                 //if either entity wants to continue the contact
                 continueContact = ent1.onCollision(ent2, body1, damage2);
                 continueContact = ent2.onCollision(ent1, body2, damage1) || continueContact;
@@ -82,6 +81,5 @@ class CollisionController extends CollisionAdapter {
         }
 
         return continueContact;
-        //ent1.health > 0 && ent2.health > 0
     }
 }
