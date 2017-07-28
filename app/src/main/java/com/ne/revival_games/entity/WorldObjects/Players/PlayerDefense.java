@@ -69,7 +69,7 @@ public class PlayerDefense extends Player {
 
     @Override
     public void update() {
-        if (holdingGhost) {
+        if (holdingGhost && ghost.entity != null) {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
 
@@ -130,19 +130,19 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        float maxFlingVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
-        velocityX = velocityX / maxFlingVelocity;
-        velocityY = velocityY / maxFlingVelocity;
-
-        if (holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
-            holdingGhost = false;
-            this.ghost.removeGhost();
-            this.ghost = null;
-        } else if (!holdingGhost) {
-            if (velocityX > 0.3 || velocityY > 0.3) {
-
-            }
-        }
+//        float maxFlingVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
+//        velocityX = velocityX / maxFlingVelocity;
+//        velocityY = velocityY / maxFlingVelocity;
+//
+//        if (holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
+//            holdingGhost = false;
+//            this.ghost.removeGhost();
+//            this.ghost = null;
+//        } else if (!holdingGhost) {
+//            if (velocityX > 0.3 || velocityY > 0.3) {
+//
+//            }
+//        }
         return false;
     }
 

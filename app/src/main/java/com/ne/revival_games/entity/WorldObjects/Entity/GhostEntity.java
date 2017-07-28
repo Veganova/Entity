@@ -92,6 +92,7 @@ public class GhostEntity {
         if (this.entity == null) {
             return;
         }
+
         for (Body body : world.engineWorld.getBodies()) {
             if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {
                 if (this.entity.shape.body.isInContact(body)) {
@@ -105,6 +106,7 @@ public class GhostEntity {
                 }
             }
         }
+
         this.placeable = true;
         entity.setColor(PLACEABLE, world);
         entity.setPaint(Paint.Style.STROKE, world);

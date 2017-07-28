@@ -24,8 +24,9 @@ public class StepController extends StepAdapter {
         // (things that are shot) before the database loop
         ArrayList<GhostEntity> ghosts = new ArrayList<>(earth.ghosts.values());
 
-        for (int x = 0; x < ghosts.size(); x++) {
-            ghosts.get(x).isColliding();
+        //can't iterate through the list above because it hits null value ghosts?!
+        for (GhostEntity ghost : earth.ghosts.values()) {
+            ghost.isColliding();
         }
 
         for (Player player : this.earth.players) {
@@ -38,7 +39,14 @@ public class StepController extends StepAdapter {
             if(!updater.get(x).ghost)
                 updater.get(x).update(earth);
         }
+    }
 
+    public void updatePerformed(Step step, World world) {
+
+    }
+
+    @Override
+    public void end(Step step, World world) {
         for (int i = 0; i < earth.bodiestodelete.size(); i += 1) {
             Body body = earth.bodiestodelete.get(i);
             Entity toDelete = earth.objectDatabase.get(body);
@@ -51,15 +59,6 @@ public class StepController extends StepAdapter {
             earth.engineWorld.removeBody(body);
             earth.bodiestodelete.remove(body);
         }
-    }
-
-    public void updatePerformed(Step step, World world) {
-
-    }
-
-    @Override
-    public void end(Step step, World world) {
-
     }
 
 
