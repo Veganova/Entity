@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ExplosiveMissile extends ConditionalDestructible implements Aimable {
     public static int HEALTH = 20;
-    private double lifeTime = 100000;
+    private double lifeTime = 8000;
     private boolean collided = false;
     private AimLogic logic;
     private boolean primed = false;

@@ -18,6 +18,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.StepAdapter;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.geometry.Vector2;
@@ -36,7 +37,7 @@ public class MyWorld {
     public HashMap<Body, Entity> objectDatabase;
     public ArrayList<Body> bodiestodelete;
     public ArrayList<double []> coords;
-    private List<Player> players;
+    protected List<Player> players;
     public HashMap<Entity, GhostEntity> ghosts;
 
     /**static friction */
@@ -95,8 +96,10 @@ public class MyWorld {
         this.engineWorld.setGravity(new Vector2(0, 0));
         CollisionListener skip = new CollisionController(this);
         ContactListener contact = new ContactController(this);
+        StepController step = new StepController(this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
+        this.engineWorld.addListener(step);
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
 //        Settings settings = new Settings();
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
@@ -158,9 +161,6 @@ public class MyWorld {
      */
     public void objectUpdate() {
         // TODO: 7/7/2017 this check can probably be done when the user clicks the "place" command
-        for (GhostEntity ghost:this.ghosts.values()) {
-            ghost.isColliding();
-        }
 
         // get the current time
         long time = System.nanoTime();
@@ -171,33 +171,6 @@ public class MyWorld {
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the engineWorld with the elapsed time
-
-        // deals with concurrent modification error by creating all the projectile objects
-        // (things that are shot) before the database loop
-        for (Player player : this.players) {
-            player.update();
-        }
-
-
-        ArrayList<Entity> updater = new ArrayList<>(objectDatabase.values());
-
-        for (int x = 0; x < updater.size(); x++){
-            if(!updater.get(x).ghost)
-            updater.get(x).update(this);
-        }
-
-        for (int i = 0; i < bodiestodelete.size(); i += 1) {
-            Body body = bodiestodelete.get(i);
-            Entity toDelete = objectDatabase.get(body);
-            if(toDelete != null){
-                if(toDelete.team != null)
-                    toDelete.team.getTeamObjects().remove(toDelete);
-                toDelete.onDeath(this);
-                objectDatabase.remove(body);
-            }
-            engineWorld.removeBody(body);
-            bodiestodelete.remove(body);
-        }
 
         this.engineWorld.update(elapsedTime);
     }
@@ -218,15 +191,12 @@ public class MyWorld {
 //        canvas.drawCircle((float) 0.0, (float) 8.0, (float) 1.0, paint2);
 //        canvas.drawCircle((float) 0.0, (float) -8.0, (float) 1.0, paint2);
 
-        for (Entity entity : objectDatabase.values()) {
-                entity.draw(canvas);
+
+        ArrayList<Entity> drawer = new ArrayList<>(objectDatabase.values());
+
+        for (int x = 0; x < drawer.size(); x++){
+                drawer.get(x).draw(canvas);
         }
-        // up.draw(canvas);
-//        tri.draw(canvas);
-//        circ.draw(canvas);
-//
-//        if (ghost.canPlace())
-//            ghost.entity.shape.setPaint(Paint.Style.STROKE);
 
     }
 
