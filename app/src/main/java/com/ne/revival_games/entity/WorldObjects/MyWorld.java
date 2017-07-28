@@ -35,6 +35,7 @@ import java.util.List;
 public class MyWorld {
 
     public HashMap<Body, Entity> objectDatabase;
+//    public HashMap<GhostEntity, Team> entitiestoAdd = new HashMap<>();
     public ArrayList<Body> bodiestodelete;
     public ArrayList<double []> coords;
     protected List<Player> players;

@@ -35,6 +35,7 @@ import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,6 +62,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     protected GestureDetectorCompat mDetector;
     protected ScaleGestureDetector scaleGestureDetector;
     protected GhostEntity ghost;
+    public List<GhostEntity> entitiestoAdd = new ArrayList<>();
     protected boolean oldScroll = false;
     protected Vector2 initialTranslate = new Vector2(0, 0);
 

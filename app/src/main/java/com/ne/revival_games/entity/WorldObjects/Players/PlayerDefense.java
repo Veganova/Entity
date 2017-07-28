@@ -69,6 +69,11 @@ public class PlayerDefense extends Player {
 
     @Override
     public void update() {
+        for(int x = 0; x < entitiestoAdd.size(); x++) {
+            entitiestoAdd.get(x).place().addToTeam(this.team);
+        }
+        entitiestoAdd.clear();
+
         if (holdingGhost && ghost.entity != null) {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
@@ -114,7 +119,8 @@ public class PlayerDefense extends Player {
     public boolean onSingleTapUp(MotionEvent e) {
         if (lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
                 && holdingGhost && this.ghost.canPlace()) {
-            ghost.place().addToTeam(team);
+            entitiestoAdd.add(ghost);
+            this.ghost = null;
             holdingGhost = false;
         } else if (!holdingGhost) {
             Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
