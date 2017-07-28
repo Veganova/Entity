@@ -34,6 +34,7 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     public CameraController camera;
     protected MyWorld world;
     protected Context context;
+    protected JSONObject addToWorld = null;
 
     int playerNumber;
     Team team;
@@ -62,7 +64,6 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     protected GestureDetectorCompat mDetector;
     protected ScaleGestureDetector scaleGestureDetector;
     protected GhostEntity ghost;
-    public List<GhostEntity> entitiestoAdd = new ArrayList<>();
     protected boolean oldScroll = false;
     protected Vector2 initialTranslate = new Vector2(0, 0);
 
@@ -118,10 +119,22 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             System.out.println("ALREADY HOLDING A GHOST!");
         } else {
             //center of the screen
-            this.ghost = GhostFactory.produce(type, -1 * camera.translateXY.x * MyWorld.SCALE,
-                    -1 * camera.translateXY.y * MyWorld.SCALE, 0, world, team);
-            this.pullTowards = this.ghost.entity.shape.body.getWorldCenter();
             this.holdingGhost = true;
+//            this.ghost = GhostFactory.produce(type, -1 * camera.translateXY.x * MyWorld.SCALE,
+//                    -1 * camera.translateXY.y * MyWorld.SCALE, 0, world, team);
+            addToWorld = new JSONObject();
+            try{
+                addToWorld.put("x", -1*camera.translateXY.x * MyWorld.SCALE);
+                addToWorld.put("y", -1*camera.translateXY.y * MyWorld.SCALE);
+                addToWorld.put("type", type.toString());
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            if(holdingGhost && this.ghost != null){
+                this.pullTowards = this.ghost.entity.shape.body.getWorldCenter();
+            }
             this.previousAngle = 0;
         }
     }

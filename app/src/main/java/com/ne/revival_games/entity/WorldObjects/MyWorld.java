@@ -22,6 +22,7 @@ import org.dyn4j.dynamics.StepAdapter;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.geometry.Vector2;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class MyWorld {
     public ArrayList<Body> bodiestodelete;
     public ArrayList<double []> coords;
     protected List<Player> players;
+    public List<JSONObject> addtoWorld;
     public HashMap<Entity, GhostEntity> ghosts;
 
     /**static friction */

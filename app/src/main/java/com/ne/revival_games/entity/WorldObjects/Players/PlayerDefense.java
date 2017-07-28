@@ -2,17 +2,19 @@ package com.ne.revival_games.entity.WorldObjects.Players;
 
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+import org.json.JSONObject;
 
 /**
  * Created by vishn on 7/27/2017.
@@ -44,7 +46,7 @@ public class PlayerDefense extends Player {
         }
 
         if (ev.getPointerCount() > 1) {
-            if (holdingGhost) {
+            if (holdingGhost && ghost.entity != null) {
                 //we need this line unfortunately for turret TODO: change it back on place!
                 this.ghost.entity.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
                 //rotate
@@ -69,15 +71,27 @@ public class PlayerDefense extends Player {
 
     @Override
     public void update() {
-        for(int x = 0; x < entitiestoAdd.size(); x++) {
-            entitiestoAdd.get(x).place().addToTeam(this.team);
-        }
-        entitiestoAdd.clear();
 
-        if (holdingGhost && ghost.entity != null) {
+            if(this.addToWorld != null)
+            try{
+                pullTowards = new Vector2(addToWorld.getDouble("x")/MyWorld.SCALE, addToWorld.getDouble("y")/MyWorld.SCALE);
+                this.ghost = GhostFactory.produce(
+                        Entities.valueOf(addToWorld.getString("type")),
+                        addToWorld.getDouble("x"),
+                        addToWorld.getDouble("y"),
+                        0,
+                        world,
+                        team
+                        );
+                this.addToWorld = null;
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+        if (holdingGhost && ghost != null) {
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
-
             ghost.setLinearVelocity(10 * delta.x, 10 * delta.y);
         }
     }
@@ -117,9 +131,9 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        if (lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
+        if (this.ghost != null && lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
                 && holdingGhost && this.ghost.canPlace()) {
-            entitiestoAdd.add(ghost);
+            this.ghost.place().addToTeam(team);
             this.ghost = null;
             holdingGhost = false;
         } else if (!holdingGhost) {

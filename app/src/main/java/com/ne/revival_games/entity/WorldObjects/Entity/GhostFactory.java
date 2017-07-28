@@ -47,7 +47,6 @@ public class GhostFactory {
 //                break;
             case BARRIER:
                 entity =  (new Barrier(x, y, angle, world, team));
-
                 break;
 
             case NEXUS:
