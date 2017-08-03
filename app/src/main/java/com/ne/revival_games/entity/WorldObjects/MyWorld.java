@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MyWorld {
 
-    public HashMap<Body, Entity> objectDatabase;
+    public Database objectDatabase;
 //    public HashMap<GhostEntity, Team> entitiestoAdd = new HashMap<>();
     public ArrayList<Body> bodiestodelete;
     public ArrayList<double []> coords;
@@ -90,7 +90,7 @@ public class MyWorld {
     protected void initializeWorld() {
         // create the engineWorld
         coords = new ArrayList<double[]>();
-        this.objectDatabase = new HashMap<>();
+        this.objectDatabase = new Database ();
         this.ghosts = new HashMap<>();
         this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();

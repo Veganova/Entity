@@ -93,18 +93,24 @@ public class GhostEntity {
             return;
         }
 
-        for (Body body : world.engineWorld.getBodies()) {
-            if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {
-                if (this.entity.shape.body.isInContact(body)) {
-                    // the ghost object is colliding with another non-ghost object
+       try {
+            for (Body body : world.engineWorld.getBodies()) {
+                if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {
+                    if (entity.shape.body.isInContact(body)) {
+                        // the ghost object is colliding with another non-ghost object
 
-                    entity.setColor(CONTACTING, world);
-                    entity.setPaint(Paint.Style.FILL, world);
+                        entity.setColor(CONTACTING, world);
+                        entity.setPaint(Paint.Style.FILL, world);
 
-                    this.placeable = false;
-                    return;
+                        this.placeable = false;
+                        return;
+                    }
                 }
             }
+        } catch (NullPointerException e) {
+            // gets rid of a concurrency bug - the entity was being set to null as this
+            // function enters the loop below
+            e.printStackTrace();
         }
 
         this.placeable = true;
