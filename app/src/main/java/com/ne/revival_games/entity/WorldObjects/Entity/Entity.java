@@ -119,6 +119,7 @@ public class Entity implements Effector {
 
     public void onDeath(MyWorld world){
         for(Effect effect: effects.values()){
+            world.bodiestodelete.add(effect.zone.body);
             world.objectDatabase.remove(effect);
             world.engineWorld.removeBody(effect.zone.body);
         }

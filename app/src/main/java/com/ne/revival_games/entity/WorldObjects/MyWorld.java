@@ -148,12 +148,12 @@ public class MyWorld {
 
 //        new ShockwaveCanister(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
 
-        new ExplosiveMissile(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
-        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
-        Team.DEFENCE.add(turret);
-
-        Turret turret2 = new Turret(new Vector2(300, 300), 0, this, Team.OFFENSE);
-        Team.OFFENSE.add(turret2);
+//        new ExplosiveMissile(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
+//        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
+//        Team.DEFENCE.add(turret);
+//
+//        Turret turret2 = new Turret(new Vector2(300, 300), 0, this, Team.OFFENSE);
+//        Team.OFFENSE.add(turret2);
     }
 
     //need a way to add an object (check what kind of object it is, etc.)

@@ -58,6 +58,7 @@ public class StepController extends StepAdapter {
             earth.engineWorld.removeBody(body);
             earth.bodiestodelete.remove(body);
         }
+        System.out.println("KEYSET - " + earth.objectDatabase.keySet().size());
     }
 
 

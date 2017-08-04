@@ -14,6 +14,9 @@ public class Database extends HashMap<Body, Entity> {
 
     @Override
     public Entity put(Body key, Entity value) {
+//        System.out.println("ADDING - " + key.toString());
+//        System.out.println(value);
+//        System.out.println("========================");
         super.put(key, value);
         key.setUserData(value);
         return value;
@@ -24,8 +27,9 @@ public class Database extends HashMap<Body, Entity> {
         if (key instanceof Body) {
             Body b = (Body)key;
             // TODO: 8/3/2017 THIS CAUSES THREADS TO FREEZE.. 100%+ cpu usage
-            System.out.println("USER DATA - " + (b.getUserData() instanceof Entity));
-            Entity val =  (Entity) b.getUserData();
+//            System.out.println("USER DATA - " + (b.getUserData() instanceof Entity));
+//            Entity val =  (Entity) b.getUserData();
+//            System.out.println(val);
         }
         return super.get(key);
     }
