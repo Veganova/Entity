@@ -35,6 +35,7 @@ public class StepController extends StepAdapter {
         ArrayList<Entity> updater = new ArrayList<>(earth.objectDatabase.values());
 
         for (int x = 0; x < updater.size(); x++){
+            earth.bounds.checkOutside(updater.get(x));
             if(!updater.get(x).ghost)
                 updater.get(x).update(earth);
         }

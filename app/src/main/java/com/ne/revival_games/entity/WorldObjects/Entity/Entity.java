@@ -106,6 +106,10 @@ public class Entity implements Effector {
                 speed * Math.sin(Math.toRadians(this.direction)));
     }
 
+    public String simpleString() {
+        return this.getClass().getSimpleName();
+    }
+
     public String toString() {
         String result = "";
         result += "Team: " + this.team + "\n";

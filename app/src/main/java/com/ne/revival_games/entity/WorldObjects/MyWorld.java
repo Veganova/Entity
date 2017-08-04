@@ -66,6 +66,10 @@ public class MyWorld {
     /** The time stamp for the last iteration */
     protected long last;
 
+    /**
+     * Allows checking if any of the bodies are out of bounds (and preforms deletion on them).
+     */
+    Boundary bounds;
 
     CustomEntity up, down, left, right;
 
@@ -100,6 +104,7 @@ public class MyWorld {
         CollisionListener skip = new CollisionController(this);
         ContactListener contact = new ContactController(this);
         StepController step = new StepController(this);
+        bounds = new Boundary(500, this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
@@ -199,6 +204,7 @@ public class MyWorld {
         for (int x = 0; x < drawer.size(); x++){
                 drawer.get(x).draw(canvas);
         }
+        this.bounds.draw(canvas);
         // up.draw(canvas);
 //        tri.draw(canvas);
 //        circ.draw(canvas);
