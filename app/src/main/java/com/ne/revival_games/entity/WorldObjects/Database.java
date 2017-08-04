@@ -14,9 +14,6 @@ public class Database extends HashMap<Body, Entity> {
 
     @Override
     public Entity put(Body key, Entity value) {
-//        System.out.println("ADDING - " + key.toString());
-//        System.out.println(value);
-//        System.out.println("========================");
         super.put(key, value);
         key.setUserData(value);
         return value;
