@@ -116,7 +116,7 @@ public class Launcher {
                                     MyWorld.SCALE * location.y, 0, world, team);
 
                             if (comet.canPlace()) {
-                                comet.place().addToTeam(team);
+                                comet.place(Team.OFFENSE);
                                 this.lastFired = System.currentTimeMillis();
                                 ammo -= 1;
                             } else {

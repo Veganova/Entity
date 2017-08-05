@@ -56,7 +56,24 @@ public class GhostEntity {
         return this.placeable;
     }
 
-    public Entity place() {
+
+    public void place(Team team) {
+        if (this.placeable) {
+            this.wantToPlace = true;
+            this.team = team;
+        } else {
+            throw new RuntimeException("Cannot place ghost " + entity.simpleString() + " here!");
+        }
+    }
+
+    private Team team;
+
+    /**
+     * place(Player) will be called before this. Assumes that placeable is true
+     * @return
+     */
+    private void placeReal() {
+        // this check is not necessary, but if incorrect usage then throws an error (below)
         this.entity.shape.setPaint(Paint.Style.FILL);
         this.entity.ghost = false;
         this.clearForces(this.entity);
@@ -76,16 +93,20 @@ public class GhostEntity {
             }
         }
         this.entity.invulnerable = false;
-        Entity toPlace = this.entity;
+//        Entity toPlace = this.entity;
+
         this.entity.enableAllEffects();
+        this.team.add(this.entity);
+        world.ghosts.remove(this.entity);
+
         this.entity = null;
-        world.ghosts.remove(toPlace);
         this.placeable = false;
-
-
+        this.wantToPlace = false;
         // TODO: 7/11/2017 might want to place the entity created into the team lists right here
-        return toPlace;
+//        return toPlace;
     }
+
+    private boolean wantToPlace = false;
 
     // TODO: 7/7/2017 dont need to always call this method - can start calling it when the listeners find a collision with ghost
     public void isColliding() {
@@ -93,7 +114,8 @@ public class GhostEntity {
             return;
         }
 
-       try {
+        System.out.println("IN LOOP");
+        try {
             for (Body body : world.engineWorld.getBodies()) {
                 if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {
                     if (entity.shape.body.isInContact(body)) {
@@ -112,10 +134,15 @@ public class GhostEntity {
             // function enters the loop below
             e.printStackTrace();
         }
-
+        if (this.wantToPlace) {
+            this.placeReal();
+        } else {
+//            this.placeable = true;
+            entity.setColor(PLACEABLE, world);
+            entity.setPaint(Paint.Style.STROKE, world);
+        }
         this.placeable = true;
-        entity.setColor(PLACEABLE, world);
-        entity.setPaint(Paint.Style.STROKE, world);
+
 
     }
 

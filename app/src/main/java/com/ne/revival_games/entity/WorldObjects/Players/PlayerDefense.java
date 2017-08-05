@@ -133,7 +133,8 @@ public class PlayerDefense extends Player {
     public boolean onSingleTapUp(MotionEvent e) {
         if (this.ghost != null && lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
                 && holdingGhost && this.ghost.canPlace()) {
-            this.ghost.place().addToTeam(team);
+
+            this.ghost.place(team);
             this.ghost = null;
             holdingGhost = false;
         } else if (!holdingGhost) {

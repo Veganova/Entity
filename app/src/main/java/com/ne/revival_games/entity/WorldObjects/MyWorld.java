@@ -104,7 +104,7 @@ public class MyWorld {
         CollisionListener skip = new CollisionController(this);
         ContactListener contact = new ContactController(this);
         StepController step = new StepController(this);
-        bounds = new Boundary(500, this);
+//        bounds = new Boundary(500, this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
@@ -204,7 +204,7 @@ public class MyWorld {
         for (int x = 0; x < drawer.size(); x++){
                 drawer.get(x).draw(canvas);
         }
-        this.bounds.draw(canvas);
+//        this.bounds.draw(canvas);
         // up.draw(canvas);
 //        tri.draw(canvas);
 //        circ.draw(canvas);

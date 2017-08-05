@@ -22,6 +22,7 @@ public class StepController extends StepAdapter {
     public void begin(Step step, World world) {
         // deals with concurrent modification error by creating all the projectile objects
         // (things that are shot) before the database loop
+        // WHY NOT CALL WORLD.UPDATE HERE.. UNECESSARY INFORMATION SHARING?
         ArrayList<GhostEntity> ghosts = new ArrayList<>(earth.ghosts.values());
 
         for (int x = 0; x < ghosts.size(); x++) {
@@ -35,7 +36,7 @@ public class StepController extends StepAdapter {
         ArrayList<Entity> updater = new ArrayList<>(earth.objectDatabase.values());
 
         for (int x = 0; x < updater.size(); x++){
-            earth.bounds.checkOutside(updater.get(x));
+//            earth.bounds.checkOutside(updater.get(x));
             if(!updater.get(x).ghost)
                 updater.get(x).update(earth);
         }
