@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -18,6 +19,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Database extends HashMap<Body, Entity> {
 
+    private ConcurrentLinkedDeque<Entity> values = new ConcurrentLinkedDeque<>();
     private ConcurrentLinkedQueue<Pair<Body, Entity>> toAdd = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<Body> toRemove = new ConcurrentLinkedQueue<>();
 //    @Override
@@ -43,7 +45,7 @@ public class Database extends HashMap<Body, Entity> {
     @Override
     public Entity put(Body key, Entity entity) {
         this.toAdd.add(new Pair<Body, Entity>(key, entity));
-
+        this.values.add(entity);
         return this.get(key);
     }
 
@@ -52,7 +54,6 @@ public class Database extends HashMap<Body, Entity> {
                 Pair<Body, Entity> p = this.toAdd.poll();
                 super.put(p.first, p.second);
             }
-
     }
 
     public void removePendingDeletions(MyWorld world) {
@@ -67,7 +68,6 @@ public class Database extends HashMap<Body, Entity> {
                 }
                 world.engineWorld.removeBody(body);
             }
-
     }
 
     @Override
