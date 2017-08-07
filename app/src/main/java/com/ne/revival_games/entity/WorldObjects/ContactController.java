@@ -30,10 +30,10 @@ public class ContactController extends ContactAdapter {
         Entity ent2 = world.objectDatabase.get(point.getBody2());
 
         if(ent1.health <= 0) {
-            world.bodiestodelete.add(ent1.shape.body);
+            world.objectDatabase.remove(ent1.shape.body);
         }
         if(ent2.health <= 0) {
-            world.bodiestodelete.add(ent2.shape.body);
+            world.objectDatabase.remove(ent2.shape.body);
         }
         //System.out.println("ghost contact - " + (ent1.ghost || ent2.ghost));
     }

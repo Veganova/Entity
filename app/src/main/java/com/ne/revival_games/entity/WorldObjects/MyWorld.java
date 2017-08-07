@@ -37,7 +37,7 @@ public class MyWorld {
 
     public Database objectDatabase;
 //    public HashMap<GhostEntity, Team> entitiestoAdd = new HashMap<>();
-    public ArrayList<Body> bodiestodelete;
+//    public ArrayList<Body> bodiestodelete;
     public ArrayList<double []> coords;
     protected List<Player> players;
     public List<JSONObject> addtoWorld;
@@ -96,7 +96,7 @@ public class MyWorld {
         coords = new ArrayList<double[]>();
         this.objectDatabase = new Database ();
         this.ghosts = new HashMap<>();
-        this.bodiestodelete = new ArrayList<>();
+//        this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();
         this.players = new ArrayList<>();
 
@@ -104,7 +104,7 @@ public class MyWorld {
         CollisionListener skip = new CollisionController(this);
         ContactListener contact = new ContactController(this);
         StepController step = new StepController(this);
-//        bounds = new Boundary(500, this);
+        bounds = new Boundary(2000, this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
@@ -204,7 +204,7 @@ public class MyWorld {
         for (int x = 0; x < drawer.size(); x++){
                 drawer.get(x).draw(canvas);
         }
-//        this.bounds.draw(canvas);
+        this.bounds.draw(canvas);
         // up.draw(canvas);
 //        tri.draw(canvas);
 //        circ.draw(canvas);

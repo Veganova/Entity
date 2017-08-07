@@ -152,7 +152,7 @@ public class MassLazer extends Projectile {
 
         while (tail.size() > 10) {
             points.remove(0);
-            this.world.bodiestodelete.add(tail.get(0).body);
+            this.world.objectDatabase.remove(tail.get(0).body);
             tail.remove(0);
         }
 

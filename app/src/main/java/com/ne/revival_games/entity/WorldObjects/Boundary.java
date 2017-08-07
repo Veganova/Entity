@@ -44,7 +44,7 @@ public class Boundary {
             if (entity.ghost) {
                 entity.setColor(Color.YELLOW, world);
             } else {
-                world.bodiestodelete.add(entity.shape.body);
+                world.objectDatabase.remove(entity.shape.body);
             }
         }
     }

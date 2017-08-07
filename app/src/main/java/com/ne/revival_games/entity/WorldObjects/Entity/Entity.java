@@ -61,7 +61,7 @@ public class Entity implements Effector {
      */
     public boolean update(MyWorld world) {
         if(this.dead){
-            world.bodiestodelete.add(this.shape.body);
+            world.objectDatabase.remove(this.shape.body);
             return true;
         }
 
@@ -123,7 +123,8 @@ public class Entity implements Effector {
 
     public void onDeath(MyWorld world){
         for(Effect effect: effects.values()){
-            world.bodiestodelete.add(effect.zone.body);
+            world.objectDatabase.remove(effect.zone.body);
+            // dont think next line does anything
             world.objectDatabase.remove(effect);
             world.engineWorld.removeBody(effect.zone.body);
         }

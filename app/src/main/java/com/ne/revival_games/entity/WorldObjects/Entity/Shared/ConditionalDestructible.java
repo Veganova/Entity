@@ -22,7 +22,7 @@ public abstract class ConditionalDestructible extends Entity {
         
         if(deathCondition() && this.primed) {
             this.invisible = true;
-            world.bodiestodelete.add(this.shape.body);
+            world.objectDatabase.remove(this.shape.body);
         }
         else {
             super.update(world);

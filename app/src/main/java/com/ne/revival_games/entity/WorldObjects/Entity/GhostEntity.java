@@ -114,7 +114,6 @@ public class GhostEntity {
             return;
         }
 
-        System.out.println("IN LOOP");
         try {
             for (Body body : world.engineWorld.getBodies()) {
                 if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {

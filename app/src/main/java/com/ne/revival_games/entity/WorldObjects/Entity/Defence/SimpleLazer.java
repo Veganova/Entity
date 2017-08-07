@@ -80,7 +80,7 @@ public class SimpleLazer extends Lazer {
     public boolean update(MyWorld world){
 
         if(lifetime!=0 && this.bornTime + lifetime < System.currentTimeMillis()){
-            world.bodiestodelete.add(this.shape.body);
+            world.objectDatabase.remove(this.shape.body);
         }
 
         return true;

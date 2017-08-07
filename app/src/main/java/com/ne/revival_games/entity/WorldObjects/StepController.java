@@ -33,13 +33,21 @@ public class StepController extends StepAdapter {
             player.update();
         }
 
-        ArrayList<Entity> updater = new ArrayList<>(earth.objectDatabase.values());
-
-        for (int x = 0; x < updater.size(); x++){
+//        ArrayList<Entity> updater = new ArrayList<>(earth.objectDatabase.values());
+//
+//        for (int x = 0; x < updater.size(); x++){
 //            earth.bounds.checkOutside(updater.get(x));
-            if(!updater.get(x).ghost)
-                updater.get(x).update(earth);
+//            if(!updater.get(x).ghost)
+//                updater.get(x).update(earth);
+//        }
+
+        for (Entity entity: earth.objectDatabase.values()) {
+            earth.bounds.checkOutside(entity);
+            if (!entity.ghost) {
+                entity.update(earth);
+            }
         }
+        earth.objectDatabase.addAll();
     }
 
     public void updatePerformed(Step step, World world) {
@@ -48,18 +56,19 @@ public class StepController extends StepAdapter {
 
     @Override
     public void end(Step step, World world) {
-        for (int i = 0; i < earth.bodiestodelete.size(); i += 1) {
-            Body body = earth.bodiestodelete.get(i);
-            Entity toDelete = earth.objectDatabase.get(body);
-            if(toDelete != null){
-                if(toDelete.team != null)
-                    toDelete.team.getTeamObjects().remove(toDelete);
-                toDelete.onDeath(earth);
-                earth.objectDatabase.remove(body);
-            }
-            earth.engineWorld.removeBody(body);
-            earth.bodiestodelete.remove(body);
-        }
+//        for (int i = 0; i < earth.bodiestodelete.size(); i += 1) {
+//            Body body = earth.bodiestodelete.get(i);
+//            Entity toDelete = earth.objectDatabase.get(body);
+//            if(toDelete != null){
+//                if(toDelete.team != null)
+//                    toDelete.team.getTeamObjects().remove(toDelete);
+//                toDelete.onDeath(earth);
+//                earth.objectDatabase.remove(body);
+//            }
+//            earth.engineWorld.removeBody(body);
+//            earth.bodiestodelete.remove(body);
+//        }
+        earth.objectDatabase.removeAll(earth);
 //        System.out.println("KEYSET - " + earth.objectDatabase.keySet().size());
     }
 
