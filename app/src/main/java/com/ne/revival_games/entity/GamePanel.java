@@ -21,6 +21,8 @@ import java.util.List;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     //need a perspective type where we control what is drawn and when and why
 
+    public static final int background_dark = Color.rgb(39,40,34);
+    public static final int background_red = Color.rgb(100,40,34);
     //private float scaleX = 1, scaleY = 1;
     public Vector2 scales;
     private Player myPlayer; //create an enum maybe ?
@@ -96,7 +98,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
             camera.applyTransforms(canvas);
 
-            canvas.drawColor(Color.rgb(39,40,34));
+            canvas.drawColor(background_red);
             world.drawObjects(canvas);
             canvas.restoreToCount(savedState);
         }

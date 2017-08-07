@@ -3,21 +3,17 @@ package com.ne.revival_games.entity.WorldObjects;
 import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.CustomEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ExplosiveMissile;
-import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ShockwaveCanister;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.*;
+import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.Step;
 import org.dyn4j.dynamics.StepAdapter;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactListener;
@@ -103,7 +99,7 @@ public class MyWorld {
         this.engineWorld.setGravity(new Vector2(0, 0));
         CollisionListener skip = new CollisionController(this);
         ContactListener contact = new ContactController(this);
-        StepController step = new StepController(this);
+        StepController step = new StepController();
         bounds = new Boundary(2000, this);
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
@@ -159,8 +155,11 @@ public class MyWorld {
 //
 //        Turret turret2 = new Turret(new Vector2(300, 300), 0, this, Team.OFFENSE);
 //        Team.OFFENSE.add(turret2);
+
+        launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
     }
 
+    private Launcher launcher;
     //need a way to add an object (check what kind of object it is, etc.)
     //alternative is to add a new object on creation in MainThread
     /**
@@ -199,12 +198,19 @@ public class MyWorld {
 //        canvas.drawCircle((float) 0.0, (float) -8.0, (float) 1.0, paint2);
 
 
+        this.bounds.draw(canvas);
+        launcher.draw(canvas);
+
+//        for (Entity toDraw: this.objectDatabase.values()) {
+//            toDraw.draw(canvas);
+//        }
+
         ArrayList<Entity> drawer = new ArrayList<>(objectDatabase.values());
 
         for (int x = 0; x < drawer.size(); x++){
                 drawer.get(x).draw(canvas);
         }
-        this.bounds.draw(canvas);
+
         // up.draw(canvas);
 //        tri.draw(canvas);
 //        circ.draw(canvas);
@@ -228,6 +234,73 @@ public class MyWorld {
                 }
             }
         }
+    }
+
+
+
+    private class StepController extends StepAdapter {
+
+        @Override
+        public void begin(Step step, World world) {
+            // deals with concurrent modification error by creating all the projectile objects
+            // (things that are shot) before the database loop
+            // WHY NOT CALL WORLD.UPDATE HERE.. UNECESSARY INFORMATION SHARING earth.objectUpdate()
+
+            MyWorld earth = MyWorld.this;
+
+
+            ArrayList<GhostEntity> ghosts = new ArrayList<>(earth.ghosts.values());
+
+            for (int x = 0; x < ghosts.size(); x++) {
+                ghosts.get(x).isColliding();
+            }
+
+            for (Player player : earth.players) {
+                player.update();
+            }
+
+//        ArrayList<Entity> updater = new ArrayList<>(earth.objectDatabase.values());
+//
+//        for (int x = 0; x < updater.size(); x++){
+//            earth.bounds.checkOutside(updater.get(x));
+//            if(!updater.get(x).ghost)
+//                updater.get(x).update(earth);
+//        }
+            launcher.update();
+
+            for (Entity entity: earth.objectDatabase.values()) {
+                earth.bounds.checkOutside(entity);
+                if (!entity.ghost) {
+                    entity.update(earth);
+                }
+            }
+            earth.objectDatabase.addPendingAdditions();
+        }
+
+        public void updatePerformed(Step step, World world) {
+
+        }
+
+        @Override
+        public void end(Step step, World world) {
+            MyWorld earth = MyWorld.this;
+//        for (int i = 0; i < earth.bodiestodelete.size(); i += 1) {
+//            Body body = earth.bodiestodelete.get(i);
+//            Entity toDelete = earth.objectDatabase.get(body);
+//            if(toDelete != null){
+//                if(toDelete.team != null)
+//                    toDelete.team.getTeamObjects().remove(toDelete);
+//                toDelete.onDeath(earth);
+//                earth.objectDatabase.remove(body);
+//            }
+//            earth.engineWorld.removeBody(body);
+//            earth.bodiestodelete.remove(body);
+//        }
+            earth.objectDatabase.removePendingDeletions(earth);
+//        System.out.println("KEYSET - " + earth.objectDatabase.keySet().size());
+        }
+
+
     }
 }
 

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import org.dyn4j.collision.AbstractBounds;
@@ -55,7 +56,11 @@ public class Boundary {
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.RED);
+        canvas.drawRect(rect, paint);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(GamePanel.background_dark);
         canvas.drawRect(rect, paint);
     }
 }

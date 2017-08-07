@@ -9,14 +9,17 @@ import org.dyn4j.dynamics.Body;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by Veganova on 8/3/2017.
  */
 
 public class Database extends HashMap<Body, Entity> {
-    private Stack<Pair<Body, Entity>> toAdd = new Stack<>();
-    private Stack<Body> toRemove = new Stack<>();
+
+    private ConcurrentLinkedQueue<Pair<Body, Entity>> toAdd = new ConcurrentLinkedQueue<>();
+    private ConcurrentLinkedQueue<Body> toRemove = new ConcurrentLinkedQueue<>();
 //    @Override
 //    public Entity put(Body key, Entity value) {
 //        super.put(key, value);
@@ -44,32 +47,34 @@ public class Database extends HashMap<Body, Entity> {
         return this.get(key);
     }
 
-    public void addAll() {
+    public void addPendingAdditions() {
         while (!this.toAdd.isEmpty()) {
-            Pair<Body, Entity> p = this.toAdd.pop();
-            super.put(p.first, p.second);
-        }
+                Pair<Body, Entity> p = this.toAdd.poll();
+                super.put(p.first, p.second);
+            }
+
     }
 
-    public void removeAll(MyWorld world) {
-        while (!this.toRemove.isEmpty()) {
-            Body body = this.toRemove.pop();
-            Entity toDelete = this.get(body);
-            if(toDelete != null){
-                if(toDelete.team != null)
-                    toDelete.team.getTeamObjects().remove(toDelete);
-                toDelete.onDeath(world);
-                super.remove(body);
+    public void removePendingDeletions(MyWorld world) {
+            while (!this.toRemove.isEmpty()) {
+                Body body = this.toRemove.poll();
+                Entity toDelete = this.get(body);
+                if (toDelete != null) {
+                    if (toDelete.team != null)
+                        toDelete.team.getTeamObjects().remove(toDelete);
+                    toDelete.onDeath(world);
+                    super.remove(body);
+                }
+                world.engineWorld.removeBody(body);
             }
-            world.engineWorld.removeBody(body);
-        }
+
     }
 
     @Override
     public Entity remove(Object object) {
         if (object instanceof Body) {
             Body body = (Body)object;
-            this.toRemove.push(body);
+            this.toRemove.add(body);
             return this.get(body);
         } else {
             return null;
