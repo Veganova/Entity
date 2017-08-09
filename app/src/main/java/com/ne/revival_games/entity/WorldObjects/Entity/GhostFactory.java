@@ -56,8 +56,8 @@ public class GhostFactory {
                 entity =  (new Turret(new Vector2(x, y), angle, world, team));
                 break;
             case COMET:
-//                entity = new Comet(x, y, angle, 0, world, team);
-                entity = new ExplosiveMissile(new Vector2(x,y), 0, 0, 0, team, world );
+                entity = new Comet(x, y, angle, 0, world, team);
+//                entity = new ExplosiveMissile(new Vector2(x,y), 0, 0, 0, team, world );
                 break;
         }
 

@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import org.dyn4j.dynamics.Body;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Database extends HashMap<Body, Entity> {
 
-    private ConcurrentLinkedDeque<Entity> values = new ConcurrentLinkedDeque<>();
+    private MyDeque values = new MyDeque();
     private ConcurrentLinkedQueue<Pair<Body, Entity>> toAdd = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<Body> toRemove = new ConcurrentLinkedQueue<>();
 //    @Override
@@ -45,35 +46,46 @@ public class Database extends HashMap<Body, Entity> {
     @Override
     public Entity put(Body key, Entity entity) {
         this.toAdd.add(new Pair<Body, Entity>(key, entity));
-        this.values.add(entity);
         return this.get(key);
     }
 
     public void addPendingAdditions() {
         while (!this.toAdd.isEmpty()) {
-                Pair<Body, Entity> p = this.toAdd.poll();
-                super.put(p.first, p.second);
-            }
+            Pair<Body, Entity> p = this.toAdd.poll();
+            this.values.add(p.second);
+            super.put(p.first, p.second);
+        }
+    }
+
+    @Override
+    public Collection<Entity> values() {
+        return super.values();
+    }
+
+    public MyDeque valuesFast() {
+        return this.values;
     }
 
     public void removePendingDeletions(MyWorld world) {
-            while (!this.toRemove.isEmpty()) {
-                Body body = this.toRemove.poll();
-                Entity toDelete = this.get(body);
-                if (toDelete != null) {
-                    if (toDelete.team != null)
-                        toDelete.team.getTeamObjects().remove(toDelete);
-                    toDelete.onDeath(world);
-                    super.remove(body);
-                }
-                world.engineWorld.removeBody(body);
+        while (!this.toRemove.isEmpty()) {
+            Body body = this.toRemove.poll();
+            Entity toDelete = this.get(body);
+            if (toDelete != null) {
+                if (toDelete.team != null)
+                    toDelete.team.getTeamObjects().remove(toDelete);
+                toDelete.onDeath(world);
+                this.values.remove(toDelete);
+
+                super.remove(body);
             }
+            world.engineWorld.removeBody(body);
+        }
     }
 
     @Override
     public Entity remove(Object object) {
         if (object instanceof Body) {
-            Body body = (Body)object;
+            Body body = (Body) object;
             this.toRemove.add(body);
             return this.get(body);
         } else {

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
+import com.ne.revival_games.entity.WorldObjects.MyDeque;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -41,6 +42,8 @@ public class Entity implements Effector {
     public HashMap<Body, Effect> zoneToEffect;
     protected ActiveBar bar;
 
+    private MyDeque.Node node;
+
     // TODO: 7/5/2017 some fields here are not needed 
     public Entity(double direction, double speed, int health, boolean invulnerable, Team team) {
         this.direction = direction;
@@ -51,6 +54,14 @@ public class Entity implements Effector {
         this.team = team;
         this.effects = new HashMap<>();
         this.zoneToEffect = new HashMap<>();
+    }
+
+    public MyDeque.Node getNode() {
+        return node;
+    }
+
+    public void setNode(MyDeque.Node node) {
+        this.node = node;
     }
 
     /**

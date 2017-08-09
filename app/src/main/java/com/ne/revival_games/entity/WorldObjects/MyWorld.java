@@ -205,10 +205,14 @@ public class MyWorld {
 //            toDraw.draw(canvas);
 //        }
 
-        ArrayList<Entity> drawer = new ArrayList<>(objectDatabase.values());
-
-        for (int x = 0; x < drawer.size(); x++){
-                drawer.get(x).draw(canvas);
+        // TODO: 8/9/2017 CHECK IF THIS ERROR EVER OCCURS.. IF IT DOES THEN PUT BACK HE LINEs BELOW!!!
+//        ArrayList<Entity> drawer = new ArrayList<>(objectDatabase.values());
+//
+//        for (int x = 0; x < drawer.size(); x++){
+//                drawer.get(x).draw(canvas);
+//        }
+        for (Entity toDraw: this.objectDatabase.valuesFast()) {
+            toDraw.draw(canvas);
         }
 
         // up.draw(canvas);
@@ -266,15 +270,23 @@ public class MyWorld {
 //            if(!updater.get(x).ghost)
 //                updater.get(x).update(earth);
 //        }
-            launcher.update();
+//            launcher.update();
 
-            for (Entity entity: earth.objectDatabase.values()) {
+
+            MyDeque values = earth.objectDatabase.valuesFast();
+            System.out.println("NUM OBJECTS - " + values.size());
+
+            long time = System.nanoTime();
+            for (Entity entity:
+//                    values) {
+                earth.objectDatabase.values()) {
                 earth.bounds.checkOutside(entity);
                 if (!entity.ghost) {
                     entity.update(earth);
                 }
             }
             earth.objectDatabase.addPendingAdditions();
+            System.out.println("TIME DIF - " + (System.nanoTime() - time));
         }
 
         public void updatePerformed(Step step, World world) {
