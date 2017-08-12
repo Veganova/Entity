@@ -110,8 +110,8 @@ public class Launcher {
                     for (Integer areaOfOval: this.compositeShape.keySet()) {
                         if (randomArea > culmArea && randomArea < areaOfOval) {
                             location = this.compositeShape.get(areaOfOval).randomPoint();
-                            System.out.println("FIRED! at time - " + this.lastFired / 1000
-                                    + " at location: " + location);
+//                            System.out.println("FIRED! at time - " + this.lastFired / 1000
+//                                    + " at location: " + location);
                             GhostEntity comet = GhostFactory.produce(Entities.COMET, MyWorld.SCALE * location.x,
                                     MyWorld.SCALE * location.y, 0, world, team);
 

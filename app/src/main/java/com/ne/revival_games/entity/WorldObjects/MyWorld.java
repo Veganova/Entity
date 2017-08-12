@@ -21,6 +21,7 @@ import org.dyn4j.geometry.Vector2;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -211,7 +212,7 @@ public class MyWorld {
 //        for (int x = 0; x < drawer.size(); x++){
 //                drawer.get(x).draw(canvas);
 //        }
-        for (Entity toDraw: this.objectDatabase.valuesFast()) {
+        for (Entity toDraw: this.objectDatabase.values()) {
             toDraw.draw(canvas);
         }
 
@@ -273,10 +274,18 @@ public class MyWorld {
 //            launcher.update();
 
 
-            MyDeque values = earth.objectDatabase.valuesFast();
-            System.out.println("NUM OBJECTS - " + values.size());
+//            MyDeque values = earth.objectDatabase.valuesFast();
+//            System.out.println("NUM OBJECTS - " + values.size());
+//
+//            long time = System.nanoTime();
+//            Collection<Entity> x = earth.objectDatabase.values();
+//            for (Entity entity:x) {
+//                String s = entity.toString();
+//            }
+//            System.out.println("TIME DIF - " + (System.nanoTime() - time));
 
-            long time = System.nanoTime();
+
+
             for (Entity entity:
 //                    values) {
                 earth.objectDatabase.values()) {
@@ -286,7 +295,7 @@ public class MyWorld {
                 }
             }
             earth.objectDatabase.addPendingAdditions();
-            System.out.println("TIME DIF - " + (System.nanoTime() - time));
+
         }
 
         public void updatePerformed(Step step, World world) {

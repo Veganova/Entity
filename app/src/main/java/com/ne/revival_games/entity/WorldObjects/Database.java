@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Database extends HashMap<Body, Entity> {
 
-    private MyDeque values = new MyDeque();
+//    private MyDeque values = new MyDeque();
     private ConcurrentLinkedQueue<Pair<Body, Entity>> toAdd = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<Body> toRemove = new ConcurrentLinkedQueue<>();
 //    @Override
@@ -52,7 +52,7 @@ public class Database extends HashMap<Body, Entity> {
     public void addPendingAdditions() {
         while (!this.toAdd.isEmpty()) {
             Pair<Body, Entity> p = this.toAdd.poll();
-            this.values.add(p.second);
+//            this.values.add(p.second);
             super.put(p.first, p.second);
         }
     }
@@ -63,7 +63,8 @@ public class Database extends HashMap<Body, Entity> {
     }
 
     public MyDeque valuesFast() {
-        return this.values;
+        return null;
+//        return this.values;
     }
 
     public void removePendingDeletions(MyWorld world) {
@@ -74,7 +75,7 @@ public class Database extends HashMap<Body, Entity> {
                 if (toDelete.team != null)
                     toDelete.team.getTeamObjects().remove(toDelete);
                 toDelete.onDeath(world);
-                this.values.remove(toDelete);
+//                this.values.remove(toDelete);
 
                 super.remove(body);
             }
@@ -85,11 +86,14 @@ public class Database extends HashMap<Body, Entity> {
     @Override
     public Entity remove(Object object) {
         if (object instanceof Body) {
-            Body body = (Body) object;
-            this.toRemove.add(body);
-            return this.get(body);
+            return this.remove((Body) object);
         } else {
             return null;
         }
+    }
+
+    public Entity remove(Body body) {
+        this.toRemove.add(body);
+        return this.get(body);
     }
 }

@@ -22,6 +22,7 @@ public class MainThread extends Thread
     private int FPS = 40;
     private double averageFPS;
     private boolean running;
+    private boolean end = false;
     private MyWorld world;
     public static Canvas canvas;
     public HashMap<GamePanel, SurfaceHolder> screens = new HashMap<>();
@@ -46,6 +47,7 @@ public class MainThread extends Thread
     public void run()
     {
         running = true;
+        end = false;
         while(running) {
 //            System.out.println("IN thread LOOP");
             startTime = System.nanoTime();
@@ -96,8 +98,11 @@ public class MainThread extends Thread
             }
         }
 
-        System.out.println("WAITING");
-        if(doWait) {
+        System.out.println("LOOP - WAITING");
+        if (end) {
+
+        }
+        else if(doWait) {
             try {
                 synchronized (waitFor) {
                     waitFor.wait();
@@ -105,11 +110,18 @@ public class MainThread extends Thread
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                doWait = false;
-                this.run();
+                waitFor = null;
+                if (this.end) {
+                    // then let the code run through and end the thread
+                } else {
+
+                    // when code gets here, it has been resumed from a pause.
+                    doWait = false;
+                    this.run();
+                }
             }
         }
-        System.out.println("NOT WAITING");
+        System.out.println("GAME LOOP THREAD ENDING");
     }
 
     public void addNewPanel(GamePanel gamePanel, SurfaceHolder surfaceHolder){
@@ -133,7 +145,15 @@ public class MainThread extends Thread
     }
 
     public void end() {
-        this.setRunning(false);
+        this.end = true;
+        if (waitFor != null) {
+            // if not null, loop is paused
+            synchronized (waitFor) {
+                waitFor.notify();
+            }
+        }
+//        this.setRunning(false);
+
         for(GamePanel panel: screens.keySet()){
             screens.get(panel).removeCallback(panel);
         }

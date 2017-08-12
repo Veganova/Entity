@@ -41,6 +41,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.world = world;
 
 
+
         // make mainPanel focusable so it can handle events
         setFocusable(true);
     }
@@ -51,18 +52,25 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        System.out.println("CHANGING SURFACE");
+        getHolder().removeCallback(this);
+        holder.addCallback(this );
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) throws RuntimeException {
+        System.out.println("DESTROYING SURFACE");
         // TODO: 7/26/2017 do something here?
 //        throw new RuntimeException("GG");
+//        mainActivity.myThread.end();
             getHolder().removeCallback(this);
+
 
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        System.out.println("CREATING SURFACE");
         this.scales.x = getWidth()  / mainActivity.MAP_WIDTH;
         this.scales.y = getHeight() / mainActivity.MAP_HEIGHT;
     }

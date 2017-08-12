@@ -96,7 +96,8 @@ public class GhostEntity {
 //        Entity toPlace = this.entity;
 
         this.entity.enableAllEffects();
-        this.team.add(this.entity);
+        this.entity.addToTeam(this.team);
+//        this.team.add(this.entity);
         world.ghosts.remove(this.entity);
 
         this.entity = null;

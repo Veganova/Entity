@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected RelativeLayout relativeLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("CREATING------------------------------------------------------");
         super.onCreate(savedInstanceState);
         //set screen to fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -115,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
     public void initPlayers(boolean playerSelection, int numPlayers) {
 
         if (numPlayers == 1) {
-            this.MAP_HEIGHT = 2400;
-            this.MAP_WIDTH = 1350;
+            this.MAP_HEIGHT = 1184;
+            this.MAP_WIDTH = 720;
         } else {
             this.MAP_HEIGHT = 1600;
             this.MAP_WIDTH = 1800;
@@ -273,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
     //similar logic to be used for end game, should also implement an 'onPause' etc.
     @Override
     public void onDestroy() {
+        System.out.println("DESTROYING");
         boolean retry = true;
         int counter = 0;
         while (retry && counter < 1000) {
@@ -289,30 +291,55 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onResume() {
+        System.out.println("RESUMING------------------------------------------------------");
+        super.onResume();
         if (this.myThread != null) {
-            this.myThread.end();
+            synchronized (Thread.currentThread()) {
+                Thread.currentThread().notify();
+            }
         }
-        relativeLayout.removeAllViews();
     }
 
     @Override
     public void onPause() {
+        System.out.println("PAUSING------------------------------------------------------");
+
         super.onPause();
         if (this.myThread != null) {
-            this.myThread.end();
+            try {
+                this.myThread.pause(Thread.currentThread());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
+    public void onStop() {
+        System.out.println("STOPPING------------------------------------------------------");
+        super.onStop();
+
+    }
+
+    @Override
     public void finish() {
+        System.out.println("FINISHING------------------------------------------------------");
+
+//        this.onStop();
         super.finish();
+
         if (this.myThread != null) {
             this.myThread.end();
         }
         relativeLayout.removeAllViews();
+//        if (this.myThread != null) {
+//            this.myThread.end();
+//        }
+//        relativeLayout.removeAllViews();
     }
 
 
