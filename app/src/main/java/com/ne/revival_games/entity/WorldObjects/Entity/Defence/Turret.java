@@ -3,20 +3,17 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
-import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
-import com.ne.revival_games.entity.WorldObjects.Entity.SimpleAim;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
-import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Vector2;
 

@@ -1,12 +1,14 @@
-package com.ne.revival_games.entity.WorldObjects.Entity;
+package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrel;
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 /**
@@ -113,21 +115,21 @@ public class SimpleAim implements AimLogic {
         Team team = getTeam();
         List<Entity> enemies = team.getOpposite().getTeamObjects();
         if(enemies.size() > 0) {
-//            Vector2 myPosition = ((Entity)this.turret).shape.body.getWorldCenter();
-//            int index = 0;
-//            double distance = Util.getDistance(enemies.get(0).shape.body.getWorldCenter(), myPosition);
-//            for(int x = 1; x < enemies.size(); x++){
-//                double otherDist = Util.getDistance(enemies.get(x).shape.body.getWorldCenter(), myPosition);
-//                if(distance > otherDist){
-//                    index = x;
-//                    distance = otherDist;
-//                }
-//            }
-//            if(distance < this.range) {
-//                this.enemy = enemies.get(index);
-//                return;
-//            }
-            enemy = enemies.get(0);
+            Vector2 myPosition = ((Entity)this.turret).shape.body.getWorldCenter();
+            int index = 0;
+            double distance = Util.getDistance(enemies.get(0).shape.body.getWorldCenter(), myPosition);
+            for(int x = 1; x < enemies.size(); x++){
+                double otherDist = Util.getDistance(enemies.get(x).shape.body.getWorldCenter(), myPosition);
+                if(distance > otherDist){
+                    index = x;
+                    distance = otherDist;
+                }
+            }
+            if(distance < this.range) {
+                this.enemy = enemies.get(index);
+                return;
+            }
+//            enemy = enemies.get(0);
             return;
         }
         this.enemy = null;

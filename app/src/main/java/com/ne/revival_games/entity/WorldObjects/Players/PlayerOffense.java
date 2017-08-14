@@ -26,7 +26,7 @@ public class PlayerOffense extends Player {
 
     @Override
     public void update() {
-
+        super.update();
     }
 
     @Override

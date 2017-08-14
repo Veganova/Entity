@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Shared;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 /**
  * Created by vishn on 7/27/2017.

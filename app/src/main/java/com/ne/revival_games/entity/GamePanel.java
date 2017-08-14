@@ -6,6 +6,7 @@ package com.ne.revival_games.entity;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -47,6 +48,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void addPlayerListener(Player player) {
+        this.myPlayer = player;
+        // TODO: 8/13/2017 not sure why we need an array, one screen is associated with one player (and their inputs/menu, etc)
         this.myPlayers.add(player);
     }
 
@@ -103,12 +106,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.translate(mainActivity.MAP_WIDTH / 2, -mainActivity.MAP_HEIGHT / 2);
             canvas.scale((float) MyWorld.SCALE, (float) MyWorld.SCALE);
 
-
             camera.applyTransforms(canvas);
 
             canvas.drawColor(background_red);
+
             world.drawObjects(canvas);
+
+            canvas.scale(1,-1);
             canvas.restoreToCount(savedState);
+
         }
     }
 

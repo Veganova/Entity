@@ -47,8 +47,7 @@ public class PlayerDefense extends Player {
 
         if (ev.getPointerCount() > 1) {
             if (holdingGhost && ghost.entity != null) {
-                //we need this line unfortunately for turret TODO: change it back on place!
-                this.ghost.entity.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
+
                 //rotate
                 double p1x = ev.getX(0);
                 double p1y = ev.getY(0);
@@ -71,7 +70,7 @@ public class PlayerDefense extends Player {
 
     @Override
     public void update() {
-
+            super.update();
             if(this.addToWorld != null)
             try{
                 pullTowards = new Vector2(addToWorld.getDouble("x")/MyWorld.SCALE, addToWorld.getDouble("y")/MyWorld.SCALE);
@@ -134,7 +133,7 @@ public class PlayerDefense extends Player {
         if (this.ghost != null && lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
                 && holdingGhost && this.ghost.canPlace()) {
 
-            this.ghost.place(team);
+            this.ghost.place(this);
             this.ghost = null;
             holdingGhost = false;
         } else if (!holdingGhost) {

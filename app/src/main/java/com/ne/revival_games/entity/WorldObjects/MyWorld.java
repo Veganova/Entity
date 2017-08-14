@@ -2,7 +2,7 @@ package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.CustomEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
@@ -13,6 +13,7 @@ import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.Step;
 import org.dyn4j.dynamics.StepAdapter;
 import org.dyn4j.dynamics.World;
@@ -21,7 +22,7 @@ import org.dyn4j.geometry.Vector2;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,9 +67,14 @@ public class MyWorld {
     /**
      * Allows checking if any of the bodies are out of bounds (and preforms deletion on them).
      */
-    Boundary bounds;
+    private Boundary bounds;
 
     CustomEntity up, down, left, right;
+
+    /**
+     * All updatable objects.
+     */
+    private List<Updatable> updatables;
 
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
@@ -96,6 +102,8 @@ public class MyWorld {
 //        this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();
         this.players = new ArrayList<>();
+        this.updatables = new ArrayList<>();
+        this.updatables = Collections.synchronizedList(updatables);
 
         this.engineWorld.setGravity(new Vector2(0, 0));
         CollisionListener skip = new CollisionController(this);
@@ -106,10 +114,11 @@ public class MyWorld {
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
-//        Settings settings = new Settings();
+        Settings settings = new Settings();
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
-//        settings.setLinearTolerance(50*settings.getLinearTolerance());
-//        this.engineWorld.setSettings(settings);
+        settings.setLinearTolerance(150*settings.getLinearTolerance());
+//        settings.setMaximumTranslation(settings.getMaximumTranslation() / 5.0);
+        this.engineWorld.setSettings(settings);
 
 //        bam = new MassLazer(-200, -200, 30, this);
 //        this.ghostNexus = new GhostEntity(nex);
@@ -241,6 +250,13 @@ public class MyWorld {
         }
     }
 
+    public void addUpdatable(Updatable updatable) {
+        this.updatables.add(updatable);
+    }
+
+    public boolean removeUpdatable(Updatable updatable) {
+        return this.updatables.remove(updatable);
+    }
 
 
     private class StepController extends StepAdapter {
@@ -271,7 +287,7 @@ public class MyWorld {
 //            if(!updater.get(x).ghost)
 //                updater.get(x).update(earth);
 //        }
-//            launcher.update();
+
 
 
 //            MyDeque values = earth.objectDatabase.valuesFast();
@@ -284,6 +300,9 @@ public class MyWorld {
 //            }
 //            System.out.println("TIME DIF - " + (System.nanoTime() - time));
 
+            for (Updatable updatable: earth.updatables) {
+                updatable.update();
+            }
 
 
             for (Entity entity:

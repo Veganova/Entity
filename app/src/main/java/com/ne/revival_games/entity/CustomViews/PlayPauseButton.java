@@ -1,4 +1,4 @@
-package com.ne.revival_games.entity;
+package com.ne.revival_games.entity.CustomViews;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.MainMenuActivity;
+import com.ne.revival_games.entity.MainThread;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

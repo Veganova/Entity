@@ -1,9 +1,5 @@
-package com.ne.revival_games.entity.WorldObjects.Entity;
+package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 
-import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
-import com.ne.revival_games.entity.WorldObjects.Shape.Shape;
-
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 /**

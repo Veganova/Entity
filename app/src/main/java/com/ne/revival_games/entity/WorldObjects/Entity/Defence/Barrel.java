@@ -1,10 +1,8 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
-import android.graphics.Canvas;
-
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
-import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -32,7 +30,6 @@ public class Barrel extends Entity implements Aimable {
     private Projectile projectile;
     public Turret myTurret = null;
     private double sleepUntil = 0;
-
 
     public Barrel(Projectile projectile, BarrelType type,
                   Entity turret, MyWorld world, double angle, Team team, Vector2 location) {

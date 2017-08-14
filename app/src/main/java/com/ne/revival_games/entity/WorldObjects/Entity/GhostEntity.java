@@ -8,6 +8,8 @@ import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.Joint;
+import org.dyn4j.geometry.Mass;
+import org.dyn4j.geometry.MassType;
 
 /**
  * Created by Veganova on 6/30/2017.
@@ -19,6 +21,7 @@ public class GhostEntity {
     private static int CONTACTING = Color.RED;
     private static int PLACEABLE = Color.GREEN;
     private boolean placeable = true;
+    private Mass previousType;
 
     public GhostEntity(Entity entity, MyWorld world) {
         this.entity = entity;
@@ -26,6 +29,10 @@ public class GhostEntity {
 
         this.entity.shape.setPaint(Paint.Style.STROKE);
         this.entity.ghost = true;
+
+        //we need this line unfortunately for turret TODO: change it back on place!
+        previousType = this.entity.shape.body.getMass();
+        this.entity.shape.body.setMass(MassType.FIXED_ANGULAR_VELOCITY);
 
         int num = 0;
         for (Joint joint : this.entity.shape.body.getJoints()) {
@@ -56,6 +63,8 @@ public class GhostEntity {
         return this.placeable;
     }
 
+    private Team team;
+    private Player player;
 
     public void place(Team team) {
         if (this.placeable) {
@@ -66,7 +75,15 @@ public class GhostEntity {
         }
     }
 
-    private Team team;
+    public void place(Player player) {
+        if (this.placeable) {
+            this.wantToPlace = true;
+            this.player = player;
+        } else {
+            throw new RuntimeException("Cannot place ghost " + entity.simpleString() + " here!");
+        }
+    }
+
 
     /**
      * place(Player) will be called before this. Assumes that placeable is true
@@ -77,13 +94,16 @@ public class GhostEntity {
         this.entity.shape.setPaint(Paint.Style.FILL);
         this.entity.ghost = false;
         this.clearForces(this.entity);
+
+        this.entity.shape.body.setMass(previousType);
+
+
         for (Joint joint : this.entity.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
             if (ent1 != null && ent2 != null) {
                 ent1.shape.setPaint(Paint.Style.FILL);
                 ent2.shape.setPaint(Paint.Style.FILL);
-
                 ent1.ghost = false;
                 ent1.invulnerable = false;
                 ent2.ghost = false;
@@ -96,7 +116,14 @@ public class GhostEntity {
 //        Entity toPlace = this.entity;
 
         this.entity.enableAllEffects();
-        this.entity.addToTeam(this.team);
+        if (this.player != null) {
+            this.entity.addToPlayer(this.player);
+            this.player = null;
+        } else if (this.team != null) {
+            this.entity.addToTeam(this.team);
+            this.team = null;
+        }
+
 //        this.team.add(this.entity);
         world.ghosts.remove(this.entity);
 

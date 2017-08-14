@@ -5,39 +5,31 @@ package com.ne.revival_games.entity.WorldObjects.Players;
  */
 
 import android.content.Context;
-import android.graphics.Camera;
 import android.graphics.Point;
 import android.support.v4.view.GestureDetectorCompat;
-import android.text.Layout;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 
 import com.ne.revival_games.entity.CameraController;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
-import com.ne.revival_games.entity.Menu;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
+import com.ne.revival_games.entity.CustomViews.Menu;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
-import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.dynamics.joint.Joint;
-import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * -list of entities
@@ -55,7 +47,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     protected JSONObject addToWorld = null;
 
     int playerNumber;
-    Team team;
+    public Team team;
     protected float WIDTH = 900;
     protected float HEIGHT = 1600;
     protected float VIEW_WIDTH = 900;
@@ -66,6 +58,10 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     protected GhostEntity ghost;
     protected boolean oldScroll = false;
     protected Vector2 initialTranslate = new Vector2(0, 0);
+
+    private double money;
+    // money per tick
+    private double mpt;
 
     public Player(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity, boolean addListenertoPanel) {
         this.playerNumber = id;
@@ -86,6 +82,9 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         this.mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
         this.mDetector.setIsLongpressEnabled(false);
         this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
+
+        this.money = 0.0;
+        this.mpt = 1.0;
     }
 
     protected boolean holdingGhost = false;
@@ -95,8 +94,14 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     protected double lastMultiPress = 0;
     protected double mDownX, mDownY;
 
+    @OverridingMethodsMustInvokeSuper
+    public void update() {
+        this.money += this.mpt;
+    }
 
-    public abstract void update();
+    public double getMoney() {
+        return money;
+    }
 
     @Override
     public abstract boolean onTouch(View view, MotionEvent ev);
@@ -137,6 +142,10 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             }
             this.previousAngle = 0;
         }
+    }
+
+    public void addMoney(double damage) {
+        this.money += damage;
     }
 
     public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {

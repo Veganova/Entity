@@ -7,6 +7,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.geometry.Vector2;
@@ -29,7 +30,6 @@ public class ShockwaveCanister extends ConditionalDestructible {
 
     @Override
     protected boolean deathCondition() {
-
         if(this.health > 0){
             this.naturalDeath = true;
         }

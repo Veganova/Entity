@@ -11,6 +11,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Updatable;
 
 import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
@@ -21,7 +22,7 @@ import java.util.HashMap;
  * Created by Veganova on 7/22/2017.
  */
 
-public class Launcher {
+public class Launcher implements Updatable {
 
 
     private final MyWorld world;
@@ -65,6 +66,8 @@ public class Launcher {
 
         this.compositeShape = new HashMap<>();
         this.addBoundingOval(scaledWidth / 2, scaledWidth, scaledHeight / 2, scaledHeight, new Vector2(0, 0));
+
+        this.world.addUpdatable(this);
     }
 
     /**
@@ -88,6 +91,7 @@ public class Launcher {
         this.maxY = scaledHeight / 2;
 
         this.compositeShape = new HashMap<>();
+        this.world.addUpdatable(this);
         center.multiply(1/MyWorld.SCALE);
         this.addBoundingOval(scaledWidth / 2, scaledWidth, scaledHeight / 2, scaledHeight, center);
     }

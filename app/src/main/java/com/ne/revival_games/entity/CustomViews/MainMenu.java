@@ -1,15 +1,15 @@
-package com.ne.revival_games.entity;
+package com.ne.revival_games.entity.CustomViews;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.ne.revival_games.entity.MainActivity;
 
 /**
  * Created by Veganova on 7/23/2017.

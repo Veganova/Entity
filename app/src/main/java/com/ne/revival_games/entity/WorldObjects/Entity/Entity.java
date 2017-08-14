@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
 import com.ne.revival_games.entity.WorldObjects.MyDeque;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.Body;
@@ -31,6 +32,7 @@ public class Entity implements Effector {
     public boolean isCollisionAuthority = false;
     public boolean invisible = false;
     public boolean invulnerable;
+    protected Player player;
     public boolean isActive = true;
     public double isDisabledUntil = 0;
     public boolean ghost = false;
@@ -51,6 +53,7 @@ public class Entity implements Effector {
         this.health = health;
         this.MAX_HEALTH = health;
         this.invulnerable = invulnerable;
+        this.player = null;
         this.team = team;
         this.effects = new HashMap<>();
         this.zoneToEffect = new HashMap<>();
@@ -71,7 +74,7 @@ public class Entity implements Effector {
      * @return true if the update occurred successfully, false if entity is disabled
      */
     public boolean update(MyWorld world) {
-        if(this.dead){
+        if (this.dead) {
             world.objectDatabase.remove(this.shape.body);
             return true;
         }
@@ -84,7 +87,7 @@ public class Entity implements Effector {
             this.isActive = true;
         }
 
-        if(this.isActive) {
+        if (this.isActive) {
             return true;
         }
 
@@ -93,16 +96,16 @@ public class Entity implements Effector {
 
 
     public void draw(Canvas canvas) {
-        if(!this.invisible){
-        this.shape.draw(canvas);
+        if (!this.invisible) {
+            this.shape.draw(canvas);
 
-        for(Effect effect : effects.values()){
-            effect.draw(canvas);
-        }
+            for (Effect effect : effects.values()) {
+                effect.draw(canvas);
+            }
 
-        if (this.bar != null) {
-            this.bar.draw(canvas);
-        }
+            if (this.bar != null) {
+                this.bar.draw(canvas);
+            }
         }
     }
 
@@ -132,22 +135,31 @@ public class Entity implements Effector {
         return result;
     }
 
-    public void onDeath(MyWorld world){
-        for(Effect effect: effects.values()){
+    public void onDeath(MyWorld world) {
+        if (this.lastHit != null && this.lastHit.player != null) {
+            // if the last hit entity part is owned by a player
+            double earned = this.MAX_HEALTH;
+            System.out.println("ADDING MONEY" + earned);
+            lastHit.player.addMoney(earned);
+        }
+
+        for (Effect effect : effects.values()) {
             world.objectDatabase.remove(effect.zone.body);
             // dont think next line does anything
-            world.objectDatabase.remove(effect);
-            world.engineWorld.removeBody(effect.zone.body);
+//            world.objectDatabase.remove(effect);
+//            world.engineWorld.removeBody(effect.zone.body);
         }
         this.team.remove(this);
     }
+
+    private Entity lastHit;
 
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
         if (this.untargetable || this.dead) {
             return false;
         }
 
-        if(componentHit == null)
+        if (componentHit == null)
             return false;
 
         Effect activeEffect = zoneToEffect.get(componentHit);
@@ -156,8 +168,10 @@ public class Entity implements Effector {
             return false;
         }
 
-        if(contact.team.opposite(this.team)) {
+        if (contact.team.opposite(this.team)) {
+            this.lastHit = contact;
             applyDamage(damage);
+
         }
 
         return !this.dead;
@@ -171,7 +185,12 @@ public class Entity implements Effector {
         }
     }
 
-    public double getDamage(Body componentHit){
+    public void addToPlayer(Player player) {
+        this.addToTeam(player.team);
+        this.player = player;
+    }
+
+    public double getDamage(Body componentHit) {
         if (this.team == Team.NEUTRAL)
             return 0;
         return this.health;
@@ -184,10 +203,10 @@ public class Entity implements Effector {
      */
     public void setPaint(Paint.Style style, MyWorld world) {
         this.shape.setPaint(style);
-        for (Joint joint: this.shape.body.getJoints()) {
+        for (Joint joint : this.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            if(ent1 != null && ent2 != null){
+            if (ent1 != null && ent2 != null) {
                 ent1.shape.setPaint(style);
                 ent2.shape.setPaint(style);
             }
@@ -201,10 +220,10 @@ public class Entity implements Effector {
      */
     public void setColor(int color, MyWorld world) {
         this.shape.setColor(color);
-        for (Joint joint: this.shape.body.getJoints()) {
+        for (Joint joint : this.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            if(ent1 != null && ent2 !=null){
+            if (ent1 != null && ent2 != null) {
                 ent1.shape.setColor(color);
                 ent2.shape.setColor(color);
             }
@@ -228,7 +247,7 @@ public class Entity implements Effector {
     public void removeEffect(Effect effect) {
         Effect thisEffect = this.zoneToEffect.remove(effect.zone.body);
 
-        if(thisEffect != null) {
+        if (thisEffect != null) {
             thisEffect.onRemove();
         }
 
@@ -236,24 +255,28 @@ public class Entity implements Effector {
     }
 
     public void disableAllEffects() {
-        for (Effect effect: this.effects.values()) {
+        for (Effect effect : this.effects.values()) {
             effect.disable();
         }
     }
 
     public void enableAllEffects() {
-        for (Effect effect: this.effects.values()) {
+        for (Effect effect : this.effects.values()) {
             effect.enable();
         }
     }
 
-    public void applyDamage(double damage) {
-        if(!this.ghost && !this.untargetable && !this.invulnerable){
+    public double applyDamage(double damage) {
+        if (!this.ghost && !this.untargetable && !this.invulnerable) {
             this.health -= damage;
-        if (this.health <= 0) {
-            this.invisible = true;
-            this.dead = true;
+
+            if (this.health <= 0) {
+                this.invisible = true;
+                this.dead = true;
+                return 0;
+            }
+            return damage;
         }
-        }
+        return 0;
     }
 }

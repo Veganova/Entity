@@ -1,4 +1,4 @@
-package com.ne.revival_games.entity;
+package com.ne.revival_games.entity.CustomViews;
 
 import android.animation.ValueAnimator;
 import android.content.Context;

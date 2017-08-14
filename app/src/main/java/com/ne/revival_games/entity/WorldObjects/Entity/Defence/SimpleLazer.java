@@ -5,6 +5,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
@@ -12,7 +13,6 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Created by vishn on 7/1/2017.
  */
-
 public class SimpleLazer extends Lazer {
     public double lifetime = 500, bornTime;
 

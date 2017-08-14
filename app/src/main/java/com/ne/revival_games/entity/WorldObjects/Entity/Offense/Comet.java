@@ -1,9 +1,9 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.SeekerAim;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SeekerAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;

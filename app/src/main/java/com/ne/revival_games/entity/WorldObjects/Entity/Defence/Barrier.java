@@ -5,6 +5,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -34,6 +35,10 @@ public class Barrier extends Entity {
 
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
+
+//        this.shape.body.setAngularDamping(this.shape.body.getAngularDamping() * 10);
+//        this.shape.body.setLinearDamping(this.shape.body.getLinearDamping() * 10);
+
 
         this.bar = new ActiveBar(this);
         this.bar.setPathType(ActiveBar.PathType.LINE, 200);

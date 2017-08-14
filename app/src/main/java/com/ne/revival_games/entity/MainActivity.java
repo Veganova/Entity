@@ -15,6 +15,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.ne.revival_games.entity.CustomViews.MainMenu;
+import com.ne.revival_games.entity.CustomViews.MoneyView;
+import com.ne.revival_games.entity.CustomViews.PlayPauseButton;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
@@ -22,7 +25,6 @@ import com.ne.revival_games.entity.WorldObjects.Players.PlayerDefense;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -116,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
     public void initPlayers(boolean playerSelection, int numPlayers) {
 
         if (numPlayers == 1) {
-            this.MAP_HEIGHT = 1184;
-            this.MAP_WIDTH = 720;
+            this.MAP_HEIGHT = 2400;
+            this.MAP_WIDTH = 1350;
         } else {
             this.MAP_HEIGHT = 1600;
             this.MAP_WIDTH = 1800;
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
             // loop over all players and do this..
             for (Player player: players) {
                 relativeLayout.addView(player.getMenu());
+                relativeLayout.addView(new MoneyView(this, getApplicationContext(), world, player));
             }
         }
 
@@ -280,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         while (retry && counter < 1000) {
             counter++;
             try {
-                myThread.setRunning(false);
+                myThread.end();
                 myThread.join();
                 retry = false;
             } catch (InterruptedException e) {

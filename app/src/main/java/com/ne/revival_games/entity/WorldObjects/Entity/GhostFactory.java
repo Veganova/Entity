@@ -9,6 +9,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Comet;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ExplosiveMissile;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import org.dyn4j.geometry.Vector2;
 
@@ -25,7 +26,6 @@ public class GhostFactory {
      * @param x Give the x.
      * @param y Give the y.
      * @param angle
-     * @param team
      * @return
      */
     // TODO: 7/1/2017 need some way to rotate here or in the ghost entities.
@@ -33,7 +33,6 @@ public class GhostFactory {
                                       double y, double angle, MyWorld world, Team team) {
         Entity entity = null;
         switch(ent) {
-
 //            case BARREL:
 //
 //                entity = new Barrel(new Missile(0, 0, 0, 30, world, team),

@@ -1,9 +1,9 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.AimLogic;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aimable;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Aimable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.SeekerAim;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SeekerAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.ConditionalDestructible;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
@@ -76,8 +76,6 @@ public class ExplosiveMissile extends ConditionalDestructible implements Aimable
             boom.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
             super.onDeath(world);
     }
-
-
 
     @Override
     public void aim() {
