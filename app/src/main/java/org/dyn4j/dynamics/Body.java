@@ -24,6 +24,8 @@
  */
 package org.dyn4j.dynamics;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -160,7 +162,12 @@ public class Body extends AbstractCollidable<BodyFixture> implements Collidable<
 	
 	/** The {@link Body}'s joints */
 	final List<JointEdge> joints;
-	
+
+	/**
+	 * ENTITY I DID IT I MADE IT
+	 */
+	private Entity myEnt;
+
 	/**
 	 * Default constructor.
 	 */
@@ -208,6 +215,14 @@ public class Body extends AbstractCollidable<BodyFixture> implements Collidable<
 		// then they do, so by default don't allocate anything
 		// for the joints list
 		this.joints = new ArrayList<JointEdge>(0);
+	}
+	
+	public void setEntity(Entity ent) {
+		myEnt = ent;
+	}
+
+	public Entity getEntity() {
+		return myEnt;
 	}
 	
 	/* (non-Javadoc)

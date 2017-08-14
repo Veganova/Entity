@@ -66,6 +66,9 @@ public class GhostFactory {
             world.ghosts.put(entity, ghost);
         }
 
+
+        System.out.println("NOT NULL? " + world.objectDatabase.get(entity.shape.body));
+
         return ghost;
     }
 }

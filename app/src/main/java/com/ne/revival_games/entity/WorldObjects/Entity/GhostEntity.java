@@ -38,6 +38,7 @@ public class GhostEntity {
         for (Joint joint : this.entity.shape.body.getJoints()) {
             Entity ent1 = world.objectDatabase.get(joint.getBody1());
             Entity ent2 = world.objectDatabase.get(joint.getBody2());
+
             if (ent1 != null && ent2 != null) {
                 ent1.shape.setPaint(Paint.Style.STROKE);
                 ent2.shape.setPaint(Paint.Style.STROKE);

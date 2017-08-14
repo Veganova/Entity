@@ -55,7 +55,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        System.out.println("CHANGING SURFACE");
+//        System.out.println("CHANGING SURFACE");
         getHolder().removeCallback(this);
         holder.addCallback(this );
     }
@@ -73,7 +73,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        System.out.println("CREATING SURFACE");
+//        System.out.println("CREATING SURFACE");
         this.scales.x = getWidth()  / mainActivity.MAP_WIDTH;
         this.scales.y = getHeight() / mainActivity.MAP_HEIGHT;
     }

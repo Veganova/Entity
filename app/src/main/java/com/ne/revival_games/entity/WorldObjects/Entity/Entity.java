@@ -279,4 +279,8 @@ public class Entity implements Effector {
         }
         return 0;
     }
+
+//    public boolean isGhost(){
+//
+//    }
 }

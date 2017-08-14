@@ -18,9 +18,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by Veganova on 8/3/2017.
  */
 
-public class Database extends HashMap<Body, Entity> {
+public class Database {
 
-//    private MyDeque values = new MyDeque();
+    private MyDeque values = new MyDeque();
     private ConcurrentLinkedQueue<Pair<Body, Entity>> toAdd = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<Body> toRemove = new ConcurrentLinkedQueue<>();
 //    @Override
@@ -31,40 +31,29 @@ public class Database extends HashMap<Body, Entity> {
 //        return oldvalue;
 //    }
 //
-//    @Override
-//    public Entity get(Object key) {
-//        if (key instanceof Body) {
-//            Body b = (Body)key;
-////            System.out.println("USER DATA - " + (b.getUserData() instanceof Entity));
-//            Entity val =  (Entity) b.getUserData();
-//            return val;
-////            System.out.println(val);
-//        }
-//        return super.get(key);
-//    }
 
-    @Override
-    public Entity put(Body key, Entity entity) {
-        this.toAdd.add(new Pair<Body, Entity>(key, entity));
-        return this.get(key);
+
+
+    public Entity get(Body key) {
+        return key.getEntity();
     }
+
+    public void put(Body key, Entity entity) {
+        key.setEntity(entity);
+        this.toAdd.add(new Pair<Body, Entity>(key, entity));
+    }
+
 
     public void addPendingAdditions() {
         while (!this.toAdd.isEmpty()) {
             Pair<Body, Entity> p = this.toAdd.poll();
-//            this.values.add(p.second);
-            super.put(p.first, p.second);
+            this.values.add(p.second);
+//            super.put(p.first, p.second);
         }
     }
 
-    @Override
-    public Collection<Entity> values() {
-        return super.values();
-    }
-
-    public MyDeque valuesFast() {
-        return null;
-//        return this.values;
+    public MyDeque values() {
+        return values;
     }
 
     public void removePendingDeletions(MyWorld world) {
@@ -75,25 +64,17 @@ public class Database extends HashMap<Body, Entity> {
                 if (toDelete.team != null)
                     toDelete.team.getTeamObjects().remove(toDelete);
                 toDelete.onDeath(world);
-//                this.values.remove(toDelete);
+                this.values.remove(toDelete);
 
-                super.remove(body);
+//                super.remove(body);
+
             }
             world.engineWorld.removeBody(body);
         }
     }
 
-    @Override
-    public Entity remove(Object object) {
-        if (object instanceof Body) {
-            return this.remove((Body) object);
-        } else {
-            return null;
-        }
-    }
 
-    public Entity remove(Body body) {
+    public void remove(Body body) {
         this.toRemove.add(body);
-        return this.get(body);
     }
 }

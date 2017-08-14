@@ -21,7 +21,7 @@ import java.util.Iterator;
  *
  * The real performance upgrade
  // Million element .remove()
- // Linked - 8549143ns
+ // Linked - 8549143 ns
  // MyDeque -229531 ns
  // ------------------------------------------------------------------------------
  */

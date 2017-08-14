@@ -60,13 +60,13 @@ public class Turret extends Entity implements Aimable {
 
         this.barrels.add(b);
         WeldJoint joint = new WeldJoint(b.shape.body,
-                this.center.body, new Vector2(location.x/MyWorld.SCALE, location.y/MyWorld.SCALE));
+                this.shape.body, new Vector2(location.x/MyWorld.SCALE, location.y/MyWorld.SCALE));
         world.engineWorld.addJoint(joint);
+//        this.world.objectDatabase.put(b.shape.body, this);
 
 //        this.components.add(b.shape);
 
         //this.shape = new ComplexShape(components, location.x, location.y, world);
-        //this.world.objectDatabase.put(b.shape.body, this);
 
     }
 
@@ -79,10 +79,9 @@ public class Turret extends Entity implements Aimable {
     }
 
     private void initializeTurret(Vector2 location, MyWorld world){
-        this.center = new ObjCircle(30);
-        AShape.InitBuilder builder = this.center.getBuilder(true, world);
+        this.shape = new ObjCircle(30);
+        AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setXY(location.x, location.y).init();
-        this.shape = this.center;
         // TODO: 7/11/2017 take off and try
         this.world.objectDatabase.put(this.shape.body, this);
 //        this.components.add(shape);
@@ -172,7 +171,7 @@ public class Turret extends Entity implements Aimable {
 
     @Override
     public Vector2 getCenter() {
-        return this.center.body.getWorldCenter();
+        return this.shape.body.getWorldCenter();
     }
 
     @Override
