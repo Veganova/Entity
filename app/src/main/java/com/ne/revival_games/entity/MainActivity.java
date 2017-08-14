@@ -42,41 +42,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("CREATING------------------------------------------------------");
         super.onCreate(savedInstanceState);
-        //set screen to fullscreen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //turn title off
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        world = new MyWorld();
-        myThread = new MainThread(this.world);
-
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-
-        SCREEN_WIDTH = displaymetrics.widthPixels;
-        SCREEN_HEIGHT = displaymetrics.heightPixels;
-
-
-        setContentView(R.layout.activity_main_thread);
-        relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
-
-        Serializable message = getIntent().getSerializableExtra("GameMode");
-        if (message != null) {
-            // case where the actual game has been started (when it is null we are still in the main menu)i
-            System.out.println("GAME " + message.toString());
-            MainMenu.GameMode choice = (MainMenu.GameMode)message;
-            switch(choice) {
-                case SINGLEPLAYER:
-//                    initOnePlayer();
-                    initPlayers(true, 1);
-                    break;
-
-                case MULTIPLAYER:
-//                    initTwoPlayer(true);
-                    initPlayers(true, 2);
-                    break;
-            }
-        }
+//        //set screen to fullscreen
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        //turn title off
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        world = new MyWorld();
+//        myThread = new MainThread(this.world);
+//
+//        DisplayMetrics displaymetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//
+//        SCREEN_WIDTH = displaymetrics.widthPixels;
+//        SCREEN_HEIGHT = displaymetrics.heightPixels;
+//
+//
+//        setContentView(R.layout.activity_main_thread);
+//        relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+//
+//        Serializable message = getIntent().getSerializableExtra("GameMode");
+//        if (message != null) {
+//            // case where the actual game has been started (when it is null we are still in the main menu)i
+//            System.out.println("GAME " + message.toString());
+//            MainMenu.GameMode choice = (MainMenu.GameMode)message;
+//            switch(choice) {
+//                case SINGLEPLAYER:
+////                    initOnePlayer();
+//                    initPlayers(true, 1);
+//                    break;
+//
+//                case MULTIPLAYER:
+////                    initTwoPlayer(true);
+//                    initPlayers(true, 2);
+//                    break;
+//            }
+//        }
 
 //        Thread t = new Thread(new Runnable() {
 //            @Override

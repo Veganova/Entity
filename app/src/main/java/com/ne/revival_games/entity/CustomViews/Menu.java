@@ -95,6 +95,7 @@ class Poppist extends HorizontalScrollView {
         MAX_WIDTH = (int)(width * 3) / 4;
 
         //this.getLayoutParams().width = MAX_WIDTH;
+        this.setHorizontalScrollBarEnabled(false);
         this.setLayoutParams(new ViewGroup.LayoutParams(0, LayoutParams.WRAP_CONTENT));
 
         LinearLayout container = new LinearLayout(context);
