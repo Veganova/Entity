@@ -144,7 +144,8 @@ public class Entity implements Effector {
         }
 
         for (Effect effect : effects.values()) {
-            world.objectDatabase.remove(effect.zone.body);
+            this.removeEffect(effect);
+//            world.objectDatabase.remove(effect.zone.body);
             // dont think next line does anything
 //            world.objectDatabase.remove(effect);
 //            world.engineWorld.removeBody(effect.zone.body);

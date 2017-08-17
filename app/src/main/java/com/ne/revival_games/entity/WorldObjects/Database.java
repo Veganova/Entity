@@ -58,8 +58,10 @@ public class Database {
 
     public void removePendingDeletions(MyWorld world) {
         while (!this.toRemove.isEmpty()) {
+
             Body body = this.toRemove.poll();
             Entity toDelete = this.get(body);
+            System.out.println("REMOVING " + toDelete.simpleString());
             if (toDelete != null) {
                 if (toDelete.team != null)
                     toDelete.team.getTeamObjects().remove(toDelete);
@@ -75,6 +77,7 @@ public class Database {
 
 
     public void remove(Body body) {
+        body.setUserData(null);
         this.toRemove.add(body);
     }
 }

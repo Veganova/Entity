@@ -166,7 +166,7 @@ public class MyWorld {
 //        Turret turret2 = new Turret(new Vector2(300, 300), 0, this, Team.OFFENSE);
 //        Team.OFFENSE.add(turret2);
 
-        launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
+//        launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
     }
 
     private Launcher launcher;
@@ -209,7 +209,7 @@ public class MyWorld {
 
 
         this.bounds.draw(canvas);
-        launcher.draw(canvas);
+//        launcher.draw(canvas);
 
 //        for (Entity toDraw: this.objectDatabase.values()) {
 //            toDraw.draw(canvas);

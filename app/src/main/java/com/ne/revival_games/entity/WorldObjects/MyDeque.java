@@ -37,13 +37,20 @@ public class MyDeque implements Iterable<Entity> {
     }
 
     Node add(Entity value) {
-        Node node = new Node(value, this.tail, this.tail.right);
-        this.tail.right.left = node;
-        this.tail.right = node;
-        this.tail = node;
-        this.size += 1;
+        // if no node is associated with the given
+        Node n = value.getNode();
+        if (n == null) {
+            Node node = new Node(value, this.tail, this.tail.right);
+            this.tail.right.left = node;
+            this.tail.right = node;
+            this.tail = node;
+            this.size += 1;
 
-        return node;
+            return node;
+        } else {
+            n.increment();
+            return n;
+        }
     }
 
     public int size() {
@@ -62,17 +69,22 @@ public class MyDeque implements Iterable<Entity> {
 //        System.out.println("REMOVING - " + s.s + ". Tail is " + " " + this.tail.content.s);
 
         // If tail is being removed, reset the tail.
-        if (s.getNode() == tail) {
-            this.tail = this.tail.left;
+        Node n = s.getNode();
+        n.decrement();
+        if (n.num == 0) {
+            if (n == tail) {
+                this.tail = this.tail.left;
+            }
+            n.remove();
+            this.size -= 1;
         }
-        s.getNode().remove();
-        this.size -= 1;
     }
 
 
     public class Node {
         Node right, left;
         Entity content;
+        int num = 1;
 
         Node(Entity content, Node left, Node right) {
 //            this.content = new StringHolder(content, this);
@@ -82,6 +94,14 @@ public class MyDeque implements Iterable<Entity> {
             this.content = content;
             this.right = right;
             this.left = left;
+        }
+
+        void increment() {
+            this.num += 1;
+        }
+
+        void decrement() {
+            this.num -= 1;
         }
 
         // fix refernces
