@@ -49,13 +49,14 @@ public class MainMenu extends LinearLayout {
         verticle.setOrientation(VERTICAL);
 
 
-        final Intent intent = new Intent(context, MainActivity.class);
+
         boolean current = false;
         for (final GameMode mode: GameMode.values()) {
 
             OnClickListener listener = new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("GameMode", mode);
 //                    activity.myThread.end();
 //                    try {
