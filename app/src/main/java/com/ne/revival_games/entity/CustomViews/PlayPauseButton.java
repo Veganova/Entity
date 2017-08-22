@@ -70,14 +70,15 @@ public class PlayPauseButton extends LinearLayout {
             @Override
             public void onClick(View v) {
                 System.out.println("PAUSE");
-                synchronized (game) {
-                    try {
-                        game.pause(Thread.currentThread());
-                        System.out.println("ALIVE " + game.isAlive());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+                activity.onPause();
+//                synchronized (game) {
+//                    try {
+//                        game.pause(Thread.currentThread());
+//                        System.out.println("ALIVE " + game.isAlive());
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
             }
         });
         verticle.addView(play);
@@ -90,58 +91,60 @@ public class PlayPauseButton extends LinearLayout {
             @Override
             public void onClick(View v) {
                 System.out.println("PLAY");
-                synchronized (Thread.currentThread()) {
-                    System.out.println("NOTIFYING");
-                    Thread.currentThread().notify();
-//                    game.run();
-
-                    System.out.println("ALIVE " + game.isAlive());
-                }
+                activity.onResume();
+//                synchronized (Thread.currentThread()) {
+//                    System.out.println("NOTIFYING");
+//                    Thread.currentThread().notify();
+////                    game.run();
+//
+//                    System.out.println("ALIVE " + game.isAlive());
+//                }
             }
         });
         verticle.addView(pause);
 
-        Button end = new Button(context);
-        end.setText("X");
-        end.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        end.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("END");
-                game.end();
-                try {
-                    game.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("ALIVE " + game.isAlive());
-            }
-        });
-        verticle.addView(end);
-
-
-        final Intent intent = new Intent(context, MainMenuActivity.class);
-
-        OnClickListener listener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                game.end(); // thread
-                activity.finish();
-//                        activity.myThread.pause(Thread.currentThread());
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }
-        };
-        Button button = new Button(context);
-        button.setText("<");
-        button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        button.setOnClickListener(listener);
-        verticle.addView(button);
-
-        horizontal.addView(verticle);
-        this.addView(horizontal);
+//        Button end = new Button(context);
+//        end.setText("X");
+//        end.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT));
+//        end.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                System.out.println("END");
+//                activity.finish();
+////                game.end();
+////                try {
+////                    game.join();
+////                } catch (InterruptedException e) {
+////                    e.printStackTrace();
+////                }
+////
+////                System.out.println("ALIVE " + game.isAlive());
+//            }
+//        });
+//        verticle.addView(end);
+//
+//
+//        final Intent intent = new Intent(context, MainMenuActivity.class);
+//
+//        OnClickListener listener = new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                game.end(); // thread
+//                activity.finish();
+////                        activity.myThread.pause(Thread.currentThread());
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                context.startActivity(intent);
+//            }
+//        };
+//        Button button = new Button(context);
+//        button.setText("<");
+//        button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT));
+//        button.setOnClickListener(listener);
+//        verticle.addView(button);
+//
+//        horizontal.addView(verticle);
+//        this.addView(horizontal);
     }
 }

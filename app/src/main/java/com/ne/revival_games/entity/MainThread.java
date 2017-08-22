@@ -34,6 +34,7 @@ public class MainThread extends Thread
     {
         super();
         this.world = world;
+        initValues();
     }
 
     //    private boolean locked = false;
@@ -43,9 +44,39 @@ public class MainThread extends Thread
     private long totalTime = 0;
     private int frameCount =0;
     private long targetTime = 1000/FPS;
+
+    private void initValues() {
+        running = true;
+        end = false;
+    }
+
     @Override
     public void run()
     {
+//        System.out.println("LOOP - WAITING");
+//        if (end) {
+//
+//        }
+//        else if(doWait) {
+//            try {
+//                synchronized (waitFor) {
+//                    waitFor.wait();
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } finally {
+//                waitFor = null;
+//                if (this.end) {
+//                    // then let the code run through and end the thread
+//                } else {
+//
+//                    // when code gets here, it has been resumed from a pause.
+//                    doWait = false;
+//                    initValues();
+//                    this.run();
+//                }
+//            }
+//        }
         running = true;
         end = false;
         while(running) {
@@ -54,14 +85,16 @@ public class MainThread extends Thread
             canvas = null;
             update();
             for(GamePanel gamePanel : screens.keySet()) {
+                SurfaceHolder holder = screens.get(gamePanel);
                 // try locking the canvas for pixel editing
+                canvas = holder.lockCanvas();
                 try {
-                    canvas = screens.get(gamePanel).lockCanvas();
+
+//                    System.out.println("CANVAS LOCKED");
                     // TODO: 7/25/2017 see if this ever breaks
                     synchronized (this) {
-
                         //main thread runs functions of game panel
-                        synchronized (screens.get(gamePanel)) {
+                        synchronized (holder) {
                             if (canvas != null) {
                                 gamePanel.draw(canvas);
                             }
@@ -72,12 +105,17 @@ public class MainThread extends Thread
                     e.printStackTrace();
                     System.out.println("ERROR IN CANVAS CREATION");
                 } finally {
-                    if (canvas != null) {
-                        try {
-                            screens.get(gamePanel).unlockCanvasAndPost(canvas);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
+// System.out.println("CANVAS UNLOCKED");
+                }
+                if (canvas != null) {
+                    try {
+                        synchronized (holder) {
+                            holder.unlockCanvasAndPost(canvas);
+
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -99,33 +137,45 @@ public class MainThread extends Thread
         }
 
         System.out.println("LOOP - WAITING");
-        if (end) {
-
-        }
-        else if(doWait) {
-            try {
-                synchronized (waitFor) {
-                    waitFor.wait();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                waitFor = null;
-                if (this.end) {
-                    // then let the code run through and end the thread
-                } else {
-
-                    // when code gets here, it has been resumed from a pause.
-                    doWait = false;
-                    this.run();
-                }
-            }
+//        if (end) {
+//
+//        }
+//        else if(doWait) {
+//            try {
+//                synchronized (waitFor) {
+//                    waitFor.wait();
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } finally {
+//                waitFor = null;
+//                if (this.end) {
+//                    // then let the code run through and end the thread
+//                } else {
+//
+//                    // when code gets here, it has been resumed from a pause.
+//                    doWait = false;
+//                    initValues();
+//                    this.run();
+//                }
+//            }
+//        }
+        synchronized (this) {
+            this.notify();
         }
         System.out.println("GAME LOOP THREAD ENDING");
     }
 
     public void addNewPanel(GamePanel gamePanel, SurfaceHolder surfaceHolder){
         screens.put(gamePanel, surfaceHolder);
+    }
+
+    public HashMap<GamePanel, SurfaceHolder> getScreens() {
+        return this.screens;
+    }
+
+    public void setScreens(HashMap<GamePanel, SurfaceHolder> screens) {
+        this.screens = screens;
     }
 
     public void update() {
@@ -142,10 +192,14 @@ public class MainThread extends Thread
         this.doWait = true;
         this.waitFor = a;
         this.setRunning(false);
+//        for(GamePanel panel: screens.keySet()){
+//            screens.get(panel).removeCallback(panel);
+//        }
     }
 
     public void end() {
         this.end = true;
+        setRunning(false);
         if (waitFor != null) {
             // if not null, loop is paused
             synchronized (waitFor) {
@@ -154,8 +208,8 @@ public class MainThread extends Thread
         }
 //        this.setRunning(false);
 
-        for(GamePanel panel: screens.keySet()){
-            screens.get(panel).removeCallback(panel);
-        }
+//        for(GamePanel panel: screens.keySet()){
+//            screens.get(panel).removeCallback(panel);
+//        }
     }
 }

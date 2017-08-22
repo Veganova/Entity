@@ -64,12 +64,27 @@ public class MainMenu extends LinearLayout {
 //                    } catch (InterruptedException e) {
 //                        e.printStackTrace();
 //                    }
-                    activity.finish();
+//                    activity.onStop();
+//                    try {
+//                        activity.myThread.pause(Thread.currentThread());
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
 
 //                        activity.myThread.pause(Thread.currentThread());
                     //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    activity.startActivity(intent);
 
+
+                    // wait for the current activity thread to end. (so that it will let go of the canvas lock)
+                    activity.myThread.end();
+                    try {
+                        synchronized (activity.myThread) {
+                            activity.myThread.wait();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    activity.startActivity(intent);
                 }
             };
             MainMenuButton button = new MainMenuButton(context, mode.toString(), listener);

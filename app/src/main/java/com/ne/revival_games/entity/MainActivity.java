@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 
 
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -25,6 +26,7 @@ import com.ne.revival_games.entity.WorldObjects.Players.PlayerDefense;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main_thread);
         relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
+
+        screens = new HashMap<>();
 
         Serializable message = getIntent().getSerializableExtra("GameMode");
         if (message != null) {
@@ -138,7 +142,8 @@ public class MainActivity extends AppCompatActivity {
             curTeam = curTeam.getOpposite();
             players.add(player);
 
-            myThread.addNewPanel(panel, panel.getHolder());
+            screens.put(panel, panel.getHolder());
+//            myThread.addNewPanel(panel, panel.getHolder());
         }
 
 
@@ -156,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
         this.addPlayPause();
 
-        myThread.setRunning(true);
-        myThread.start();
+//        myThread.setRunning(true);
+//        myThread.start();
     }
 
     public void initOnePlayer(boolean playerSelection){
@@ -262,20 +267,20 @@ public class MainActivity extends AppCompatActivity {
     //similar logic to be used for end game, should also implement an 'onPause' etc.
     @Override
     public void onDestroy() {
-        System.out.println("DESTROYING");
-        boolean retry = true;
-        int counter = 0;
-        while (retry && counter < 1000) {
-            counter++;
-            try {
-                myThread.end();
-                myThread.join();
-                retry = false;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
+        System.out.println("DESTROYING------------------------------------------------------");
+//        boolean retry = true;
+//        int counter = 0;
+//        while (retry && counter < 1000) {
+//            counter++;
+//            try {
+//                myThread.end();
+//                myThread.join();
+//                retry = false;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
         super.onDestroy();
     }
 
@@ -286,11 +291,18 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("RESUMING------------------------------------------------------");
         super.onResume();
         if (this.myThread != null) {
-            synchronized (Thread.currentThread()) {
-                Thread.currentThread().notify();
-            }
+
+
+            myThread = new MainThread(world);
+            myThread.setScreens(screens);
+            myThread.start();
+//            synchronized (Thread.currentThread()) {
+//                Thread.currentThread().notify();
+//            }
         }
     }
+
+    private HashMap<GamePanel, SurfaceHolder> screens;
 
     @Override
     public void onPause() {
@@ -298,36 +310,38 @@ public class MainActivity extends AppCompatActivity {
 
         super.onPause();
         if (this.myThread != null) {
-            try {
-                this.myThread.pause(Thread.currentThread());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            screens = myThread.getScreens();
+            this.myThread.end();
         }
+//        if (this.myThread != null) {
+//            try {
+//                this.myThread.pause(Thread.currentThread());
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Override
     public void onStop() {
         System.out.println("STOPPING------------------------------------------------------");
         super.onStop();
-
+        if (this.myThread != null) {
+            this.myThread.end();
+        }
     }
 
     @Override
     public void finish() {
         System.out.println("FINISHING------------------------------------------------------");
-
 //        this.onStop();
         super.finish();
 
         if (this.myThread != null) {
             this.myThread.end();
         }
+
         relativeLayout.removeAllViews();
-//        if (this.myThread != null) {
-//            this.myThread.end();
-//        }
-//        relativeLayout.removeAllViews();
     }
 
 

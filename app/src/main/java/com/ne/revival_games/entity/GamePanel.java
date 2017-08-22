@@ -38,7 +38,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         this.mainActivity = mainActivity;
         this.scales = new Vector2(1, 1);
         camera = new CameraController(new Vector2(1,1), new Vector2(300, 300), this);
-        getHolder().addCallback(this);
+
         this.world = world;
 
 
@@ -54,10 +54,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        System.out.println("CREATING SURFACE");
+        this.scales.x = getWidth()  / mainActivity.MAP_WIDTH;
+        this.scales.y = getHeight() / mainActivity.MAP_HEIGHT;
+        SurfaceHolder old = getHolder();
+        if (old != null) {
+            old.removeCallback(this);
+        }
+        holder.addCallback(this);
+    }
+
+    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-//        System.out.println("CHANGING SURFACE");
+        System.out.println("CHANGING SURFACE");
         getHolder().removeCallback(this);
-        holder.addCallback(this );
+        holder.addCallback(this);
     }
 
     @Override
@@ -69,13 +81,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             getHolder().removeCallback(this);
 
 
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-//        System.out.println("CREATING SURFACE");
-        this.scales.x = getWidth()  / mainActivity.MAP_WIDTH;
-        this.scales.y = getHeight() / mainActivity.MAP_HEIGHT;
     }
 
     public void setScales(){

@@ -91,7 +91,7 @@ class Poppist extends HorizontalScrollView {
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        System.out.println("WIDTH ---- " + width);
+//        System.out.println("WIDTH ---- " + width);
         MAX_WIDTH = (int)(width * 3) / 4;
 
         //this.getLayoutParams().width = MAX_WIDTH;
