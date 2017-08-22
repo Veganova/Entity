@@ -124,7 +124,6 @@ public class PlayPauseButton extends LinearLayout {
 //        });
 //        verticle.addView(end);
 //
-//
 //        final Intent intent = new Intent(context, MainMenuActivity.class);
 //
 //        OnClickListener listener = new OnClickListener() {
@@ -144,7 +143,8 @@ public class PlayPauseButton extends LinearLayout {
 //        button.setOnClickListener(listener);
 //        verticle.addView(button);
 //
-//        horizontal.addView(verticle);
-//        this.addView(horizontal);
+
+        horizontal.addView(verticle);
+        this.addView(horizontal);
     }
 }
