@@ -69,7 +69,7 @@ public class PlayPauseButton extends LinearLayout {
         play.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("PAUSE");
+//                System.out.println("PAUSE");
                 activity.onPause();
 //                synchronized (game) {
 //                    try {
@@ -90,7 +90,6 @@ public class PlayPauseButton extends LinearLayout {
         pause.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("PLAY");
                 activity.onResume();
 //                synchronized (Thread.currentThread()) {
 //                    System.out.println("NOTIFYING");

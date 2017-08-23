@@ -9,12 +9,15 @@ import android.graphics.Point;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.ne.revival_games.entity.CameraController;
+import com.ne.revival_games.entity.CustomViews.MoneyView;
+import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.CustomViews.Menu;
@@ -40,6 +43,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  * -one ghost object - have this ghost class implement the listener as well?
  */
 public abstract class Player extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
+    private Screen screen;
     protected List<Entity> entities;
     public CameraController camera;
     protected MyWorld world;
@@ -63,12 +67,15 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     // money per tick
     private double mpt;
 
-    public Player(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity, boolean addListenertoPanel) {
+    public Player(int id, Team team, MyWorld world, Screen screen, MainActivity activity, boolean addListenertoPanel) {
         this.playerNumber = id;
         this.team = team;
         this.world = world;
+        this.screen = screen;
+
+        GamePanel gamePanel = screen.getGamePanel();
         this.scales = gamePanel.scales;
-        System.out.println(gamePanel.scales);
+//        System.out.println(gamePanel.scales);
         this.camera = gamePanel.camera;
         if (addListenertoPanel) {
             gamePanel.addPlayerListener(this);
@@ -170,19 +177,27 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         }
     }
 
-    public Menu getMenu() {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int height = size.y;
+//    public Menu getMenu() {
+//        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+//        Display display = wm.getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int height = size.y;
+//
+//        if (this.playerNumber == 1) {
+//            return new Menu(context, this, 0);
+//        } else if (this.playerNumber == 2) {
+//            return new Menu(context, this, height - 400);
+//        } else {
+//            return new Menu(context, this, 0);
+//        }
+//    }
 
-        if (this.playerNumber == 1) {
-            return new Menu(context, this, 0);
-        } else if (this.playerNumber == 2) {
-            return new Menu(context, this, height - 400);
-        } else {
-            return new Menu(context, this, 0);
-        }
+    public void addMenu() {
+        this.screen.addView(new Menu(context, this, Gravity.BOTTOM));
     }
+    public void addMoneyView(MainActivity activity) {
+        this.screen.addView(new MoneyView(activity, context, world, this));
+    }
+
 }

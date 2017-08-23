@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Players;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -14,8 +15,8 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 public class PlayerOffense extends Player {
 
-    public PlayerOffense(int id, Team team, MyWorld world, GamePanel gamePanel, MainActivity activity, boolean addListenertoPanel) {
-        super(id, team, world, gamePanel, activity, addListenertoPanel);
+    public PlayerOffense(int id, Team team, MyWorld world, Screen screen, MainActivity activity, boolean addListenertoPanel) {
+        super(id, team, world, screen, activity, addListenertoPanel);
     }
 
     @Override

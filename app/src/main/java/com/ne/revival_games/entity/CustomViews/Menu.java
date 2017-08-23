@@ -2,16 +2,22 @@ package com.ne.revival_games.entity.CustomViews;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.ne.revival_games.entity.R;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
@@ -21,13 +27,29 @@ import java.util.List;
 /**
  * Set of classes that make up the menu that the player can open and close and select items to build
  */
-public class Menu extends LinearLayout {
+
+public class Menu extends RelativeLayout {
+
+    public Menu(Context context, Player player, int gravity) {
+        super(context);
+
+        this.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT));
+        this.setGravity(gravity);
+
+        MenuList listing = new MenuList(context, player);
+        this.addView(listing);
+    }
+}
+
+
+class MenuList extends LinearLayout {
 
 
     private Popper popper;
     private Poppist poppist;
 
-    public Menu(Context context, Player player, int height) {
+    public MenuList(Context context, Player player) {
         super(context);
 
         this.setOrientation(HORIZONTAL);
@@ -35,7 +57,7 @@ public class Menu extends LinearLayout {
 //                ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-        params.topMargin = height;
+//        params.topMargin = height;
 
 
 //        this.setLayoutParams(params);
@@ -51,7 +73,7 @@ public class Menu extends LinearLayout {
 
 }
 
-class Popper extends Button {
+class Popper extends ImageView {
 
     private final Poppist toPop;
 
@@ -59,9 +81,27 @@ class Popper extends Button {
         super(context);
         this.toPop = toPop;
 
-        this.setText(">");
+//        this.setText(">");
+        setBackgroundResource(R.drawable.ic_arrow);
+        int width = 60;
+        int height = 60;
+        this.setScaleType(ScaleType.FIT_CENTER);
+        this.setAdjustViewBounds(true);
         this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        this.setVisibility(View.INVISIBLE);
+        this.post(new Runnable() {
+
+            @Override
+            public void run() {
+                ViewGroup.LayoutParams mParams;
+                mParams = (ViewGroup.LayoutParams) Popper.this.getLayoutParams();
+                mParams.width = Popper.this.getHeight();
+                Popper.this.setLayoutParams(mParams);
+                Popper.this.setVisibility(View.VISIBLE);
+                Popper.this.postInvalidate();
+            }
+        });
 
         this.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
