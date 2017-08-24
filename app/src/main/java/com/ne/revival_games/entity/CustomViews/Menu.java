@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.media.Image;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -16,7 +19,9 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.R;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
@@ -55,9 +60,10 @@ class MenuList extends LinearLayout {
         this.setOrientation(HORIZONTAL);
 //        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
 //                ViewGroup.LayoutParams.WRAP_CONTENT);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                180);//LayoutParams.WRAP_CONTENT);
 
-//        params.topMargin = height;
+        params.bottomMargin = 50;
 
 
 //        this.setLayoutParams(params);
@@ -82,26 +88,17 @@ class Popper extends ImageView {
         this.toPop = toPop;
 
 //        this.setText(">");
-        setBackgroundResource(R.drawable.ic_arrow);
-        int width = 60;
-        int height = 60;
-        this.setScaleType(ScaleType.FIT_CENTER);
-        this.setAdjustViewBounds(true);
+//        setBackgroundResource(R.drawable.ic_down_arrow);
+
+
+
         this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        this.setVisibility(View.INVISIBLE);
-        this.post(new Runnable() {
+//        this.setScaleType(ScaleType.FIT_START);
+        this.setAdjustViewBounds(true);
 
-            @Override
-            public void run() {
-                ViewGroup.LayoutParams mParams;
-                mParams = (ViewGroup.LayoutParams) Popper.this.getLayoutParams();
-                mParams.width = Popper.this.getHeight();
-                Popper.this.setLayoutParams(mParams);
-                Popper.this.setVisibility(View.VISIBLE);
-                Popper.this.postInvalidate();
-            }
-        });
+        Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
+        this.setImageDrawable(drawable);
 
         this.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -125,6 +122,9 @@ class Poppist extends HorizontalScrollView {
     Poppist(Context context, List<Entities> toDisplay, Player player) {
         super(context);
         this.toDisplay = toDisplay;
+        this.owner = player;
+
+
         // TODO: 7/20/2017 might want to do this with weights instead.. for handling the changing screen orientation
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -135,16 +135,20 @@ class Poppist extends HorizontalScrollView {
         MAX_WIDTH = (int)(width * 3) / 4;
 
         //this.getLayoutParams().width = MAX_WIDTH;
+
         this.setHorizontalScrollBarEnabled(false);
-        this.setLayoutParams(new ViewGroup.LayoutParams(0, LayoutParams.WRAP_CONTENT));
+        this.setLayoutParams(new ViewGroup.LayoutParams(0, LayoutParams.MATCH_PARENT));
 
         LinearLayout container = new LinearLayout(context);
+        container.setGravity(Gravity.CENTER);
+        container.setBackgroundColor(GamePanel.cream);
+        container.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
+                , ViewGroup.LayoutParams.MATCH_PARENT));
 
-        this.owner = player;
 
         // Add all the entities as buttons to this scroll view
         for (Entities entityType: this.toDisplay) {
-            Button entButton = new EntButton(context, entityType, owner);
+            EntButton entButton = new EntButton(context, entityType, owner);
             container.addView(entButton);
         }
 
@@ -159,6 +163,7 @@ class Poppist extends HorizontalScrollView {
     boolean toggle() {
         if (this.hidden) {
             out = ValueAnimator.ofInt(this.getMeasuredWidth(), MAX_WIDTH);
+
             out.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -190,7 +195,7 @@ class Poppist extends HorizontalScrollView {
         return this.hidden;
     }
 
-    class EntButton extends Button {
+    class EntButton extends TextView {
 
         private Entities entType;
         private final Player owner;
@@ -199,7 +204,9 @@ class Poppist extends HorizontalScrollView {
             super(context);
 
             this.entType = entType;
+            this.setPadding(50, 0, 50, 0);
 
+            this.setTextColor(GamePanel.background_dark);
             this.setText(entType.toString());
             this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));

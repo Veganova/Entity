@@ -22,6 +22,7 @@ import java.util.List;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     //need a perspective type where we control what is drawn and when and why
 
+    public static final int cream = Color.rgb(224, 213, 218);
     public static final int background_dark = Color.rgb(39,40,34);
     public static final int background_red = Color.rgb(100,40,34);
     //private float scaleX = 1, scaleY = 1;
