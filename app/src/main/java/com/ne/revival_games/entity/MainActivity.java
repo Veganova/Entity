@@ -1,12 +1,9 @@
 package com.ne.revival_games.entity;
 
-import android.content.Context;
-import android.graphics.Point;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.Display;
 
 
 import android.view.SurfaceHolder;
@@ -17,8 +14,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.ne.revival_games.entity.CustomViews.MainMenu;
-import com.ne.revival_games.entity.CustomViews.MoneyView;
-import com.ne.revival_games.entity.CustomViews.PlayPauseButton;
+import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -61,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         SCREEN_WIDTH = displaymetrics.widthPixels;
         SCREEN_HEIGHT = displaymetrics.heightPixels;
 
-
         setContentView(R.layout.activity_main_thread);
         relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
 
@@ -95,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     private View playPauseButton;
     private void addPlayPause(){
-        playPauseButton = new PlayPauseButton(getApplicationContext(), myThread, this);
+        playPauseButton = new PlayPauseArea(getApplicationContext(), this);
         relativeLayout.addView(playPauseButton);
     }
 
@@ -126,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
             DoubleScreen.LayoutParams parms = new DoubleScreen.LayoutParams(SCREEN_WIDTH,
                     SCREEN_HEIGHT / numPlayers);
-
             if (i != 0) {
                 // first player doesnt want padding at top
                 parms.topMargin = (int) (i * SCREEN_HEIGHT / numPlayers + 5);
@@ -158,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             // loop over all players and do this..
             for (Player player: players) {
 //                relativeLayout.addView(player.getMenu());
-                player.addMenu();
+                player.addMenu((int)SCREEN_HEIGHT);
                 player.addMoneyView(this);
 //                relativeLayout.addView(new MoneyView(this, getApplicationContext(), world, player));
             }

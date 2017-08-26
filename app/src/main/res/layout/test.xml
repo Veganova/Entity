@@ -3,35 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom|left">
+    android:gravity="top|left">
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.ne.revival_games.entity.CustomViews.PlayPauseView
         android:layout_height="100dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_down_arrow" />
-    </LinearLayout>
+        android:layout_width="100dp">
+    </com.ne.revival_games.entity.CustomViews.PlayPauseView>
 
 </RelativeLayout>
