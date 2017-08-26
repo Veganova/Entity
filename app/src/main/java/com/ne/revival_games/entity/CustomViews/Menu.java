@@ -51,6 +51,7 @@ public class Menu extends RelativeLayout {
 class MenuList extends LinearLayout {
 
 
+    static int ANIMATION_DURATION = 600;
     private Popper popper;
     private Poppist poppist;
 
@@ -82,6 +83,9 @@ class MenuList extends LinearLayout {
 class Popper extends ImageView {
 
     private final Poppist toPop;
+    private boolean hidden = true;
+    private int ORIGINAL_WIDTH;
+    private int SCALED_WIDTH;
 
     Popper(Context context, final Poppist toPop) {
         super(context);
@@ -94,15 +98,62 @@ class Popper extends ImageView {
 
         this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-//        this.setScaleType(ScaleType.FIT_START);
         this.setAdjustViewBounds(true);
+        this.setScaleType(ScaleType.FIT_XY);
+
 
         Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
         this.setImageDrawable(drawable);
+        
+        
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                ORIGINAL_WIDTH = getMeasuredWidth();
+                SCALED_WIDTH = ORIGINAL_WIDTH * 4 / 5;
+                postInvalidate();
+            }
+        });
 
         this.setOnClickListener(new View.OnClickListener() {
+            private ValueAnimator in, out;
             public void onClick(View v) {
                 toPop.toggle();
+
+                if (hidden) {
+                    final int w = getMeasuredWidth();
+                    out = ValueAnimator.ofInt(w, SCALED_WIDTH);
+
+                    out.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            int val = (Integer) valueAnimator.getAnimatedValue();
+
+                            ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                            layoutParams.width = val;
+                            setLayoutParams(layoutParams);
+                        }
+                    });
+
+                    out.setDuration(MenuList.ANIMATION_DURATION);
+                    out.start();
+                } else {
+                    final int w = getMeasuredWidth();
+                    in = ValueAnimator.ofInt(w, ORIGINAL_WIDTH);
+                    in.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            int val = (Integer) valueAnimator.getAnimatedValue();
+                            ViewGroup.LayoutParams layoutParams = getLayoutParams();
+                            layoutParams.width = val;
+                            setLayoutParams(layoutParams);
+                        }
+                    });
+
+                    in.setDuration(MenuList.ANIMATION_DURATION);
+                    in.start();
+                }
+                hidden = !hidden;
             }
         });
     }
@@ -174,7 +225,7 @@ class Poppist extends HorizontalScrollView {
                 }
             });
 
-            out.setDuration(600);
+            out.setDuration(MenuList.ANIMATION_DURATION);
             out.start();
         } else {
             in = ValueAnimator.ofInt(this.getMeasuredWidth(), 0);
@@ -188,14 +239,14 @@ class Poppist extends HorizontalScrollView {
                 }
             });
 
-            in.setDuration(600);
+            in.setDuration(MenuList.ANIMATION_DURATION);
             in.start();
         }
         this.hidden = !this.hidden;
         return this.hidden;
     }
 
-    class EntButton extends TextView {
+    private class EntButton extends TextView {
 
         private Entities entType;
         private final Player owner;
@@ -203,13 +254,15 @@ class Poppist extends HorizontalScrollView {
         public EntButton(Context context, final Entities entType, final Player owner) {
             super(context);
 
+            this.setGravity(Gravity.CENTER);
+
             this.entType = entType;
             this.setPadding(50, 0, 50, 0);
 
             this.setTextColor(GamePanel.background_dark);
             this.setText(entType.toString());
             this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                    ViewGroup.LayoutParams.MATCH_PARENT));
 
 
             this.owner = owner;

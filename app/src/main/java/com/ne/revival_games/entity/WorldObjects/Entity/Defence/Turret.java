@@ -36,15 +36,17 @@ public class Turret extends Entity implements Aimable {
     private Barrel mainBarrel = null;
     private AShape center;
     private AimLogic logic;
-    private Projectile myProjectile;
 
+    private Projectile myProjectile;
     private List<AShape> components = new ArrayList<AShape>();
+
     private boolean aiming = true;
+    private final int numBarrels;
 
     //need to include the angle somehow
-    public Turret(Vector2 location, double angle, MyWorld world, Team team){
-
+    public Turret(Vector2 location, double angle, MyWorld world, Team team, int numBarrels){
         super(angle, 0, 80, false, team);
+        this.numBarrels = numBarrels;
         this.frictionCoefficent = 3;
         this.world = world;
         initializeTurret(location, world);
@@ -88,9 +90,19 @@ public class Turret extends Entity implements Aimable {
 
 //        this.addBarrel(Barrel.BarrelType.SIDE, location, 0);
         //very weird behavior with angle (each angle is like x2 what it is expected to be)
-        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(location.x, 32+location.y), 45);
-        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(-36+location.x, 30+location.y), 45);
-        this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(36+location.x, 30+location.y), 45);
+
+        if (numBarrels == 1) {
+            this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(location.x, 32 + location.y), 45);
+        }
+        else if (numBarrels == 2) {
+            this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(-36 + location.x, 30 + location.y), 45);
+            this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(36 + location.x, 30 + location.y), 45);
+        }
+        else if (numBarrels == 3) {
+            this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(location.x, 32 + location.y), 45);
+            this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(-36 + location.x, 30 + location.y), 45);
+            this.addBarrel(Barrel.BarrelType.SINGLE, new Vector2(36 + location.x, 30 + location.y), 45);
+        }
 //        this.world.engineWorld.addJoint(new WeldJoint(barrels.get(0).shape.body, barrels.get(1).shape.body, location));
 //        this.addBarrel(Barrel.BarrelType.SINGLE, location, 270);
 //        this.addBarrel(Barrel.BarrelType.SINGLE, location);

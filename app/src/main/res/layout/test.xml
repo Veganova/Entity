@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_down_arrow" />
     </LinearLayout>
 

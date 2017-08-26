@@ -197,40 +197,19 @@ public class MyWorld {
      * @param canvas the canvas onto which the entities will be drawn
      */
     public void drawObjects(Canvas canvas){
-        //this might draw multiple of the same entities
-//        Paint paint2 =  new Paint();
-//        paint2.setStyle(Paint.Style.FILL);
-//        paint2.setColor(Color.RED);
-//        canvas.drawCircle((float) 0.0, (float) 0.0, (float) 1.0, paint2);
-//        canvas.drawCircle((float) 9.0, (float) 0.0, (float) 1.0, paint2);
-//        canvas.drawCircle((float) -9.0, (float) 0.0, (float) 1.0, paint2);
-//        canvas.drawCircle((float) 0.0, (float) 8.0, (float) 1.0, paint2);
-//        canvas.drawCircle((float) 0.0, (float) -8.0, (float) 1.0, paint2);
-
-
         this.bounds.draw(canvas);
 //        launcher.draw(canvas);
 
-//        for (Entity toDraw: this.objectDatabase.values()) {
-//            toDraw.draw(canvas);
-//        }
-
-        // TODO: 8/9/2017 CHECK IF THIS ERROR EVER OCCURS.. IF IT DOES THEN PUT BACK HE LINEs BELOW!!!
-//        ArrayList<Entity> drawer = new ArrayList<>(objectDatabase.values());
-//
-//        for (int x = 0; x < drawer.size(); x++){
-//                drawer.get(x).draw(canvas);
-//        }
         for (Entity toDraw: this.objectDatabase.values()) {
-            toDraw.draw(canvas);
+            if (!toDraw.ghost)
+                toDraw.draw(canvas);
         }
 
-        // up.draw(canvas);
-//        tri.draw(canvas);
-//        circ.draw(canvas);
-//
-//        if (ghost.canPlace())
-//            ghost.entity.shape.setPaint(Paint.Style.STROKE);
+        // Draw ghosts last so that they don't get overlapped by other objects.
+        for (Entity ghost: this.ghosts.keySet()) {
+            ghost.draw(canvas);
+        }
+
 
     }
 
