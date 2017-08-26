@@ -112,6 +112,8 @@ public class MainThread extends Thread
         synchronized (this) {
             this.notify();
         }
+
+        this.ended = true;
         System.out.println("GAME LOOP THREAD ENDING");
     }
 
@@ -160,5 +162,11 @@ public class MainThread extends Thread
 //        for(GamePanel panel: screens.keySet()){
 //            screens.get(panel).removeCallback(panel);
 //        }
+    }
+
+
+    private boolean ended = false;
+    public boolean hasEnded() {
+        return this.ended;
     }
 }

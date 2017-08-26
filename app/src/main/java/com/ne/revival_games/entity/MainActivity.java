@@ -70,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
             switch(choice) {
                 case SINGLEPLAYER:
 //                    initOnePlayer();
-                    initPlayers(true, 1);
+                    initPlayers(true, true, 1);
                     break;
 
                 case MULTIPLAYER:
 //                    initTwoPlayer(true);
-                    initPlayers(true, 2);
+                    initPlayers(true, true, 2);
                     break;
             }
         }
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void initPlayers(boolean playerSelection, int numPlayers) {
+    public void initPlayers(boolean playerSelection, boolean playPause, int numPlayers) {
 
         if (numPlayers == 1) {
             this.MAP_HEIGHT = 2400;
@@ -160,7 +160,9 @@ public class MainActivity extends AppCompatActivity {
 
         world.addPlayers(players);
 
-        this.addPlayPause();
+        if (playPause) {
+            this.addPlayPause();
+        }
 
 //        myThread.setRunning(true);
 //        myThread.start();

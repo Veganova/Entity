@@ -70,6 +70,7 @@ public class MainMenu extends LinearLayout {
                 public void onClick(View v) {
                     final Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("GameMode", mode);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //                    activity.myThread.end();
 //                    try {
 //                        activity.myThread.join();
@@ -89,12 +90,16 @@ public class MainMenu extends LinearLayout {
 
                     // wait for the current activity thread to end. (so that it will let go of the canvas lock)
                     activity.myThread.end();
-                    try {
-                        synchronized (activity.myThread) {
-                            activity.myThread.wait();
+                    if (activity.myThread.hasEnded()) {
+
+                    } else {
+                        try {
+                            synchronized (activity.myThread) {
+                                activity.myThread.wait();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                     activity.startActivity(intent);
                 }

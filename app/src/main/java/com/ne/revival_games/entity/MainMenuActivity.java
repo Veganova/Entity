@@ -14,7 +14,7 @@ public class MainMenuActivity extends MainActivity {
         System.out.print("Menu ");
         super.onCreate(savedInstanceState);
         //set screen to fullscreen
-        this.initPlayers(false, 1);
+        this.initPlayers(false, false, 1);
         this.addMenu();
     }
 
