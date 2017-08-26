@@ -19,11 +19,14 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.R;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
+import com.ne.revival_games.entity.WorldObjects.Entity.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import java.util.Arrays;
@@ -55,6 +58,8 @@ class MenuList extends LinearLayout {
     private Popper popper;
     private Poppist poppist;
 
+    static int HEIGHT = 180;//pixels
+
     public MenuList(Context context, Player player) {
         super(context);
 
@@ -62,7 +67,7 @@ class MenuList extends LinearLayout {
 //        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
 //                ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                180);//LayoutParams.WRAP_CONTENT);
+                HEIGHT);//LayoutParams.WRAP_CONTENT);
 
         params.bottomMargin = 50;
 
@@ -199,8 +204,8 @@ class Poppist extends HorizontalScrollView {
 
         // Add all the entities as buttons to this scroll view
         for (Entities entityType: this.toDisplay) {
-            EntButton entButton = new EntButton(context, entityType, owner);
-            container.addView(entButton);
+            EntScroll entScroll = new EntScroll(context, entityType, owner);
+            container.addView(entScroll);
         }
 
         this.addView(container);
@@ -246,30 +251,54 @@ class Poppist extends HorizontalScrollView {
         return this.hidden;
     }
 
+    private class EntScroll extends ScrollView {
+
+        public EntScroll(Context context, final Entities entType, Player player) {
+            super(context);
+
+            this.setVerticalScrollBarEnabled(false);
+
+
+
+            LinearLayout container = new LinearLayout(context);
+            container.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            container.setOrientation(LinearLayout.VERTICAL);
+
+            for (EntityLeaf producer: entType.produceables) {
+                container.addView(new EntButton(context, producer, player));
+            }
+
+
+            this.addView(container);
+        }
+    }
+
+
     private class EntButton extends TextView {
 
-        private Entities entType;
+//        private Entities entType;
         private final Player owner;
 
-        public EntButton(Context context, final Entities entType, final Player owner) {
+        public EntButton(Context context, final EntityLeaf toProduce, final Player owner) {
             super(context);
 
             this.setGravity(Gravity.CENTER);
 
-            this.entType = entType;
+//            this.entType = entType;
             this.setPadding(50, 0, 50, 0);
 
             this.setTextColor(GamePanel.background_dark);
-            this.setText(entType.toString());
+            this.setText(toProduce.name);
             this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
+                    MenuList.HEIGHT));
 
 
             this.owner = owner;
 
             this.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    owner.setGhost(entType);
+                    owner.setGhost(toProduce);
                 }
             });
         }

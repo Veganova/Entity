@@ -23,6 +23,7 @@ import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.CustomViews.Menu;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -33,6 +34,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+
+import static android.R.attr.type;
 
 /**
  * -list of entities
@@ -126,7 +129,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     public abstract boolean onSingleTapUp(MotionEvent e);
 
 
-    public void setGhost(Entities type) {
+    public void setGhost(EntityLeaf toProduce) {
         if (this.holdingGhost) {
             System.out.println("ALREADY HOLDING A GHOST!");
         } else {
@@ -138,7 +141,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             try{
                 addToWorld.put("x", -1*camera.translateXY.x * MyWorld.SCALE);
                 addToWorld.put("y", -1*camera.translateXY.y * MyWorld.SCALE);
-                addToWorld.put("type", type.toString());
+                addToWorld.put("type", toProduce);
             }
             catch (Exception e){
                 e.printStackTrace();

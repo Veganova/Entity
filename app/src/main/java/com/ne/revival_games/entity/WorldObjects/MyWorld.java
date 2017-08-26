@@ -205,8 +205,9 @@ public class MyWorld {
                 toDraw.draw(canvas);
         }
 
-        // Draw ghosts last so that they don't get overlapped by other objects.
-        for (Entity ghost: this.ghosts.keySet()) {
+        // Draw ghosts last so that they don't get overlapped by other objects. Copy to be safe.
+        List<Entity> ghosts = new ArrayList<>(this.ghosts.keySet());
+        for (Entity ghost: ghosts) {
             ghost.draw(canvas);
         }
 

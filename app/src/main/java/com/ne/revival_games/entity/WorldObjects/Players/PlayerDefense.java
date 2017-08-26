@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
@@ -76,7 +77,7 @@ public class PlayerDefense extends Player {
             try{
                 pullTowards = new Vector2(addToWorld.getDouble("x")/MyWorld.SCALE, addToWorld.getDouble("y")/MyWorld.SCALE);
                 this.ghost = GhostFactory.produce(
-                        Entities.valueOf(addToWorld.getString("type")),
+                        (EntityLeaf)addToWorld.get("type"),
                         addToWorld.getDouble("x"),
                         addToWorld.getDouble("y"),
                         0,

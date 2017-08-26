@@ -44,43 +44,41 @@ public enum Entities {
         Entity produce(double x, double y, double angle, MyWorld world, Team team) {
             return new Turret(new Vector2(x, y), angle, world, team, 2);
         }
-    }});
+    }
+            ,
+            new EntityLeaf("TURRET-3") {
+                @Override
+                Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+                    return new Turret(new Vector2(x, y), angle, world, team, 3);
+                }
+            }
+    });
 
-
-    String name;
     public List<EntityLeaf> produceables;
 
     Entities(EntityLeaf[] leafs) {
-        this.name = name;
         produceables = Arrays.asList(leafs);
+    }
 
+    public EntityLeaf getLeaf(String id) {
+        for (EntityLeaf leaf: this.produceables) {
+            if (leaf.name.equals(id)) {
+                return leaf;
+            }
+        }
+        System.out.println("RETURNING DEFAULT FROM getLeaf!!");
+        return this.getDefaultLeaf();
+    }
+
+    public EntityLeaf getDefaultLeaf() {
+        return this.produceables.get(0);
     }
 
     public static Entities random() {
         return Entities.values()[new Random().nextInt(Entities.values().length)];
     }
 
-}
 
-
-abstract class EntityLeaf {
-    private String name;
-
-    EntityLeaf(String name) {
-        this.name = name;
-    }
-
-    abstract Entity produce(double x, double y, double angle, MyWorld world, Team team);
 }
 
 // x, y, angle => new Turret(x, y, angle, 0, TEAM, etc.)
-
-
-abstract class TreeElement {
-
-}
-
-class EntityNode extends TreeElement {
-
-
-}
