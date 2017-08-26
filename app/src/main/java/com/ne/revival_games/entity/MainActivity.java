@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public float MAP_HEIGHT;
 
     protected RelativeLayout relativeLayout;
+    private boolean paused = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("CREATING------------------------------------------------------");
@@ -302,6 +304,8 @@ public class MainActivity extends AppCompatActivity {
             myThread = new MainThread(world);
             myThread.setScreens(screens);
             myThread.start();
+
+            paused = false;
 //            synchronized (Thread.currentThread()) {
 //                Thread.currentThread().notify();
 //            }
@@ -319,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
             screens = myThread.getScreens();
             this.myThread.end();
         }
+        paused = true;
 //        if (this.myThread != null) {
 //            try {
 //                this.myThread.pause(Thread.currentThread());
@@ -351,4 +356,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public boolean isPaused() {
+        return paused;
+    }
 }

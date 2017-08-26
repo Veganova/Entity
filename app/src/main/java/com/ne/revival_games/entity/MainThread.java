@@ -53,34 +53,9 @@ public class MainThread extends Thread
     @Override
     public void run()
     {
-//        System.out.println("LOOP - WAITING");
-//        if (end) {
-//
-//        }
-//        else if(doWait) {
-//            try {
-//                synchronized (waitFor) {
-//                    waitFor.wait();
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } finally {
-//                waitFor = null;
-//                if (this.end) {
-//                    // then let the code run through and end the thread
-//                } else {
-//
-//                    // when code gets here, it has been resumed from a pause.
-//                    doWait = false;
-//                    initValues();
-//                    this.run();
-//                }
-//            }
-//        }
         running = true;
         end = false;
         while(running) {
-//            System.out.println("IN thread LOOP");
             startTime = System.nanoTime();
             canvas = null;
             update();
@@ -89,8 +64,6 @@ public class MainThread extends Thread
                 // try locking the canvas for pixel editing
                 canvas = holder.lockCanvas();
                 try {
-
-//                    System.out.println("CANVAS LOCKED");
                     // TODO: 7/25/2017 see if this ever breaks
                     synchronized (this) {
                         //main thread runs functions of game panel
@@ -136,30 +109,6 @@ public class MainThread extends Thread
             }
         }
 
-        System.out.println("LOOP - WAITING");
-//        if (end) {
-//
-//        }
-//        else if(doWait) {
-//            try {
-//                synchronized (waitFor) {
-//                    waitFor.wait();
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } finally {
-//                waitFor = null;
-//                if (this.end) {
-//                    // then let the code run through and end the thread
-//                } else {
-//
-//                    // when code gets here, it has been resumed from a pause.
-//                    doWait = false;
-//                    initValues();
-//                    this.run();
-//                }
-//            }
-//        }
         synchronized (this) {
             this.notify();
         }

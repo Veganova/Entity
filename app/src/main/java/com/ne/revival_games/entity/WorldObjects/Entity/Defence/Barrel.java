@@ -63,8 +63,9 @@ public class Barrel extends Entity implements Aimable {
 //                this.shape.body.getTransform().rotate(1);
                 break;
         }
-        this.bar = new ActiveBar(this);
-        this.bar.setPathType(LINE, 120);
+
+//        this.bar = new ActiveBar(this);
+//        this.bar.setPathType(LINE, 120);
     }
 
 

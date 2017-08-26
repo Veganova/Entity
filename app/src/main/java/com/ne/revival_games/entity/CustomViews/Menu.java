@@ -258,11 +258,9 @@ class Poppist extends HorizontalScrollView {
 
             this.setVerticalScrollBarEnabled(false);
 
-
-
             LinearLayout container = new LinearLayout(context);
-            container.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
+            container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT));
             container.setOrientation(LinearLayout.VERTICAL);
 
             for (EntityLeaf producer: entType.produceables) {
@@ -273,28 +271,21 @@ class Poppist extends HorizontalScrollView {
             this.addView(container);
         }
     }
-
-
+    
     private class EntButton extends TextView {
-
-//        private Entities entType;
-        private final Player owner;
 
         public EntButton(Context context, final EntityLeaf toProduce, final Player owner) {
             super(context);
 
             this.setGravity(Gravity.CENTER);
-
-//            this.entType = entType;
             this.setPadding(50, 0, 50, 0);
 
             this.setTextColor(GamePanel.background_dark);
             this.setText(toProduce.name);
+
+            // TODO: 8/25/2017 for now manually setting the height.. might be kinda bad idk. 
             this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     MenuList.HEIGHT));
-
-
-            this.owner = owner;
 
             this.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
