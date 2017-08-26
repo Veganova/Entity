@@ -4,19 +4,15 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ne.revival_games.entity.CustomViews.Screen;
-import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.EntityLeaf;
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
-import org.json.JSONObject;
 
 /**
  * Created by vishn on 7/27/2017.

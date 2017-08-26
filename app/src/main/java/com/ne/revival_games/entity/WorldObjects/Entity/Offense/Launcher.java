@@ -5,15 +5,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostFactory;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Updatable;
 
-import org.dyn4j.geometry.Rectangle;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.HashMap;

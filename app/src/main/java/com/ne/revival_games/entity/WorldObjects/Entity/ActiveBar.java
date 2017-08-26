@@ -31,7 +31,7 @@ public class ActiveBar {
     // default
     private PathType pathType = PathType.CIRCLE;
 
-    public ActiveBar(Entity entity) {
+    public ActiveBar(Entity entity, float strokeWidthFraction) {
         this.entity = entity;
         this.on = true;
 
@@ -39,7 +39,7 @@ public class ActiveBar {
         //smoothing
         paint.setAntiAlias(true);
         paint.setColor(ACTIVE_COLOR);
-        paint.setStrokeWidth(0.16f);
+        paint.setStrokeWidth(0.16f * strokeWidthFraction);
         paint.setStyle(Paint.Style.STROKE);
 
         blur = new Paint();
@@ -58,7 +58,7 @@ public class ActiveBar {
     }
 
     ActiveBar(Entity entity, boolean state) {
-        this(entity);
+        this(entity, 1f);
         if (!state) {
             this.toggle();
         }

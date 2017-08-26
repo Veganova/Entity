@@ -1,5 +1,7 @@
-package com.ne.revival_games.entity.WorldObjects.Entity;
+package com.ne.revival_games.entity.WorldObjects.Entity.Creators;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 public abstract class EntityLeaf {

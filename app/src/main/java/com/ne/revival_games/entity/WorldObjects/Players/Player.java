@@ -5,15 +5,12 @@ package com.ne.revival_games.entity.WorldObjects.Players;
  */
 
 import android.content.Context;
-import android.graphics.Point;
 import android.support.v4.view.GestureDetectorCompat;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.ne.revival_games.entity.CameraController;
 import com.ne.revival_games.entity.CustomViews.MoneyView;
@@ -21,10 +18,9 @@ import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.CustomViews.Menu;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.EntityLeaf;
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
@@ -34,8 +30,6 @@ import org.json.JSONObject;
 import java.util.List;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-
-import static android.R.attr.type;
 
 /**
  * -list of entities

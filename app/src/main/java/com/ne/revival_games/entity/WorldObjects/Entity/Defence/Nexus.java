@@ -67,7 +67,7 @@ public class Nexus extends Entity {
         gravEffect = new GravityEffect(this, 1000, 30, new Vector2(0,0), world);
         this.addEffect(gravEffect);
 
-        this.bar = new ActiveBar(this);
+        this.bar = new ActiveBar(this, 1f);
     }
 
     @Override

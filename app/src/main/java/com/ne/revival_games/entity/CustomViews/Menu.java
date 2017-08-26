@@ -2,32 +2,25 @@ package com.ne.revival_games.entity.CustomViews;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
-import android.media.Image;
 import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.ne.revival_games.entity.GamePanel;
-import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.R;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entities;
-import com.ne.revival_games.entity.WorldObjects.Entity.EntityLeaf;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import java.util.Arrays;

@@ -5,10 +5,9 @@ import android.graphics.Canvas;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
-import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 

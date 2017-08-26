@@ -52,7 +52,7 @@ public class Turret extends Entity implements Aimable {
         initializeTurret(location, world);
         this.logic = new SimpleAim(this, range);
 
-        this.bar = new ActiveBar(this);
+        this.bar = new ActiveBar(this, 0.587f);
     };
 
     private void addBarrel(Barrel.BarrelType type, Vector2 location, double angle) {

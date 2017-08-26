@@ -3,13 +3,20 @@ package com.ne.revival_games.entity.CustomViews;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.R;
 
 /**
  * Created by Veganova on 7/23/2017.
@@ -22,6 +29,7 @@ public class MainMenu extends LinearLayout {
     public enum GameMode {
         SINGLEPLAYER("Single Player"), MULTIPLAYER("Multiplayer");
         private String val;
+
         GameMode(String s) {
             this.val = s;
         }
@@ -32,9 +40,13 @@ public class MainMenu extends LinearLayout {
         }
     }
 
+
+//    private int HEIGHT;
     public MainMenu(final Context context, final MainActivity activity) {
         super(context);
         this.activity = activity;
+
+//        HEIGHT = (int) (activity.MAP_HEIGHT * 0.06);
 
         this.setLayoutParams(new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
@@ -49,9 +61,9 @@ public class MainMenu extends LinearLayout {
         verticle.setOrientation(VERTICAL);
 
 
-
         boolean current = false;
-        for (final GameMode mode: GameMode.values()) {
+        boolean leftSide = true;
+        for (final GameMode mode : GameMode.values()) {
 
             OnClickListener listener = new OnClickListener() {
                 @Override
@@ -87,25 +99,93 @@ public class MainMenu extends LinearLayout {
                     activity.startActivity(intent);
                 }
             };
+
+
+            LinearLayout container = new LinearLayout(context);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.bottomMargin = 30;
+            container.setLayoutParams(params);
+            container.setGravity(Gravity.CENTER);
+
+            LinearLayout left = new LinearLayout(context);
+            left.setLayoutParams(new LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.MATCH_PARENT,
+                    1.0f));
+            if (leftSide) {
+                left.setBackgroundColor(GamePanel.background_dark);
+
+                ImageView style = new ImageView(context);
+                style.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                style.setAdjustViewBounds(true);
+//                style.setScaleType(ScaleType.FIT_XY);
+
+                Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow_reversed, null);
+                style.setImageDrawable(drawable);
+                left.setGravity(Gravity.RIGHT);
+                left.addView(style);
+            }
+
+
+            LinearLayout right = new LinearLayout(context);
+            right.setLayoutParams(new LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.MATCH_PARENT,
+                    1.0f));
+            if (!leftSide) {
+                right.setBackgroundColor(GamePanel.background_dark);
+
+                ImageView style = new ImageView(context);
+                style.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                style.setAdjustViewBounds(true);
+//                style.setScaleType(ScaleType.FIT_XY);
+
+                Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
+                style.setImageDrawable(drawable);
+                right.setGravity(Gravity.LEFT);
+                right.addView(style);
+            }
+
             MainMenuButton button = new MainMenuButton(context, mode.toString(), listener);
-            button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            verticle.addView(button);
+
+            container.setBackgroundColor(GamePanel.cream);
+
+            container.addView(left);
+            container.addView(button);
+            container.addView(right);
+
+
+            verticle.addView(container);
+
+            leftSide = !leftSide;
         }
 
         this.addView(verticle);
     }
-}
 
-class MainMenuButton extends Button {
+    private class MainMenuButton extends TextView {
 
-    public MainMenuButton(Context context, String name, OnClickListener listener) {
-        super(context);
+        public MainMenuButton(Context context, String name, OnClickListener listener) {
+            super(context);
 
-        this.setTextColor(Color.YELLOW);
-        this.setBackgroundColor(Color.TRANSPARENT);
-        this.setText(name);
-        this.setOnClickListener(listener);
+            this.setTextColor(GamePanel.background_dark);
+
+            this.setTextSize(25);
+            this.setGravity(Gravity.CENTER);
+            this.setBackgroundColor(Color.TRANSPARENT);
+            this.setText(name);
+            this.setOnClickListener(listener);
+
+            this.setPadding(0, 20, 0, 20);
+
+            this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+        }
+
     }
 
 }
+
 

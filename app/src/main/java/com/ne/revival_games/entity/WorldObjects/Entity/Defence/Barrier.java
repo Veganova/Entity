@@ -40,7 +40,7 @@ public class Barrier extends Entity {
 //        this.shape.body.setLinearDamping(this.shape.body.getLinearDamping() * 10);
 
 
-        this.bar = new ActiveBar(this);
+        this.bar = new ActiveBar(this, 0.8f);
         this.bar.setPathType(ActiveBar.PathType.LINE, 200);
     }
 

@@ -1,16 +1,9 @@
 package com.ne.revival_games.entity.WorldObjects;
 
-import android.graphics.Paint;
-
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.GhostEntity;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.contact.ContactAdapter;
 import org.dyn4j.dynamics.contact.ContactPoint;
-import org.dyn4j.dynamics.contact.SolvedContactPoint;
-
-import java.sql.SQLOutput;
 
 /**
  * Created by vishn on 6/27/2017.
