@@ -89,7 +89,6 @@ public class Barrel extends Entity implements Aimable {
 
         this.shape.body.setAsleep(false);
         this.sleepUntil = System.currentTimeMillis() + this.projectile.getSleepTime();
-
     }
 
     @Override

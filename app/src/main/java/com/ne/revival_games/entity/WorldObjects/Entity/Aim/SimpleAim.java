@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrel;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
@@ -73,7 +74,13 @@ public class SimpleAim implements AimLogic {
         }
 
         if (Math.abs(angleDifference) <= 0.03) {
-            this.turret.fire(angleTo);
+            Turret t = (Turret) this.turret;
+            if (t.aiming) {
+                System.out.println("SHOOTING - "  + enemy.simpleString());
+                this.turret.fire(angleTo);
+            } else {
+                return;
+            }
 //            mainBarrel.shape.body.clearAccumulatedTorque();
 //            mainBarrel.shape.body.clearAccumulatedForce();
             mainBarrel.shape.body.setAngularVelocity(0);
@@ -88,11 +95,10 @@ public class SimpleAim implements AimLogic {
             mainBarrel.shape.body.setAngularVelocity(0);
         }
 
-
         //better find a shortest distance algorithm
-        if(mainBarrel instanceof Barrel){
+        if(mainBarrel instanceof Barrel) {
             Barrel thisBarrel = ((Barrel) mainBarrel);
-            if(thisBarrel.myTurret == null || thisBarrel.myTurret.shape == null){
+            if(thisBarrel.myTurret == null || thisBarrel.myTurret.shape == null) {
                 return;
             }
             thisBarrel.myTurret.setMotion(turnCounterClock * 10);

@@ -53,9 +53,9 @@ public abstract class Projectile extends Entity {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        if (contact.untargetable) {
-            return false;
-        }
+//        if (contact.untargetable) {
+//            return false;
+//        }
 
         return super.onCollision(contact, componentHit, damage);
     }

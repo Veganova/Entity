@@ -40,7 +40,7 @@ public class Turret extends Entity implements Aimable {
     private Projectile myProjectile;
     private List<AShape> components = new ArrayList<AShape>();
 
-    private boolean aiming = true;
+    public boolean aiming = true;
     private final int numBarrels;
 
     //need to include the angle somehow
@@ -64,12 +64,9 @@ public class Turret extends Entity implements Aimable {
         WeldJoint joint = new WeldJoint(b.shape.body,
                 this.shape.body, new Vector2(location.x/MyWorld.SCALE, location.y/MyWorld.SCALE));
         world.engineWorld.addJoint(joint);
-//        this.world.objectDatabase.put(b.shape.body, this);
-
-//        this.components.add(b.shape);
-
-        //this.shape = new ComplexShape(components, location.x, location.y, world);
-
+        // this.world.objectDatabase.put(b.shape.body, this);
+        // this.components.add(b.shape);
+        // this.shape = new ComplexShape(components, location.x, location.y, world);
     }
 
     /**
@@ -165,6 +162,7 @@ public class Turret extends Entity implements Aimable {
 
     @Override
     public void fire(double angle){
+//        System.out.println("TURRET IS FIRING!");
         if(System.currentTimeMillis() - lastfired <= reload ){
             return;
         }

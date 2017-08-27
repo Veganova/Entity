@@ -41,13 +41,19 @@ public enum Entities {
             return new Barrier(x, y, angle, world, team);
         }
     }}),
-    TURRET(new EntityLeaf[]{new EntityLeaf("TURRET-2") {
+    TURRET(new EntityLeaf[]{
+            new EntityLeaf("TURRET-1") {
+                @Override
+                Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+                    return new Turret(new Vector2(x, y), angle, world, team, 1);
+                }
+            },
+            new EntityLeaf("TURRET-2") {
         @Override
         Entity produce(double x, double y, double angle, MyWorld world, Team team) {
             return new Turret(new Vector2(x, y), angle, world, team, 2);
         }
-    }
-            ,
+    },
             new EntityLeaf("TURRET-3") {
                 @Override
                 Entity produce(double x, double y, double angle, MyWorld world, Team team) {

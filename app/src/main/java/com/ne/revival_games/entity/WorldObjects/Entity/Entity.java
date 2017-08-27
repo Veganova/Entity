@@ -162,7 +162,9 @@ public class Entity implements Effector {
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
 //        System.out.println("contact type " + contact.getClass().getSimpleName());
 
-        if (this.untargetable && this.targetExceptions.isContactDisallowedWith(contact)) {
+        if ((this.untargetable && this.targetExceptions.isContactDisallowedWith(contact) )
+                || (contact.untargetable && contact.targetExceptions.isContactDisallowedWith(this))) {
+            return false;
 //            System.out.println("CONTACT PROHIBITED");
         }
 
@@ -182,7 +184,6 @@ public class Entity implements Effector {
         if (contact.team.opposite(this.team)) {
             this.lastHit = contact;
             applyDamage(damage);
-
         }
 
         return !this.dead;
