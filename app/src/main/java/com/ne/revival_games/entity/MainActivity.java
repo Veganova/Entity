@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         SCREEN_WIDTH = displaymetrics.widthPixels;
         SCREEN_HEIGHT = displaymetrics.heightPixels;
 
-        initTwoPlayer();
-//        initOnePlayer();
+//        initTwoPlayer();
+        initOnePlayer();
     }
 
     public void initOnePlayer(){

@@ -281,9 +281,12 @@ public class Player extends GestureDetector.SimpleOnGestureListener implements V
         display.getSize(size);
         int height = size.y;
 
+        // set the locations of the menu bars given the player - this can be made smarter using
+        // the player's bounding box as a spawning points
         if (this.playerNumber == 1) {
             return new Menu(context, this, 0);
-        } else if (this.playerNumber == 2) {
+        }
+        else if (this.playerNumber == 2) {
             return new Menu(context, this, height - 300);
         } else {
             return new Menu(context, this, 0);
