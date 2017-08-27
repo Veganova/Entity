@@ -226,6 +226,33 @@ public class Turret extends Entity implements Aimable {
 //        System.out.println(this.shape.body.getJoints().size());
         super.draw(canvas);
     }
+
+
+    @Override
+    public void setColor(int color, MyWorld world) {
+        super.setColor(color, world);
+
+        for (Barrel barrel: this.barrels) {
+            barrel.setColor(color, world);
+        }
+    }
+
+
+
+    public boolean isInContact(Body body) {
+        if (super.isInContact(body)) {
+            return true;
+        } else {
+            for (Barrel barrel: this.barrels) {
+                if (barrel.isInContact(body)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
 }
 
 

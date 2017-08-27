@@ -1,5 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import android.support.annotation.NonNull;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Aimable;
@@ -32,15 +34,14 @@ public class Barrel extends Entity implements Aimable {
     private double sleepUntil = 0;
 
     public Barrel(Projectile projectile, BarrelType type,
-                  Entity turret, MyWorld world, double angle, Team team, Vector2 location) {
+                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location) {
         super(0, 0, 70, false, team);
         initBarrel(type, location, world, angle);
         this.world = world;
         this.projectile = projectile;
         this.world.objectDatabase.put(this.shape.body, this);
-        if(turret instanceof Turret){
-            this.myTurret = ((Turret)turret);
-        }
+
+        this.myTurret = turret;
     }
 
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {

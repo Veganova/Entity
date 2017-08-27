@@ -148,7 +148,7 @@ public class GhostEntity {
         try {
             for (Body body : world.engineWorld.getBodies()) {
                 if (world.objectDatabase.get(body) != null && !world.objectDatabase.get(body).ghost) {
-                    if (entity.shape.body.isInContact(body)) {
+                    if (entity.isInContact(body)) {//shape.body.isInContact(body)) {
                         // the ghost object is colliding with another non-ghost object
 
                         entity.setColor(CONTACTING, world);

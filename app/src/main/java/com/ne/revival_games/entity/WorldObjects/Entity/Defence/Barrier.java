@@ -1,9 +1,13 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import android.util.Pair;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.Entity.Untargetable;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -42,6 +46,8 @@ public class Barrier extends Entity {
 
         this.bar = new ActiveBar(this, 0.8f);
         this.bar.setPathType(ActiveBar.PathType.LINE, 200);
+
+        this.targetExceptions.addType(Projectile.class, Untargetable.FROM.ALLY);
     }
 
     @Override
@@ -50,23 +56,6 @@ public class Barrier extends Entity {
         this.untargetable = !untargetable;
     }
 
-//    private class BarrierDown extends Effect {
-//
-//        private Barrier barrier;
-//
-//        BarrierDown(Barrier barrier) {
-//            this.barrier = barrier;
-//        }
-//
-//        @Override
-//        public void apply() {
-//            this.untargetable = true;
-//        }
-//
-//        @Override
-//        public void apply(Entity other) {
-//        }
-//    }
 
 }
 

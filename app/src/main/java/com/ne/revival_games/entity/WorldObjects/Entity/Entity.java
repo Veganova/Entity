@@ -14,7 +14,9 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.Joint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents the common behaviors that are shared by all engineWorld objects
@@ -36,6 +38,7 @@ public class Entity implements Effector {
     public boolean isActive = true;
     public double isDisabledUntil = 0;
     public boolean ghost = false;
+    public Untargetable targetExceptions;
     public boolean untargetable = false;
     public boolean dead = false;
 
@@ -57,6 +60,7 @@ public class Entity implements Effector {
         this.team = team;
         this.effects = new HashMap<>();
         this.zoneToEffect = new HashMap<>();
+        this.targetExceptions = new Untargetable(this);
     }
 
     public MyDeque.Node getNode() {
@@ -156,7 +160,13 @@ public class Entity implements Effector {
     private Entity lastHit;
 
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        if (this.untargetable || this.dead) {
+//        System.out.println("contact type " + contact.getClass().getSimpleName());
+
+        if (this.untargetable && this.targetExceptions.isContactDisallowedWith(contact)) {
+//            System.out.println("CONTACT PROHIBITED");
+        }
+
+        if (this.dead) {
             return false;
         }
 
@@ -214,24 +224,6 @@ public class Entity implements Effector {
         }
     }
 
-    /**
-     * Handles the joints as well.
-     *
-     * @param color
-     */
-    public void setColor(int color, MyWorld world) {
-        this.shape.setColor(color);
-        for (Joint joint : this.shape.body.getJoints()) {
-            Entity ent1 = world.objectDatabase.get(joint.getBody1());
-            Entity ent2 = world.objectDatabase.get(joint.getBody2());
-            if (ent1 != null && ent2 != null) {
-                ent1.shape.setColor(color);
-                ent2.shape.setColor(color);
-            }
-
-        }
-    }
-
     @Override
     public boolean isEffect(Body effectBody) {
         return this.zoneToEffect.containsKey(effectBody);
@@ -268,6 +260,7 @@ public class Entity implements Effector {
     }
 
     public double applyDamage(double damage) {
+
         if (!this.ghost && !this.untargetable && !this.invulnerable) {
             this.health -= damage;
 
@@ -281,7 +274,17 @@ public class Entity implements Effector {
         return 0;
     }
 
-//    public boolean isGhost(){
-//
-//    }
+    public boolean isInContact(Body body) {
+        return shape.body.isInContact(body);
+    }
+
+    /**
+     * Override this if the object (like turret) and has subparts to be colored.
+     *
+     * @param color
+     */
+    public void setColor(int color, MyWorld world) {
+        this.shape.setColor(color);
+    }
+
 }
