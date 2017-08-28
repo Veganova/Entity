@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -118,6 +119,10 @@ public class MyWorld {
         settings.setLinearTolerance(150*settings.getLinearTolerance());
 //        settings.setMaximumTranslation(settings.getMaximumTranslation() / 5.0);
         this.engineWorld.setSettings(settings);
+
+        Team.DEFENCE.empty();
+        Team.OFFENSE.empty();
+        Team.NEUTRAL.empty();
 
 //        bam = new MassLazer(-200, -200, 30, this);
 //        this.ghostNexus = new GhostEntity(nex);
@@ -282,6 +287,11 @@ public class MyWorld {
             for (Updatable updatable: earth.updatables) {
                 updatable.update();
             }
+
+//            System.out.println("NUM entit: " + earth.objectDatabase.size());
+//            System.out.println("Team off: " + Team.OFFENSE.getTeamObjects().size());
+//            System.out.println("Team def: " + Team.DEFENCE.getTeamObjects().size());
+//            System.out.println();
 
 
             for (Entity entity:

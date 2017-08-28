@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Veganova on 6/10/2017.
+ * NOTE: Static variables can sustain values added to them over programs.
  */
-
 public enum Team {
     OFFENSE(Color.rgb(40,240,200)), DEFENCE(Color.rgb(236,38,101)), NEUTRAL(Color.MAGENTA);
 
@@ -32,6 +31,10 @@ public enum Team {
             return DEFENCE;
         else
             return NEUTRAL;
+    }
+
+    public void empty() {
+        this.teamObjects.clear();
     }
 
     public void add(Entity entity) {

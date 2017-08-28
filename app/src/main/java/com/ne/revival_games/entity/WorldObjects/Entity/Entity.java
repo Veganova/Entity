@@ -14,9 +14,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.Joint;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Represents the common behaviors that are shared by all engineWorld objects
@@ -183,7 +181,7 @@ public class Entity implements Effector {
 
         if (contact.team.opposite(this.team)) {
             this.lastHit = contact;
-            applyDamage(damage);
+            applyDamage(damage, contact);
         }
 
         return !this.dead;
@@ -260,9 +258,13 @@ public class Entity implements Effector {
         }
     }
 
-    public double applyDamage(double damage) {
+    public double applyDamage(double damage, Entity from) {
 
-        if (!this.ghost && !this.untargetable && !this.invulnerable) {
+        if (this.untargetable && this.targetExceptions.isContactDisallowedWith(from)) {
+            return 0;
+        }
+
+        if (!this.ghost && !this.invulnerable) {
             this.health -= damage;
 
             if (this.health <= 0) {

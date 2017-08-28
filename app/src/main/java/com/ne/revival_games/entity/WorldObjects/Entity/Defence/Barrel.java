@@ -108,18 +108,19 @@ public class Barrel extends Entity implements Aimable {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        if(contact instanceof Barrel) {
-            if(((Barrel) contact).myTurret == this.myTurret && this.myTurret != null){
-                return false;
-            }
-        }
+        // TODO: 8/27/2017 see if this not there breaks anything
+//        if(contact instanceof Barrel) {
+//            if(((Barrel) contact).myTurret == this.myTurret && this.myTurret != null){
+//                return false;
+//            }
+//        }
 
 //        if(this.myTurret == contact) {
 //            return false;
 //        }
+        System.out.println("COLLIDING barrel");
 
         return super.onCollision(contact, componentHit, damage);
-
     }
 
     @Override
@@ -131,12 +132,4 @@ public class Barrel extends Entity implements Aimable {
            this.myTurret = null;
         super.onDeath(world);
     }
-
-
-//    @Override
-//    public void addToTeam(Team team) {
-//        this.team = Team.NEUTRAL;
-//        this.team.add(this);
-//    }
-
 }

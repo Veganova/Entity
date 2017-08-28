@@ -76,7 +76,7 @@ public class SimpleAim implements AimLogic {
         if (Math.abs(angleDifference) <= 0.03) {
             Turret t = (Turret) this.turret;
             if (t.aiming) {
-                System.out.println("SHOOTING - "  + enemy.simpleString());
+//                System.out.println("SHOOTING - "  + enemy.simpleString());
                 this.turret.fire(angleTo);
             } else {
                 return;

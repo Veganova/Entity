@@ -5,12 +5,9 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.collision.narrowphase.DistanceDetector;
 import org.dyn4j.collision.narrowphase.Gjk;
-import org.dyn4j.collision.narrowphase.Separation;
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Convex;
-import org.dyn4j.geometry.Transform;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -75,7 +72,7 @@ public class ExplosiveEffect extends ExpandingEffect {
 
         double magnitude = explosionPower / (distance) / other.shape.body.getMass().getMass();
 
-        other.applyDamage(this.damage);
+        other.applyDamage(this.damage, other);
 
         other.shape.body.applyForce(new Vector2(-1*magnitude*Math.cos(angle),
                 -1*magnitude*Math.max(magnitude, 0) * Math.sin(angle)));

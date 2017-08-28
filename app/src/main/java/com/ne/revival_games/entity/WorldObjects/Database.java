@@ -80,4 +80,8 @@ public class Database {
         body.setUserData(null);
         this.toRemove.add(body);
     }
+
+    public int size() {
+        return this.values.size();
+    }
 }
