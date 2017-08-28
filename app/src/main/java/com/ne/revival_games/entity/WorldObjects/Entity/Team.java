@@ -9,7 +9,7 @@ import java.util.List;
  * NOTE: Static variables can sustain values added to them over programs.
  */
 public enum Team {
-    OFFENSE(Color.rgb(40,240,200)), DEFENCE(Color.rgb(236,38,101)), NEUTRAL(Color.MAGENTA);
+    OFFENSE(Color.rgb(40, 240, 200)), DEFENCE(Color.rgb(236, 38, 101)), NEUTRAL(Color.MAGENTA);
 
     //yellow
 
@@ -18,7 +18,7 @@ public enum Team {
     }
 
     private int teamColor;
-    private List<Entity> teamObjects = new ArrayList<>();
+//    private List<Entity> teamObjects = new ArrayList<>();
 
     public boolean opposite(Team other) {
         return (this != other);
@@ -33,25 +33,31 @@ public enum Team {
             return NEUTRAL;
     }
 
-    public void empty() {
-        this.teamObjects.clear();
-    }
 
-    public void add(Entity entity) {
-        // TODO: 7/11/2017 test later with this and remove's outputs
-//        System.out.println(this + " adding - " + this.teamObjects.size());
-//        System.out.println(entity);
-        entity.shape.setColor(this.teamColor);
-        this.teamObjects.add(entity);
-    }
+//    public void empty() {
+//        this.teamObjects.clear();
+//    }
 
-    public List<Entity> getTeamObjects() {
-        return this.teamObjects;
-    }
-
-    public void remove(Entity entity) {
-//        System.out.println(this + " removing - " + this.teamObjects.size());
-//        System.out.println(entity);
-        this.teamObjects.remove(entity);
+    public void applyTeamColor(Entity entity) {
+        entity.setColor(this.teamColor);
     }
 }
+
+//    public void add(Entity entity) {
+//        // TODO: 7/11/2017 test later with this and remove's outputs
+////        System.out.println(this + " adding - " + this.teamObjects.size());
+////        System.out.println(entity);
+//        entity.shape.setColor(this.teamColor);
+//        this.teamObjects.add(entity);
+//    }
+
+//    public List<Entity> getTeamObjects() {
+//        return this.teamObjects;
+//    }
+//
+//    public void remove(Entity entity) {
+////        System.out.println(this + " removing - " + this.teamObjects.size());
+////        System.out.println(entity);
+//        this.teamObjects.remove(entity);
+//    }
+//}

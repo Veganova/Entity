@@ -14,6 +14,8 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.Vector2;
 
+import java.util.Iterator;
+
 /**
  * Created by vishn on 7/27/2017.
  */
@@ -136,7 +138,9 @@ public class PlayerDefense extends Player {
             holdingGhost = false;
         } else if (!holdingGhost) {
             Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
-            for (Entity teamEntity : this.entities) {
+            Iterator<Entity> looper = this.world.objectDatabase.getTeamIterator(this.team);
+            while(looper.hasNext()) {
+                Entity teamEntity = looper.next();
                 if (teamEntity.shape.body.contains(clickPos)) {
                     teamEntity.interact();
                     break;

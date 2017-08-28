@@ -27,6 +27,7 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import org.dyn4j.geometry.Vector2;
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -41,7 +42,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public abstract class Player extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
     private Screen screen;
-    protected List<Entity> entities;
+//    protected Iterator<Entity> entities;
     public CameraController camera;
     protected MyWorld world;
     protected Context context;
@@ -77,7 +78,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         if (addListenertoPanel) {
             gamePanel.addPlayerListener(this);
         }
-        this.entities = team.getTeamObjects();
+//        this.entities = world.objectDatabase.getTeamIterator(team);//team.getTeamObjects();
         this.context = activity.getApplicationContext();
         this.WIDTH = activity.MAP_WIDTH;
         this.HEIGHT = activity.MAP_HEIGHT;

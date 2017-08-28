@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
-import com.ne.revival_games.entity.WorldObjects.MyDeque;
+import com.ne.revival_games.entity.WorldObjects.MyCollections.MyDeque;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -152,7 +152,7 @@ public class Entity implements Effector {
 //            world.objectDatabase.remove(effect);
 //            world.engineWorld.removeBody(effect.zone.body);
         }
-        this.team.remove(this);
+//        this.team.remove(this);
     }
 
     private Entity lastHit;
@@ -187,17 +187,18 @@ public class Entity implements Effector {
         return !this.dead;
     }
 
-    public void addToTeam(Team team) {
-        if (team != null) {
-            this.team.remove(this);
-            this.team = team;
-            this.team.add(this);
-        }
-    }
+//    public void addToTeam(Team team) {
+//        if (team != null) {
+//            this.team.remove(this);
+//            this.team = team;
+//            this.team.add(this);
+//        }
+//    }
 
     public void addToPlayer(Player player) {
-        this.addToTeam(player.team);
+//        this.addToTeam(player.team);
         this.player = player;
+        this.team.applyTeamColor(this);
     }
 
     public double getDamage(Body componentHit) {
@@ -286,7 +287,7 @@ public class Entity implements Effector {
      *
      * @param color
      */
-    public void setColor(int color, MyWorld world) {
+    public void setColor(int color) {
         this.shape.setColor(color);
     }
 

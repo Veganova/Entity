@@ -26,7 +26,7 @@ public class Comet extends Projectile implements Aimable {
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
         super(x, y, RADIUS, direction, speed, HEALTH, world, team, true);
         this.team = team;
-        this.logic = new SeekerAim(this, range, false);
+        this.logic = new SeekerAim(this, world.objectDatabase, range, false);
     }
 
     @Override

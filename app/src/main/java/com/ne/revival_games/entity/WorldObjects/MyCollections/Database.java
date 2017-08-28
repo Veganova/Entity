@@ -1,17 +1,14 @@
-package com.ne.revival_games.entity.WorldObjects;
+package com.ne.revival_games.entity.WorldObjects.MyCollections;
 
 import android.util.Pair;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -20,18 +17,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Database {
 
-    private MyDeque values = new MyDeque();
+    private MyList values = new MyList();
     private ConcurrentLinkedQueue<Pair<Body, Entity>> toAdd = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<Body> toRemove = new ConcurrentLinkedQueue<>();
-//    @Override
-//    public Entity put(Body key, Entity value) {
-//        super.put(key, value);
-//        Entity oldvalue = (Entity) key.getUserData();
-//        key.setUserData(value);
-//        return oldvalue;
-//    }
-//
 
+    public Iterator<Entity> getTeamIterator(Team team) {
+        return this.values.getTeamIterator(team);
+    }
+
+    public MyList values() {
+    return values;
+}
 
 
     public Entity get(Body key) {
@@ -52,9 +48,7 @@ public class Database {
         }
     }
 
-    public MyDeque values() {
-        return values;
-    }
+
 
     public void removePendingDeletions(MyWorld world) {
         while (!this.toRemove.isEmpty()) {
@@ -63,8 +57,8 @@ public class Database {
             Entity toDelete = this.get(body);
             System.out.println("REMOVING " + toDelete.simpleString());
             if (toDelete != null) {
-                if (toDelete.team != null)
-                    toDelete.team.getTeamObjects().remove(toDelete);
+//                if (toDelete.team != null)
+//                    toDelete.team.getTeamObjects().remove(toDelete);
                 toDelete.onDeath(world);
                 this.values.remove(toDelete);
 

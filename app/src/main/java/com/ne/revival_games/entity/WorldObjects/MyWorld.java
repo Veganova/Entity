@@ -9,6 +9,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -120,9 +121,9 @@ public class MyWorld {
 //        settings.setMaximumTranslation(settings.getMaximumTranslation() / 5.0);
         this.engineWorld.setSettings(settings);
 
-        Team.DEFENCE.empty();
-        Team.OFFENSE.empty();
-        Team.NEUTRAL.empty();
+//        Team.DEFENCE.empty();
+//        Team.OFFENSE.empty();
+//        Team.NEUTRAL.empty();
 
 //        bam = new MassLazer(-200, -200, 30, this);
 //        this.ghostNexus = new GhostEntity(nex);

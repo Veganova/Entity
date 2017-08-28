@@ -50,7 +50,7 @@ public class Turret extends Entity implements Aimable {
         this.frictionCoefficent = 3;
         this.world = world;
         initializeTurret(location, world);
-        this.logic = new SimpleAim(this, range);
+        this.logic = new SimpleAim(this, world.objectDatabase, range);
 
         this.bar = new ActiveBar(this, 0.587f);
     };
@@ -199,13 +199,13 @@ public class Turret extends Entity implements Aimable {
 //    }
 
 
-    @Override
-    public void addToTeam(Team team) {
-        super.addToTeam(team);
-        for (Barrel barrel: this.barrels) {
-            barrel.addToTeam(team);
-        }
-    }
+//    @Override
+//    public void addToTeam(Team team) {
+//        super.addToTeam(team);
+//        for (Barrel barrel: this.barrels) {
+//            barrel.addToTeam(team);
+//        }
+//    }
 
     @Override
     public void interact() {
@@ -227,11 +227,11 @@ public class Turret extends Entity implements Aimable {
 
 
     @Override
-    public void setColor(int color, MyWorld world) {
-        super.setColor(color, world);
+    public void setColor(int color) {
+        super.setColor(color);
 
         for (Barrel barrel: this.barrels) {
-            barrel.setColor(color, world);
+            barrel.setColor(color);
         }
     }
 

@@ -8,12 +8,6 @@ import android.graphics.RectF;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
-import org.dyn4j.collision.AbstractBounds;
-import org.dyn4j.collision.Bounds;
-import org.dyn4j.collision.BoundsAdapter;
-import org.dyn4j.collision.Collidable;
-import org.dyn4j.collision.Fixture;
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -43,7 +37,7 @@ public class Boundary {
         Vector2 center = entity.shape.body.getWorldCenter();
         if((Math.abs(center.x) > side) || (Math.abs(center.y) > side)) {
             if (entity.ghost) {
-                entity.setColor(Color.YELLOW, world);
+                entity.setColor(Color.YELLOW);
             } else {
                 world.objectDatabase.remove(entity.shape.body);
             }

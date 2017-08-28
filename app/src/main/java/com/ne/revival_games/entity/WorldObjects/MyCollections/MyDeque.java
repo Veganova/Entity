@@ -1,4 +1,4 @@
-package com.ne.revival_games.entity.WorldObjects;
+package com.ne.revival_games.entity.WorldObjects.MyCollections;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
@@ -10,33 +10,34 @@ import java.util.Iterator;
  *
  // Million additions -
  // Linked - 1402875182 ns
- // MyDeque- 1316633929 ns
+ // DequeStuff2.MyDeque- 1316633929 ns
  // ------------------------------------------------------------------------------
  *
  // Million elements .size()
  // Linked - 199111 ns
- // MyDeque- 249679 ns -- close  enough (this is what O(1) looks like)
+ // DequeStuff2.MyDeque- 249679 ns -- close  enough (this is what O(1) looks like)
  // ------------------------------------------------------------------------------
  *
  *
  * The real performance upgrade
  // Million element .remove()
  // Linked - 8549143 ns
- // MyDeque -229531 ns
+ // DequeStuff2.MyDeque -229531 ns
  // ------------------------------------------------------------------------------
  */
-public class MyDeque implements Iterable<Entity> {
+public class MyDeque implements BasicList<Entity> {
 
     private Node tail;
 
     private int size = 0;
+
 
     public MyDeque() {
         tail = new Sentinel();
 
     }
 
-    Node add(Entity value) {
+    public Node add(Entity value) {
         // if no node is associated with the given
         Node n = value.getNode();
         if (n == null) {
@@ -133,15 +134,6 @@ public class MyDeque implements Iterable<Entity> {
         }
     }
 
-//    class StringHolder {
-//        String s;
-//        Node node;
-//
-//        StringHolder(String s, Node node) {
-//            this.s = s;
-//            this.node = node;
-//        }
-//    }
 
     private class DequeIterator implements Iterator<Entity> {
 
@@ -169,4 +161,6 @@ public class MyDeque implements Iterable<Entity> {
             return current.content;
         }
     }
+
+
 }

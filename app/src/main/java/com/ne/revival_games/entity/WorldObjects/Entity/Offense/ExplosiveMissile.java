@@ -48,7 +48,7 @@ public class ExplosiveMissile extends ConditionalDestructible implements Aimable
 
         this.shape = new ComplexShape(components, location.x, location.y, world);
         world.objectDatabase.put(this.shape.body, this);
-        this.logic = new SeekerAim(this, 900, true);
+        this.logic = new SeekerAim(this, world.objectDatabase, 900, true);
         this.prime();
     }
 

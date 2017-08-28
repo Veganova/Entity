@@ -123,7 +123,7 @@ public class GhostEntity {
             this.entity.addToPlayer(this.player);
             this.player = null;
         } else if (this.team != null) {
-            this.entity.addToTeam(this.team);
+            this.team.applyTeamColor(entity);
             this.team = null;
         }
 
@@ -151,7 +151,7 @@ public class GhostEntity {
                     if (entity.isInContact(body)) {//shape.body.isInContact(body)) {
                         // the ghost object is colliding with another non-ghost object
 
-                        entity.setColor(CONTACTING, world);
+                        entity.setColor(CONTACTING);
                         entity.setPaint(Paint.Style.FILL, world);
 
                         this.placeable = false;
@@ -168,7 +168,7 @@ public class GhostEntity {
             this.placeReal();
         } else {
 //            this.placeable = true;
-            entity.setColor(PLACEABLE, world);
+            entity.setColor(PLACEABLE);
             entity.setPaint(Paint.Style.STROKE, world);
         }
         this.placeable = true;

@@ -5,11 +5,13 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,11 +22,12 @@ public class SimpleAim implements AimLogic {
     // Doesnt have to be a turret
     private Aimable turret;
     private Entity enemy;
+    private final Database data;
     private double range;
 
-
-    public SimpleAim(Aimable turret, double range) {
+    public SimpleAim(Aimable turret, Database data, double range) {
         this.turret = turret;
+        this.data = data;
         this.range = range/MyWorld.SCALE;
     }
 
@@ -119,26 +122,28 @@ public class SimpleAim implements AimLogic {
     @Override
     public void choose() {
         Team team = getTeam();
-        List<Entity> enemies = team.getOpposite().getTeamObjects();
-        if(enemies.size() > 0) {
+//        List<Entity> enemies = team.getOpposite().getTeamObjects();
+        Iterator<Entity> enemies = data.getTeamIterator(team);
+        Entity possibleChoice = null;
+        // checks if there is a single element
+        if(enemies.hasNext()){
             Vector2 myPosition = ((Entity)this.turret).shape.body.getWorldCenter();
-            int index = 0;
-            double distance = Util.getDistance(enemies.get(0).shape.body.getWorldCenter(), myPosition);
-            for(int x = 1; x < enemies.size(); x++){
-                double otherDist = Util.getDistance(enemies.get(x).shape.body.getWorldCenter(), myPosition);
+            double distance = this.range + 1;//Util.getDistance(enemies.get(0).shape.body.getWorldCenter(), myPosition);
+
+            while(enemies.hasNext()) {
+                Entity enemy = enemies.next();
+                double otherDist = Util.getDistance(enemy.shape.body.getWorldCenter(), myPosition);
                 if(distance > otherDist){
-                    index = x;
+                    possibleChoice = enemy;
                     distance = otherDist;
                 }
             }
-            if(distance < this.range) {
-                this.enemy = enemies.get(index);
-                return;
-            }
-//            enemy = enemies.get(0);
-            return;
+//            if(distance < this.range) {
+//                this.enemy = possibleChoice;
+//                return;
+//            }
         }
-        this.enemy = null;
+        this.enemy = possibleChoice;
 
     }
 }
