@@ -4,11 +4,13 @@ import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Aimable;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
@@ -24,7 +26,7 @@ import java.util.List;
  * Created by vishn on 6/11/2017.
  */
 
-public class Turret extends Entity implements Aimable {
+public class Turret extends AimableEntity {
     public static int COST = 200;
     public static int MASS = 25;
     private static double reload = 3000;
@@ -33,15 +35,17 @@ public class Turret extends Entity implements Aimable {
 
     private MyWorld world;
     public List<Barrel> barrels = new ArrayList<>();
+    private final int numBarrels;
     private Barrel mainBarrel = null;
     private AShape center;
-    private AimLogic logic;
 
-    private Projectile myProjectile;
+
+//    private Projectile myProjectile;
     private List<AShape> components = new ArrayList<AShape>();
 
-    public boolean aiming = true;
-    private final int numBarrels;
+//    private AimLogic logic;
+//    public boolean aiming = true;
+
 
     //need to include the angle somehow
     public Turret(Vector2 location, double angle, MyWorld world, Team team, int numBarrels){
@@ -57,8 +61,14 @@ public class Turret extends Entity implements Aimable {
 
     private void addBarrel(Barrel.BarrelType type, Vector2 location, double angle) {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
-        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, team, false);
-        Barrel b = new Barrel(projectile, type, this, world, angle, team, location);
+//        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, team, false);
+
+        Barrel b = new Barrel(new EntityLeaf("Missile") {
+            @Override
+            public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+                return new Missile(x, y, angle, 0, world, team);
+            }
+        }, type, this, world, angle, team, location);
 
         this.barrels.add(b);
         WeldJoint joint = new WeldJoint(b.shape.body,
@@ -107,29 +117,12 @@ public class Turret extends Entity implements Aimable {
 
     }
 
-    @Override
-    public void aim() {
-        if (this.mainBarrel != null && this.aiming && !this.isSleeping()) {
-            logic.aim(mainBarrel);
-        }
-        //logic.aim(body, this.barrels.get(1).shape);
-    }
-
     public void selectNewMainBarrel(Barrel deadBarrel){
         if(deadBarrel == mainBarrel && barrels.size() > 0){
             this.mainBarrel = barrels.get(0);
         }
     }
 
-    @Override
-    public boolean update(MyWorld world){
-        if(super.update(world) && this.logic != null){
-            this.logic.aim(mainBarrel);
-            return true;
-        }
-
-        return false;
-    }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
@@ -160,8 +153,21 @@ public class Turret extends Entity implements Aimable {
         super.onDeath(world);
     }
 
+
     @Override
-    public void fire(double angle){
+    public void aim() {
+        if (this.mainBarrel != null) {// && this.aiming && !this.isSleeping()) {
+            super.aim();
+        }
+    }
+
+    @Override
+    public Entity getPartToAimWith() {
+        return mainBarrel;
+    }
+
+    @Override
+    public void fire() {
 //        System.out.println("TURRET IS FIRING!");
         if(System.currentTimeMillis() - lastfired <= reload ){
             return;
@@ -169,19 +175,15 @@ public class Turret extends Entity implements Aimable {
 
         for (Barrel barrel: barrels) {
             if(barrel == mainBarrel){
-                barrel.fire(angle);
+                barrel.fire();
             }
             else {
-                barrel.fire(barrel.shape.body.getTransform().getRotation());
+                barrel.fire();
+//                barrel.fire(barrel.shape.body.getTransform().getRotation());
             }
         }
 
         lastfired = System.currentTimeMillis();
-    }
-
-    @Override
-    public Vector2 getCenter() {
-        return this.shape.body.getWorldCenter();
     }
 
     @Override
@@ -190,21 +192,18 @@ public class Turret extends Entity implements Aimable {
     }
 
     @Override
-    public boolean isSleeping() {
-        return mainBarrel != null && this.mainBarrel.isSleeping();
+    public int getTurnSpeed() {
+        return 10;
     }
 
-//    public boolean inContact(Body contact){
-//        return this.barrels.get(0).shape.body.isInContact(contact) || center.body.isInContact(contact);
+//    @Override
+//    public Vector2 getCenter() {
+//        return this.shape.body.getWorldCenter();
 //    }
 
-
 //    @Override
-//    public void addToTeam(Team team) {
-//        super.addToTeam(team);
-//        for (Barrel barrel: this.barrels) {
-//            barrel.addToTeam(team);
-//        }
+//    public boolean isSleeping() {
+//        return mainBarrel != null && this.mainBarrel.isSleeping();
 //    }
 
     @Override
@@ -213,18 +212,11 @@ public class Turret extends Entity implements Aimable {
         this.aiming = !this.aiming;
     }
 
-//    @Override
-//    public void draw(Canvas canvas){
-//        this.center.draw(canvas);
-//    }
-
 
     @Override
     public void draw(Canvas canvas){
-//        System.out.println(this.shape.body.getJoints().size());
         super.draw(canvas);
     }
-
 
     @Override
     public void setColor(int color) {
@@ -234,8 +226,6 @@ public class Turret extends Entity implements Aimable {
             barrel.setColor(color);
         }
     }
-
-
 
     public boolean isInContact(Body body) {
         if (super.isInContact(body)) {
@@ -249,8 +239,6 @@ public class Turret extends Entity implements Aimable {
         }
         return false;
     }
-
-
 }
 
 

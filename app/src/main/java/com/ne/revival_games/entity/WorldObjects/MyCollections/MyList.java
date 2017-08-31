@@ -43,6 +43,10 @@ public class MyList implements BasicList<Entity> {
         return this.teamDeques.get(team).iterator();
     }
 
+    public Iterator<Entity> getForwardTeamIterator(Team team) {
+        return this.teamDeques.get(team).reverseIterator();
+    }
+
     @Override
     public Iterator<Entity> iterator() {
         Stack<Iterator<Entity>> iters = new Stack<>();
@@ -50,6 +54,14 @@ public class MyList implements BasicList<Entity> {
             iters.push(deque.iterator());
         }
         return new CombineIterator<>(iters);
+    }
+
+    public String sizes() {
+        String total = "";
+        for (Team team: this.teamDeques.keySet()) {
+            total += team + " " + this.teamDeques.get(team).size() + "\n";
+        }
+        return total;
     }
 
 

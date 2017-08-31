@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 import android.util.Pair;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Shootable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
@@ -47,7 +48,7 @@ public class Barrier extends Entity {
         this.bar = new ActiveBar(this, 0.8f);
         this.bar.setPathType(ActiveBar.PathType.LINE, 200);
 
-        this.targetExceptions.addType(Projectile.class, Untargetable.FROM.ALLY);
+        this.targetExceptions.addType(Missile.class, Untargetable.FROM.ALLY);
     }
 
     @Override

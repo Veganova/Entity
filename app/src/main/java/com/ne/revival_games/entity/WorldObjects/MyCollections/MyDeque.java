@@ -63,6 +63,10 @@ public class MyDeque implements BasicList<Entity> {
         return new DequeIterator(tail);
     }
 
+    public Iterator<Entity> reverseIterator() {
+        return new BackwardsDequeIterator(tail);
+    }
+
     /**
      * Assumes the element being removed is in the list.
      */
@@ -153,6 +157,35 @@ public class MyDeque implements BasicList<Entity> {
         public Entity next() {
             Node current = tail;
             this.tail = this.tail.left;
+            index += 1;
+
+            if (current.isSentinel()) {
+                throw new RuntimeException("Iterator is returning the sentinel!");
+            }
+            return current.content;
+        }
+    }
+
+    private class BackwardsDequeIterator implements Iterator<Entity> {
+
+        private Node start;
+
+
+        BackwardsDequeIterator(Node tail) {
+            this.start = tail.right.right;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !this.start.isSentinel();
+        }
+
+        private int index = 0;
+
+        @Override
+        public Entity next() {
+            Node current = start;
+            this.start = this.start.right;
             index += 1;
 
             if (current.isSentinel()) {

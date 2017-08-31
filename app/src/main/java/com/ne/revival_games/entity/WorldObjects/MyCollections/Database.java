@@ -25,6 +25,11 @@ public class Database {
         return this.values.getTeamIterator(team);
     }
 
+    public Iterator<Entity> getForwardTeamIterator(Team team) {
+        return this.values.teamDeques.get(team).reverseIterator();
+    }
+
+
     public MyList values() {
     return values;
 }
@@ -36,9 +41,14 @@ public class Database {
 
     public void put(Body key, Entity entity) {
         key.setEntity(entity);
+        entity.team.applyTeamColor(entity);
         this.toAdd.add(new Pair<Body, Entity>(key, entity));
     }
 
+
+    public String getPartitionData() {
+        return this.values.sizes();
+    }
 
     public void addPendingAdditions() {
         while (!this.toAdd.isEmpty()) {

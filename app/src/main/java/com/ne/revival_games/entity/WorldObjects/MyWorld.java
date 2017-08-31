@@ -265,6 +265,8 @@ public class MyWorld {
                 player.update();
             }
 
+            System.out.println(objectDatabase.getPartitionData());
+
 //        ArrayList<Entity> updater = new ArrayList<>(earth.objectDatabase.values());
 //
 //        for (int x = 0; x < updater.size(); x++){

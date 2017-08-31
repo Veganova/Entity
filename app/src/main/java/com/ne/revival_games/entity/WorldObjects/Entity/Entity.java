@@ -16,6 +16,8 @@ import org.dyn4j.dynamics.joint.Joint;
 
 import java.util.HashMap;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 /**
  * Represents the common behaviors that are shared by all engineWorld objects
  */
@@ -118,9 +120,16 @@ public class Entity implements Effector {
     }
 
     public void setVelocity(double speed) {
-        this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(this.direction)),
-                speed * Math.sin(Math.toRadians(this.direction)));
+//        double direction = shape.body.getTransform().getRotation();
+        this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(direction)),
+                speed * Math.sin(Math.toRadians(direction)));
     }
+
+    public void setVelocity(double speed, double angle) {
+//        double direction = shape.body.getTransform().getRotation();
+        this.shape.body.setLinearVelocity(speed * Math.cos(angle), speed * Math.sin(angle));
+    }
+
 
     public String simpleString() {
         return this.getClass().getSimpleName();
@@ -157,6 +166,7 @@ public class Entity implements Effector {
 
     private Entity lastHit;
 
+    @OverridingMethodsMustInvokeSuper
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
 //        System.out.println("contact type " + contact.getClass().getSimpleName());
 

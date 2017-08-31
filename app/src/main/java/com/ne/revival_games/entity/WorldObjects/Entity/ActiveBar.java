@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
+import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -16,13 +17,15 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
  * of functionality, it only serves as a visual aid for the status of the entity that it is tied to.
  */
 public class ActiveBar {
-    private int ACTIVE_COLOR = Color.WHITE;
-    private int INACTIVE_COLOR = Color.GRAY;
+//    private int ACTIVE_COLOR = Color.WHITE;
+//    private int INACTIVE_COLOR = Color.GRAY;
+    private int ACTIVE_COLOR = GamePanel.cream;
+    private int INACTIVE_COLOR = GamePanel.background_dark;
 
     private float startingAngle = 225f;
     private Entity entity;
     private boolean on;
-    private Paint paint, selected, blur;
+    private Paint paint, blur;
 
     public enum PathType {
         CIRCLE, RECTANGLE, ROUNDED_RECTANGLE, LINE;
@@ -47,14 +50,14 @@ public class ActiveBar {
         blur.setStrokeJoin(Paint.Join.ROUND);
         blur.setStrokeCap(Paint.Cap.ROUND);
         blur.setColor(Color.WHITE);
-        blur.setStrokeWidth(0.45f);
+        blur.setStrokeWidth(0.45f * strokeWidthFraction);
         blur.setMaskFilter(new BlurMaskFilter(1.4f, BlurMaskFilter.Blur.INNER));
 
-        selected = new Paint();
-        selected.set(paint);
-        selected.setColor(Color.WHITE);
-        selected.setStrokeWidth(0.16f);
-        selected.setMaskFilter(new BlurMaskFilter(0.8f, BlurMaskFilter.Blur.NORMAL));
+//        selected = new Paint();
+//        selected.set(paint);
+//        selected.setColor(Color.WHITE);
+//        selected.setStrokeWidth(0.16f);
+//        selected.setMaskFilter(new BlurMaskFilter(0.8f, BlurMaskFilter.Blur.NORMAL));
     }
 
     ActiveBar(Entity entity, boolean state) {
@@ -124,7 +127,9 @@ public class ActiveBar {
                 break;
         }
 
-        c.drawPath(path, blur);
+        if (this.on) {
+            c.drawPath(path, blur);
+        }
         c.drawPath(path, paint);
         // c.drawPath(path, selected);
     }

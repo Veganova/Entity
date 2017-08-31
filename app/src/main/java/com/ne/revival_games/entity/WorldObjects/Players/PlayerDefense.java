@@ -138,7 +138,7 @@ public class PlayerDefense extends Player {
             holdingGhost = false;
         } else if (!holdingGhost) {
             Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
-            Iterator<Entity> looper = this.world.objectDatabase.getTeamIterator(this.team);
+            Iterator<Entity> looper = this.world.objectDatabase.getForwardTeamIterator(this.team);
             while(looper.hasNext()) {
                 Entity teamEntity = looper.next();
                 if (teamEntity.shape.body.contains(clickPos)) {
