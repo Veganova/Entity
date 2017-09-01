@@ -146,17 +146,12 @@ public class Entity implements Effector {
         return result;
     }
 
-    private boolean actuallyDead = false;
 
     public void onDeath(MyWorld world) {
-        // TODO: 9/1/2017 "not sure why but the bellow boolean usage is required otherwise score is 2x  
-        if (actuallyDead)
-            return;
-
         if (this.lastHit != null && this.lastHit.player != null) {
             // if the last hit entity part is owned by a player
             double earned = this.MAX_HEALTH;
-            System.out.println("ADDING MONEY" + earned);
+//            System.out.println("ADDING MONEY" + earned);
             lastHit.player.addMoney(earned);
         }
 
@@ -169,8 +164,6 @@ public class Entity implements Effector {
         }
 
         this.dead = true;
-        this.actuallyDead = true;
-//        this.team.remove(this);
     }
 
     private Entity lastHit;
