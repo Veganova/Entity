@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import org.dyn4j.dynamics.Body;
 
@@ -41,7 +42,21 @@ public class Database {
 
     public void put(Body key, Entity entity) {
         key.setEntity(entity);
-        entity.team.applyTeamColor(entity);
+//        entity.team.applyTeamColor(entity);
+        this.toAdd.add(new Pair<Body, Entity>(key, entity));
+    }
+
+    /**
+     * Use this one when the object is created in game and not by a player (yet needs to belong to a player - ex bullet from a turret).
+     *
+     * @param key
+     * @param entity
+     * @param player
+     */
+    public void put(Body key, Entity entity, Player player) {
+        key.setEntity(entity);
+        entity.addToPlayer(player);
+//        entity.team.applyTeamColor(entity);
         this.toAdd.add(new Pair<Body, Entity>(key, entity));
     }
 

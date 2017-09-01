@@ -12,6 +12,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
@@ -123,6 +124,14 @@ public class Turret extends AimableEntity {
         }
     }
 
+    @Override
+    public void addToPlayer(Player player) {
+        super.addToPlayer(player);
+        for(Barrel barrel: this.barrels) {
+            barrel.addToPlayer(player);
+        }
+    }
+
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
@@ -169,7 +178,7 @@ public class Turret extends AimableEntity {
     @Override
     public void fire() {
 //        System.out.println("TURRET IS FIRING!");
-        if(System.currentTimeMillis() - lastfired <= reload ){
+        if(System.currentTimeMillis() - lastfired <= reload){
             return;
         }
 

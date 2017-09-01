@@ -146,7 +146,13 @@ public class Entity implements Effector {
         return result;
     }
 
+    private boolean actuallyDead = false;
+
     public void onDeath(MyWorld world) {
+        // TODO: 9/1/2017 "not sure why but the bellow boolean usage is required otherwise score is 2x  
+        if (actuallyDead)
+            return;
+
         if (this.lastHit != null && this.lastHit.player != null) {
             // if the last hit entity part is owned by a player
             double earned = this.MAX_HEALTH;
@@ -161,6 +167,9 @@ public class Entity implements Effector {
 //            world.objectDatabase.remove(effect);
 //            world.engineWorld.removeBody(effect.zone.body);
         }
+
+        this.dead = true;
+        this.actuallyDead = true;
 //        this.team.remove(this);
     }
 
@@ -175,6 +184,10 @@ public class Entity implements Effector {
             return false;
 //            System.out.println("CONTACT PROHIBITED");
         }
+//
+//        if (contact.team.opposite(this.team)) {
+//            this.lastHit = contact;
+//        }
 
         if (this.dead) {
             return false;
@@ -215,6 +228,38 @@ public class Entity implements Effector {
         if (this.team == Team.NEUTRAL)
             return 0;
         return this.health;
+    }
+
+    public double applyDamage(double damage, Entity from) {
+
+        if (this.untargetable && this.targetExceptions.isContactDisallowedWith(from)) {
+            return 0;
+        }
+
+        if (!this.ghost && !this.invulnerable) {
+            this.health -= damage;
+
+            if (this.health <= 0) {
+                this.invisible = true;
+                this.dead = true;
+                return 0;
+            }
+            return damage;
+        }
+        return 0;
+    }
+
+    public boolean isInContact(Body body) {
+        return shape.body.isInContact(body);
+    }
+
+    /**
+     * Override this if the object (like turret) and has subparts to be colored.
+     *
+     * @param color
+     */
+    public void setColor(int color) {
+        this.shape.setColor(color);
     }
 
     /**
@@ -267,38 +312,6 @@ public class Entity implements Effector {
         for (Effect effect : this.effects.values()) {
             effect.enable();
         }
-    }
-
-    public double applyDamage(double damage, Entity from) {
-
-        if (this.untargetable && this.targetExceptions.isContactDisallowedWith(from)) {
-            return 0;
-        }
-
-        if (!this.ghost && !this.invulnerable) {
-            this.health -= damage;
-
-            if (this.health <= 0) {
-                this.invisible = true;
-                this.dead = true;
-                return 0;
-            }
-            return damage;
-        }
-        return 0;
-    }
-
-    public boolean isInContact(Body body) {
-        return shape.body.isInContact(body);
-    }
-
-    /**
-     * Override this if the object (like turret) and has subparts to be colored.
-     *
-     * @param color
-     */
-    public void setColor(int color) {
-        this.shape.setColor(color);
     }
 
 }

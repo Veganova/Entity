@@ -31,7 +31,10 @@ public abstract class ShootableEntity extends Entity implements Shootable {
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*shape.body.getWorldCenter().x;
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
 
-        getNewBodyToShoot(x, y, Math.toDegrees(angle)).setVelocity(shootingSpeed);
+        Entity shooting = getNewBodyToShoot(x, y, Math.toDegrees(angle));
+        shooting.setVelocity(shootingSpeed);
+        shooting.addToPlayer(this.player);
+
 
 //        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, team);
 //

@@ -89,7 +89,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
 
         this.money = 0.0;
-        this.mpt = 1.0;
+        this.mpt = 0.0;
     }
 
     protected boolean holdingGhost = false;

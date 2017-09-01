@@ -9,6 +9,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -41,6 +42,7 @@ public class Barrel extends ShootableEntity {
         this.world.objectDatabase.put(this.shape.body, this);
 
         this.myTurret = turret;
+
     }
 
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {

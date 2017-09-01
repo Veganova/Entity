@@ -30,29 +30,29 @@ public class Missile extends Entity {
     }
 
 
-    @Override
-    public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        boolean regular = super.onCollision(contact, componentHit, damage);
+//    @Override
+//    public boolean onCollision(Entity contact, Body componentHit, double damage) {
+//        boolean regular = super.onCollision(contact, componentHit, damage);
+//
+//        if (!regular || this.dead) {
+//            return false;
+//        }
+//
+//        if (contact.team.opposite(this.team)) {
+//            this.applyDamage(damage, contact);
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
-        if (!regular || this.dead) {
-            return false;
-        }
 
-        if (contact.team.opposite(this.team)) {
-            this.applyDamage(damage, contact);
-            return false;
-        }
-
-        return true;
-    }
-
-
-    @Override
-    public double applyDamage(double damage, Entity from) {
-        this.dead = true;
-        this.invisible = true;
-        this.health = 0;
-        return super.applyDamage(damage, from);
-    }
+//    @Override
+//    public double applyDamage(double damage, Entity from) {
+//        this.dead = true;
+//        this.invisible = true;
+//        this.health = 0;
+//        return super.applyDamage(damage, from);
+//    }
 
 }
