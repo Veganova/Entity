@@ -9,6 +9,7 @@ import org.dyn4j.collision.Fixture;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
+import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
@@ -69,6 +70,7 @@ public abstract class AShape implements Shape {
         private double angle = 0.0D;
         private boolean premadeBody = false;
         private MassType type = MassType.NORMAL;
+        private Mass mass;
 
         private InitBuilder(boolean body, MyWorld world, Convex shape) {
             this.isBody = body;
@@ -124,7 +126,12 @@ public abstract class AShape implements Shape {
 
             body.setAutoSleepingEnabled(false);
             body.rotate(angle);
-            body.setMass(type);
+
+            if (mass !=null) {
+                body.setMass(mass);
+            } else {
+                body.setMass(type);
+            }
             setBodyPosition(new Vector2(x, y), body.getWorldCenter());
             // TODO: 7/4/2017 could be adding several times.. 
             world.engineWorld.addBody(body);
@@ -163,6 +170,11 @@ public abstract class AShape implements Shape {
         }
         public InitBuilder setFriction(double friction) {
             this.friction = friction;
+            return this;
+        }
+
+        public InitBuilder setMassType(double mass) {
+            this.mass = new Mass(new Vector2(x, y), mass, 1);
             return this;
         }
 

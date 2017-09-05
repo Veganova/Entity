@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Creators;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Totem;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Comet;
@@ -32,6 +33,12 @@ public enum Entities {
         @Override
         public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
             return new Nexus(x, y, angle, world, team);
+        }
+    }}),
+    TOTEM(new EntityLeaf[]{new EntityLeaf("TOTEM") {
+        @Override
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+            return new Totem(x, y, angle, world, team, 3);
         }
     }}),
 
