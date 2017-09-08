@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimShootEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.ImmediateAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
@@ -34,7 +35,7 @@ public class Comet extends AimShootEntity {
         shape.getBuilder(true, world).setXY(x, y).init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
-        this.logic = new SimpleAim(this, world.objectDatabase, range);//new SeekerAim(this, world.objectDatabase, range, false);
+        this.logic = new ImmediateAim(this, world.objectDatabase, range);//new SeekerAim(this, world.objectDatabase, range, false);
     }
 
     @Override
