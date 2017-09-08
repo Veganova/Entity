@@ -24,22 +24,6 @@ public class ObjCircle extends AShape {
         this.convex = circ;
     }
 
-//    private ObjCircle(double x, double y, double r, double density, MyWorld world) {
-//        r = r/MyWorld.SCALE;
-//        this.circ = new Circle(r);
-//        initValues(this.circ, x, y, density, world);
-//    }
-//
-//    private ObjCircle(double x, double y, double r, double fixtureangle) {
-//        r = r/MyWorld.SCALE;
-//        this.circ = new Circle(r);
-//        initValues(this.circ, x, y, fixtureangle);
-//    }
-
-//    public InitBuilder putInWorld(int x, int y, MyWorld world) {
-//        return new InitBuilder(world)
-//    }
-
     @Override
     public void draw(Canvas canvas) {
         //might have to modify coordinates as needed
@@ -68,30 +52,6 @@ public class ObjCircle extends AShape {
 
     public Convex getShape(){
         return this.convex;
-    }
-
-
-    public static class ObjCircleBuilder {
-
-        private double x = 0, y =0, r = 10;
-
-
-        ObjCircleBuilder setX(double x) {
-            this.x = x;
-            return this;
-        }
-        ObjCircleBuilder setY(double x) {
-            this.y = x;
-            return this;
-        }
-        ObjCircleBuilder setR(double x) {
-            this.r = x;
-            return this;
-        }
-
-        // Builder b = CircleBuilder
-        // myCricle = b.setX(10).setY(1).setR(1).build();
-
     }
 
 }

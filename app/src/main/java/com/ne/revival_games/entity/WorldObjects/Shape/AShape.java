@@ -202,6 +202,11 @@ public abstract class AShape implements Shape {
     }
 
     @Override
+    public Paint getPaint() {
+        return this.paint;
+    }
+
+    @Override
     public void setColor(int color) {
         this.paint.setColor(color);
     }

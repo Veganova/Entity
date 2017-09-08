@@ -100,16 +100,26 @@ public class Entity implements Effector {
 
 
     public void draw(Canvas canvas) {
+        System.out.println(this.simpleString());
+
         if (!this.invisible) {
+//            for (Effect effect : effects.values()) {
+//                effect.draw(canvas);
+//            }
+
             this.shape.draw(canvas);
 
-            for (Effect effect : effects.values()) {
-                effect.draw(canvas);
-            }
+
 
             if (this.bar != null) {
                 this.bar.draw(canvas);
             }
+        }
+    }
+
+    public void drawEffect(Canvas canvas) {
+        for (Effect effect : effects.values()) {
+            effect.draw(canvas);
         }
     }
 
@@ -253,6 +263,9 @@ public class Entity implements Effector {
      */
     public void setColor(int color) {
         this.shape.setColor(color);
+        for (Effect effect: this.effects.values()) {
+            effect.setColor(color);
+        }
     }
 
     /**

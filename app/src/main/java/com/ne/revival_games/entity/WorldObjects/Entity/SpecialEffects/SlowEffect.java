@@ -26,6 +26,7 @@ public class SlowEffect extends Effect {
                       double slowFactor, MyWorld world) {
         aoeJoint(applier, zone, effectType.SLOW, jointDisplacement, world);
         this.slowFactor = slowFactor;
+        world.objectDatabase.put(this.zone.body, applier);
     }
 
     @Override

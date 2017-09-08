@@ -10,6 +10,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
+import com.ne.revival_games.entity.WorldObjects.MyCollections.MyList;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -204,8 +205,16 @@ public class MyWorld {
     public void drawObjects(Canvas canvas){
         this.bounds.draw(canvas);
 //        launcher.draw(canvas);
+        MyList l = this.objectDatabase.values();
 
-        for (Entity toDraw: this.objectDatabase.values()) {
+        for (Entity toDraw: l) {
+            if (!toDraw.ghost) {
+                toDraw.drawEffect(canvas);
+            }
+        }
+
+
+        for (Entity toDraw: l) {
             if (!toDraw.ghost)
                 toDraw.draw(canvas);
         }
@@ -215,7 +224,6 @@ public class MyWorld {
         for (Entity ghost: ghosts) {
             ghost.draw(canvas);
         }
-
 
     }
 

@@ -3,6 +3,8 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.SlowEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
@@ -42,6 +44,11 @@ public class Totem extends Entity {
 
         initBars(x, y, world, numbars);
 //        this.bar = new ActiveBar(this, 0.587f);
+
+
+        Effect e = new SlowEffect(this, new ObjCircle(250), new Vector2(0, 0), 1.2, world);
+        e.toggleDraw();
+        this.addEffect(e);
     }
 
     private static double ANGULAR_SPEED = 2.5;
@@ -100,7 +107,6 @@ public class Totem extends Entity {
             joint.setDampingRatio(0.8);
 
             world.engineWorld.addJoint(joint);
-
         }
     }
 

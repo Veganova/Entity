@@ -44,4 +44,6 @@ public interface Shape {
     void setPaint(Paint.Style style);
 
     void setColor(int color);
+
+    Paint getPaint();
 }
