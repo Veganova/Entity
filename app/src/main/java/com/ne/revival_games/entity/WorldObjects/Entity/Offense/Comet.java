@@ -4,7 +4,9 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimShootEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -37,6 +39,7 @@ public class Comet extends AimShootEntity {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
+        Entities.NEXUS.getDefaultLeaf();
         boolean regular = super.onCollision(contact, componentHit, damage);
 
         if (!regular || this.dead) {

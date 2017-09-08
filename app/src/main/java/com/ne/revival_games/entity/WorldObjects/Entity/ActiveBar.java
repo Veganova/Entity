@@ -106,7 +106,7 @@ public class ActiveBar {
         if (this.entity.health != targetHealth) {
             this.targetHealth = this.entity.health;
             // animation change! animate lastHealth from lastHealth to targetHealth
-            healthAnim = new IntAnimator(lastHealth, targetHealth, 2);
+            healthAnim = new IntAnimator(lastHealth, targetHealth, 0.8);
         } else {
             // will be null first time when health is full
             if (healthAnim != null)

@@ -30,11 +30,10 @@ public class Barrier extends Entity {
     public static double WIDTH = 200;
     public static double HEIGHT = 30;
 
-    private Effect barrierDown;
 
     public Barrier(double x, double y, double angle, MyWorld world, Team team) {
         super(angle, 0, HEALTH, false, team);
-        this.shape = new ObjRectangle(200, 30);
+        this.shape = new ObjRectangle(WIDTH, HEIGHT);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setAngle(angle).setXY(x, y).init();
 
@@ -43,7 +42,6 @@ public class Barrier extends Entity {
 
 //        this.shape.body.setAngularDamping(this.shape.body.getAngularDamping() * 10);
 //        this.shape.body.setLinearDamping(this.shape.body.getLinearDamping() * 10);
-
 
         this.bar = new ActiveBar(this, 0.8f);
         this.bar.setPathType(ActiveBar.PathType.LINE, 200);
