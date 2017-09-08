@@ -61,14 +61,15 @@ public abstract class ExpandingEffect extends Effect {
     }
 
     @Override
-    public void apply(Entity other) {
-        if (!canApply(other)) {
-            return;
-        }
+    public boolean apply(Entity other) {
+        if (super.apply(other)) {
 
-        if(inRange(other)){
-           applyEffect(other);
+            if (inRange(other)) {
+                applyEffect(other);
+            }
+            return true;
         }
+        return false;
 
     }
 

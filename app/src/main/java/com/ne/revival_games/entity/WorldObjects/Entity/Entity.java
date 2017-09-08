@@ -39,7 +39,7 @@ public class Entity implements Effector {
     public double isDisabledUntil = 0;
     public boolean ghost = false;
     public Untargetable targetExceptions;
-    public boolean untargetable = false;
+//    public boolean untargetable = false;
     public boolean dead = false;
 
     public double frictionCoefficent = 1;
@@ -100,7 +100,6 @@ public class Entity implements Effector {
 
 
     public void draw(Canvas canvas) {
-        System.out.println(this.simpleString());
 
         if (!this.invisible) {
 //            for (Effect effect : effects.values()) {
@@ -109,14 +108,17 @@ public class Entity implements Effector {
 
             this.shape.draw(canvas);
 
-
-
             if (this.bar != null) {
                 this.bar.draw(canvas);
             }
         }
     }
 
+    /**
+     * Draw this first because we want effects underneath Entities!
+     *
+     * @param canvas
+     */
     public void drawEffect(Canvas canvas) {
         for (Effect effect : effects.values()) {
             effect.draw(canvas);
@@ -182,8 +184,8 @@ public class Entity implements Effector {
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
 //        System.out.println("contact type " + contact.getClass().getSimpleName());
 
-        if ((this.untargetable && this.targetExceptions.isContactDisallowedWith(contact) )
-                || (contact.untargetable && contact.targetExceptions.isContactDisallowedWith(this))) {
+        if (this.targetExceptions.isContactDisallowedWith(contact)
+                || contact.targetExceptions.isContactDisallowedWith(this)) {
             return false;
 //            System.out.println("CONTACT PROHIBITED");
         }
@@ -235,7 +237,7 @@ public class Entity implements Effector {
 
     public double applyDamage(double damage, Entity from) {
 
-        if (this.untargetable && this.targetExceptions.isContactDisallowedWith(from)) {
+        if (this.targetExceptions.isContactDisallowedWith(from)) {
             return 0;
         }
 

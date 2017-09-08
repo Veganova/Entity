@@ -54,7 +54,7 @@ public class Barrier extends Entity {
     @Override
     public void interact() {
         super.interact();
-        this.untargetable = !untargetable;
+        this.targetExceptions.toggle();
     }
 
 

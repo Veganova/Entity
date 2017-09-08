@@ -12,6 +12,8 @@ import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Vector2;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 /**
  * Created by Veganova on 7/12/2017.
  */
@@ -48,7 +50,16 @@ public abstract class Effect {
         world.engineWorld.addJoint(new RevoluteJoint(applier.shape.body, zone.body, zone.body.getWorldCenter()));
     }
 
-    public abstract void apply(Entity other);
+    /**
+     *
+     *
+     * @param other
+     * @return      Whether the effect was applied or not
+     */
+    @OverridingMethodsMustInvokeSuper
+    public boolean apply(Entity other) {
+        return this.canApply(other);
+    }
 
 
     public void disable() {
@@ -63,7 +74,7 @@ public abstract class Effect {
         status = !status;
     }
 
-    protected boolean canApply(Entity other) {
+    private boolean canApply(Entity other) {
         return this.status && other != applier;
     }
 

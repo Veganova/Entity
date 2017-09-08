@@ -13,6 +13,7 @@ public class Untargetable {
 
 
     private Entity owner;
+    private boolean disallow = false;
 
     public enum FROM {
         ALLY, ENEMY, ALL
@@ -29,6 +30,10 @@ public class Untargetable {
     public Untargetable addType(Class<? extends Entity> classType, FROM from) {
         data.add(new Pair<Class<? extends Entity>, FROM>(classType, from));
         return this;
+    }
+
+    public void toggle() {
+        this.disallow = !disallow;
     }
 
     public void removeType(Class<? extends Entity> classType) {
@@ -65,10 +70,12 @@ public class Untargetable {
     }
 
     public boolean isContactDisallowedWith(Entity contact) {
-        Class<? extends Entity> classType = contact.getClass();
-        for (Pair<Class<? extends Entity>, FROM> p: this.data) {
-            if (matchTeam(p.second, contact.team) && matchClass(p.first, classType)) {
-                return true;
+        if (this.disallow) {
+            Class<? extends Entity> classType = contact.getClass();
+            for (Pair<Class<? extends Entity>, FROM> p : this.data) {
+                if (matchTeam(p.second, contact.team) && matchClass(p.first, classType)) {
+                    return true;
+                }
             }
         }
         return false;

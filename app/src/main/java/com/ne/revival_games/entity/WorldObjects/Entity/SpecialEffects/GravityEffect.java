@@ -47,39 +47,42 @@ public class GravityEffect extends Effect{
     }
 
     @Override
-    public void apply(Entity other) {
-        if (!canApply(other)) {
-            return;
-        }
+    public boolean apply(Entity other) {
+//        if (!canApply(other)) {
+//            return;
+//        }
+        if (super.apply(other)) {
 
-        double distance =
-                Util.getDistance(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter());
+            double distance =
+                    Util.getDistance(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter());
 
-        double angle =
-                Util.absoluteAngle(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter());
+            double angle =
+                    Util.absoluteAngle(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter());
 
-        double magnitude = gravityValue
-                * this.zone.body.getMass().getMass()
-                * other.shape.body.getMass().getMass()
-                / (Math.pow(distance, 2));
+            double magnitude = gravityValue
+                    * this.zone.body.getMass().getMass()
+                    * other.shape.body.getMass().getMass()
+                    / (Math.pow(distance, 2));
 
 
-        if(Util.nearValue(other.shape.body.getLinearVelocity().x, 0, 0.001)
-                && Util.nearValue(other.shape.body.getLinearVelocity().y, 0, 0.001)){
-            if(this.applier.shape.body.getMass().getMass() * MyWorld.staticFriction > magnitude){
-                return;
+            if (Util.nearValue(other.shape.body.getLinearVelocity().x, 0, 0.001)
+                    && Util.nearValue(other.shape.body.getLinearVelocity().y, 0, 0.001)) {
+                if (this.applier.shape.body.getMass().getMass() * MyWorld.staticFriction > magnitude) {
+                    return false;
+                }
+                magnitude -= this.applier.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.staticFriction;
+            } else {
+                magnitude -= this.applier.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.kineticFriction;
             }
-            magnitude -= this.applier.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.staticFriction;
+
+            magnitude = Math.max(magnitude, 0) * 0.01;
+
+
+            other.shape.body.applyForce(new Vector2(magnitude * Math.cos(angle),
+                    magnitude * Math.max(magnitude, 0) * Math.sin(angle)));
+            return true;
         }
-        else{
-            magnitude -= this.applier.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.kineticFriction;
-        }
-
-        magnitude = Math.max(magnitude, 0) * 0.01;
-
-
-        other.shape.body.applyForce(new Vector2(magnitude*Math.cos(angle),
-                magnitude*Math.max(magnitude, 0) * Math.sin(angle)));
+        return false;
 
     }
 

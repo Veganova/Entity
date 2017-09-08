@@ -16,7 +16,7 @@ public class SlowEffect extends Effect {
      * joins a given shape to the applier at a given displacement from the center using a weldjoint
      *
      * @param applier
-     * @param zone uninitialized shape, unplaced (but set angles and other properties)
+     * @param zone              uninitialized shape, unplaced (but set angles and other properties)
      * @param jointDisplacement displacement from the center point of the applier to join at
      * @param slowFactor
      * @param world
@@ -30,10 +30,12 @@ public class SlowEffect extends Effect {
     }
 
     @Override
-    public void apply(Entity other) {
-        if (applier.team.opposite(other.team)) {
-            Vector2 vel  = other.shape.body.getLinearVelocity();
+    public boolean apply(Entity other) {
+        if (super.apply(other) && (applier.team.opposite(other.team))) {
+            Vector2 vel = other.shape.body.getLinearVelocity();
             other.shape.body.setLinearVelocity(vel.x / slowFactor, vel.y / slowFactor);
+            return true;
         }
+        return false;
     }
 }

@@ -32,6 +32,10 @@ public class Totem extends Entity {
 
     private static int DISTANCE = 90;
 
+
+    private Effect slow;
+
+
     public Totem(double x, double y, double angle, MyWorld world, Team team, int numbars) {
         super(angle, 0, HEALTH, false, team);
 
@@ -46,9 +50,20 @@ public class Totem extends Entity {
 //        this.bar = new ActiveBar(this, 0.587f);
 
 
-        Effect e = new SlowEffect(this, new ObjCircle(250), new Vector2(0, 0), 1.2, world);
-        e.toggleDraw();
-        this.addEffect(e);
+        this.slow = new SlowEffect(this, new ObjCircle(250), new Vector2(0, 0), 1.2, world);
+        this.slow.toggleDraw();
+        this.addEffect(this.slow);
+
+        this.bar = new ActiveBar(this, 1f);
+        this.bar.setPathType(ActiveBar.PathType.FILLED_CIRCLE, 0.6);
+    }
+
+
+
+    @Override
+    public void interact() {
+        super.interact();
+        this.slow.toggle();
     }
 
     private static double ANGULAR_SPEED = 2.5;

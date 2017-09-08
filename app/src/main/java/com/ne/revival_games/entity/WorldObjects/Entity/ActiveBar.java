@@ -1,11 +1,13 @@
 package com.ne.revival_games.entity.WorldObjects.Entity;
 
+import android.animation.ValueAnimator;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.view.ViewGroup;
 
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -28,15 +30,20 @@ public class ActiveBar {
     private Paint paint, blur;
 
     public enum PathType {
-        CIRCLE, RECTANGLE, ROUNDED_RECTANGLE, LINE;
+        FILLED_CIRCLE, CIRCLE, RECTANGLE, ROUNDED_RECTANGLE, LINE;
     }
 
     // default
     private PathType pathType = PathType.CIRCLE;
 
+    private int lastHealth, targetHealth = 0;
+
     public ActiveBar(Entity entity, float strokeWidthFraction) {
         this.entity = entity;
         this.on = true;
+
+        this.lastHealth = entity.health;
+        this.targetHealth = entity.health;
 
         paint = new Paint();
         //smoothing
@@ -60,12 +67,12 @@ public class ActiveBar {
 //        selected.setMaskFilter(new BlurMaskFilter(0.8f, BlurMaskFilter.Blur.NORMAL));
     }
 
-    ActiveBar(Entity entity, boolean state) {
-        this(entity, 1f);
-        if (!state) {
-            this.toggle();
-        }
-    }
+//    ActiveBar(Entity entity, boolean state) {
+//        this(entity, 1f);
+//        if (!state) {
+//            this.toggle();
+//        }
+//    }
 
     private double x, y;
 
@@ -73,7 +80,7 @@ public class ActiveBar {
      * Use this for lines and circles.
      *
      * @param type
-     * @param x
+     * @param x    radius, length, etc.
      */
     public void setPathType(PathType type, double x) {
         this.pathType = type;
@@ -93,14 +100,28 @@ public class ActiveBar {
         this.y = y / MyWorld.SCALE;
     }
 
+    private IntAnimator healthAnim;
     public void draw(Canvas c) {
+        // Entity health is changed
+        if (this.entity.health != targetHealth) {
+            this.targetHealth = this.entity.health;
+            // animation change! animate lastHealth from lastHealth to targetHealth
+            healthAnim = new IntAnimator(lastHealth, targetHealth, 2);
+        } else {
+            // will be null first time when health is full
+            if (healthAnim != null)
+                this.lastHealth = healthAnim.update();
+        }
+
         float cx = (float)this.entity.shape.getX();
         float cy = (float)this.entity.shape.getY();
         float angle = (float) this.entity.shape.body.getTransform().getRotation();
-        float healthPercentage = (1.0f * entity.health) / entity.MAX_HEALTH;
+        float healthPercentage = (1.0f * lastHealth) / entity.MAX_HEALTH;
 
         Path path = new Path();
         switch(pathType) {
+            case FILLED_CIRCLE:
+                paint.setStyle(Paint.Style.FILL);
             case CIRCLE:
                 float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
                 RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
