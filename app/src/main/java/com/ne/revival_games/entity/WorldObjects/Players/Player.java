@@ -161,6 +161,25 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             double scaleFactor = scaleGestureDetector.getScaleFactor();
             scaleFactor = ((float) ((int) (scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
             camera.relativeZoom(scaleFactor, scaleFactor);
+            //WIDTH, HEIGHT
+
+            //record absolute position of zoom
+            //snap screen to focus of zoom
+//          //move screen appropriately by absolute coordinates based on current screen size
+            mDownX = scaleGestureDetector.getFocusX() / scales.x;   //scales coordinates 0 to map width
+            mDownY = scaleGestureDetector.getFocusY() / scales.y;   //scales coordinates 0 to map height
+            mDownX = (mDownX - WIDTH / 2);     //centers x
+            mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
+            double absoluteX = mDownX;
+            double absoluteY = mDownY;
+            mDownX /= camera.zoomXY.x;
+            mDownY /= camera.zoomXY.y;
+            mDownX -= camera.translateXY.x * MyWorld.SCALE;
+            mDownY -= camera.translateXY.y * MyWorld.SCALE;
+            camera.move(mDownX, mDownY);
+            camera.relativeMove(-1*absoluteX/camera.zoomXY.x, -1*absoluteY/camera.zoomXY.y);
+//
+//            camera.relativeMove();
             return true;
         }
 

@@ -322,4 +322,15 @@ public class Entity implements Effector {
         }
     }
 
+
+    /**
+     * Override this if the object (like turret) and has subparts to be colored.
+     *
+     * @param color
+     */
+    public void setColor(int color, MyWorld world) {
+        this.shape.setColor(color);
+    }
+
+    public void prime(){};
 }

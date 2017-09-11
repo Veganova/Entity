@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Creators;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Mine;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Totem;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
@@ -61,6 +62,13 @@ public enum Entities {
             return new Turret(new Vector2(x, y), angle, world, team, 2);
         }
     },
+            new EntityLeaf("MINE") {
+                @Override
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+                    return new Mine(new Vector2(x, y), angle, 200.0, team, world);
+                }
+            },
+
             new EntityLeaf("TURRET-3") {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team) {

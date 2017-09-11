@@ -28,7 +28,6 @@ public class Dummy extends ConditionalDestructible {
         this.isCollisionAuthority = true;
         this.effectType = myEffect.effectType;
         this.addEffect(myEffect);
-        this.prime();
     }
 
     @Override

@@ -129,7 +129,7 @@ public class GhostEntity {
 
 //        this.team.add(this.entity);
         world.ghosts.remove(this.entity);
-
+        this.entity.prime();                //enables on death effects "on place" function
         this.entity = null;
         this.placeable = false;
         this.wantToPlace = false;

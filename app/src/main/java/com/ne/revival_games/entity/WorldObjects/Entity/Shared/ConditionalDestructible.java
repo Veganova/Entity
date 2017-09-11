@@ -32,6 +32,7 @@ public abstract class ConditionalDestructible extends Entity {
         return true;
     }
 
+    @Override
     public void prime(){
         this.primed = true;
         this.startTime = System.currentTimeMillis();

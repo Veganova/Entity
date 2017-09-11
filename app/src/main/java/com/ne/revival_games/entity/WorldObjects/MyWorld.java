@@ -118,8 +118,9 @@ public class MyWorld {
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
-        settings.setLinearTolerance(150*settings.getLinearTolerance());
-//        settings.setMaximumTranslation(settings.getMaximumTranslation() / 5.0);
+//        settings.setLinearTolerance(150*settings.getLinearTolerance());
+
+        settings.setMaximumTranslation(settings.getMaximumTranslation() / 5.0);
         this.engineWorld.setSettings(settings);
 
 //        Team.DEFENCE.empty();
