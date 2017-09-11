@@ -15,7 +15,7 @@ import java.util.Iterator;
  * Created by Veganova on 8/30/2017.
  */
 
-public class SimpleAim implements AimLogic {
+public class ImmediateAim implements AimLogic {
     public static double WIGGLE_ROOM = 0.03;
     private int turnSpeed = 10;
 
@@ -26,7 +26,7 @@ public class SimpleAim implements AimLogic {
     private boolean first = false;
     private int lastDirection;
 
-    public SimpleAim(AimableEntity aimEntity, Database objectDatabase, double range) {
+    public ImmediateAim(AimableEntity aimEntity, Database objectDatabase, double range) {
         this.aimEntity = aimEntity;
         this.objectDatabase = objectDatabase;
         this.range = range;
@@ -80,27 +80,30 @@ public class SimpleAim implements AimLogic {
             turnCounterClock = 1;
         }
 
-        if (first) {
-            first = false;
-        } else if (turnCounterClock != this.lastDirection){
-            this.turnSpeed /= 2;
-        } else {
-            this.turnSpeed = this.aimEntity.getTurnSpeed();
-        }
+        this.aimEntity.shape.body.getTransform().setRotation(angleTo);
+        this.aimEntity.fire();
 
-        this.lastDirection = turnCounterClock;
-
-        if (Math.abs(angleDifference) <= WIGGLE_ROOM) {
-            this.aimEntity.fire();
-
-//            mainBarrel.shape.body.clearAccumulatedTorque();
-//            mainBarrel.shape.body.clearAccumulatedForce();
-            aimWith.shape.body.setAngularVelocity(0);
-
-            this.aimEntity.shape.body.setAngularVelocity(0);
-        } else {
-            this.aimEntity.shape.body.setAngularVelocity(turnCounterClock * turnSpeed);
-        }
+//        if (first) {
+//            first = false;
+//        } else if (turnCounterClock != this.lastDirection){
+//            this.turnSpeed /= 2;
+//        } else {
+//            this.turnSpeed = this.aimEntity.getTurnSpeed();
+//        }
+//
+//        this.lastDirection = turnCounterClock;
+//
+//        if (Math.abs(angleDifference) <= WIGGLE_ROOM) {
+//            this.aimEntity.fire();
+//
+////            mainBarrel.shape.body.clearAccumulatedTorque();
+////            mainBarrel.shape.body.clearAccumulatedForce();
+//            aimWith.shape.body.setAngularVelocity(0);
+//
+//            this.aimEntity.shape.body.setAngularVelocity(0);
+//        } else {
+//            this.aimEntity.shape.body.setAngularVelocity(turnCounterClock * turnSpeed);
+//        }
     }
 
 
