@@ -2,9 +2,11 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
@@ -44,6 +46,9 @@ public class Launcher implements Updatable {
     //      the area commulates to the randomized one)
     private HashMap<Integer, RandomPointSelector> compositeShape;
     private int totalArea = 0;
+
+    private Paint p;
+
     /**
      * Pass in a width and height that represents the size of the bounding box where the player is
      * centered and objects CANNOT be launched. The negative of this area is all the area where
@@ -66,7 +71,16 @@ public class Launcher implements Updatable {
         this.addBoundingOval(scaledWidth / 2, scaledWidth, scaledHeight / 2, scaledHeight, new Vector2(0, 0));
 
         this.world.addUpdatable(this);
+
+        p = new Paint();
+        p.setStyle(Paint.Style.STROKE);
+        p.setPathEffect( new DashPathEffect(new float[]{1f, .8f} , 0 ));
+        p.setStrokeCap( Paint.Cap.ROUND );
+        p.setStrokeWidth(0.08f);
+        p.setColor(Team.OFFENSE.getColor());
     }
+
+
 
     /**
      * Pass in a width and height that represents the size of the bounding box where the player is
@@ -142,11 +156,8 @@ public class Launcher implements Updatable {
 // TODO: 8/27/2017 why do these calculations work?
         RectF rectOuter = new RectF((float)this.minX * 2, (float)this.minY * 2, (float)this.maxX * 2, (float)this.maxY * 2);
 
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.WHITE);
-        canvas.drawOval(rectInner, paint);
-        canvas.drawOval(rectOuter, paint);
+        canvas.drawOval(rectInner, p);
+//        canvas.drawOval(rectOuter, p);
     }
 
     public void addBoundingOval(double hMin, double hMax, double vMin, double vMax, Vector2 center) {

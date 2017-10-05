@@ -71,22 +71,6 @@ public class MainMenu extends LinearLayout {
                     final Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("GameMode", mode);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                    activity.myThread.end();
-//                    try {
-//                        activity.myThread.join();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    activity.onStop();
-//                    try {
-//                        activity.myThread.pause(Thread.currentThread());
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-
-//                        activity.myThread.pause(Thread.currentThread());
-                    //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
 
                     // wait for the current activity thread to end. (so that it will let go of the canvas lock)
                     activity.myThread.end();

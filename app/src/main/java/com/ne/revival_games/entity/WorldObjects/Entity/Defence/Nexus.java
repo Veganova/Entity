@@ -83,4 +83,9 @@ public class Nexus extends Entity {
         this.gravEffect.toggle();
     }
 
+    @Override
+    public void onDeath(MyWorld world) {
+        super.onDeath(world);
+        world.gameOver();
+    }
 }

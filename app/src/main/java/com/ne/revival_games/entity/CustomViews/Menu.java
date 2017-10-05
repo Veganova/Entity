@@ -90,19 +90,13 @@ class MenuList extends LinearLayout {
             super(context);
             this.toPop = toPop;
 
-//        this.setText(">");
-//        setBackgroundResource(R.drawable.ic_down_arrow);
-
-
             this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
             this.setAdjustViewBounds(true);
             this.setScaleType(ScaleType.FIT_XY);
 
-
             Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
             this.setImageDrawable(drawable);
-
 
             this.post(new Runnable() {
                 @Override
