@@ -20,5 +20,5 @@ app\src
 Visuals/UI:
 All UI elements and units in the game are vector images and are included in 
 ```
-app\src
+app\src\main\res
 ```
