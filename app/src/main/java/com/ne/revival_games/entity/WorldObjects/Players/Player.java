@@ -160,26 +160,27 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
             double scaleFactor = scaleGestureDetector.getScaleFactor();
             scaleFactor = ((float) ((int) (scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
-            camera.relativeZoom(scaleFactor, scaleFactor);
             //WIDTH, HEIGHT
 
             //record absolute position of zoom
             //snap screen to focus of zoom
 //          //move screen appropriately by absolute coordinates based on current screen size
-            mDownX = scaleGestureDetector.getFocusX() / scales.x;   //scales coordinates 0 to map width
-            mDownY = scaleGestureDetector.getFocusY() / scales.y;   //scales coordinates 0 to map height
-            mDownX = (mDownX - WIDTH / 2);     //centers x
-            mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
-            double absoluteX = mDownX;
-            double absoluteY = mDownY;
-            mDownX /= camera.zoomXY.x;
-            mDownY /= camera.zoomXY.y;
-            mDownX -= camera.translateXY.x * MyWorld.SCALE;
-            mDownY -= camera.translateXY.y * MyWorld.SCALE;
-            camera.move(mDownX, mDownY);
-            camera.relativeMove(-1*absoluteX/camera.zoomXY.x, -1*absoluteY/camera.zoomXY.y);
-//
-//            camera.relativeMove();
+
+//            mDownX = scaleGestureDetector.getFocusX() / scales.x /camera.zoomXY.x;   //scales coordinates 0 to map width
+//            mDownY = scaleGestureDetector.getFocusY() / scales.y / camera.zoomXY.y;   //scales coordinates 0 to map height
+//            double absoluteX = mDownX;
+//            double absoluteY = mDownY;
+//            mDownX = (mDownX - WIDTH / 2);     //centers x
+//            mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
+//            camera.move(mDownX, mDownY);
+//            System.out.println(absoluteX + " " + absoluteY);
+//            mDownX -= camera.translateXY.x * MyWorld.SCALE;
+//            mDownY -= camera.translateXY.y * MyWorld.SCALE;
+//            System.out.println(mDownX + " " + mDownY);
+
+            camera.relativeZoom(1/scaleFactor, 1/scaleFactor);
+//            camera.relativeMove(absoluteX/camera.zoomXY.x, absoluteY/camera.zoomXY.y);
+
             return true;
         }
 

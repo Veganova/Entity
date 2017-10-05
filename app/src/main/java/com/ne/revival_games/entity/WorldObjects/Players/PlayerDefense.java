@@ -29,10 +29,10 @@ public class PlayerDefense extends Player {
     public boolean onTouch(View view, MotionEvent ev) {
         mDownX = ev.getX() / scales.x;   //scales coordinates 0 to map width
         mDownY = ev.getY() / scales.y;   //scales coordinates 0 to map height
-        mDownX = (mDownX - WIDTH / 2);     //centers x
-        mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
         mDownX /= camera.zoomXY.x;
         mDownY /= camera.zoomXY.y;
+        mDownX = (mDownX - WIDTH / 2);     //centers x
+        mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
         mDownX -= camera.translateXY.x * MyWorld.SCALE;
         mDownY -= camera.translateXY.y * MyWorld.SCALE;
 

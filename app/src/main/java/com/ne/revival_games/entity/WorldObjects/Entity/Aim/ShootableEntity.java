@@ -26,6 +26,7 @@ public abstract class ShootableEntity extends Entity implements Shootable {
         //double angle = shape.body.getTransform().getRotation();
         double x, y, angle;
         double magnitude = getShootingDistance();
+
         //magnitude of 90 away
         angle = this.shape.body.getTransform().getRotation();
         x = magnitude * Math.cos(angle) + MyWorld.SCALE*shape.body.getWorldCenter().x;
