@@ -33,6 +33,12 @@ public enum Team {
             return NEUTRAL;
     }
 
+    public int getColor() {
+        return teamColor;
+    }
+
+
+
 
 //    public void empty() {
 //        this.teamObjects.clear();

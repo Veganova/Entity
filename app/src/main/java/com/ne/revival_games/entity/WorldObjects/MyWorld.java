@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
 
+import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
@@ -78,11 +79,14 @@ public class MyWorld {
      */
     private List<Updatable> updatables;
 
+    private MainActivity activity;
+
     /**
      * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
      *
      */
-    public MyWorld(){
+    public MyWorld(MainActivity activity) {
+        this.activity = activity;
         initializeWorld();
     };
 
@@ -172,7 +176,7 @@ public class MyWorld {
 //        Turret turret2 = new Turret(new Vector2(300, 300), 0, this, Team.OFFENSE);
 //        Team.OFFENSE.add(turret2);
 
-//        launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
+        launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
     }
 
     private Launcher launcher;
@@ -204,7 +208,8 @@ public class MyWorld {
      */
     public void drawObjects(Canvas canvas){
         this.bounds.draw(canvas);
-//        launcher.draw(canvas);
+        launcher.draw(canvas);
+
         MyList l = this.objectDatabase.values();
 
         for (Entity toDraw: l) {
@@ -249,6 +254,10 @@ public class MyWorld {
 
     public boolean removeUpdatable(Updatable updatable) {
         return this.updatables.remove(updatable);
+    }
+
+    public void gameOver() {
+
     }
 
 

@@ -121,7 +121,8 @@ public class PlayerDefense extends Player {
             }
             return false;
         } else if (lastDownPress + 30 < System.currentTimeMillis()) {
-            camera.relativeMove(scrollSpeed * (int)(distanceX) / MyWorld.SCALE, -1 * scrollSpeed * (int)(distanceY) / MyWorld.SCALE);
+            camera.relativeMove(scrollSpeed * (int)(distanceX) / MyWorld.SCALE, -1 * scrollSpeed
+                    * (int)(distanceY) / MyWorld.SCALE);
         }
 
 

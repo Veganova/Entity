@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.ne.revival_games.entity.CustomViews.MainMenu;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
+import com.ne.revival_games.entity.CustomViews.RestartHome;
 import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     protected RelativeLayout relativeLayout;
     private boolean paused = true;
 
+    private MainMenu.GameMode choice = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("CREATING------------------------------------------------------");
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        world = new MyWorld();
+        world = new MyWorld(this);
         myThread = new MainThread(this.world);
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         if (message != null) {
             // case where the actual game has been started (when it is null we are still in the main menu)i
             System.out.println("GAME " + message.toString());
-            MainMenu.GameMode choice = (MainMenu.GameMode)message;
+            choice = (MainMenu.GameMode)message;
             switch(choice) {
                 case SINGLEPLAYER:
 //                    initOnePlayer();
@@ -93,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
         playPauseButton = new PlayPauseArea(getApplicationContext(), this);
         relativeLayout.addView(playPauseButton);
     }
+
+    private RestartHome restartHome;
+    private void addRestartHome(){
+        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, choice);
+        relativeLayout.addView(restartHome);
+    }
+
 
     private void removeSavedView(View view) {
         // If not null, then it must have been set. Look at above methods.
@@ -162,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (playPause) {
             this.addPlayPause();
+            this.addRestartHome();
         }
 
 //        myThread.setRunning(true);
@@ -266,6 +278,10 @@ public class MainActivity extends AppCompatActivity {
 //        myThread.setRunning(true);
 //        myThread.start();
 //    }
+
+    public void gameOver() {
+        this.restartHome.pop();
+    }
 
     //similar logic to be used for end game, should also implement an 'onPause' etc.
     @Override
