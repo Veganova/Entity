@@ -21,21 +21,21 @@
     </item>
     <item
         is-multidex="false"
-        jar="C:\Users\vishn\Documents\Entity\app\dyn4j-v3.2.4.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="808750d4a2cc2c76f684b4e4e762254146991fe3">
-        <dex dex="C:\Users\vishn\Documents\Entity\app\build\intermediates\pre-dexed\debug\dyn4j-v3.2.4_46079d5888c19a50855206977d463aa6f3addf44.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\vishn\AppData\Local\Android\sdk\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
         <dex dex="C:\Users\vishn\Documents\Entity\app\build\intermediates\pre-dexed\debug\constraint-layout-solver-1.0.2_25a45255fb4af164f9fc24266f94ecf9c8cae531.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\vishn\.android\build-cache\58b43d4196c58b647b6d339dfc4ab8d4e7196b11\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c796c6602e5fa48f90a81c8ab3b3a21a205d1853">
+        <dex dex="C:\Users\vishn\Documents\Entity\app\build\intermediates\pre-dexed\debug\classes_620675e9c3acc4232f546d608c290e1bbe5fceb1.jar" />
     </item>
 
 </items>

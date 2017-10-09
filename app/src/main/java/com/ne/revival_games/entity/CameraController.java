@@ -75,4 +75,8 @@ public class CameraController {
     }
 
 
+    public boolean isZoomMaxorMin(){
+        return zoomXY.x == zoom_min || zoomXY.x >= zoom_max - 0.2;
+    }
+
 }

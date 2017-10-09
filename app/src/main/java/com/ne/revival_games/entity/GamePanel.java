@@ -102,20 +102,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void draw(Canvas canvas) {
-        //c.applyToCanvas(canvas); camera stuff.. could be usefull
-//        canvas.scale(1f, 0.5f);
-        super.draw(canvas);
         camera.update();
         //draw game objects and background
         if (canvas != null) {
             final int savedState = canvas.save();
             canvas.scale((float)scales.x, (float)-scales.y);
-            canvas.scale((float)(1/camera.zoomXY.x), (float)(1/camera.zoomXY.y));
             canvas.translate(mainActivity.MAP_WIDTH / 2, -mainActivity.MAP_HEIGHT / 2);
             canvas.scale((float) MyWorld.SCALE, (float) MyWorld.SCALE);
 
-//            camera.applyTransforms(canvas);
-            canvas.translate((float) camera.translateXY.x, (float) camera.translateXY.y);
+            camera.applyTransforms(canvas);
+
             canvas.drawColor(background_red);
 
             world.drawObjects(canvas);
