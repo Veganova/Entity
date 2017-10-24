@@ -33,33 +33,20 @@ public class RestartHome extends RelativeLayout {
 
     public RestartHome(Context context, float parentHeight, MainActivity activity, MainMenu.GameMode mode) {
         super(context);
-        this.HEIGHT = (int) (parentHeight * 0.7);
+        this.HEIGHT = (int) (parentHeight * 0.2);
         this.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT));
 
         this.setGravity(Gravity.LEFT | Gravity.CENTER);
 
-
-        LinearLayout l = new LinearLayout(context);
-        l.setPadding(HEIGHT / 8, HEIGHT / 5, HEIGHT / 8, HEIGHT / 5);
-        l.setBackgroundColor(GamePanel.cream);
-        l.setElevation(0);
-        l.setStateListAnimator(null);
-
         ImageView image = new ImageView(context);
         Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_restart, null);
-        image.setImageDrawable(drawable);
         image.setColorFilter(GamePanel.background_dark);
-
-
-        l.addView(image);
+        image.setImageDrawable(drawable);
 
 //        rb = new RestartButton(context, activity, mode);
         home = new HomeButton(context, activity);
-//        containerVerticle.addView(rb);
-//        containerHome.addView(t);
-        Container c = new Container(context, l, home);
-
+        Container c = new Container(context, image, home);
         this.addView(c);
     }
 
@@ -68,15 +55,29 @@ public class RestartHome extends RelativeLayout {
     }
 
     class Container extends LinearLayout {
-        public Container(Context context, View icon, View image) {
+        public Container(Context context, ImageView icon, final View image) {
             super(context);
+
+            LinearLayout l = new LinearLayout(context);
+            l.setBackgroundColor(GamePanel.cream);
+            l.addView(icon);
+            l.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            l.setGravity(Gravity.CENTER);
 
             this.setOrientation(HORIZONTAL);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                     HEIGHT);
-            params.bottomMargin = 50;
+            this.setLayoutParams(params);
 
-            this.addView(icon);
+            this.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    image.callOnClick();
+                }
+            });
+
+            this.addView(l);
             this.addView(image);
         }
     }
@@ -105,6 +106,14 @@ public class RestartHome extends RelativeLayout {
     private class RestartButton extends ImageView {
         RestartButton(final Context context, final MainActivity activity, final MainMenu.GameMode mode) {
             super(context);
+
+            this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            this.setAdjustViewBounds(true);
+            this.setScaleType(ScaleType.FIT_XY);
+
+            Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_isosceles, null);
+            this.setImageDrawable(drawable);
 
 
             this.setOnClickListener(new OnClickListener() {
