@@ -13,6 +13,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.Joint;
+import org.dyn4j.geometry.Vector2;
 
 import java.util.HashMap;
 
@@ -25,6 +26,9 @@ public class Entity implements Effector {
 
     public int COST;
     public int MAX_HEALTH;
+    public int MAX_INITIAL_SPEED = 60;
+    public boolean storedPrevVelocity = false;
+    public Vector2 oldVelocity = new Vector2(-1,-1);
     public Team team;
 
     public AShape shape;
@@ -42,15 +46,16 @@ public class Entity implements Effector {
 //    public boolean untargetable = false;
     public boolean dead = false;
 
-    public double frictionCoefficent = 1;
+    public double frictionCoefficent = DEFAULT_FRICTION;
     public HashMap<EffectType, Effect> effects;
     public HashMap<Body, Effect> zoneToEffect;
     protected ActiveBar bar;
+    public static double DEFAULT_FRICTION = 1;
 
     private MyDeque.Node node;
 
     // TODO: 7/5/2017 some fields here are not needed 
-    public Entity(double direction, double speed, int health, boolean invulnerable, Team team) {
+    public Entity(double direction, double speed, int health, boolean invulnerable, Team team, double frictionCoefficient) {
         this.direction = direction;
         this.speed = speed;
         this.health = health;
@@ -61,6 +66,7 @@ public class Entity implements Effector {
         this.effects = new HashMap<>();
         this.zoneToEffect = new HashMap<>();
         this.targetExceptions = new Untargetable(this);
+        this.frictionCoefficent = frictionCoefficient;
     }
 
     public MyDeque.Node getNode() {
@@ -333,4 +339,29 @@ public class Entity implements Effector {
     }
 
     public void prime(){};
+
+    public double getMaxVelocity(double percentSpeed) {
+        return MAX_INITIAL_SPEED;
+    }
+
+    public boolean isFlingable() {
+        return true;
+    }
+
+    public void resetVelocity() {
+        if(storedPrevVelocity) {
+            this.shape.body.setLinearVelocity(oldVelocity.x, oldVelocity.y);
+            storedPrevVelocity = false;
+        }
+    }
+
+    public void setTempVelocity(double x, double y){
+        if(!storedPrevVelocity) {
+            storedPrevVelocity = true;
+            this.oldVelocity = this.shape.body.getLinearVelocity();
+            System.out.println(x + " " + y);
+            this.shape.body.setLinearVelocity(x,y);
+        }
+
+    }
 }

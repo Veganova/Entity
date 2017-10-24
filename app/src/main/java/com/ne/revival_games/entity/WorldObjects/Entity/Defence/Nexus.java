@@ -1,20 +1,15 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
-import android.graphics.Canvas;
-
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.GravityEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
@@ -29,15 +24,20 @@ public class Nexus extends Entity {
     public static int MASS;
     public static int COST;
     private List<AShape> components;
+    private static int centerDensity = 200;
+    public static double LINEAR_DAMPING = 2;
+    public static double ANGULAR_DAMPING = 0.25;
 
     private GravityEffect gravEffect;
 
     public Nexus(double x, double y, double angle, MyWorld world, Team team) {
-        super(angle, 0, HEALTH, false, team);
+        super(angle, 0, HEALTH, false, team, DEFAULT_FRICTION);
+        frictionCoefficent = 90;
         components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(120, 120);
-        rect.getBuilder(false, world).setXY(0, 0).init();
+        rect.getBuilder(false, world).setXY(0, 0).setDensity(centerDensity).
+                setLinearDamping(ANGULAR_DAMPING).setAngularDamping(ANGULAR_DAMPING).init();
 
         components.add(rect);
 
@@ -64,7 +64,7 @@ public class Nexus extends Entity {
         this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
         this.team = team;
-        gravEffect = new GravityEffect(this, 1000, 30, new Vector2(0,0), world);
+        gravEffect = new GravityEffect(this, 1000, 20, new Vector2(0,0), world);
         this.addEffect(gravEffect);
 
         this.bar = new ActiveBar(this, 1f);

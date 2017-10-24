@@ -98,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout.addView(playPauseButton);
     }
 
-    private RestartHome restartHome;
-    private void addRestartHome(){
-        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, choice);
-        relativeLayout.addView(restartHome);
-    }
+//    private RestartHome restartHome;
+//    private void addRestartHome(){
+//        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, choice);
+//        relativeLayout.addView(restartHome);
+//    }
 
 
     private void removeSavedView(View view) {
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (playPause) {
             this.addPlayPause();
-            this.addRestartHome();
+//            this.addRestartHome();
         }
 
 //        myThread.setRunning(true);
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void gameOver() {
-        this.restartHome.pop();
+//        this.restartHome.pop();
     }
 
     //similar logic to be used for end game, should also implement an 'onPause' etc.

@@ -14,8 +14,6 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.WeldJoint;
-import org.dyn4j.geometry.Mass;
-import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class Totem extends Entity {
 
 
     public Totem(double x, double y, double angle, MyWorld world, Team team, int numbars) {
-        super(angle, 0, HEALTH, false, team);
+        super(angle, 0, HEALTH, false, team, DEFAULT_FRICTION);
 
         this.shape = new ObjCircle(30);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
@@ -50,7 +48,7 @@ public class Totem extends Entity {
 //        this.bar = new ActiveBar(this, 0.587f);
 
 
-        this.slow = new SlowEffect(this, new ObjCircle(250), new Vector2(0, 0), 1.2, world);
+        this.slow = new SlowEffect(this, new ObjCircle(265), new Vector2(0, 0), 4, world);
         this.slow.toggleDraw();
         this.addEffect(this.slow);
 

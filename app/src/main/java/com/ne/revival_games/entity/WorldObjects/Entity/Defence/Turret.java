@@ -6,11 +6,9 @@ import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -30,6 +28,8 @@ import java.util.List;
 public class Turret extends AimableEntity {
     public static int COST = 200;
     public static int MASS = 25;
+    public static double LINEAR_DAMPING = 5;
+    public static double ANGULAR_DAMPING = 0.09;
     private static double reload = 3000;
     private double lastfired = 0;
     private double range = 800;
@@ -52,7 +52,7 @@ public class Turret extends AimableEntity {
     public Turret(Vector2 location, double angle, MyWorld world, Team team, int numBarrels){
         super(angle, 0, 80, false, team);
         this.numBarrels = numBarrels;
-        this.frictionCoefficent = 3;
+        this.frictionCoefficent = 60;
         this.world = world;
         initializeTurret(location, world);
         this.logic = new SimpleAim(this, world.objectDatabase, range);
@@ -69,7 +69,7 @@ public class Turret extends AimableEntity {
             public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                 return new Missile(x, y, angle, 0, world, team);
             }
-        }, type, this, world, angle, team, location);
+        }, type, this, world, angle, team, location, this.frictionCoefficent);
 
         this.barrels.add(b);
         WeldJoint joint = new WeldJoint(b.shape.body,
@@ -91,7 +91,8 @@ public class Turret extends AimableEntity {
     private void initializeTurret(Vector2 location, MyWorld world){
         this.shape = new ObjCircle(30);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
-        builder.setXY(location.x, location.y).init();
+        builder.setXY(location.x, location.y)
+                .setLinearDamping(LINEAR_DAMPING).setAngularDamping(ANGULAR_DAMPING).init();
         // TODO: 7/11/2017 take off and try
         this.world.objectDatabase.put(this.shape.body, this);
 //        this.components.add(shape);
@@ -154,6 +155,10 @@ public class Turret extends AimableEntity {
     @Override
     public void onDeath(MyWorld world){
         if(this.health <= 0) {
+                for(Barrel barrel : barrels) {
+                    barrel.frictionCoefficent = Barrel.DEFAULT_FRICTION;
+                }
+
                 while(barrels.size() > 0){
                     barrels.get(0).myTurret = null;
                     barrels.remove(0);

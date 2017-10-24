@@ -21,7 +21,7 @@ import org.dyn4j.geometry.Vector2;
  */
 
 public class Barrel extends ShootableEntity {
-
+    public static double DEFAULT_FRICTION = 5;
 
     public enum BarrelType {
         SINGLE, LAZER, SIDE, SPIRIT_BOMB
@@ -34,8 +34,8 @@ public class Barrel extends ShootableEntity {
     private double sleepUntil = 0;
 
     public Barrel(EntityLeaf toShoot, BarrelType type,
-                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location) {
-        super(0, 0, 70, false, team);
+                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location, double frictionCoefficient) {
+        super(0, 0, 70, false, team, frictionCoefficient);
         initBarrel(type, location, world, angle);
         this.world = world;
         this.toShoot = toShoot;

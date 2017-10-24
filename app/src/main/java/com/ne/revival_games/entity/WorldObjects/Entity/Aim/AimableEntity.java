@@ -4,8 +4,6 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.dynamics.Body;
-
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
@@ -18,7 +16,7 @@ public abstract class AimableEntity extends Entity implements Aimable {
     protected boolean aiming = true;
 
     public AimableEntity(double direction, double speed, int health, boolean invulnerable, Team team) {
-        super(direction, speed, health, invulnerable, team);
+        super(direction, speed, health, invulnerable, team, DEFAULT_FRICTION);
     }
 //
 //    public AimableEntity(double direction, double speed, int health, boolean invulnerable, Team team, AimLogic logic) {

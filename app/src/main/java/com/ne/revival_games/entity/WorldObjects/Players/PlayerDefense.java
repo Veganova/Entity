@@ -131,8 +131,7 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        if (this.ghost != null && lastMultiPress + 200 < System.currentTimeMillis() && e.getPointerCount() < 2
-                && holdingGhost && this.ghost.canPlace()) {
+        if (readytoPlace(e)) {
 
             this.ghost.place(this);
             this.ghost = null;

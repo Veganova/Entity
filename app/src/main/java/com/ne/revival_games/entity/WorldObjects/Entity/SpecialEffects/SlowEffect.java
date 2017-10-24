@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -11,6 +12,7 @@ import org.dyn4j.geometry.Vector2;
  */
 public class SlowEffect extends Effect {
     private double slowFactor;
+    public static double percentRealRadius = 0.95;
 
     /**
      * joins a given shape to the applier at a given displacement from the center using a weldjoint
@@ -32,8 +34,19 @@ public class SlowEffect extends Effect {
     @Override
     public boolean apply(Entity other) {
         if (super.apply(other) && (applier.team.opposite(other.team))) {
-            Vector2 vel = other.shape.body.getLinearVelocity();
-            other.shape.body.setLinearVelocity(vel.x / slowFactor, vel.y / slowFactor);
+
+            if(Util.getDistance(other.shape.body.getWorldCenter(), this.zone.body.getWorldCenter())
+                    < this.zone.body.getRotationDiscRadius()*percentRealRadius) {
+                other.resetVelocity();
+                Vector2 vel = other.shape.body.getLinearVelocity();
+                System.out.println(vel.x + " " + vel.y);
+                other.setTempVelocity(vel.x / slowFactor, vel.y / slowFactor);
+//                System.out.println(other.shape.body.getLinearVelocity().x + " " + other.shape.body.getLinearVelocity().y);
+            }
+            else {
+                other.resetVelocity();
+            }
+
             return true;
         }
         return false;

@@ -67,19 +67,22 @@ public class GravityEffect extends Effect{
 
             if (Util.nearValue(other.shape.body.getLinearVelocity().x, 0, 0.001)
                     && Util.nearValue(other.shape.body.getLinearVelocity().y, 0, 0.001)) {
-                if (this.applier.shape.body.getMass().getMass() * MyWorld.staticFriction > magnitude) {
+                if (other.shape.body.getMass().getMass() * MyWorld.staticFriction > magnitude) {
                     return false;
                 }
-                magnitude -= this.applier.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.staticFriction;
+                magnitude -= other.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.staticFriction;
             } else {
-                magnitude -= this.applier.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.kineticFriction;
+                magnitude -= other.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.kineticFriction;
             }
 
+
+
             magnitude = Math.max(magnitude, 0) * 0.01;
+            System.out.println(magnitude);
 
 
             other.shape.body.applyForce(new Vector2(magnitude * Math.cos(angle),
-                    magnitude * Math.max(magnitude, 0) * Math.sin(angle)));
+                    magnitude * Math.sin(angle)));
             return true;
         }
         return false;

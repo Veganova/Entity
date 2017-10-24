@@ -1,20 +1,12 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
-import android.util.Pair;
-
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.Shootable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Untargetable;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
-
-import org.dyn4j.dynamics.Body;
 
 
 /**
@@ -32,7 +24,7 @@ public class Barrier extends Entity {
 
 
     public Barrier(double x, double y, double angle, MyWorld world, Team team) {
-        super(angle, 0, HEALTH, false, team);
+        super(angle, 0, HEALTH, false, team, DEFAULT_FRICTION);
         this.shape = new ObjRectangle(WIDTH, HEIGHT);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setAngle(angle).setXY(x, y).init();

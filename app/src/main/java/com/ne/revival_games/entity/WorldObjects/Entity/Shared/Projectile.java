@@ -3,7 +3,6 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Shared;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.Body;
@@ -22,10 +21,10 @@ public abstract class Projectile extends Entity {
 
     public Projectile(double x, double y, int r, double direction, double speed,
                       int health, MyWorld world, Team team, boolean addToWorld) {
-        super(direction, speed, health, false, team);
+        super(direction, speed, health, false, team, DEFAULT_FRICTION);
         shape = new ObjCircle(r);
         if(addToWorld) {
-            shape.getBuilder(true, world).setXY(x, y).init();
+            shape.getBuilder(true, world).setXY(x, y).setLinearDamping(0.02).init();
 
 //        shape.body.setBullet(true);
 
@@ -39,7 +38,7 @@ public abstract class Projectile extends Entity {
 
 
     public Projectile(double direction, double speed, int health, MyWorld world, Team team, boolean addedToWorld) {
-        super(direction, speed, health, false, team);
+        super(direction, speed, health, false, team, DEFAULT_FRICTION);
         this.inWorld = addedToWorld;
     }
 

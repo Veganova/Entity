@@ -230,4 +230,10 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         this.screen.addView(new MoneyView(activity, context, world, this));
     }
 
+    public boolean readytoPlace(MotionEvent e){
+        return this.ghost != null && lastMultiPress + 200 < System.currentTimeMillis()
+                && e.getPointerCount() < 2 && ghost.entity.isFlingable()
+                && holdingGhost && this.ghost.canPlace();
+    }
+
 }

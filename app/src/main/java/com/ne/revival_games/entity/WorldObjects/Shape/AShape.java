@@ -67,6 +67,8 @@ public abstract class AShape implements Shape {
         // fixture values
         private double fx = 0, fy = 0;
         private double density = 0.5D, friction = 0.2D, restitution = 0.5D;
+        private double linearDamping = Body.DEFAULT_LINEAR_DAMPING;
+        private double angularDamping = Body.DEFAULT_ANGULAR_DAMPING;
         private double angle = 0.0D;
         private boolean premadeBody = false;
         private MassType type = MassType.NORMAL;
@@ -88,6 +90,16 @@ public abstract class AShape implements Shape {
         public InitBuilder setXY(double x, double y) {
             this.x = x / MyWorld.SCALE;
             this.y = y / MyWorld.SCALE;
+            return this;
+        }
+
+        public InitBuilder setLinearDamping(double dampingfactor) {
+            this.linearDamping = dampingfactor;
+            return this;
+        }
+
+        public InitBuilder setAngularDamping(double dampingfactor) {
+            this.angularDamping = dampingfactor;
             return this;
         }
 
@@ -133,7 +145,9 @@ public abstract class AShape implements Shape {
                 body.setMass(type);
             }
             setBodyPosition(new Vector2(x, y), body.getWorldCenter());
-            // TODO: 7/4/2017 could be adding several times.. 
+            // TODO: 7/4/2017 could be adding several times..
+            body.setLinearDamping(linearDamping);
+            body.setAngularDamping(angularDamping);
             world.engineWorld.addBody(body);
 
         }
