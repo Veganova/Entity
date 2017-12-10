@@ -257,7 +257,7 @@ public class MyWorld {
     }
 
     public void gameOver() {
-
+        activity.gameOver();
     }
 
 

@@ -1,17 +1,9 @@
 package com.ne.revival_games.entity.CustomViews;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -29,7 +21,6 @@ import java.util.List;
 /**
  * Set of classes that make up the menu that the player can open and close and select items to build
  */
-
 public class Menu extends RelativeLayout {
 
     public Menu(Context context, int parentHeight, Player player, int gravity) {
@@ -44,198 +35,46 @@ public class Menu extends RelativeLayout {
     }
 }
 
+class MenuList extends PopListing {
 
-class MenuList extends LinearLayout {
-
-
-    static int ANIMATION_DURATION = 600;
-    private Popper popper;
-    private Poppist poppist;
-
-    int HEIGHT;//pixels
+    private final Player player;
 
     public MenuList(Context context, int parentHeight, Player player) {
-        super(context);
+        super(context, parentHeight);
 
-        this.HEIGHT = (int) (parentHeight * 0.1);
-        this.setOrientation(HORIZONTAL);
-//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                HEIGHT);//LayoutParams.WRAP_CONTENT);
+        this.player = player;
 
-        params.bottomMargin = 50;
+        super.create(context);
+    }
 
+    @Override
+    protected Poppist createListing(Context context) {
+        return new MenuList.MenuItems(context, Arrays.asList(Entities.values()), player);
+    }
 
-//        this.setLayoutParams(params);
-
-        poppist = new Poppist(context, Arrays.asList(Entities.values()), player);
-        popper = new Popper(context, poppist);
-
-
-        this.addView(poppist);
-        this.addView(popper);
-        this.setLayoutParams(params);
+    @Override
+    protected Popper createPopper(Context context, Poppist listing) {
+        return new MenuList.MenuPop(context, listing);
     }
 
 
-    class Popper extends ImageView {
+    class MenuPop extends Popper {
 
-        private final Poppist toPop;
-        private boolean hidden = true;
-        private int ORIGINAL_WIDTH;
-        private int SCALED_WIDTH;
-
-        Popper(Context context, final Poppist toPop) {
-            super(context);
-            this.toPop = toPop;
-
-            this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            this.setAdjustViewBounds(true);
-            this.setScaleType(ScaleType.FIT_XY);
-
-            Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
-            this.setImageDrawable(drawable);
-
-            this.post(new Runnable() {
-                @Override
-                public void run() {
-                    ORIGINAL_WIDTH = getMeasuredWidth();
-                    SCALED_WIDTH = ORIGINAL_WIDTH * 4 / 5;
-                    postInvalidate();
-                }
-            });
-
-            this.setOnClickListener(new View.OnClickListener() {
-                private ValueAnimator in, out;
-
-                public void onClick(View v) {
-                    toPop.toggle();
-
-                    if (hidden) {
-                        final int w = getMeasuredWidth();
-                        out = ValueAnimator.ofInt(w, SCALED_WIDTH);
-
-                        out.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                int val = (Integer) valueAnimator.getAnimatedValue();
-
-                                ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                                layoutParams.width = val;
-                                setLayoutParams(layoutParams);
-                            }
-                        });
-
-                        out.setDuration(MenuList.ANIMATION_DURATION);
-                        out.start();
-                    } else {
-                        final int w = getMeasuredWidth();
-                        in = ValueAnimator.ofInt(w, ORIGINAL_WIDTH);
-                        in.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                int val = (Integer) valueAnimator.getAnimatedValue();
-                                ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                                layoutParams.width = val;
-                                setLayoutParams(layoutParams);
-                            }
-                        });
-
-                        in.setDuration(MenuList.ANIMATION_DURATION);
-                        in.start();
-                    }
-                    hidden = !hidden;
-                }
-            });
+        MenuPop(Context context, final Poppist toPop) {
+            super(context, toPop, R.drawable.ic_down_arrow, 1);
         }
     }
 
-    class Poppist extends HorizontalScrollView {
-
-        private List<Entities> toDisplay;
-        private boolean hidden = true;
-
-        private final int MAX_WIDTH;
-
-        private ValueAnimator in, out;
-        private Player owner;
-
-        Poppist(Context context, List<Entities> toDisplay, Player player) {
-            super(context);
-            this.toDisplay = toDisplay;
-            this.owner = player;
+    class MenuItems extends Poppist {
 
 
-            // TODO: 7/20/2017 might want to do this with weights instead.. for handling the changing screen orientation
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x;
-//        System.out.println("WIDTH ---- " + width);
-            MAX_WIDTH = (int) (width * 3) / 4;
+        MenuItems(Context context, List<Entities> toDisplay, Player player) {
+            super(context, 0, 0.75, 600);
 
-            //this.getLayoutParams().width = MAX_WIDTH;
-
-            this.setHorizontalScrollBarEnabled(false);
-            this.setLayoutParams(new ViewGroup.LayoutParams(0, LayoutParams.MATCH_PARENT));
-
-            LinearLayout container = new LinearLayout(context);
-            container.setGravity(Gravity.CENTER);
-            container.setBackgroundColor(GamePanel.cream);
-            container.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
-                    , ViewGroup.LayoutParams.MATCH_PARENT));
-
-
-            // Add all the entities as buttons to this scroll view
-            for (Entities entityType : this.toDisplay) {
-                EntScroll entScroll = new EntScroll(context, entityType, owner);
+            for (Entities entityType : toDisplay) {
+                EntScroll entScroll = new EntScroll(context, entityType, player);
                 container.addView(entScroll);
             }
-
-            this.addView(container);
-        }
-
-        /**
-         * Toggles the poppist on and off - triggering the appropriate animation.
-         *
-         * @return Returns the boolean status of the hidden variable after the toggle
-         */
-        boolean toggle() {
-            if (this.hidden) {
-                out = ValueAnimator.ofInt(this.getMeasuredWidth(), MAX_WIDTH);
-
-                out.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int val = (Integer) valueAnimator.getAnimatedValue();
-                        ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                        layoutParams.width = val;
-                        setLayoutParams(layoutParams);
-                    }
-                });
-
-                out.setDuration(MenuList.ANIMATION_DURATION);
-                out.start();
-            } else {
-                in = ValueAnimator.ofInt(this.getMeasuredWidth(), 0);
-                in.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int val = (Integer) valueAnimator.getAnimatedValue();
-                        ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                        layoutParams.width = val;
-                        setLayoutParams(layoutParams);
-                    }
-                });
-
-                in.setDuration(MenuList.ANIMATION_DURATION);
-                in.start();
-            }
-            this.hidden = !this.hidden;
-            return this.hidden;
         }
 
         private class EntScroll extends ScrollView {

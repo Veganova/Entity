@@ -2,6 +2,7 @@ package com.ne.revival_games.entity;
 
 import android.os.Bundle;
 
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
@@ -25,6 +26,7 @@ import com.ne.revival_games.entity.WorldObjects.Players.PlayerDefense;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.RunnableFuture;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -174,11 +176,26 @@ public class MainActivity extends AppCompatActivity {
         if (playPause) {
             this.addPlayPause();
             this.addRestartHome();
+            this.gameOver();
+//            Runnable r = new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    gameOver();
+//                }
+//            };
+
+//             t = new (r);
+//            t.start();
         }
 
 //        myThread.setRunning(true);
 //        myThread.start();
-    }
+  }
 
 //    public void initOnePlayer(boolean playerSelection){
 //
@@ -280,7 +297,14 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void gameOver() {
-        this.restartHome.pop();
+        System.out.println("GAME OVER!");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                restartHome.pop();
+            }
+        });
+
     }
 
     //similar logic to be used for end game, should also implement an 'onPause' etc.
