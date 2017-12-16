@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.ne.revival_games.entity.CustomViews.ArrowPop;
 import com.ne.revival_games.entity.CustomViews.MainMenu;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.RestartHome;
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_thread);
         relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
 
+
+
         screens = new HashMap<>();
 
         Serializable message = getIntent().getSerializableExtra("GameMode");
@@ -85,7 +88,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-
+        View test = getLayoutInflater().inflate(R.layout.test, relativeLayout, false);
+        ArrowPop ap = new ArrowPop(getApplicationContext(), test, 0, 100,
+                ArrowPop.SIDE.LEFT, SCREEN_WIDTH);
+        relativeLayout.addView(ap);
     }
 
     protected View menu;
@@ -175,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (playPause) {
             this.addPlayPause();
-            this.addRestartHome();
+//            this.addRestartHome();
             this.gameOver();
 //            Runnable r = new Runnable() {
 //                @Override
@@ -298,13 +304,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void gameOver() {
         System.out.println("GAME OVER!");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                restartHome.pop();
-            }
-        });
-
+        if (restartHome != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    restartHome.pop();
+                }
+            });
+        }
     }
 
     //similar logic to be used for end game, should also implement an 'onPause' etc.

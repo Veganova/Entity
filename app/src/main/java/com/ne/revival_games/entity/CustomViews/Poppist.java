@@ -31,6 +31,7 @@ public abstract class Poppist extends HorizontalScrollView {
     private final int ANIMATION_DURATION;
 
     protected LinearLayout container;
+
     /**
      * Generalized UI element that can be extended and implemented with very few changes required.
      *

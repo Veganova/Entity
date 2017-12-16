@@ -14,7 +14,6 @@ import com.ne.revival_games.entity.R;
 /**
  * Created by Veganova on 10/24/2017.
  */
-
 public abstract class Popper extends ImageView {
 
     private boolean hidden = true;
@@ -36,7 +35,8 @@ public abstract class Popper extends ImageView {
         this.post(new Runnable() {
             @Override
             public void run() {
-                ORIGINAL_WIDTH = getMeasuredWidth();
+                // changes the size of the arrow over the course of the animation
+                ORIGINAL_WIDTH = getMeasuredWidth();//should b 0
                 SCALED_WIDTH = ORIGINAL_WIDTH * 4 / 5;
                 ORIGINAL_WIDTH = (int)(ORIGINAL_WIDTH * startingPercent);
                 Popper.this.getLayoutParams().width = ORIGINAL_WIDTH;
