@@ -102,9 +102,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void draw(Canvas canvas) {
-        //c.applyToCanvas(canvas); camera stuff.. could be usefull
-//        canvas.scale(1f, 0.5f);
-        super.draw(canvas);
         camera.update();
         //draw game objects and background
         if (canvas != null) {

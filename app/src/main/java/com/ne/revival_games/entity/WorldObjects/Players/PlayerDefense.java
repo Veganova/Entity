@@ -36,7 +36,6 @@ public class PlayerDefense extends Player {
         mDownX -= camera.translateXY.x * MyWorld.SCALE;
         mDownY -= camera.translateXY.y * MyWorld.SCALE;
 
-
         int mask = (ev.getAction() & MotionEvent.ACTION_MASK);
 
         if (mask == MotionEvent.ACTION_DOWN) {
@@ -109,6 +108,7 @@ public class PlayerDefense extends Player {
         mDownY /= camera.zoomXY.y;
         mDownX -= camera.translateXY.x * MyWorld.SCALE;
         mDownY -= camera.translateXY.y * MyWorld.SCALE;
+
 
         if (holdingGhost) {
             if (lastDownPress + 30 < System.currentTimeMillis()) {

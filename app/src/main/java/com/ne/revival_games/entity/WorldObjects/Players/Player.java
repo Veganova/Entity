@@ -18,7 +18,6 @@ import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.CustomViews.Menu;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -26,9 +25,6 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.Vector2;
 import org.json.JSONObject;
-
-import java.util.Iterator;
-import java.util.List;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -60,6 +56,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     protected GhostEntity ghost;
     protected boolean oldScroll = false;
     protected Vector2 initialTranslate = new Vector2(0, 0);
+    protected double lastScale = 1;
 
     private double money;
     // money per tick
@@ -154,18 +151,53 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     }
 
     public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
-
+        protected double refX = 0;
+        protected double refY = 0;
+        protected double absoluteX = 0;
+        protected double absoluteY = 0;
+        protected double initialZoom = 0;
 
         @Override
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
             double scaleFactor = scaleGestureDetector.getScaleFactor();
             scaleFactor = ((float) ((int) (scaleFactor * 100))) / 100; // Change precision to help with jitter when user just rests their fingers //
+            //WIDTH, HEIGHT
+
+            //record absolute position of zoom
+            //snap screen to focus of zoom
+//          //move screen appropriately by absolute coordinates based on current screen size
+
+            mDownX = scaleGestureDetector.getFocusX() / scales.x;   //scales coordinates 0 to map width
+            mDownY = scaleGestureDetector.getFocusY() / scales.y;   //scales coordinates 0 to map height
+            mDownX = (mDownX - WIDTH / 2);     //centers x
+            mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
+            mDownX /= camera.zoomXY.x;
+            mDownY /= camera.zoomXY.y;
+            mDownX -= camera.translateXY.x * MyWorld.SCALE;
+            mDownY -= camera.translateXY.y * MyWorld.SCALE;
+//            System.out.println(mDownX + " " + mDownY);
             camera.relativeZoom(scaleFactor, scaleFactor);
+            camera.move(-1* refX, -1* refY);
+            camera.relativeMove(-1*absoluteX/camera.zoomXY.x*MyWorld.SCALE, -1*absoluteY/camera.zoomXY.y*MyWorld.SCALE);
+
             return true;
         }
 
         @Override
         public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+            mDownX = scaleGestureDetector.getFocusX() / scales.x;   //scales coordinates 0 to map width
+            mDownY = scaleGestureDetector.getFocusY() / scales.y;   //scales coordinates 0 to map height
+            mDownX = (mDownX - WIDTH / 2);     //centers x
+            mDownY = -1 * (mDownY - HEIGHT / 2); //centers y
+            absoluteX = mDownX;
+            absoluteY = mDownY;
+            mDownX /= camera.zoomXY.x;
+            mDownY /= camera.zoomXY.y;
+            mDownX -= camera.translateXY.x * MyWorld.SCALE;
+            mDownY -= camera.translateXY.y * MyWorld.SCALE;
+
+            refX = mDownX;
+            refY = mDownY;
             return true;
         }
 

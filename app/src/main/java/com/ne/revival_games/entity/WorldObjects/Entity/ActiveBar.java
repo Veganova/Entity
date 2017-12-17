@@ -116,7 +116,7 @@ public class ActiveBar {
         float cx = (float)this.entity.shape.getX();
         float cy = (float)this.entity.shape.getY();
         float angle = (float) this.entity.shape.body.getTransform().getRotation();
-        float healthPercentage = (1.0f * lastHealth) / entity.MAX_HEALTH;
+        float healthPercentage = (1.0f * this.entity.health) / entity.MAX_HEALTH;//(1.0f * lastHealth) / entity.MAX_HEALTH;
 
         Path path = new Path();
         switch(pathType) {

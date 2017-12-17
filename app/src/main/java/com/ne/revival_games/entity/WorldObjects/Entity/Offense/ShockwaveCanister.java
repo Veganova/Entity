@@ -25,7 +25,6 @@ public class ShockwaveCanister extends ConditionalDestructible {
         this.shape = new ObjRectangle(50, 20);
         this.shape.getBuilder(true, world).setXY(location.x, location.y).setAngle(angle).init();
         world.objectDatabase.put(this.shape.body, this);
-        this.prime();
     }
 
     @Override

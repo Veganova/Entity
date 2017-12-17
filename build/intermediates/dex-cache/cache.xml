@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\vishn\.android\build-cache\a9d5e1b89f2cc22a3c6863596314b0c9b3faeccc\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="C:\Users\vishn\Documents\Entity\app\build\intermediates\pre-dexed\debug\classes_ecb1a82516f995e3d11d10759957911af315b46e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\vishn\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\2.0.1\516c03b21d50a644d538de0f0369c620989cd8f0\jsr305-2.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="516c03b21d50a644d538de0f0369c620989cd8f0">
+        <dex dex="C:\Users\vishn\Documents\Entity\app\build\intermediates\pre-dexed\debug\jsr305-2.0.1_397023b26eb0ff2f086a0202f64f4d6c8ea0e3a8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\vishn\AppData\Local\Android\sdk\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="C:\Users\vishn\Documents\Entity\app\build\intermediates\pre-dexed\debug\constraint-layout-solver-1.0.2_25a45255fb4af164f9fc24266f94ecf9c8cae531.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\vishn\.android\build-cache\58b43d4196c58b647b6d339dfc4ab8d4e7196b11\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c796c6602e5fa48f90a81c8ab3b3a21a205d1853">
+        <dex dex="C:\Users\vishn\Documents\Entity\app\build\intermediates\pre-dexed\debug\classes_620675e9c3acc4232f546d608c290e1bbe5fceb1.jar" />
+    </item>
+
+</items>
