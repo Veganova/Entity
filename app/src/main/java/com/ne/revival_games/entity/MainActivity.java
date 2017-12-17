@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
         View test = getLayoutInflater().inflate(R.layout.test, relativeLayout, false);
         ArrowPop ap = new ArrowPop(getApplicationContext(), test, 0, 100,
-                ArrowPop.SIDE.LEFT, SCREEN_WIDTH);
+                ArrowPop.SIDE.RIGHT, SCREEN_WIDTH);
         relativeLayout.addView(ap);
     }
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         world.addPlayers(players);
 
         if (playPause) {
-            this.addPlayPause();
+//            this.addPlayPause();
 //            this.addRestartHome();
             this.gameOver();
 //            Runnable r = new Runnable() {
