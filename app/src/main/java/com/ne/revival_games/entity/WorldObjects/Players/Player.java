@@ -223,11 +223,11 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
 //        }
 //    }
 
-    public void addMenu(int parentHeight) {
-        this.screen.addView(new Menu(context, parentHeight, this, Gravity.BOTTOM));
+    public void addMenu(int parentHeight, float SCREEN_WIDTH) {
+        this.screen.addView(new Menu(context, parentHeight, this, Gravity.BOTTOM, SCREEN_WIDTH));
     }
-    public void addMoneyView(MainActivity activity) {
-        this.screen.addView(new MoneyView(activity, context, world, this));
+    public void addMoneyView(MainActivity activity, float SCREEN_WIDTH) {
+        this.screen.addView(new MoneyView(activity, context, world, this, SCREEN_WIDTH));
     }
 
 }

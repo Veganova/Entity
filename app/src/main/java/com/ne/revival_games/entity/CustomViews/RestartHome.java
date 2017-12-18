@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.ne.revival_games.entity.GamePanel;
@@ -28,272 +29,74 @@ import java.util.List;
  * Created by Veganova on 9/10/2017.
  */
 
-/*
-public class RestartHome extends LinearLayout {
-
-    private BreakListing restart;
-    private BreakListingEnd home;
-
-    public RestartHome(Context context, float parentHeight, MainActivity activity, MainMenu.GameMode mode) {
-        super(context);
-        this.setOrientation(VERTICAL);
-        RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-        layout.setMargins(0, 0, 0, 100);
-        this.setLayoutParams(layout);
-        this.setGravity(Gravity.LEFT | Gravity.CENTER);
-
-        restart = new BreakListing(context, (int) parentHeight, activity, mode);
-        restart.setClickable(true);
-        home = new BreakListingEnd(context, (int) parentHeight, activity);
-//        this.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                System.out.println("CLICKING MAIN");
-//            }
-//        });
-
-        restart.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("CLICKING RESTART");
-            }
-        });
-        home.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("CLICKING HOME");
-            }
-        });
-        //listing.getLayoutParams().width = 0;
-        this.addView(restart);
-        this.addView(home);
-    }
-
-    public void pop() {
-        this.restart.pop();
-        this.home.pop();
-    }
-}
-
-class BreakListing extends PopListing {
-
-    private final MainActivity activity;
-    private final MainMenu.GameMode mode;
-
-    public BreakListing(Context context, int parentHeight, MainActivity activity, MainMenu.GameMode mode) {
-        super(context, parentHeight);
-        this.activity = activity;
-        this.mode = mode;
-
-        super.create(context);
-        this.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("ONCLICK RESTART");
-                ((BreakListing.BreakItems) (listing)).onClick();
-            }
-        });
-    }
-
-    @Override
-    protected Poppist createListing(Context context) {
-        return new BreakListing.BreakItems(context, activity, mode);
-    }
-
-    @Override
-    protected Popper createPopper(Context context, Poppist listing) {
-        return new BreakListing.BreakPop(context, listing);
-    }
-
-    class BreakPop extends Popper {
-        BreakPop(Context context, final Poppist toPop) {
-            super(context, toPop, R.drawable.ic_down_arrow, 0);
-
-        }
-    }
-
-    class BreakItems extends Poppist {
-        Runnable r;
-
-        BreakItems(final Context context, final MainActivity activity, final MainMenu.GameMode mode) {
-            super(context, 0, 0.13, 250);
-
-            ImageView icon = new ImageView(context);
-            Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_restart, null);
-            icon.setColorFilter(GamePanel.background_dark);
-            icon.setImageDrawable(drawable);
-
-            this.setBackgroundColor(GamePanel.cream);
-
-            this.container.addView(icon);
-            this.container.setPadding(50, 0, 0, 0);
-
-            r = new Runnable() {
-                @Override
-                public void run() {
-                    final Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("GameMode", mode);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                    // wait for the current activity thread to end. (so that it will let go of the canvas lock)
-                    activity.finish();
-                    if (activity.myThread.hasEnded()) {
-
-                    } else {
-                        try {
-                            synchronized (activity.myThread) {
-                                activity.myThread.wait();
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    activity.startActivity(intent);
-                }
-            };
-
-            this.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("WAT UP BOI");
-                }
-            });
-        }
-
-        void onClick() {
-            r.run();
-        }
-
-
-    }
-}
-
-class BreakListingEnd extends PopListing {
-
-    private final MainActivity activity;
-
-    public BreakListingEnd(Context context, int parentHeight, MainActivity activity) {
-        super(context, parentHeight);
-        this.activity = activity;
-
-        super.create(context);
-        this.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("ONCLICK HOME");
-                ((BreakListing.BreakItems) (listing)).onClick();
-            }
-        });
-    }
-
-    @Override
-    protected Poppist createListing(Context context) {
-        return new BreakListingEnd.BreakItems(context, activity);
-    }
-
-    @Override
-    protected Popper createPopper(Context context, Poppist listing) {
-        return new BreakListingEnd.BreakPop(context, listing);
-    }
-
-    class BreakPop extends Popper {
-        BreakPop(Context context, final Poppist toPop) {
-            super(context, toPop, R.drawable.ic_down_arrow, 0);
-
-        }
-    }
-
-    class BreakItems extends Poppist {
-
-        Runnable r;
-
-        BreakItems(final Context context, final MainActivity activity) {
-            super(context, 0, 0.13, 250);
-
-            ImageView icon = new ImageView(context);
-            Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_restart, null);
-            icon.setColorFilter(GamePanel.background_dark);
-            icon.setImageDrawable(drawable);
-
-            this.setBackgroundColor(GamePanel.cream);
-
-            this.container.addView(icon);
-            this.container.setPadding(50, 0, 0, 0);
-
-            r = new Runnable() {
-                @Override
-                public void run() {
-                    activity.finish();
-                }
-            };
-        }
-
-        void onClick() {
-            r.run();
-        }
-
-    }
-}
-*/
-
 public class RestartHome extends RelativeLayout {
     private static final int ANIMATION_DURATION = 600;
-    private int HEIGHT;
+    private static float SCREEN_WIDTH;
+    private static int HEIGHT;
     private RestartButton rb;
     private HomeButton home;
+    private ArrowPop a1, a2;
 
-    public RestartHome(Context context, float parentHeight, MainActivity activity, MainMenu.GameMode mode) {
+
+    public RestartHome(Context context, float parentHeight, MainActivity activity, MainMenu.GameMode mode, float SCREEN_WIDTH) {
         super(context);
-        this.HEIGHT = (int) (parentHeight * 0.2);
+        this.SCREEN_WIDTH = SCREEN_WIDTH;
+        this.HEIGHT = (int) (parentHeight * 0.07);
         this.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT));
-
         this.setGravity(Gravity.LEFT | Gravity.CENTER);
 
-        ImageView image = new ImageView(context);
-        Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_restart, null);
-        image.setColorFilter(GamePanel.background_dark);
-        image.setImageDrawable(drawable);
-
-//        rb = new RestartButton(context, activity, mode);
         home = new HomeButton(context, activity);
         rb = new RestartButton(context, activity, mode);
-        Container c = new Container(context, image, home);
-        Container c2  = new Container(context, image, home);
-        this.addView(c);
-        this.addView(c2);
-
     }
 
     public void pop() {
-        // move the image out
+        Context context = getContext();
+        Container c2 = new Container(context , home, 0);
+        Container c  = new Container(context, rb, 1);
+
+
+
+        a1 = new ArrowPop(context, c, false, true, ArrowPop.SIDE.LEFT, SCREEN_WIDTH);
+        a2 = new ArrowPop(context, c2, false, true, ArrowPop.SIDE.LEFT, SCREEN_WIDTH);
+
+        LinearLayout dummy1 = new LinearLayout(context);
+        LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        p1.setMargins(0, (int)(0.1 * HEIGHT), 0, 0);
+        dummy1.setLayoutParams(p1);
+        dummy1.addView(a2);
+
+
+
+        LinearLayout verticle = new LinearLayout(context);
+        verticle.setOrientation(LinearLayout.VERTICAL);
+        verticle.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        verticle.addView(a1);
+//        Space s = new Space(context);
+//        s.setLayoutParams(new LinearLayout.LayoutParams(0, 10));
+//        verticle.addView(s);
+        verticle.addView(dummy1);
+        this.addView(verticle);
+
+
+        a1.show();
+        a2.show();
     }
 
     class Container extends LinearLayout {
-        public Container(Context context, ImageView icon, final View image) {
+        public Container(Context context, final View image, int num) {
             super(context);
 
-            LinearLayout l = new LinearLayout(context);
-            l.setBackgroundColor(GamePanel.cream);
-            l.addView(icon);
-            l.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            l.setGravity(Gravity.CENTER);
+            this.setBackgroundColor(GamePanel.cream);
 
             this.setOrientation(HORIZONTAL);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                     HEIGHT);
+            int p = (int)(0.18 * HEIGHT);
+            this.setPadding(p / 2, p, 0, p);
+//            params.topMargin = p;
             this.setLayoutParams(params);
 
-            this.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    image.callOnClick();
-                }
-            });
-
-            this.addView(l);
             this.addView(image);
         }
     }
@@ -307,7 +110,8 @@ public class RestartHome extends RelativeLayout {
             this.setAdjustViewBounds(true);
             this.setScaleType(ScaleType.FIT_XY);
 
-            Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
+            Drawable drawable = VectorDrawableCompat.create(getResources(),  R.drawable.ic_home, null);
+            this.setColorFilter(GamePanel.background_dark);
             this.setImageDrawable(drawable);
 
             this.setOnClickListener(new OnClickListener() {
@@ -328,7 +132,8 @@ public class RestartHome extends RelativeLayout {
             this.setAdjustViewBounds(true);
             this.setScaleType(ScaleType.FIT_XY);
 
-            Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_isosceles, null);
+            Drawable drawable = VectorDrawableCompat.create(getResources(),  R.drawable.ic_restart, null);
+            this.setColorFilter(GamePanel.background_dark);
             this.setImageDrawable(drawable);
 
 

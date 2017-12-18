@@ -88,10 +88,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-        View test = getLayoutInflater().inflate(R.layout.test, relativeLayout, false);
-        ArrowPop ap = new ArrowPop(getApplicationContext(), test, 0, 100,
-                ArrowPop.SIDE.RIGHT, SCREEN_WIDTH);
-        relativeLayout.addView(ap);
     }
 
     protected View menu;
@@ -101,14 +97,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private View playPauseButton;
-    private void addPlayPause(){
+    private void addPlayPause() {
         playPauseButton = new PlayPauseArea(getApplicationContext(), this);
         relativeLayout.addView(playPauseButton);
     }
 
     private RestartHome restartHome;
     private void addRestartHome(){
-        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, choice);
+        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, choice, SCREEN_WIDTH);
         relativeLayout.addView(restartHome);
     }
 
@@ -171,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
             // loop over all players and do this..
             for (Player player: players) {
 //                relativeLayout.addView(player.getMenu());
-                player.addMenu((int)SCREEN_HEIGHT);
-                player.addMoneyView(this);
+                player.addMenu((int)SCREEN_HEIGHT, SCREEN_WIDTH);
+                player.addMoneyView(this, SCREEN_WIDTH);
 //                relativeLayout.addView(new MoneyView(this, getApplicationContext(), world, player));
             }
         }
@@ -180,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
         world.addPlayers(players);
 
         if (playPause) {
-//            this.addPlayPause();
-//            this.addRestartHome();
-            this.gameOver();
+            this.addPlayPause();
+            this.addRestartHome();
+//            this.gameOver();
 //            Runnable r = new Runnable() {
 //                @Override
 //                public void run() {
@@ -202,105 +198,6 @@ public class MainActivity extends AppCompatActivity {
 //        myThread.setRunning(true);
 //        myThread.start();
   }
-
-//    public void initOnePlayer(boolean playerSelection){
-//
-//        this.MAP_HEIGHT = 2400;
-//        this.MAP_WIDTH = 1350;
-//
-//        GamePanel gamePanel1 = new GamePanel(this, world);
-//
-//        player1 = new PlayerDefense(1, Team.DEFENCE, world, gamePanel1, this, true);
-//        player2 = new PlayerDefense(2, Team.OFFENSE, world, gamePanel1, this, false);
-//
-//        curPlayer = player1;
-//        ArrayList<Player> players = new ArrayList<>();
-//        players.add(player1);
-//        players.add(player2);
-//        world.addPlayers(players);
-//
-//        ViewGroup myGroup = new DoubleScreen(this);
-//
-//        DoubleScreen.LayoutParams parms = new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT);
-//        gamePanel1.setLayoutParams(parms);
-//
-//        myGroup.addView(gamePanel1);
-//        // setContentView(myGroup);
-//
-//        WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-//        Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        int height = size.y;
-//
-//        relativeLayout.addView(myGroup);
-//
-//        if (playerSelection) {
-//            // loop over all players and do this..
-//            for (Player player: players) {
-//                relativeLayout.addView(player.getMenu());
-//            }
-//        }
-//
-////        this.addMenu();
-//        this.addPlayPause();
-//
-//        myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
-//        myThread.setRunning(true);
-//        myThread.start();
-//    }
-
-
-//    public void initTwoPlayer(boolean playerSelection){
-//        this.MAP_HEIGHT = 1600;
-//        this.MAP_WIDTH = 1800;
-//
-//        GamePanel gamePanel1 = new GamePanel(this, world);
-//        GamePanel gamePanel2 = new GamePanel(this, world);
-//
-//        Player player1 = new PlayerDefense(1, Team.DEFENCE, world, gamePanel1, this, true);
-//        Player player2 = new PlayerDefense(2, Team.OFFENSE, world, gamePanel2, this, true);
-//
-//        Player curPlayer = player1;
-//        ArrayList<Player> players = new ArrayList<>();
-//        players.add(player1);
-//        players.add(player2);
-//        world.addPlayers(players);
-//
-//        ViewGroup myGroup = new DoubleScreen(this);
-//
-//        DoubleScreen.LayoutParams parms =
-//                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT / 2);
-//        parms.topMargin = 0;
-//        gamePanel1.setLayoutParams(parms);
-//
-//        DoubleScreen.LayoutParams parms2 =
-//                new DoubleScreen.LayoutParams(SCREEN_WIDTH, SCREEN_HEIGHT / 2);
-//        parms2.topMargin = (int) (SCREEN_HEIGHT / 2);
-//        gamePanel2.setLayoutParams(parms2);
-//
-//        myGroup.addView(gamePanel2);
-//        myGroup.addView(gamePanel1);
-////        setContentView(myGroup);
-//
-//
-//        relativeLayout.addView(myGroup);
-//
-//        if (playerSelection) {
-//            // loop over all players and do this..
-//            for (Player player: players) {
-//                relativeLayout.addView(player.getMenu());
-//            }
-//        }
-//
-//        this.addPlayPause();
-//
-//
-//        myThread.addNewPanel(gamePanel1, gamePanel1.getHolder());
-//        myThread.addNewPanel(gamePanel2, gamePanel2.getHolder());
-//        myThread.setRunning(true);
-//        myThread.start();
-//    }
 
     public void gameOver() {
         System.out.println("GAME OVER!");

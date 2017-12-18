@@ -1,9 +1,17 @@
 package com.ne.revival_games.entity.CustomViews;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -21,60 +29,86 @@ import java.util.List;
 /**
  * Set of classes that make up the menu that the player can open and close and select items to build
  */
+
 public class Menu extends RelativeLayout {
 
-    public Menu(Context context, int parentHeight, Player player, int gravity) {
+    public Menu(Context context, int parentHeight, Player player, int gravity, float SCREEN_WIDTH) {
         super(context);
 
         this.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT));
         this.setGravity(gravity);
 
-        MenuList listing = new MenuList(context, parentHeight, player);
+        MenuList listing = new MenuList(context, parentHeight, player, SCREEN_WIDTH);
         this.addView(listing);
     }
 }
 
-class MenuList extends PopListing {
 
-    private final Player player;
+class MenuList extends LinearLayout {
 
-    public MenuList(Context context, int parentHeight, Player player) {
-        super(context, parentHeight);
 
-        this.player = player;
+    static int ANIMATION_DURATION = 600;
+    static double SCREEN_PORTION = 0.75;
+    private Poppist poppist;
 
-        super.create(context);
+    int HEIGHT;
+
+    public MenuList(Context context, int parentHeight, Player player, float SCREEN_WIDTH) {
+        super(context);
+
+        this.HEIGHT = (int) (parentHeight * 0.1);
+        this.setOrientation(HORIZONTAL);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                HEIGHT);
+
+        params.bottomMargin = 50;
+
+        poppist = new Poppist(context, Arrays.asList(Entities.values()), player);
+        ArrowPop tray = new ArrowPop(context, poppist, false, true, ArrowPop.SIDE.LEFT, SCREEN_WIDTH);
+
+        this.setLayoutParams(params);
+        this.addView(tray);
     }
 
-    @Override
-    protected Poppist createListing(Context context) {
-        return new MenuList.MenuItems(context, Arrays.asList(Entities.values()), player);
-    }
+    class Poppist extends HorizontalScrollView {
 
-    @Override
-    protected Popper createPopper(Context context, Poppist listing) {
-        return new MenuList.MenuPop(context, listing);
-    }
+        private List<Entities> toDisplay;
 
+        private final int MAX_WIDTH;
+        private Player owner;
 
-    class MenuPop extends Popper {
-
-        MenuPop(Context context, final Poppist toPop) {
-            super(context, toPop, R.drawable.ic_down_arrow, 1);
-        }
-    }
-
-    class MenuItems extends Poppist {
+        Poppist(Context context, List<Entities> toDisplay, Player player) {
+            super(context);
+            this.toDisplay = toDisplay;
+            this.owner = player;
 
 
-        MenuItems(Context context, List<Entities> toDisplay, Player player) {
-            super(context, 0, 0.75, 600);
+            // TODO: 7/20/2017 might want to do this with weights instead.. for handling the changing screen orientation
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            MAX_WIDTH = (int) (width * SCREEN_PORTION);
 
-            for (Entities entityType : toDisplay) {
-                EntScroll entScroll = new EntScroll(context, entityType, player);
+            this.setHorizontalScrollBarEnabled(false);
+            this.setLayoutParams(new ViewGroup.LayoutParams(MAX_WIDTH, LayoutParams.MATCH_PARENT));
+
+            LinearLayout container = new LinearLayout(context);
+            container.setGravity(Gravity.CENTER);
+            container.setBackgroundColor(GamePanel.cream);
+            container.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
+                    , ViewGroup.LayoutParams.MATCH_PARENT));
+
+
+            // Add all the entities as buttons to this scroll view
+            for (Entities entityType : this.toDisplay) {
+                EntScroll entScroll = new EntScroll(context, entityType, owner);
                 container.addView(entScroll);
             }
+
+            this.addView(container);
         }
 
         private class EntScroll extends ScrollView {
