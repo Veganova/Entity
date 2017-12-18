@@ -126,6 +126,7 @@ public class ActiveBar {
                 paint.setStyle(Paint.Style.FILL);
             case CIRCLE:
                 float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
+
                 RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
 
                 float sweepAngle = (360 * healthPercentage);
@@ -175,10 +176,17 @@ public class ActiveBar {
         }
     }
 
+    // Does'nt work
+    private RectF getRotatedRectangle(float x1, float y1, float x2, float y2, float angle, float cx, float cy) {
 
-//    public RectF getRotatedRectangle(float cx, float cy, float angle,) {
-//        float x = Math.cos(angle)
-//    }
+        float x1_new = (float) (Math.cos(angle) * (x1 - cx) - Math.sin(angle) * (y1 - cy)) + cx;
+        float y1_new = (float) (Math.sin(angle) * (x1 - cx) + Math.cos(angle) * (y1 - cy)) + cy;
+
+        float x2_new = (float) (Math.cos(angle) * (x2 - cx) - Math.sin(angle) * (y2 - cy)) + cx;
+        float y2_new = (float) (Math.sin(angle) * (x2 - cx) + Math.cos(angle) * (y2 - cy)) + cy;
+
+        return new RectF(x1_new, y1_new, x2_new, y2_new);
+    }
 
 
 }
