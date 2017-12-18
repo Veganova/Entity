@@ -109,15 +109,17 @@ public class ActiveBar {
             healthAnim = new IntAnimator(lastHealth, targetHealth, 0.8);
         } else {
             // will be null first time when health is full
-            if (healthAnim != null)
+            if (healthAnim != null) {
+//                System.out.println("ANIMATION---");
                 this.lastHealth = healthAnim.update();
+            }
         }
 
         float cx = (float)this.entity.shape.getX();
         float cy = (float)this.entity.shape.getY();
         float angle = (float) this.entity.shape.body.getTransform().getRotation();
-        float healthPercentage = (1.0f * this.entity.health) / entity.MAX_HEALTH;//(1.0f * lastHealth) / entity.MAX_HEALTH;
-
+        float healthPercentage = (1.0f * lastHealth) / entity.MAX_HEALTH;
+//        System.out.println("Health percentage: " + healthPercentage);
         Path path = new Path();
         switch(pathType) {
             case FILLED_CIRCLE:
@@ -125,16 +127,17 @@ public class ActiveBar {
             case CIRCLE:
                 float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
                 RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
-                float sweepAngle = (360 * healthPercentage);
 
-                path.addArc(rectangle, startingAngle - angle, sweepAngle);
+                float sweepAngle = (360 * healthPercentage);
+                float startAngle = 0;//(float) (angle * 180 / Math.PI);//startingAngle - angle;
+                path.addArc(rectangle, startAngle, sweepAngle);
                 break;
             case RECTANGLE:
                 // how to move only partway along a given path
                 break;
             case LINE:
                 double percentage = 0.75;
-                double width = x * percentage * healthPercentage;
+                double width = x  * healthPercentage * percentage;
 
                 // System.out.println(height + " " + width);
                 float p1x, p1y, p2x, p2y;
@@ -172,6 +175,10 @@ public class ActiveBar {
         }
     }
 
+
+//    public RectF getRotatedRectangle(float cx, float cy, float angle,) {
+//        float x = Math.cos(angle)
+//    }
 
 
 }
