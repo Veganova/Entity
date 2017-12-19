@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected View menu;
     protected void addMenu(){
-        menu = new MainMenu(getApplicationContext(), this);
+        menu = new MainMenu(getApplicationContext(), this, SCREEN_WIDTH);
         relativeLayout.addView(menu);
     }
 

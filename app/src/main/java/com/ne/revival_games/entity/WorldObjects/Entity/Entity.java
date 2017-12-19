@@ -359,7 +359,7 @@ public class Entity implements Effector {
         if(!storedPrevVelocity) {
             storedPrevVelocity = true;
             this.oldVelocity = this.shape.body.getLinearVelocity();
-            System.out.println(x + " " + y);
+//            System.out.println(x + " " + y);
             this.shape.body.setLinearVelocity(x,y);
         }
 

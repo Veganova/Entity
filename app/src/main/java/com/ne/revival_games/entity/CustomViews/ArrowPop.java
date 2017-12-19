@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.CustomViews;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Space;
 
 import com.ne.revival_games.entity.R;
 
+import static com.ne.revival_games.entity.CustomViews.ArrowPop.SIDE.LEFT;
 import static com.ne.revival_games.entity.CustomViews.ArrowPop.SIDE.RIGHT;
 
 //TODO: bug - when startedHidden is true, there is a flicker.
@@ -43,7 +45,7 @@ public class ArrowPop extends HorizontalScrollView {
      *
      * @param context
      * @param toPop           The view to pop out.
-     * @param side            The side of the screen to display from.
+     * @param side            The side of the screen to display from. right would mean it comes out of the right side.
      */
     public ArrowPop(final Context context, final View toPop, final boolean startHidden, final boolean interactable, final SIDE side, final float SCREEN_WIDTH) {
         super(context);
@@ -51,13 +53,18 @@ public class ArrowPop extends HorizontalScrollView {
         this.hidden = startHidden;
 
         if (side == SIDE.LEFT || side == RIGHT) {
-            final LinearLayout container = new LinearLayout(context);
+            final MyLinearLayout container = new MyLinearLayout(context);
             container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT));
             container.setOrientation(LinearLayout.HORIZONTAL);
 
             // need to add in the passed in view to check the height it will end up with
             container.addView(toPop);
+
+            if (side == RIGHT) {
+                container.setGravity(Gravity.RIGHT);
+            }
+
 
             if (side == RIGHT) {
                 drawResource = R.drawable.ic_down_arrow_reversed;
@@ -175,6 +182,23 @@ public class ArrowPop extends HorizontalScrollView {
         // we are not scrollable
         if (!mScrollable) return false;
         else return super.onInterceptTouchEvent(ev);
+    }
+
+    private class MyLinearLayout extends LinearLayout {
+
+        public MyLinearLayout(Context context) {
+            super(context);
+        }
+
+        // can cause the ui to go back and forth. Case when this happens: have a MoneyView on the left side initialized to be hidden, watch it expand as the digits in the money view increase.
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            if (!hidden) {
+                show();
+            } else {
+                hide();
+            }
+        }
     }
 }
 

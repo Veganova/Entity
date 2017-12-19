@@ -39,7 +39,7 @@ public class SlowEffect extends Effect {
                     < this.zone.body.getRotationDiscRadius()*percentRealRadius) {
                 other.resetVelocity();
                 Vector2 vel = other.shape.body.getLinearVelocity();
-                System.out.println(vel.x + " " + vel.y);
+//                System.out.println(vel.x + " " + vel.y);
                 other.setTempVelocity(vel.x / slowFactor, vel.y / slowFactor);
 //                System.out.println(other.shape.body.getLinearVelocity().x + " " + other.shape.body.getLinearVelocity().y);
             }

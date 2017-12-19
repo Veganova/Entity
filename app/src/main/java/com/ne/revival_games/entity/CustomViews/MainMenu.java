@@ -42,7 +42,7 @@ public class MainMenu extends LinearLayout {
 
 
 //    private int HEIGHT;
-    public MainMenu(final Context context, final MainActivity activity) {
+    public MainMenu(final Context context, final MainActivity activity, float SCREEN_WIDTH) {
         super(context);
         this.activity = activity;
 
@@ -89,65 +89,23 @@ public class MainMenu extends LinearLayout {
                 }
             };
 
-
             LinearLayout container = new LinearLayout(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             params.bottomMargin = 30;
             container.setLayoutParams(params);
-            container.setGravity(Gravity.CENTER);
 
-            LinearLayout left = new LinearLayout(context);
-            left.setLayoutParams(new LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.MATCH_PARENT,
-                    1.0f));
+
+//            container.setBackgroundColor(GamePanel.cream);
             if (leftSide) {
-                left.setBackgroundColor(GamePanel.background_dark);
-
-                ImageView style = new ImageView(context);
-                style.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-                style.setAdjustViewBounds(true);
-//                style.setScaleType(ScaleType.FIT_XY);
-
-                Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow_reversed, null);
-                style.setImageDrawable(drawable);
-                left.setGravity(Gravity.RIGHT);
-                left.addView(style);
+                MainMenuButton button = new MainMenuButton(context, mode.toString(), listener, SCREEN_WIDTH, 0.2f, 0.085f);
+                container.addView(button);
+                verticle.addView(new ArrowPop(context, container, false, true, ArrowPop.SIDE.LEFT, SCREEN_WIDTH));
+            } else {
+                MainMenuButton button = new MainMenuButton(context, mode.toString(), listener, SCREEN_WIDTH, 0.085f, 0.2f);
+                container.addView(button);
+                verticle.addView(new ArrowPop(context, container, false, true, ArrowPop.SIDE.RIGHT, SCREEN_WIDTH));
             }
-
-
-            LinearLayout right = new LinearLayout(context);
-            right.setLayoutParams(new LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.MATCH_PARENT,
-                    1.0f));
-            if (!leftSide) {
-                right.setBackgroundColor(GamePanel.background_dark);
-
-                ImageView style = new ImageView(context);
-                style.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-                style.setAdjustViewBounds(true);
-//                style.setScaleType(ScaleType.FIT_XY);
-
-                Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
-                style.setImageDrawable(drawable);
-                right.setGravity(Gravity.LEFT);
-                right.addView(style);
-            }
-
-            MainMenuButton button = new MainMenuButton(context, mode.toString(), listener);
-
-            container.setBackgroundColor(GamePanel.cream);
-
-            container.addView(left);
-            container.addView(button);
-            container.addView(right);
-
-
-            verticle.addView(container);
 
             leftSide = !leftSide;
         }
@@ -155,20 +113,23 @@ public class MainMenu extends LinearLayout {
         this.addView(verticle);
     }
 
-    private class MainMenuButton extends TextView {
+    private class MainMenuButton extends android.support.v7.widget.AppCompatTextView {
 
-        public MainMenuButton(Context context, String name, OnClickListener listener) {
+        public MainMenuButton(Context context, String name, OnClickListener listener, float SCREEN_WIDTH, float padding_left, float padding_right) {
             super(context);
 
             this.setTextColor(GamePanel.background_dark);
 
             this.setTextSize(25);
             this.setGravity(Gravity.CENTER);
-            this.setBackgroundColor(Color.TRANSPARENT);
+            this.setBackgroundColor(GamePanel.cream);
             this.setText(name);
             this.setOnClickListener(listener);
 
-            this.setPadding(0, 20, 0, 20);
+
+            int pl = (int) (SCREEN_WIDTH * padding_left);
+            int pr = (int) (SCREEN_WIDTH * padding_right);
+            this.setPadding(pl, 20, pr, 20);
 
             this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
         }

@@ -106,7 +106,7 @@ public class ActiveBar {
         if (this.entity.health != targetHealth) {
             this.targetHealth = this.entity.health;
             // animation change! animate lastHealth from lastHealth to targetHealth
-            System.out.println("VALUE - " + 5.0f / (targetHealth - lastHealth));
+//            System.out.println("VALUE - " + 5.0f / (targetHealth - lastHealth));
             healthAnim = new IntAnimator(lastHealth, targetHealth, 20.0f / (lastHealth - targetHealth));
         } else {
             // will be null first time when health is full
