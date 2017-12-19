@@ -1,5 +1,6 @@
 package com.ne.revival_games.entity;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import android.os.Looper;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected RelativeLayout relativeLayout;
     private boolean paused = true;
+    private static Context myContext = null;
 
     private MainMenu.GameMode choice = null;
 
@@ -50,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("CREATING------------------------------------------------------");
         super.onCreate(savedInstanceState);
+
+        //whenever a new mainactivity is created we reinitialize context
+        myContext = getContext();
+
         //set screen to fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -299,5 +305,14 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean isPaused() {
         return paused;
+    }
+
+
+    public static Context getContext() {
+        if(myContext == null) {
+            myContext = getContext();
+        }
+
+        return myContext;
     }
 }
