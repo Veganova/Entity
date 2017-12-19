@@ -25,25 +25,22 @@ import static android.R.color.holo_orange_light;
 /**
  * Created by Veganova on 8/13/2017.
  */
-
 public class MoneyView extends RelativeLayout {
     private MainActivity activity;
     private Player player;
 
     private Thread creator;
-    public MoneyView(MainActivity activity, final Context context, final MyWorld world, final Player player) {
+    public MoneyView(MainActivity activity, final Context context, final MyWorld world, final Player player, float SCREEN_WIDTH) {
         super(context);
         this.activity = activity;
         this.player = player;
 
         RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-//        params2.topMargin = 50;
+        params2.topMargin = 25;
         this.setLayoutParams(params2);
 
         this.setGravity(Gravity.TOP | Gravity.RIGHT);
-
-
 
         final LinearLayout container = new LinearLayout(context);
 
@@ -54,18 +51,7 @@ public class MoneyView extends RelativeLayout {
         container.setGravity(Gravity.RIGHT);
         container.setLayoutParams(params);
 
-        ImageView style = new ImageView(context);
-        style.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        style.setAdjustViewBounds(true);
-        style.setScaleType(ImageView.ScaleType.FIT_END);
-
-
-        Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_money_style_2, null);
-        style.setImageDrawable(drawable);
-        container.addView(style);
-
-        addView(container);
+        addView(new ArrowPop(context, container, false, true, ArrowPop.SIDE.RIGHT, SCREEN_WIDTH));
 
         creator = new Thread(new Runnable() {
             MoneyTextView text;
@@ -91,12 +77,13 @@ public class MoneyView extends RelativeLayout {
     private class MoneyTextView extends TextView implements Updatable {
 
         private Player player;
+        private float sizePortion = 0.8f;
 
         public MoneyTextView(Context context, MyWorld world, Player player) {
             super(context);
             this.player = player;
-            this.setTextSize(30);
-            this.setPadding(0, 20, 20, 20);
+            this.setTextSize(30 * sizePortion);
+            this.setPadding((int)(0 * sizePortion), (int)(20 * sizePortion), (int)(20 * sizePortion), (int)(20 * sizePortion));
 //            Typeface face = Typeface.createFromAsset(context.getAssets(),   "fonts/sans-serif-smallcaps.ttf");
 //            this.setTypeface(face);
             this.setBackgroundColor(GamePanel.cream);

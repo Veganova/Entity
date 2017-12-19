@@ -32,14 +32,14 @@ import java.util.List;
 
 public class Menu extends RelativeLayout {
 
-    public Menu(Context context, int parentHeight, Player player, int gravity) {
+    public Menu(Context context, int parentHeight, Player player, int gravity, float SCREEN_WIDTH) {
         super(context);
 
         this.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT));
         this.setGravity(gravity);
 
-        MenuList listing = new MenuList(context, parentHeight, player);
+        MenuList listing = new MenuList(context, parentHeight, player, SCREEN_WIDTH);
         this.addView(listing);
     }
 }
@@ -49,117 +49,33 @@ class MenuList extends LinearLayout {
 
 
     static int ANIMATION_DURATION = 600;
-    private Popper popper;
+    static double SCREEN_PORTION = 0.75;
     private Poppist poppist;
 
-    int HEIGHT;//pixels
+    int HEIGHT;
 
-    public MenuList(Context context, int parentHeight, Player player) {
+    public MenuList(Context context, int parentHeight, Player player, float SCREEN_WIDTH) {
         super(context);
 
         this.HEIGHT = (int) (parentHeight * 0.1);
         this.setOrientation(HORIZONTAL);
-//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                HEIGHT);//LayoutParams.WRAP_CONTENT);
+                HEIGHT);
 
         params.bottomMargin = 50;
 
-
-//        this.setLayoutParams(params);
-
         poppist = new Poppist(context, Arrays.asList(Entities.values()), player);
-        popper = new Popper(context, poppist);
+        ArrowPop tray = new ArrowPop(context, poppist, false, true, ArrowPop.SIDE.LEFT, SCREEN_WIDTH);
 
-
-        this.addView(poppist);
-        this.addView(popper);
         this.setLayoutParams(params);
-    }
-
-
-    class Popper extends ImageView {
-
-        private final Poppist toPop;
-        private boolean hidden = true;
-        private int ORIGINAL_WIDTH;
-        private int SCALED_WIDTH;
-
-        Popper(Context context, final Poppist toPop) {
-            super(context);
-            this.toPop = toPop;
-
-            this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            this.setAdjustViewBounds(true);
-            this.setScaleType(ScaleType.FIT_XY);
-
-            Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_down_arrow, null);
-            this.setImageDrawable(drawable);
-
-            this.post(new Runnable() {
-                @Override
-                public void run() {
-                    ORIGINAL_WIDTH = getMeasuredWidth();
-                    SCALED_WIDTH = ORIGINAL_WIDTH * 4 / 5;
-                    postInvalidate();
-                }
-            });
-
-            this.setOnClickListener(new View.OnClickListener() {
-                private ValueAnimator in, out;
-
-                public void onClick(View v) {
-                    toPop.toggle();
-
-                    if (hidden) {
-                        final int w = getMeasuredWidth();
-                        out = ValueAnimator.ofInt(w, SCALED_WIDTH);
-
-                        out.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                int val = (Integer) valueAnimator.getAnimatedValue();
-
-                                ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                                layoutParams.width = val;
-                                setLayoutParams(layoutParams);
-                            }
-                        });
-
-                        out.setDuration(MenuList.ANIMATION_DURATION);
-                        out.start();
-                    } else {
-                        final int w = getMeasuredWidth();
-                        in = ValueAnimator.ofInt(w, ORIGINAL_WIDTH);
-                        in.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                int val = (Integer) valueAnimator.getAnimatedValue();
-                                ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                                layoutParams.width = val;
-                                setLayoutParams(layoutParams);
-                            }
-                        });
-
-                        in.setDuration(MenuList.ANIMATION_DURATION);
-                        in.start();
-                    }
-                    hidden = !hidden;
-                }
-            });
-        }
+        this.addView(tray);
     }
 
     class Poppist extends HorizontalScrollView {
 
         private List<Entities> toDisplay;
-        private boolean hidden = true;
 
         private final int MAX_WIDTH;
-
-        private ValueAnimator in, out;
         private Player owner;
 
         Poppist(Context context, List<Entities> toDisplay, Player player) {
@@ -174,13 +90,10 @@ class MenuList extends LinearLayout {
             Point size = new Point();
             display.getSize(size);
             int width = size.x;
-//        System.out.println("WIDTH ---- " + width);
-            MAX_WIDTH = (int) (width * 3) / 4;
-
-            //this.getLayoutParams().width = MAX_WIDTH;
+            MAX_WIDTH = (int) (width * SCREEN_PORTION);
 
             this.setHorizontalScrollBarEnabled(false);
-            this.setLayoutParams(new ViewGroup.LayoutParams(0, LayoutParams.MATCH_PARENT));
+            this.setLayoutParams(new ViewGroup.LayoutParams(MAX_WIDTH, LayoutParams.MATCH_PARENT));
 
             LinearLayout container = new LinearLayout(context);
             container.setGravity(Gravity.CENTER);
@@ -196,46 +109,6 @@ class MenuList extends LinearLayout {
             }
 
             this.addView(container);
-        }
-
-        /**
-         * Toggles the poppist on and off - triggering the appropriate animation.
-         *
-         * @return Returns the boolean status of the hidden variable after the toggle
-         */
-        boolean toggle() {
-            if (this.hidden) {
-                out = ValueAnimator.ofInt(this.getMeasuredWidth(), MAX_WIDTH);
-
-                out.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int val = (Integer) valueAnimator.getAnimatedValue();
-                        ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                        layoutParams.width = val;
-                        setLayoutParams(layoutParams);
-                    }
-                });
-
-                out.setDuration(MenuList.ANIMATION_DURATION);
-                out.start();
-            } else {
-                in = ValueAnimator.ofInt(this.getMeasuredWidth(), 0);
-                in.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int val = (Integer) valueAnimator.getAnimatedValue();
-                        ViewGroup.LayoutParams layoutParams = getLayoutParams();
-                        layoutParams.width = val;
-                        setLayoutParams(layoutParams);
-                    }
-                });
-
-                in.setDuration(MenuList.ANIMATION_DURATION);
-                in.start();
-            }
-            this.hidden = !this.hidden;
-            return this.hidden;
         }
 
         private class EntScroll extends ScrollView {

@@ -106,35 +106,40 @@ public class ActiveBar {
         if (this.entity.health != targetHealth) {
             this.targetHealth = this.entity.health;
             // animation change! animate lastHealth from lastHealth to targetHealth
-            healthAnim = new IntAnimator(lastHealth, targetHealth, 0.8);
+            System.out.println("VALUE - " + 5.0f / (targetHealth - lastHealth));
+            healthAnim = new IntAnimator(lastHealth, targetHealth, 20.0f / (lastHealth - targetHealth));
         } else {
             // will be null first time when health is full
-            if (healthAnim != null)
+            if (healthAnim != null) {
+//                System.out.println("ANIMATION---");
                 this.lastHealth = healthAnim.update();
+            }
         }
 
         float cx = (float)this.entity.shape.getX();
         float cy = (float)this.entity.shape.getY();
         float angle = (float) this.entity.shape.body.getTransform().getRotation();
         float healthPercentage = (1.0f * lastHealth) / entity.MAX_HEALTH;
-
+//        System.out.println("Health percentage: " + healthPercentage);
         Path path = new Path();
         switch(pathType) {
             case FILLED_CIRCLE:
                 paint.setStyle(Paint.Style.FILL);
             case CIRCLE:
                 float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
-                RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
-                float sweepAngle = (360 * healthPercentage);
 
-                path.addArc(rectangle, startingAngle - angle, sweepAngle);
+                RectF rectangle = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
+
+                float sweepAngle = (360 * healthPercentage);
+                float startAngle = 0;//(float) (angle * 180 / Math.PI);//startingAngle - angle;
+                path.addArc(rectangle, startAngle, sweepAngle);
                 break;
             case RECTANGLE:
                 // how to move only partway along a given path
                 break;
             case LINE:
                 double percentage = 0.75;
-                double width = x * percentage * healthPercentage;
+                double width = x  * healthPercentage * percentage;
 
                 // System.out.println(height + " " + width);
                 float p1x, p1y, p2x, p2y;
@@ -172,6 +177,17 @@ public class ActiveBar {
         }
     }
 
+    // Does'nt work
+    private RectF getRotatedRectangle(float x1, float y1, float x2, float y2, float angle, float cx, float cy) {
+
+        float x1_new = (float) (Math.cos(angle) * (x1 - cx) - Math.sin(angle) * (y1 - cy)) + cx;
+        float y1_new = (float) (Math.sin(angle) * (x1 - cx) + Math.cos(angle) * (y1 - cy)) + cy;
+
+        float x2_new = (float) (Math.cos(angle) * (x2 - cx) - Math.sin(angle) * (y2 - cy)) + cx;
+        float y2_new = (float) (Math.sin(angle) * (x2 - cx) + Math.cos(angle) * (y2 - cy)) + cy;
+
+        return new RectF(x1_new, y1_new, x2_new, y2_new);
+    }
 
 
 }

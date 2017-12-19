@@ -120,7 +120,6 @@ public class MyWorld {
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
-        Nexus lol = new Nexus(0,0,0, this, Team.DEFENCE);
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
@@ -260,7 +259,7 @@ public class MyWorld {
     }
 
     public void gameOver() {
-
+        activity.gameOver();
     }
 
 
