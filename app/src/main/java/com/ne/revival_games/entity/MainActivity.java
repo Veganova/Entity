@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.RunnableFuture;
+//s
 public class MainActivity extends AppCompatActivity {
 
     private PlayerDefense player1, player2, curPlayer;
