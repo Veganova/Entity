@@ -78,7 +78,6 @@ public class GravityEffect extends Effect{
 
 
             magnitude = Math.max(magnitude, 0) * 0.01;
-//            System.out.println(magnitude);
 
 
             other.shape.body.applyForce(new Vector2(magnitude * Math.cos(angle),

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "GENERAL",
+    "nexus": {
+      "health" : 500,
+      "friction": 200
+    }
+  },
+  {
+    "name" : "OFFENSE",
+    "nexus": {
+      "health" : 600,
+      "friction": 200
+    }
+  },
+  {
+    "name": "DEFENSE",
+    "nexus": {
+      "health" : 700,
+      "friction": 200
+    }
+  },
+  {
+    "name": "NEUTRAL",
+    "nexus": {
+      "health" : 800,
+      "friction": 200
+    }
+  }
+]
