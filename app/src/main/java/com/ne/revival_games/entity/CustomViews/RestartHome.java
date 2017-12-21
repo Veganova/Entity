@@ -55,6 +55,7 @@ public class RestartHome extends RelativeLayout {
         if (!first) {
             return;
         }
+        first = false;
         Context context = getContext();
         Container c2 = new Container(context , home, 0);
         Container c  = new Container(context, rb, 1);
@@ -85,7 +86,6 @@ public class RestartHome extends RelativeLayout {
 
         a1.show();
         a2.show();
-        first = false;
     }
 
     class Container extends LinearLayout {

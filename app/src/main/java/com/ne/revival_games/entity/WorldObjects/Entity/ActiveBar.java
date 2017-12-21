@@ -154,7 +154,7 @@ public class ActiveBar {
         }
 
         if (this.on) {
-            c.drawPath(path, blur);
+//            c.drawPath(path, blur);
         }
         c.drawPath(path, paint);
         // c.drawPath(path, selected);
