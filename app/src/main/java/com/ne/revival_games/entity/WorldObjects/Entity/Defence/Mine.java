@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -23,8 +24,11 @@ public class Mine extends ConditionalDestructible{
 
     public Mine(Vector2 location, double angle, double health, Team team, MyWorld world){
         super(0, 0, (int) health, false, team);
-        this.shape = new ObjCircle(50);
-        this.shape.getBuilder(true, world).setXY(location.x, location.y).init();
+        System.out.println(MySettings.getNum(team.toString(), "mine radius"));
+        this.shape = new ObjCircle(MySettings.getNum(team.toString(), "mine radius"));
+        this.shape.getBuilder(true, world).setXY(location.x, location.y)
+                .setBasics(team.toString(), "mine")
+                .init();
         world.objectDatabase.put(this.shape.body, this);
     }
 

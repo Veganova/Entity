@@ -23,8 +23,9 @@ public class Missile extends Entity {
                    MyWorld world, Team team) {
         super(direction, speed, HEALTH, false, team, DEFAULT_FRICTION);
         shape = new ObjCircle(RADIUS);
-        shape.getBuilder(true, world).setXY(x, y).setLinearDamping(LINEAR_DAMPING).
-                                                  setAngularDamping(ANGULAR_DAMPING).init();
+        shape.getBuilder(true, world).setXY(x, y)
+                .setBasics(team.toString(), "missile")
+                .init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
     }

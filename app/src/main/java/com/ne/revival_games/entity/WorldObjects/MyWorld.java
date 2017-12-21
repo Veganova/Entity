@@ -2,7 +2,6 @@ package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -25,10 +24,13 @@ import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.geometry.Vector2;
 import org.json.JSONObject;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.ne.revival_games.entity.WorldObjects.MySettings.getSettings;
 
 
 /**
@@ -122,6 +124,7 @@ public class MyWorld {
         this.engineWorld.addListener(step);
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
+
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
 //        settings.setLinearTolerance(150*settings.getLinearTolerance());
 

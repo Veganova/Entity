@@ -44,7 +44,7 @@ import org.dyn4j.geometry.Vector2;
  */
 public class SequentialImpulses implements ContactConstraintSolver {
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.contact.ContactConstraintSolver#initialize(java.util.List, org.dyn4j.dynamics.Step, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.contact.ContactConstraintSolver#initialize(java.util.List, org.dyn4j.dynamics.Step, org.dyn4j.dynamics.MySettings)
 	 */
 	public void initialize(List<ContactConstraint> contactConstraints, Step step, Settings settings) {
 		// get the restitution velocity from the settings object
@@ -232,7 +232,7 @@ public class SequentialImpulses implements ContactConstraintSolver {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.contact.ContactConstraintSolver#solveVelocityContraints(java.util.List, org.dyn4j.dynamics.Step, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.contact.ContactConstraintSolver#solveVelocityContraints(java.util.List, org.dyn4j.dynamics.Step, org.dyn4j.dynamics.MySettings)
 	 */
 	public void solveVelocityContraints(List<ContactConstraint> contactConstraints, Step step, Settings settings) {
 		// loop through the contact constraints
@@ -561,7 +561,7 @@ public class SequentialImpulses implements ContactConstraintSolver {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.contact.ContactConstraintSolver#solvePositionContraints(java.util.List, org.dyn4j.dynamics.Step, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.contact.ContactConstraintSolver#solvePositionContraints(java.util.List, org.dyn4j.dynamics.Step, org.dyn4j.dynamics.MySettings)
 	 */
 	public boolean solvePositionContraints(List<ContactConstraint> contactConstraints, Step step, Settings settings) {
 		// immediately return true if there are no contact constraints to solve

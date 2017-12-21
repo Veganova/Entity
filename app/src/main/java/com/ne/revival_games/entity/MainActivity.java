@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //whenever a new mainactivity is created we reinitialize context
-        myContext = getContext();
+        myContext = getApplicationContext();
 
         //set screen to fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -308,11 +308,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static Context getContext() {
-        if(myContext == null) {
-            myContext = getContext();
-        }
-
+    public static Context giveContext() {
         return myContext;
     }
 }

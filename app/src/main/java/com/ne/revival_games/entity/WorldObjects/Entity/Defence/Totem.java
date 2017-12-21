@@ -39,7 +39,7 @@ public class Totem extends Entity {
 
         this.shape = new ObjCircle(30);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
-        builder.setAngle(angle).setXY(x, y).init();
+        builder.setAngle(angle).setXY(x, y).setBasics(team.toString(), "totem").init();
 
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
@@ -108,7 +108,9 @@ public class Totem extends Entity {
 
             AShape bar = new ObjRectangle(20, 100);
             AShape.InitBuilder builder = bar.getBuilder(true, world);
-            builder.setAngle(Math.toDegrees(theta * 2)).setXY(barX, barY).init();
+            builder.setAngle(Math.toDegrees(theta * 2)).setXY(barX, barY)
+                    .setBasics(team.toString(), "totem_stub")
+                    .init();
 
             this.bars.add(new CustomEntity(bar, 0, STUB_HEALTH, false, team, world));
 

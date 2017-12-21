@@ -32,7 +32,9 @@ public class Comet extends AimShootEntity {
         super(direction, speed, HEALTH, false, team);
 
         shape = new ObjCircle(RADIUS);
-        shape.getBuilder(true, world).setXY(x, y).init();
+        shape.getBuilder(true, world).setXY(x, y)
+                .setBasics(team.toString(), "comet")
+                .init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
         this.logic = new ImmediateAim(this, world.objectDatabase, range);//new SeekerAim(this, world.objectDatabase, range, false);
