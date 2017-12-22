@@ -3,7 +3,6 @@ package com.ne.revival_games.entity;
 import android.content.Context;
 import android.os.Bundle;
 
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
@@ -15,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-import com.ne.revival_games.entity.CustomViews.ArrowPop;
 import com.ne.revival_games.entity.CustomViews.MainMenu;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.RestartHome;
@@ -24,11 +22,11 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Players.PlayerDefense;
+import com.ne.revival_games.entity.WorldObjects.Sounds;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.RunnableFuture;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         screens = new HashMap<>();
+
+        // Initialize sounds
+        Sounds s = Sounds.getInstance();
+        s.setContext(this);
+
 
         Serializable message = getIntent().getSerializableExtra("GameMode");
         if (message != null) {
@@ -184,6 +187,15 @@ public class MainActivity extends AppCompatActivity {
         if (playPause) {
             this.addPlayPause();
             this.addRestartHome();
+
+
+//            final MediaPlayer sound = MediaPlayer.create(this, R.raw.round_win);
+//            sound.start();
+
+            Sounds.getInstance().playSound(Sounds.SOUND_TYPE.MODE);
+
+
+
 //            this.gameOver();
 //            Runnable r = new Runnable() {
 //                @Override

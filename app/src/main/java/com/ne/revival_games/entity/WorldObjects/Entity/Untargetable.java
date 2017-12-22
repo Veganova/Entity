@@ -8,9 +8,7 @@ import java.util.List;
 /**
  * Created by Veganova on 8/26/2017.
  */
-
 public class Untargetable {
-
 
     private Entity owner;
     private boolean disallow = false;
@@ -20,7 +18,6 @@ public class Untargetable {
     }
 
     private List<Pair<Class<? extends Entity>, FROM>> data;
-
 
     public Untargetable(Entity owner) {
         this.owner = owner;

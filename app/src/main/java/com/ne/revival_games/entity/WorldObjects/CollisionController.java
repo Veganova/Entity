@@ -74,7 +74,6 @@ class CollisionController extends CollisionAdapter {
             }
         }
 
-
         if(!continueContact){
             if(ent1.health <= 0){
                 world.objectDatabase.remove(ent1.shape.body);
@@ -82,6 +81,9 @@ class CollisionController extends CollisionAdapter {
             if(ent2.health <= 0){
                 world.objectDatabase.remove(ent2.shape.body);
             }
+        } else {
+
+            Sounds.getInstance().playSound(Sounds.SOUND_TYPE.HIT);
         }
 
         return continueContact;
