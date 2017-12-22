@@ -7,6 +7,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Comet;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Rocket;
+import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ShockwaveCanister;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
@@ -72,6 +73,12 @@ public enum Entities {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
                     return new Rocket(new Vector2(x, y), angle, 200.0, 20, team, world);
+                }
+            },
+            new EntityLeaf("EMP") {
+                @Override
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                    return new ShockwaveCanister(new Vector2(x, y), angle, 200.0, 20, team, world);
                 }
             },
 

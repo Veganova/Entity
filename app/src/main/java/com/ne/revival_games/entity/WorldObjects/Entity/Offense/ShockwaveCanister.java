@@ -5,6 +5,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EMP;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -19,10 +20,18 @@ public class ShockwaveCanister extends ConditionalDestructible {
     private double lifeTime = 5000;
 
     public ShockwaveCanister(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world) {
-        super(direction, speed, team, "shockwave");
+        super(direction, speed, team, "shockcan");
         this.shape = new ObjRectangle(50, 20);
+        this.lifeTime = MySettings.getNum(team.toString(), "shockcan lifetime");
         this.shape.getBuilder(true, world).setXY(location.x, location.y).setAngle(angle).init();
         world.objectDatabase.put(this.shape.body, this);
+
+    }
+
+    @Override
+    public void prime() {
+        this.primed = true;
+        this.startTime = System.currentTimeMillis();
     }
 
     @Override
@@ -31,13 +40,13 @@ public class ShockwaveCanister extends ConditionalDestructible {
             this.naturalDeath = true;
         }
 
-        return System.currentTimeMillis() > (startTime+lifeTime);
+        return this.primed && System.currentTimeMillis() > (startTime+lifeTime);
     }
 
     @Override
     public void onDeath(MyWorld world){
         if(this.naturalDeath) {
-            ExpandingEffect emp = new EMP(0.1, 0.01, 10, 500, 200, this.team, world, 6000);
+            ExpandingEffect emp = new EMP("shockcan", this.team, world);
             Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), emp, world, this.team);
             emp.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
         }

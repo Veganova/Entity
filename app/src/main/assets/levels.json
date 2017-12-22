@@ -1,0 +1,241 @@
+{
+  "Levels" : {
+    "1" : {
+      "duration" : 15,
+      "comet" : {
+        "number" : 10,
+        "health" : 20,
+        "speed" : 20
+      },
+      "break" : 20
+    },
+    "2" : {
+      "duration" : 20,
+      "comet" : {
+        "number" : 20,
+        "health" : 20,
+        "speed" : 30
+      },
+      "emp" : {
+        "number" : 1,
+        "health" : 60,
+        "speed" : 35
+      },
+      "break" : 20
+    },
+    "3" : {
+      "duration" : 25,
+      "comet" : {
+        "number" : 35,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 1,
+        "health" : 60,
+        "acceleration" : 2
+      },
+      "emp" : {
+        "number" : 3,
+        "health" : 40,
+        "speed" : 35
+      },
+      "break" : 25
+    },
+    "4" : {
+      "duration" : 30,
+      "comet" : {
+        "number" : 40,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 2,
+        "health" : 40,
+        "acceleration" : 3
+      },
+      "emp" : {
+        "number" : 5,
+        "health" : 40,
+        "speed" : 30
+      },
+      "break" : 25
+    },
+    "5" : {
+      "duration" : 30,
+      "comet" : {
+        "number" : 75,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 5,
+        "health" : 40,
+        "acceleration" : 3
+      },
+      "emp" : {
+        "number" : 5,
+        "health" : 40,
+        "speed" : 30
+      },
+      "break" : 25
+
+    },
+    "6" : {
+      "duration" : 30,
+      "comet" : {
+        "number" : 85,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 7,
+        "health" : 40,
+        "acceleration" : 3
+      },
+      "emp" : {
+        "number" : 7,
+        "health" : 40,
+        "speed" : 30
+      },
+      "turret-1" : {
+        "number" : 1,
+        "health" : 80,
+        "stub" : 20,
+        "speed" : 5
+      },
+      "break" : 25
+
+    },
+    "7" : {
+      "duration" : 35,
+      "comet" : {
+        "number" : 105,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 9,
+        "health" : 40,
+        "acceleration" : 3
+      },
+      "emp" : {
+        "number" : 9,
+        "health" : 40,
+        "speed" : 30
+      },
+      "turret-1" : {
+        "number" : 3,
+        "health" : 80,
+        "stub" : 20,
+        "speed" : 5
+      },
+      "break" : 25
+    },
+    "8" : {
+      "duration" : 40,
+      "comet" : {
+        "number" : 115,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 8,
+        "health" : 40,
+        "acceleration" : 3
+      },
+      "emp" : {
+        "number" : 15,
+        "health" : 40,
+        "speed" : 30
+      },
+      "turret-1" : {
+        "number" : 5,
+        "health" : 80,
+        "stub" : 20,
+        "speed" : 5
+      },
+      "turret-2" : {
+        "number" : 2,
+        "health" : 120,
+        "stub" : 40,
+        "speed" : 5
+      },
+      "break" : 25
+    },
+    "9" : {
+      "duration" : 40,
+      "comet" : {
+        "number" : 135,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 12,
+        "health" : 40,
+        "acceleration" : 4
+      },
+      "emp" : {
+        "number" : 12,
+        "health" : 40,
+        "speed" : 30
+      },
+      "turret-1" : {
+        "number" : 6,
+        "health" : 80,
+        "stub" : 20,
+        "speed" : 5
+      },
+      "turret-2" : {
+        "number" : 4,
+        "health" : 120,
+        "stub" : 40,
+        "speed" : 5
+      },
+      "turret-3" : {
+        "number" : 1,
+        "health" : 250,
+        "stub" : 80,
+        "speed" : 5
+      },
+      "break" : 25
+    },
+    "10" : {
+      "duration" : 45,
+      "comet" : {
+        "number" : 200,
+        "health" : 30,
+        "speed" : 30
+      },
+      "rocket" : {
+        "number" : 25,
+        "health" : 60,
+        "acceleration" : 4
+      },
+      "emp" : {
+        "number" : 25,
+        "health" : 40,
+        "speed" : 30
+      },
+      "turret-1" : {
+        "number" : 10,
+        "health" : 80,
+        "stub" : 20,
+        "speed" : 5
+      },
+      "turret-2" : {
+        "number" : 8,
+        "health" : 120,
+        "stub" : 40,
+        "speed" : 5
+      },
+      "turret-3" : {
+        "number" : 3,
+        "health" : 250,
+        "stub" : 80,
+        "speed" : 5
+      },
+      "break" : 25
+    }
+  }
+}
