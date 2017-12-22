@@ -2,7 +2,10 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+
+import org.dyn4j.geometry.Vector2;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -13,10 +16,13 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 public abstract class AimShootEntity extends AimableEntity implements Shootable {
 
     // default
-    private double shootingSpeed = 30;
+    private double shootingSpeed = 30, acceleration = 0;
+    private boolean isThrust = false;
 
-    public AimShootEntity(double direction, double speed, int health, boolean invulnerable, Team team) {
-        super(direction, speed, health, invulnerable, team);
+    public AimShootEntity(double direction, double speed, Team team, String name, boolean isThrust) {
+        super(direction, speed, team, name);
+        this.isThrust = isThrust;
+        this.acceleration = MySettings.getNum(team.toString(), name + " acceleration");
     }
 
     @OverridingMethodsMustInvokeSuper
@@ -34,7 +40,15 @@ public abstract class AimShootEntity extends AimableEntity implements Shootable 
 
 //        this.shape.body.rotate(angle, shape.body.getWorldCenter().x, shape.body.getWorldCenter().y);
 //        this.direction = Math.toDegrees(angle);
-        this.setVelocity(shootingSpeed, angle);
+        if(isThrust) {
+            angle = (Math.PI * 2 + this.shape.getOrientation()
+                    + this.shape.body.getTransform().getRotation()) % (Math.PI * 2);
+            this.shape.body.applyForce(new Vector2(acceleration*Math.cos(angle),
+                    acceleration*Math.sin(angle)));
+        }
+        else {
+            this.setVelocity(shootingSpeed, angle);
+        }
 
 //        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, team);
 //

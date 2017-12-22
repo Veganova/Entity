@@ -25,16 +25,11 @@ public class Nexus extends Entity {
     public static int MASS;
     public static int COST;
     private List<AShape> components;
-    private static int centerDensity = 200;
-    public static double LINEAR_DAMPING = 2;
-    public static double ANGULAR_DAMPING = 0.25;
 
     private GravityEffect gravEffect;
 
     public Nexus(double x, double y, double angle, MyWorld world, Team team) {
-        super(angle, 0, HEALTH, false, team, DEFAULT_FRICTION);
-        frictionCoefficent =
-                MySettings.getNum(team.toString(), "nexus friction");
+        super(angle, 0, team, "nexus");
         components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(120, 120);

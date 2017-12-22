@@ -7,7 +7,6 @@ import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.Body;
@@ -21,7 +20,8 @@ public class Dummy extends ConditionalDestructible {
     private EffectType effectType;
 
     public Dummy(Vector2 location, Effect myEffect, MyWorld world, Team team) {
-        super(0, 0, 1, true, team);
+        super(0, 0, team, "dummy");
+        this.targetExceptions.uninteractable = true;
         this.shape = new ObjCircle(5);
         this.shape.getBuilder(true, world).setXY(location.x, location.y).init();
         world.objectDatabase.put(this.shape.body, this);
@@ -32,7 +32,7 @@ public class Dummy extends ConditionalDestructible {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit,  double damage){
-//        super.onCollision(contact, componentHit, 0);
+        super.onCollision(contact, componentHit, 0);
 
         Effect activeEffect = zoneToEffect.get(componentHit);
         if (activeEffect != null) {

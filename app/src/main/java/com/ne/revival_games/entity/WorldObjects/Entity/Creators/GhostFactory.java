@@ -23,7 +23,7 @@ public class GhostFactory {
     public static GhostEntity produce(EntityLeaf toProduce, double x,
                                       double y, double angle, MyWorld world, Team team) {
 
-        Entity entity = toProduce.produce(x, y, angle, world, team);
+        Entity entity = toProduce.produce(x, y, angle, world, team, "ghost");
         GhostEntity ghost = new GhostEntity(entity, world);
 
         if (entity != null) {

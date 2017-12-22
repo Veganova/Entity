@@ -15,12 +15,8 @@ public abstract class ShootableEntity extends Entity implements Shootable {
     // default
     private double shootingSpeed = 30;
 
-    public ShootableEntity(double direction, double speed, int health, boolean invulnerable, Team team) {
-        super(direction, speed, health, invulnerable, team, DEFAULT_FRICTION);
-    }
-
-    public ShootableEntity(double direction, double speed, int health, boolean invulnerable, Team team, double frictionCoefficient) {
-        super(direction, speed, health, invulnerable, team, frictionCoefficient);
+    public ShootableEntity(double direction, double speed, Team team, String name) {
+        super(direction, speed, team, name);
     }
 
     @OverridingMethodsMustInvokeSuper
@@ -37,12 +33,6 @@ public abstract class ShootableEntity extends Entity implements Shootable {
         Entity shooting = getNewBodyToShoot(x, y, Math.toDegrees(angle));
         shooting.setVelocity(shootingSpeed);
         shooting.addToPlayer(this.player);
-
-
-//        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, team);
-//
-//        this.shape.body.setAsleep(false);
-//        this.sleepUntil = System.currentTimeMillis() + this.projectile.getSleepTime();
     }
 
     public void setShootingSpeed(double speed) {

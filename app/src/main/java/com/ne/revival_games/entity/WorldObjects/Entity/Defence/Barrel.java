@@ -3,13 +3,10 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 import android.support.annotation.NonNull;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.ShootableEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -34,8 +31,8 @@ public class Barrel extends ShootableEntity {
     private double sleepUntil = 0;
 
     public Barrel(EntityLeaf toShoot, BarrelType type,
-                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location, double frictionCoefficient) {
-        super(0, 0, 70, false, team, frictionCoefficient);
+                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location) {
+        super(0, 0, team, "barrel");
         initBarrel(type, location, world, angle);
         this.world = world;
         this.toShoot = toShoot;
@@ -78,7 +75,7 @@ public class Barrel extends ShootableEntity {
 
     @Override
     public Entity getNewBodyToShoot(double x, double y, double angle) {
-        return toShoot.produce(x, y, angle, world, this.team);
+        return toShoot.produce(x, y, angle, world, this.team, "barrel");
     }
 
 //    @Override

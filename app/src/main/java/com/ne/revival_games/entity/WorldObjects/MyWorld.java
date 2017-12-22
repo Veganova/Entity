@@ -174,7 +174,7 @@ public class MyWorld {
 
 //        new ShockwaveCanister(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
 
-//        new ExplosiveMissile(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
+//        new Rocket(new Vector2(-100, -100), 0, 0, 0, Team.DEFENCE, this);
 //        Turret turret = new Turret(new Vector2(0, 100), 0, this, Team.DEFENCE);
 //        Team.DEFENCE.add(turret);
 //

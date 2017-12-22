@@ -9,7 +9,6 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
@@ -29,7 +28,7 @@ public class Comet extends AimShootEntity {
     private double range = 1000;
 
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
-        super(direction, speed, HEALTH, false, team);
+        super(direction, speed, team, "comet", false);
 
         shape = new ObjCircle(RADIUS);
         shape.getBuilder(true, world).setXY(x, y)

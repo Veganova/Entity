@@ -35,7 +35,7 @@ public class Totem extends Entity {
 
 
     public Totem(double x, double y, double angle, MyWorld world, Team team, int numbars) {
-        super(angle, 0, HEALTH, false, team, DEFAULT_FRICTION);
+        super(angle, 0, team, "totem");
 
         this.shape = new ObjCircle(30);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);

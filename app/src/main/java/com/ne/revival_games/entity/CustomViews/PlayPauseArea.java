@@ -76,16 +76,17 @@ public class PlayPauseArea extends RelativeLayout {
     public PlayPauseArea(final Context context, final MainActivity activity) {
         super(context);
 
-        int imageBound = (int) (activity.SCREEN_WIDTH * 0.245);
+        int imageBound = (int) (activity.SCREEN_WIDTH * 0.18);//0.245);
 
         this.setGravity(Gravity.LEFT | Gravity.TOP);
         this.setLayoutParams(new LinearLayout.LayoutParams(imageBound, imageBound));
 
         final PlayPauseView playPause = new PlayPauseView(context, activity);
 
-        int buttonBound = (int) (activity.SCREEN_WIDTH * 0.153);
+        int buttonBound = (int) (activity.SCREEN_WIDTH * 0.11); //0.153);
         RelativeLayout container = new RelativeLayout(context);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(buttonBound, buttonBound);
+
         params.leftMargin = 10;
         container.setLayoutParams(params);
 
@@ -96,7 +97,7 @@ public class PlayPauseArea extends RelativeLayout {
         this.addView(container);
     }
 
-    private class BackgroundImage extends ImageView {
+    private class BackgroundImage extends android.support.v7.widget.AppCompatImageView {
 
         BackgroundImage(Context context) {
             super(context);

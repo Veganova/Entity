@@ -21,7 +21,7 @@ public abstract class Effect {
     public EffectType effectType;
     public AShape zone;
     public MyWorld world;
-    protected Entity applier;
+    public Entity applier;
     protected boolean status = true;
     private boolean draw = false;
 
@@ -75,7 +75,7 @@ public abstract class Effect {
     }
 
     private boolean canApply(Entity other) {
-        return this.status && other != applier;
+        return this.status && other != applier && !other.targetExceptions.isContactDisallowedWith(this);
     }
 
     public void toggleDraw() {draw = !draw;}

@@ -13,8 +13,8 @@ public abstract class ConditionalDestructible extends Entity {
     protected boolean primed = false;
     protected double startTime = -1;
 
-    public ConditionalDestructible(double direction, double speed, int health, boolean invulnerable, Team team) {
-        super(direction, speed, health, invulnerable, team, DEFAULT_FRICTION);
+    public ConditionalDestructible(double direction, double speed, Team team, String name) {
+        super(direction, speed, team, name);
     }
 
     @Override

@@ -50,7 +50,12 @@ public class RestartHome extends RelativeLayout {
         rb = new RestartButton(context, activity, mode);
     }
 
+    private boolean first = true;
     public void pop() {
+        if (!first) {
+            return;
+        }
+        first = false;
         Context context = getContext();
         Container c2 = new Container(context , home, 0);
         Container c  = new Container(context, rb, 1);

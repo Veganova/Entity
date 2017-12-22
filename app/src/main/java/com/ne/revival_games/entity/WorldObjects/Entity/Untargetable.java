@@ -2,6 +2,8 @@ package com.ne.revival_games.entity.WorldObjects.Entity;
 
 import android.util.Pair;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +16,13 @@ public class Untargetable {
 
     private Entity owner;
     private boolean disallow = false;
+    public boolean uninteractable = false;
 
     public enum FROM {
         ALLY, ENEMY, ALL
     }
 
-    private List<Pair<Class<? extends Entity>, FROM>> data;
+    private List<Pair<Class<? extends Object>, FROM>> data;
 
 
     public Untargetable(Entity owner) {
@@ -27,8 +30,8 @@ public class Untargetable {
         data = new ArrayList<>();
     }
 
-    public Untargetable addType(Class<? extends Entity> classType, FROM from) {
-        data.add(new Pair<Class<? extends Entity>, FROM>(classType, from));
+    public Untargetable addType(Class<? extends Object> classType, FROM from) {
+        data.add(new Pair<Class<? extends Object>, FROM>(classType, from));
         return this;
     }
 
@@ -37,7 +40,7 @@ public class Untargetable {
     }
 
     public void removeType(Class<? extends Entity> classType) {
-        for (Pair<Class<? extends Entity>, FROM> p: this.data) {
+        for (Pair<Class<? extends Object>, FROM> p: this.data) {
             if (matchClass(p.first, classType)) {
                 this.data.remove(p);
                 return;
@@ -52,7 +55,7 @@ public class Untargetable {
      * @param classType2
      * @return
      */
-    private boolean matchClass(Class<? extends Entity> classType1, Class<? extends Entity> classType2) {
+    private boolean matchClass(Class<? extends Object> classType1, Class<? extends Object> classType2) {
         return (classType1.equals(classType2) || classType1.isAssignableFrom(classType2));// || classType2.isAssignableFrom(classType1));
     }
 
@@ -70,14 +73,31 @@ public class Untargetable {
     }
 
     public boolean isContactDisallowedWith(Entity contact) {
+        if(uninteractable) {
+            return true;
+        }
+
         if (this.disallow) {
             Class<? extends Entity> classType = contact.getClass();
-            for (Pair<Class<? extends Entity>, FROM> p : this.data) {
+            for (Pair<Class<? extends Object>, FROM> p : this.data) {
                 if (matchTeam(p.second, contact.team) && matchClass(p.first, classType)) {
                     return true;
                 }
             }
         }
+        return false;
+    }
+
+    public boolean isContactDisallowedWith(Effect contact) {
+        if(uninteractable) {
+            return true;
+        }
+            Class<? extends Effect> classType = contact.getClass();
+            for (Pair<Class<? extends Object>, FROM> p : this.data) {
+                if (matchTeam(p.second, contact.applier.team) && matchClass(p.first, classType)) {
+                    return true;
+                }
+            }
         return false;
     }
 
