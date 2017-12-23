@@ -165,7 +165,7 @@ public class Settings {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Settings[StepFrequency=").append(this.stepFrequency)
+		sb.append("MySettings[StepFrequency=").append(this.stepFrequency)
 		.append("|MaximumTranslation=").append(this.maximumTranslation)
 		.append("|MaximumRotation=").append(this.maximumRotation)
 		.append("|AutoSleepingEnabled=").append(this.autoSleepingEnabled)

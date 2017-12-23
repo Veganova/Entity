@@ -1,11 +1,17 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
+import android.view.Gravity;
+
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Projectile;
+import com.ne.revival_games.entity.WorldObjects.Entity.Shared.ConditionalDestructible;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.GravityEffect;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.SlowEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.Entity.Untargetable;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
-import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
@@ -15,51 +21,68 @@ import org.dyn4j.geometry.Vector2;
  * Created by vishn on 7/2/2017.
  */
 
-public class Lazer extends Projectile {
+public class Lazer extends ConditionalDestructible {
     public double damage;
-    public double lazer_width = 20;         //unscaled width
-    public double lazer_length;             //unscaled length
-    public double lazer_angle;              //angle in RADIANS
-    public double lazer_speed;              //raw speed
+    public double lazer_width = 0;         //unscaled width
+    public double lazer_angle = 0;              //angle in RADIANS
+    public double lazer_length = 0;
+    private double lifeTime, start;
     private MyWorld world;
 
 
-    public Lazer(double width, double direction, double speed,
-                 double health, MyWorld world, Team team, boolean addToWorld) {
-        super(direction, speed, (int) health, world, team, addToWorld);
-
+    public Lazer(double x, double y, double angle, MyWorld world, Team team, String name) {
+        super(angle, 0, team, name + " lazer");
         this.world = world;
+        this.invulnerable = true;
         this.isCollisionAuthority = true;
-        this.lazer_speed = speed;
-        this.lazer_width = width/MyWorld.SCALE;
+        this.lazer_length = MySettings.getNum(team.toString(), name + " lazer length");
+        this.lazer_width = MySettings.getNum(team.toString(), name + " lazer width");
+        this.start = System.currentTimeMillis();
+        this.lifeTime = MySettings.getNum(team.toString(), name + " lazer lifetime");
+        this.damage = MySettings.getNum(team.toString(), name + " lazer damage");
+        this.lazer_angle = Math.toRadians(angle);
+        Vector2 newPoint = new Vector2(x + lazer_length*Math.cos(lazer_angle),
+                y + lazer_length*Math.sin(lazer_angle));
+
+        double mid_x = x + lazer_length*Math.cos(lazer_angle) / 2;
+        double mid_y = y + lazer_length*Math.sin(lazer_angle)/ 2;
+        this.shape = new ObjRectangle(lazer_length, lazer_width);
+        this.shape.getBuilder(true, this.world).setXY(x + lazer_length*Math.cos(lazer_angle) / 2,
+                y + lazer_length*Math.sin(lazer_angle)/ 2).init();
+        this.shape.rotateBody(lazer_angle);
+
+        this.setVelocity(MySettings.getNum(team.toString(), name + " lazer speed"));
+        world.objectDatabase.put(this.shape.body, this);
+        this.targetExceptions.addType(GravityEffect.class, Untargetable.FROM.ALL);
+        this.targetExceptions.addType(SlowEffect.class, Untargetable.FROM.ALL);
+        this.targetExceptions.addType(ExplosiveEffect.class, Untargetable.FROM.ALL);
     }
 
-    /**
-     * function used to place a rectangular shaped "lazer" object
-     * also change this.shape to newly generated body
-     *
-     * WARNING: object has not been placed in world object database & must be used after this.world
-     * is initialized
-     */
-    public void placeLazer(Vector2 oldPoint, Vector2 newPoint){
-        double x = (oldPoint.x + newPoint.x) / 2 * MyWorld.SCALE;
-        double y = (oldPoint.y + newPoint.y) / 2 * MyWorld.SCALE;
-        double l = Util.getDistance(oldPoint, newPoint);
-        lazer_angle = Util.absoluteAngle(oldPoint, newPoint);
-        this.shape = new ObjRectangle(l  * MyWorld.SCALE, lazer_width * MyWorld.SCALE);
-        this.shape.getBuilder(true, this.world).setXY(x,y).setAngle(Math.toDegrees(lazer_angle)).init();
-    }
+//      /**
+//     * function used to place a rectangular shaped "lazer" object
+//     * also change this.shape to newly generated body
+//     *
+//     * WARNING: object has not been placed in world object database & must be used after this.world
+//     * is initialized
+//     */
+//    public void placeLazer(Vector2 oldPoint, Vector2 newPoint){
+//        double x = (oldPoint.x + newPoint.x) / 2;
+//        double y = (oldPoint.y + newPoint.y) / 2;
+//        this.shape = new ObjRectangle(lazer_length, lazer_width);
+//        this.shape.getBuilder(true, this.world).setXY(x,y).init();
+//        this.shape.rotateBody(lazer_angle);
+//    }
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage){
+        super.onCollision(contact, componentHit, damage);
+
         return false;
     }
 
-    @Override
-    public Projectile returnCustomizedCopy(Projectile project,
-                                           Vector2 location, double direction,
-                                           double speed, MyWorld world, Team team) {
-        return null;
-    }
 
+    @Override
+    protected boolean deathCondition() {
+        return  (lifeTime != -1 && startTime + lifeTime < System.currentTimeMillis());
+    }
 }

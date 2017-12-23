@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Shape;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.collision.Fixture;
@@ -154,6 +155,15 @@ public abstract class AShape implements Shape {
 
         public InitBuilder setAngle(double fixtureangle) {
             this.angle = Math.toRadians(fixtureangle);
+            return this;
+        }
+
+        public InitBuilder setBasics(String team, String name) {
+            this.setAngularDamping(MySettings.getNum(team, name + " angular_damping"));
+            this.setLinearDamping(MySettings.getNum(team, name + " linear_damping"));
+            this.setDensity(MySettings.getNum(team, name + " density"));
+            this.setRestitution(MySettings.getNum(team, name + " restitution"));
+            this.setFriction(MySettings.getNum(team, name + " friction"));
             return this;
         }
 

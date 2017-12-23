@@ -1,12 +1,12 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Creators;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Mine;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Totem;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Comet;
+import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Rocket;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
@@ -24,7 +24,7 @@ public enum Entities {
 
     COMET(new EntityLeaf[]{new EntityLeaf("COMET") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
             return new Comet(x, y, angle, 0, world, team);
         }
     }}),
@@ -32,46 +32,52 @@ public enum Entities {
 
     NEXUS(new EntityLeaf[]{new EntityLeaf("NEXUS") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
             return new Nexus(x, y, angle, world, team);
         }
     }}),
     TOTEM(new EntityLeaf[]{new EntityLeaf("TOTEM") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
             return new Totem(x, y, angle, world, team, 3);
         }
     }}),
 
     BARRIER(new EntityLeaf[]{new EntityLeaf("BARRIER") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
             return new Barrier(x, y, angle, world, team);
         }
     }}),
     TURRET(new EntityLeaf[]{
             new EntityLeaf("TURRET-1") {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
                     return new Turret(new Vector2(x, y), angle, world, team, 1);
                 }
             },
             new EntityLeaf("TURRET-2") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
             return new Turret(new Vector2(x, y), angle, world, team, 2);
         }
     },
-            new EntityLeaf("MINE") {
+//            new EntityLeaf("MINE") {
+//                @Override
+//                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+//                    return new Mine(new Vector2(x, y), angle, 200.0, team, world);
+//                }
+//            },
+          new EntityLeaf("ROCKET") {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-                    return new Mine(new Vector2(x, y), angle, 200.0, team, world);
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                    return new Rocket(new Vector2(x, y), angle, 200.0, 20, team, world);
                 }
             },
 
             new EntityLeaf("TURRET-3") {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
                     return new Turret(new Vector2(x, y), angle, world, team, 3);
                 }
             }

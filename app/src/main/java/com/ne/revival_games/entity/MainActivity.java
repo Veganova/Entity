@@ -52,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //whenever a new mainactivity is created we reinitialize context
-        myContext = getContext();
-
+        myContext = getApplicationContext();
+        if (myContext == null) {
+            throw new NullPointerException("LOMAOL");
+        }
         //set screen to fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -320,11 +322,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static Context getContext() {
-        if(myContext == null) {
-//            myContext = getContext(); TODO: This...
-        }
-
+    public static Context giveContext() {
         return myContext;
     }
 }

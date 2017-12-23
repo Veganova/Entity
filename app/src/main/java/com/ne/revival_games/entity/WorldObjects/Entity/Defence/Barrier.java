@@ -24,7 +24,7 @@ public class Barrier extends Entity {
 
 
     public Barrier(double x, double y, double angle, MyWorld world, Team team) {
-        super(angle, 0, HEALTH, false, team, DEFAULT_FRICTION);
+        super(angle, 0, team, "barrier");
         this.shape = new ObjRectangle(WIDTH, HEIGHT);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setAngle(angle).setXY(x, y).init();

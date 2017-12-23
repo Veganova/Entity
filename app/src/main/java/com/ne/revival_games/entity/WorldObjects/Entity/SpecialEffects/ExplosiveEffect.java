@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.collision.narrowphase.Gjk;
@@ -43,6 +44,11 @@ public class ExplosiveEffect extends ExpandingEffect {
         this.active = false;
     }
 
+    public ExplosiveEffect(String name, Team team, MyWorld world) {
+        super(name, team, world, EffectType.EXPLOSIVE);
+        this.active = false;
+    }
+
 
 
     //this needs to corrected somehow
@@ -72,7 +78,7 @@ public class ExplosiveEffect extends ExpandingEffect {
 
         double magnitude = explosionPower / (distance) / other.shape.body.getMass().getMass();
 
-        other.applyDamage(this.damage, other);
+        other.applyDamage(damage, other);
 
         other.shape.body.applyForce(new Vector2(-1*magnitude*Math.cos(angle),
                 -1*magnitude*Math.max(magnitude, 0) * Math.sin(angle)));

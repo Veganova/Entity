@@ -74,7 +74,7 @@ public class WarmStartingContactManager extends SimpleContactManager implements 
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.contact.SimpleContactManager#updateAndNotify(java.util.List, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.contact.SimpleContactManager#updateAndNotify(java.util.List, org.dyn4j.dynamics.MySettings)
 	 */
 	public void updateAndNotify(List<ContactListener> listeners, Settings settings) {
 		// get the size of the list

@@ -121,7 +121,7 @@ public class SimpleContactManager implements ContactManager, Shiftable {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.contact.ContactManager#updateAndNotify(java.util.List, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.contact.ContactManager#updateAndNotify(java.util.List, org.dyn4j.dynamics.MySettings)
 	 */
 	public void updateAndNotify(List<ContactListener> listeners, Settings settings) {
 		// get the size of the list

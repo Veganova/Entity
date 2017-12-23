@@ -177,7 +177,7 @@ public class PulleyJoint extends Joint implements Shiftable, DataContainer {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.joint.Joint#initializeConstraints(org.dyn4j.dynamics.Step, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.joint.Joint#initializeConstraints(org.dyn4j.dynamics.Step, org.dyn4j.dynamics.MySettings)
 	 */
 	@Override
 	public void initializeConstraints(Step step, Settings settings) {
@@ -264,7 +264,7 @@ public class PulleyJoint extends Joint implements Shiftable, DataContainer {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.joint.Joint#solveVelocityConstraints(org.dyn4j.dynamics.Step, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.joint.Joint#solveVelocityConstraints(org.dyn4j.dynamics.Step, org.dyn4j.dynamics.MySettings)
 	 */
 	@Override
 	public void solveVelocityConstraints(Step step, Settings settings) {
@@ -306,7 +306,7 @@ public class PulleyJoint extends Joint implements Shiftable, DataContainer {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.dyn4j.dynamics.joint.Joint#solvePositionConstraints(org.dyn4j.dynamics.Step, org.dyn4j.dynamics.Settings)
+	 * @see org.dyn4j.dynamics.joint.Joint#solvePositionConstraints(org.dyn4j.dynamics.Step, org.dyn4j.dynamics.MySettings)
 	 */
 	@Override
 	public boolean solvePositionConstraints(Step step, Settings settings) {

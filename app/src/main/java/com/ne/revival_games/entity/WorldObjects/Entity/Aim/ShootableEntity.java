@@ -16,12 +16,8 @@ public abstract class ShootableEntity extends Entity implements Shootable {
     // default
     private double shootingSpeed = 30;
 
-    public ShootableEntity(double direction, double speed, int health, boolean invulnerable, Team team) {
-        super(direction, speed, health, invulnerable, team, DEFAULT_FRICTION);
-    }
-
-    public ShootableEntity(double direction, double speed, int health, boolean invulnerable, Team team, double frictionCoefficient) {
-        super(direction, speed, health, invulnerable, team, frictionCoefficient);
+    public ShootableEntity(double direction, double speed, Team team, String name) {
+        super(direction, speed, team, name);
     }
 
     @OverridingMethodsMustInvokeSuper

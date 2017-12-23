@@ -21,38 +21,13 @@ public class Missile extends Entity {
 
     public Missile(double x, double y, double direction, double speed,
                    MyWorld world, Team team) {
-        super(direction, speed, HEALTH, false, team, DEFAULT_FRICTION);
+        super(direction, speed, team, "missile");
         shape = new ObjCircle(RADIUS);
-        shape.getBuilder(true, world).setXY(x, y).setLinearDamping(LINEAR_DAMPING).
-                                                  setAngularDamping(ANGULAR_DAMPING).init();
+        shape.getBuilder(true, world).setXY(x, y)
+                .setBasics(team.toString(), "missile")
+                .init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
     }
-
-
-//    @Override
-//    public boolean onCollision(Entity contact, Body componentHit, double damage) {
-//        boolean regular = super.onCollision(contact, componentHit, damage);
-//
-//        if (!regular || this.dead) {
-//            return false;
-//        }
-//
-//        if (contact.team.opposite(this.team)) {
-//            this.applyDamage(damage, contact);
-//            return false;
-//        }
-//
-//        return true;
-//    }
-
-
-//    @Override
-//    public double applyDamage(double damage, Entity from) {
-//        this.dead = true;
-//        this.invisible = true;
-//        this.health = 0;
-//        return super.applyDamage(damage, from);
-//    }
 
 }

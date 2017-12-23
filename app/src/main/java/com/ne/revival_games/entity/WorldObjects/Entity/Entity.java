@@ -7,6 +7,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.MyDeque;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -24,7 +25,6 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public class Entity implements Effector {
 
-    public int COST;
     public int MAX_HEALTH;
     public int MAX_INITIAL_SPEED = 60;
     public boolean storedPrevVelocity = false;
@@ -55,18 +55,19 @@ public class Entity implements Effector {
     private MyDeque.Node node;
 
     // TODO: 7/5/2017 some fields here are not needed 
-    public Entity(double direction, double speed, int health, boolean invulnerable, Team team, double frictionCoefficient) {
+    public Entity(double direction, double speed, Team team, String name) {
         this.direction = direction;
         this.speed = speed;
-        this.health = health;
+        this.health = (int) MySettings.getNum(team.toString(), name + " health");
         this.MAX_HEALTH = health;
-        this.invulnerable = invulnerable;
+        this.frictionCoefficent = MySettings.getNum(team.toString(), name + " real_friction");
+        this.invulnerable = Boolean.parseBoolean(
+                MySettings.get(team.toString(), name + "invulnerable"));
         this.player = null;
         this.team = team;
         this.effects = new HashMap<>();
         this.zoneToEffect = new HashMap<>();
         this.targetExceptions = new Untargetable(this);
-        this.frictionCoefficent = frictionCoefficient;
     }
 
     public MyDeque.Node getNode() {

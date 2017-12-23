@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
@@ -48,6 +49,18 @@ public abstract class ExpandingEffect extends Effect {
         this.percent_size = percentStartSize;
         this.growth_rate = growth_rate;
         this.explosionPower = explosionPower;
+        this.zone = new ObjCircle(max_radius);
+    }
+
+    public ExpandingEffect(String name, Team team, MyWorld world, EffectType type){
+        basicInit(null, zone, type, world);
+        String path = name + " explosive_effect ";
+        this.active = false;
+        this.percent_size = MySettings.getNum(team.toString(), path + "percent_start");
+        this.growth_rate = MySettings.getNum(team.toString(), path + "growth_rate");
+        this.damage = MySettings.getNum(team.toString(), path + "damage");
+        this.max_radius = MySettings.getNum(team.toString(), path + "max_radius");
+        this.explosionPower = MySettings.getNum(team.toString(), path + "push_back");
         this.zone = new ObjCircle(max_radius);
     }
 
