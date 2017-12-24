@@ -35,7 +35,7 @@ public abstract class ShootableEntity extends Entity implements Shootable {
         shooting.setVelocity(shootingSpeed);
         shooting.addToPlayer(this.player);
 
-        Sounds.getInstance().playSound(Sounds.SOUND_TYPE.SHOOT);
+        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.SHOOT);
 
 
 //        this.projectile.returnCustomizedCopy(this.projectile, new Vector2(x,y), angle, 30, this.world, team);
