@@ -31,8 +31,8 @@ public class Barrel extends ShootableEntity {
     private double sleepUntil = 0;
 
     public Barrel(EntityLeaf toShoot, BarrelType type,
-                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location) {
-        super(0, 0, team, "barrel");
+                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location, String tag) {
+        super(0, 0, team, tag + "barrel");
         initBarrel(type, location, world, angle);
         this.world = world;
         this.toShoot = toShoot;
@@ -75,7 +75,7 @@ public class Barrel extends ShootableEntity {
 
     @Override
     public Entity getNewBodyToShoot(double x, double y, double angle) {
-        return toShoot.produce(x, y, angle, world, this.team, "barrel");
+        return toShoot.produce(x, y, angle, world, this.team, name_tag);
     }
 
 //    @Override

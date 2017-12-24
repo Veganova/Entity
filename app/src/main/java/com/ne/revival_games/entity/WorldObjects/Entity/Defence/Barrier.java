@@ -23,11 +23,11 @@ public class Barrier extends Entity {
     public static double HEIGHT = 30;
 
 
-    public Barrier(double x, double y, double angle, MyWorld world, Team team) {
-        super(angle, 0, team, "barrier");
+    public Barrier(double x, double y, double angle, MyWorld world, Team team, String tag) {
+        super(angle, 0, team, tag + "barrier");
         this.shape = new ObjRectangle(WIDTH, HEIGHT);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
-        builder.setAngle(angle).setXY(x, y).init();
+        builder.setBasics(team.toString(), name_tag).setAngle(angle).setXY(x, y).init();
 
         //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);

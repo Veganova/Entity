@@ -27,12 +27,12 @@ public class Comet extends AimShootEntity {
     public static int RADIUS = 10;
     private double range = 1000;
 
-    public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
-        super(direction, speed, team, "comet", false);
+    public Comet(double x, double y, double direction, double speed, MyWorld world, Team team, String tag) {
+        super(direction, speed, team, tag + "comet", false);
 
         shape = new ObjCircle(RADIUS);
         shape.getBuilder(true, world).setXY(x, y)
-                .setBasics(team.toString(), "comet")
+                .setBasics(team.toString(), name_tag)
                 .init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
@@ -76,7 +76,7 @@ public class Comet extends AimShootEntity {
     }
 
     @Override
-    public int getTurnSpeed() {
+    public double getTurnSpeed() {
         return 20;
     }
 

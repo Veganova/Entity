@@ -20,14 +20,16 @@ public class Missile extends Entity {
 
 
     public Missile(double x, double y, double direction, double speed,
-                   MyWorld world, Team team) {
-        super(direction, speed, team, "missile");
+                   MyWorld world, Team team, String tag) {
+        super(direction, speed, team, tag + "missile");
         shape = new ObjCircle(RADIUS);
         shape.getBuilder(true, world).setXY(x, y)
-                .setBasics(team.toString(), "missile")
+                .setBasics(team.toString(), name_tag)
                 .init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
     }
+
+
 
 }

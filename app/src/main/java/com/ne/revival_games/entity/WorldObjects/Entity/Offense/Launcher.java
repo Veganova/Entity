@@ -1,21 +1,23 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
+import com.ne.revival_games.entity.WorldObjects.Entity.Pair;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Updatable;
 
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -27,15 +29,17 @@ public class Launcher implements Updatable {
 
     private final MyWorld world;
     private final Team team;
-    private double level;
+    protected int level = 1;
+    private double onBreakUntil = 0;
+    private double levelEnds = 0;
+    protected ArrayList<Pair<String, Integer>> ammoSet = new ArrayList<>();
 
     private double minX, minY, maxX, maxY;
 
     // These values can be manipulated to represent different levels.
     // Defaults
     private double rate = 100;
-    private double atOnce = 1;
-    private double ammo = 10;
+    private int atOnce = 1, atOnce_range = 2;
     private long lastFired = 0;
 
     // A shape that is described by one or many RandomPodoubleSelectors.
@@ -112,42 +116,90 @@ public class Launcher implements Updatable {
      * Every update it checks if there is ammo to shoot and if so, if the rate of fire permits a shot at
      */
     public void update() {
-        if (this.ammo > 0 && System.currentTimeMillis() - this.lastFired >= this.rate) {
-            // FIRE
-            int randomArea = (int) (Math.random() * this.totalArea);
-//            this.lastFired = System.currentTimeMillis();
+        firingRound("", -1);
+    }
 
-            for (int i = 0; i < this.atOnce; i += 1) {
-                int culmArea = 0;
-                Vector2 location = null;
-                if (ammo > 0) {
-                    // loop over all the smaller shapes that make this shape and choose
-                    // one based on expected value using area of the shapes.
-                    for (Integer areaOfOval: this.compositeShape.keySet()) {
-                        if (randomArea > culmArea && randomArea < areaOfOval) {
-                            location = this.compositeShape.get(areaOfOval).randomPoint();
-//                            System.out.println("FIRED! at time - " + this.lastFired / 1000
-//                                    + " at location: " + location);
-                            GhostEntity comet = GhostFactory.produce(Entities.COMET.getDefaultLeaf(),
-                                    MyWorld.SCALE * location.x,
-                                    MyWorld.SCALE * location.y, 0, world, team);
+    public boolean firingRound(String tag, double endTime) {
+        if((endTime != -1 && endTime < System.currentTimeMillis()) || ammoLeft() == 0) {
+            return true;
+        }
 
-                            if (comet.canPlace()) {
-                                comet.place(Team.OFFENSE);
-                                this.lastFired = System.currentTimeMillis();
-                                ammo -= 1;
-                            } else {
-                                System.out.println("CONFLICT CANNOT PLACE HERE launcher comet issue!!!!!!!");
-                            }
-
-                            break;
-                        }
-                        culmArea = areaOfOval;
-                    }
-                }
+        if (System.currentTimeMillis() - this.lastFired >= this.rate) {
+            for (int i = 0; i < this.atOnce;  i++) {
+                int numberToShoot = Util.randomBetweenValues(atOnce-atOnce_range, atOnce+atOnce_range);
+                fireRandom(tag, numberToShoot);
 
             }
         }
+
+        return false;
+    }
+
+
+    public void fireRandom(String tag, int numberToShoot) {
+        int randomArea = (int) (Math.random() * this.totalArea);
+
+        int culmArea = 0;
+        Vector2 location = null;
+        if (ammoSet.size() > 0) {
+            // loop over all the smaller shapes that make this shape and choose
+            // one based on expected value using area of the shapes.
+            for (Integer areaOfOval: this.compositeShape.keySet()) {
+                if (randomArea > culmArea && randomArea < areaOfOval) {
+                    location = this.compositeShape.get(areaOfOval).randomPoint();
+
+                    int randomIndex = (int)(Math.random()*ammoSet.size());
+                    GhostEntity unit = GhostFactory.produce(getAmmo(randomIndex),
+                            MyWorld.SCALE * location.x,
+                            MyWorld.SCALE * location.y, 0, world, team,
+                            tag);
+
+
+                    if (unit.canPlace()) {
+                        unit.place(Team.OFFENSE);
+                        this.lastFired = System.currentTimeMillis();
+                        ammoSet.remove(randomIndex);
+                    } else {
+                        System.out.println("CONFLICT CANNOT PLACE HERE launcher comet issue!!!!!!!");
+                    }
+                    break;
+                }
+                culmArea = areaOfOval;
+            }
+        }
+
+
+    }
+
+
+    public EntityLeaf getAmmo(int index) {
+        String unit_type = "";
+        for(int i = 0; i < ammoSet.size(); ++i) {
+            if(ammoSet.get(i).second > index) {
+                index -= ammoSet.get(i).second;
+            }
+            else {
+                ammoSet.get(i).second = ammoSet.get(i).second - 1;
+                unit_type = ammoSet.get(i).first;
+
+                if(ammoSet.get(i).second == 0) {
+                    ammoSet.remove(i);
+                    --i;
+                }
+            }
+        }
+
+        return Entities.findLeaf(unit_type);
+    }
+
+
+    public int ammoLeft() {
+        int total = 0;
+        for(Pair<String, Integer> pair : ammoSet) {
+            total += pair.second;
+        }
+
+        return total;
     }
 
     // temporary method to draw the default zone made in the constructor
@@ -199,7 +251,7 @@ class OvalRandomSelector implements RandomPointSelector {
         this.vMax = vMax;
         this.center = center;
 
-        this.area = hMax * vMax - hMin * vMin; // subtract the two rectangles (dont know how to find area of elipses)
+        this.area = Math.PI * (hMax - hMin) * (hMax - hMin);
     }
 
     public Vector2 randomPoint() {
@@ -225,3 +277,5 @@ interface RandomPointSelector {
     Vector2 randomPoint();
     double getArea();
 }
+
+

@@ -39,7 +39,7 @@ public class EMP extends ExpandingEffect {
     }
 
     public EMP(String name, Team team, MyWorld world) {
-        super(name + " emp_effect ", team, world, EffectType.SHOCKWAVE);
+        super(name + " emp_effect", team, world, EffectType.SHOCKWAVE);
         this.duration = MySettings.getNum(team.toString(), name + " emp_effect duration");
     }
 

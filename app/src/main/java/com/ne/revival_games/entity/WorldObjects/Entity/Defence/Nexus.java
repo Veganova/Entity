@@ -28,13 +28,13 @@ public class Nexus extends Entity {
 
     private GravityEffect gravEffect;
 
-    public Nexus(double x, double y, double angle, MyWorld world, Team team) {
-        super(angle, 0, team, "nexus");
+    public Nexus(double x, double y, double angle, MyWorld world, Team team, String tag) {
+        super(angle, 0, team, tag + "nexus");
         components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(120, 120);
         rect.getBuilder(false, world).setXY(0, 0)
-                .setBasics(team.toString(), "nexus")
+                .setBasics(team.toString(), name_tag)
                 .init();
 
         components.add(rect);
@@ -42,28 +42,28 @@ public class Nexus extends Entity {
         double [] points1 = {0, 40, 0, -40, 40, 0};
         ObjTriangle tri1 = new ObjTriangle(points1);
         tri1.getBuilder(false, world).setXY(50, 0)
-                .setBasics(team.toString(), "nexus")
+                .setBasics(team.toString(), name_tag)
                 .init();
         components.add(tri1);
-        
+
         double [] points2 = {0, -40, 0, 40, -40, 0};
         ObjTriangle tri2 = new ObjTriangle(points2);
         tri2.getBuilder(false, world).setXY(-50, 0)
-                .setBasics(team.toString(), "nexus")
+                .setBasics(team.toString(), name_tag)
                 .init();
-        components.add(tri2);       
-        
+        components.add(tri2);
+
         double [] points3 = {-40, 0, 40, 0, 0, 40};
         ObjTriangle tri3 = new ObjTriangle(points3);
         tri3.getBuilder(false, world).setXY(0, 50)
-                .setBasics(team.toString(), "nexus")
+                .setBasics(team.toString(), name_tag)
                 .init();
         components.add(tri3);
-        
+
         double [] points4 = {40, 0,-40, 0,0, -40};
         ObjTriangle tri4 = new ObjTriangle(points4);
         tri4.getBuilder(false, world).setXY(0, -50)
-                .setBasics(team.toString(), "nexus")
+                .setBasics(team.toString(), name_tag)
                 .init();
         components.add(tri4);
 
@@ -71,8 +71,8 @@ public class Nexus extends Entity {
         world.objectDatabase.put(this.shape.body, this);
         this.team = team;
         gravEffect = new GravityEffect(this,
-                MySettings.getNum(team.toString(), "nexus gravity_effect radius"),
-                MySettings.getNum(team.toString(), "nexus gravity_effect strength"),
+                MySettings.getNum(team.toString(), name_tag + " gravity_effect radius"),
+                MySettings.getNum(team.toString(), name_tag + " gravity_effect strength"),
                 new Vector2(0,0), world);
 
         this.addEffect(gravEffect);

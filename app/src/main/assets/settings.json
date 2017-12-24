@@ -1,6 +1,6 @@
 [
   {
-    "name" : "DEFAULT",
+    "name": "DEFAULT",
     "health" : 5,
     "angular_damping": 0.02,
     "linear_damping": 0.5,
@@ -16,10 +16,7 @@
       "lifetime" : -1,
       "length" : 60,
       "width" : 10
-    }
-  },
-  {
-    "name": "GENERAL",
+    },
     "nexus": {
       "health": 1000,
       "angular_damping": 0.25,
@@ -33,7 +30,10 @@
       "health": 50,
       "slow_effect": {
         "radius": 150,
-        "strength": 4
+        "strength": 4,
+        "totem_stub" : {
+          "health" : 50
+        }
       }
     },
     "missile": {
@@ -46,13 +46,23 @@
 
     },
     "rocket" : {
-      "acceleration" : 5
+      "acceleration" : 5,
+      "explosive_effect": {
+        "percent_start": 0.05,
+        "growth_rate": 0.05,
+        "max_radius": 120,
+        "push_back": 2,
+        "damage": 5
+      }
     },
     "turret": {
-      "health": 150
-    },
-    "barrel": {
-      "health": 50
+      "health": 150,
+      "barrel": {
+        "health": 50,
+        "missile": {
+          "health" : 30
+        }
+      }
     },
     "shockcan" : {
       "health" : 100,

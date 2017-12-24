@@ -49,13 +49,13 @@ public class Turret extends AimableEntity {
 
 
     //need to include the angle somehow
-    public Turret(Vector2 location, double angle, MyWorld world, Team team, int numBarrels){
-        super(angle, 0, team, "turret");
+    public Turret(Vector2 location, double angle, MyWorld world, Team team, int numBarrels, String tag){
+        super(angle, 0, team, tag + "turret");
         this.numBarrels = numBarrels;
         this.frictionCoefficent = 60;
         this.world = world;
         initializeTurret(location, world);
-        this.logic = new SimpleAim(this, world.objectDatabase, range);
+        this.logic = new SimpleAim(this, world.objectDatabase, range, false);
 
         this.bar = new ActiveBar(this, 0.587f);
     };
@@ -64,18 +64,18 @@ public class Turret extends AimableEntity {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
 //        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, team, false);
 
-//        Barrel b = new Barrel(new EntityLeaf("Missile") {
-//            @Override
-//            public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-//                return new Missile(x, y, angle, 0, world, team);
-//            }
-//        }, type, this, world, angle, team, location);
         Barrel b = new Barrel(new EntityLeaf("Missile") {
             @Override
-            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                return new Lazer(x, y, angle, world, team, producerName);
+            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producername) {
+                return new Missile(x, y, angle, 0, world, team, producername + " ");
             }
-        }, type, this, world, angle, team, location);
+        }, type, this, world, angle, team, location, name_tag + " ");
+//        Barrel b = new Barrel(new EntityLeaf("Missile") {
+//            @Override
+//            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+//                return new Lazer(x, y, angle, world, team, producerName);
+//            }
+//        }, type, this, world, angle, team, location);
 
         this.barrels.add(b);
         WeldJoint joint = new WeldJoint(b.shape.body,
@@ -212,7 +212,7 @@ public class Turret extends AimableEntity {
     }
 
     @Override
-    public int getTurnSpeed() {
+    public double getTurnSpeed() {
         return 10;
     }
 

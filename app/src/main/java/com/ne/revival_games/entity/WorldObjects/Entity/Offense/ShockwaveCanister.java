@@ -19,10 +19,10 @@ public class ShockwaveCanister extends ConditionalDestructible {
     public static int HEALTH = 20;
     private double lifeTime = 5000;
 
-    public ShockwaveCanister(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world) {
-        super(direction, speed, team, "shockcan");
+    public ShockwaveCanister(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world, String tag) {
+        super(direction, speed, team, tag + "shockcan");
         this.shape = new ObjRectangle(50, 20);
-        this.lifeTime = MySettings.getNum(team.toString(), "shockcan lifetime");
+        this.lifeTime = MySettings.getNum(team.toString(), name_tag + " lifetime");
         this.shape.getBuilder(true, world).setXY(location.x, location.y).setAngle(angle).init();
         world.objectDatabase.put(this.shape.body, this);
 
@@ -46,7 +46,7 @@ public class ShockwaveCanister extends ConditionalDestructible {
     @Override
     public void onDeath(MyWorld world){
         if(this.naturalDeath) {
-            ExpandingEffect emp = new EMP("shockcan", this.team, world);
+            ExpandingEffect emp = new EMP(name_tag, this.team, world);
             Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), emp, world, this.team);
             emp.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
         }

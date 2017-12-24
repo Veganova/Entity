@@ -50,5 +50,5 @@ public abstract class AimableEntity extends Entity implements Aimable {
         this.logic = logic;
     }
 
-    public abstract int getTurnSpeed();
+    public abstract double getTurnSpeed();
 }

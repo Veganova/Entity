@@ -79,8 +79,8 @@ public class PlayerDefense extends Player {
                         addToWorld.getDouble("y"),
                         0,
                         world,
-                        team
-                        );
+                        team,
+                        "");
                 this.addToWorld = null;
             }
             catch (Exception e){

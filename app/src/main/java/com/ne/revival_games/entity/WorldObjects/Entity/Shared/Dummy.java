@@ -28,6 +28,7 @@ public class Dummy extends ConditionalDestructible {
         this.isCollisionAuthority = true;
         this.effectType = myEffect.effectType;
         this.addEffect(myEffect);
+        this.prime();
     }
 
     @Override
@@ -50,6 +51,7 @@ public class Dummy extends ConditionalDestructible {
 
     @Override
     public void draw(Canvas canvas) {
+        this.shape.draw(canvas);
         for(Effect effect : effects.values()) {
             effect.draw(canvas);
         }

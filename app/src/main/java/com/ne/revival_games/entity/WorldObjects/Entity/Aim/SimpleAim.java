@@ -1,6 +1,5 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
@@ -8,7 +7,6 @@ import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
-import java.sql.SQLOutput;
 import java.util.Iterator;
 
 /**
@@ -17,7 +15,7 @@ import java.util.Iterator;
 
 public class SimpleAim implements AimLogic {
     public static double WIGGLE_ROOM = 0.03;
-    private int turnSpeed = 10;
+    private double turnSpeed = 10;
 
     private final AimableEntity aimEntity;
     private final Database objectDatabase;
@@ -25,11 +23,13 @@ public class SimpleAim implements AimLogic {
     private Entity enemy;
     private boolean first = false;
     private int lastDirection;
+    private boolean continuousFiring = false;
 
-    public SimpleAim(AimableEntity aimEntity, Database objectDatabase, double range) {
+    public SimpleAim(AimableEntity aimEntity, Database objectDatabase, double range, boolean continuousFiring) {
         this.aimEntity = aimEntity;
         this.objectDatabase = objectDatabase;
         this.range = range;
+        this.continuousFiring = continuousFiring;
     }
 
     /**
@@ -91,6 +91,8 @@ public class SimpleAim implements AimLogic {
         this.lastDirection = turnCounterClock;
 
         if (Math.abs(angleDifference) <= WIGGLE_ROOM) {
+            if(this.continuousFiring)
+            this.aimEntity.shape.body.getTransform().setRotation(angleTo);
             this.aimEntity.fire();
 
 //            mainBarrel.shape.body.clearAccumulatedTorque();
@@ -101,6 +103,8 @@ public class SimpleAim implements AimLogic {
         } else {
             this.aimEntity.shape.body.setAngularVelocity(turnCounterClock * turnSpeed);
         }
+
+        if(this.continuousFiring) this.aimEntity.fire();
     }
 
 

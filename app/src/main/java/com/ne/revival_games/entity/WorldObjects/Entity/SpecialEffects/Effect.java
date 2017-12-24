@@ -74,6 +74,7 @@ public abstract class Effect {
         status = !status;
     }
 
+    //TODO: use engine possibly to avoid checking if effect is hitting applier
     private boolean canApply(Entity other) {
         return this.status && other != applier && !other.targetExceptions.isContactDisallowedWith(this);
     }

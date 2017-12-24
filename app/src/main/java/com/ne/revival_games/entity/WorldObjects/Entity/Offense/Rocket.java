@@ -3,14 +3,12 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimShootEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.ImmediateAim;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.ShootableEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.ConditionalDestructible;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
-import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
@@ -35,8 +33,8 @@ public class Rocket extends AimShootEntity {
     protected boolean primed = false;
     protected double startTime = -1;
 
-    public Rocket(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world) {
-        super(direction, speed, team, "rocket", true);
+    public Rocket(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world, String tag) {
+        super(direction, speed, team, tag + "rocket", true);
         List<AShape> components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(50, 20);
@@ -50,7 +48,7 @@ public class Rocket extends AimShootEntity {
 
         this.shape = new ComplexShape(components, location.x, location.y, world);
         world.objectDatabase.put(this.shape.body, this);
-        this.logic = new ImmediateAim(this, world.objectDatabase, 500);
+        this.logic = new SimpleAim(this, world.objectDatabase, 500, true);
     }
 
     @Override
@@ -83,7 +81,7 @@ public class Rocket extends AimShootEntity {
 
     @Override
     public void onDeath(MyWorld world){
-            ExpandingEffect boom = new ExplosiveEffect(0.05, 0.05, 12, 120, 6, this.team, world);
+            ExpandingEffect boom = new ExplosiveEffect(name_tag, this.team, world);
             Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), boom, world, this.team);
             boom.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
             super.onDeath(world);
@@ -96,8 +94,8 @@ public class Rocket extends AimShootEntity {
     }
 
     @Override
-    public int getTurnSpeed() {
-        return 5;
+    public double getTurnSpeed() {
+        return 10;
     }
 
     @Override

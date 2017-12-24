@@ -30,6 +30,7 @@ public class Entity implements Effector {
     public boolean storedPrevVelocity = false;
     public Vector2 oldVelocity = new Vector2(-1,-1);
     public Team team;
+    public String name_tag;
 
     public AShape shape;
     protected double direction;
@@ -56,6 +57,7 @@ public class Entity implements Effector {
 
     // TODO: 7/5/2017 some fields here are not needed 
     public Entity(double direction, double speed, Team team, String name) {
+        this.name_tag = name;
         this.direction = direction;
         this.speed = speed;
         this.health = (int) MySettings.getNum(team.toString(), name + " health");
@@ -85,6 +87,7 @@ public class Entity implements Effector {
      * @return true if the update occurred successfully, false if entity is disabled
      */
     public boolean update(MyWorld world) {
+
         if (this.dead) {
             world.objectDatabase.remove(this.shape.body);
             return true;

@@ -37,4 +37,8 @@ public class Util {
         return Math.abs(value-targetvalue) <= delta;
     }
 
+    public static int randomBetweenValues(int min, int max) {
+        return (int) (Math.random()*(max-min)) + min + 1;
+    }
+
 }

@@ -21,7 +21,8 @@ public abstract class ConditionalDestructible extends Entity {
     public boolean update(MyWorld world){
         
         if(deathCondition() && this.primed) {
-            this.invisible = true;
+            this.health = -1;
+            this.dead = true;
             world.objectDatabase.remove(this.shape.body);
         }
         else {

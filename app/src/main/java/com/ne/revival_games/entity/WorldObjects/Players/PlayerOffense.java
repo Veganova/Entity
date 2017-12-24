@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.ne.revival_games.entity.CustomViews.Screen;
-import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
@@ -49,8 +48,8 @@ public class PlayerOffense extends Player {
                         addToWorld.getDouble("y"),
                         0,
                         world,
-                        team
-                );
+                        team,
+                        "");
                 this.addToWorld = null;
             }
             catch (Exception e){

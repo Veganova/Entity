@@ -36,16 +36,35 @@ public class MySettings {
     }
 
     public static String get(String team, String term) {
-        String json = null, result = null;
+        String result = null;
         String [] query = term.split(" ");
 
         try {
-            InputStream is = MainActivity.giveContext().getAssets().open("settings.json");
+            InputStream is;
+
+            //custom AI lookup path into levels scheme (different query format)
+            if(team.equals("OFFENSE")) {
+                is = MainActivity.giveContext().getAssets().open("levels.json");
+                byte[] buffer = new byte[is.available()];
+                is.read(buffer);
+                is.close();
+
+                JSONObject json = (new JSONObject(new String(buffer, "UTF-8")))
+                        .getJSONObject("levels");
+
+             result = findVal(json, query, 0);
+
+             if(result != null) {
+                 return result;
+             }
+
+            }
+
+            is = MainActivity.giveContext().getAssets().open("settings.json");
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
             is.close();
-            json = new String(buffer, "UTF-8");
-            JSONArray jsonArray = new JSONArray(json);
+            JSONArray jsonArray = new JSONArray(new String(buffer, "UTF-8"));
 
             if(!team.equals("GENERAL")) {
                 for(int i = 0; i < jsonArray.length(); ++i) {
@@ -64,15 +83,8 @@ public class MySettings {
                 }
             }
 
-
-            //queries the general section (SHOULD ALWAYS BE SECTION 2)
-            result = findVal(jsonArray.getJSONObject(1), query, 0);
-            if(result != null) {
-                return result;
-            }
-
-            //queries the default section (SHOULD ALWAYS BE SECTION 1)
-            for(int x = 1; x < query.length; ++x) {
+            //queries the default section (SHOULD ALWAYS BE SECTION 0)
+            for(int x = 0; x < query.length; ++x) {
                 result = findVal(jsonArray.getJSONObject(0), query, x);
                 if(result != null) {
                     return result;

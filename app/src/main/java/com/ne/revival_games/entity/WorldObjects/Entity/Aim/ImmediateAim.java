@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 public class ImmediateAim implements AimLogic {
     public static double WIGGLE_ROOM = 0.03;
-    private int turnSpeed = 10;
+    private double turnSpeed = 10;
 
     private final AimableEntity aimEntity;
     private final Database objectDatabase;
@@ -79,6 +79,7 @@ public class ImmediateAim implements AimLogic {
             angleDifference = counterclockDist;
             turnCounterClock = 1;
         }
+
 
         this.aimEntity.shape.body.getTransform().setRotation(angleTo);
         this.aimEntity.fire();

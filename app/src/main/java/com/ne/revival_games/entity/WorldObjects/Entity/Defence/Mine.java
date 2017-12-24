@@ -20,12 +20,11 @@ import org.dyn4j.geometry.Vector2;
 public class Mine extends ConditionalDestructible{
     boolean contacted = false;
 
-    public Mine(Vector2 location, double angle, double health, Team team, MyWorld world){
-        super(0, 0, team, "mine");
-        System.out.println(MySettings.getNum(team.toString(), "mine radius"));
-        this.shape = new ObjCircle(MySettings.getNum(team.toString(), "mine radius"));
+    public Mine(Vector2 location, double angle, double health, Team team, MyWorld world, String tag){
+        super(0, 0, team, tag + "mine");
+        this.shape = new ObjCircle(MySettings.getNum(team.toString(), name_tag + " radius"));
         this.shape.getBuilder(true, world).setXY(location.x, location.y)
-                .setBasics(team.toString(), "mine")
+                .setBasics(team.toString(), name_tag)
                 .init();
         world.objectDatabase.put(this.shape.body, this);
     }
@@ -43,7 +42,7 @@ public class Mine extends ConditionalDestructible{
 
     @Override
     public void onDeath(MyWorld world){
-        ExpandingEffect boom = new ExplosiveEffect("mine", this.team, world);
+        ExpandingEffect boom = new ExplosiveEffect(name_tag, this.team, world);
         Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), boom, world, this.team);
         boom.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
         super.onDeath(world);
