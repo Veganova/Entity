@@ -32,15 +32,13 @@ public class Sounds {
      */
     public static Sounds getInstance(Context context) {
         if (ourInstance == null) {
+            if (context == null) {
+                throw new NullPointerException("The context is not set for the Sound class.");
+            }
             ourInstance = new Sounds(context);
         }
         return ourInstance;
     }
-    
-//    // Make sure to set context before caling sounds
-//    public void setContext(Context context) {
-//        this.context = context;
-//    }
 
     private Sounds(Context context) {
         System.out.println("NEW SOUND_TYPE CREATED!!");
@@ -69,10 +67,7 @@ public class Sounds {
     }
 
     public void playSound(SOUND_TYPE s) {
-//        if (this.context == null) {
-//            throw new NullPointerException("The context is note set for the Sound class.");
-//        }
         int soundId = soundMap.get(s);
-        soundPool.play(soundId, 0.2f, 0.5f, 1, 0, 1.0f);
+        soundPool.play(soundId, 1f, 1f, 1, 0, 1.0f);
     }
 }

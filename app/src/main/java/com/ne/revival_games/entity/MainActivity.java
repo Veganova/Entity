@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
     public void gameOver() {
 //        this.restartHome.pop();
         System.out.println("GAME OVER!");
+        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.LOSE);
         if (restartHome != null) {
             runOnUiThread(new Runnable() {
                 @Override

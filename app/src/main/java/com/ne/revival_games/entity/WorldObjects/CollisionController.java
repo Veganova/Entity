@@ -82,8 +82,9 @@ class CollisionController extends CollisionAdapter {
                 world.objectDatabase.remove(ent2.shape.body);
             }
         } else {
-
-            Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.HIT);
+            if (ent1.team != ent2.team) {
+                Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.HIT);
+            }
         }
 
         return continueContact;
