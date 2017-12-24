@@ -45,7 +45,7 @@ public class ExplosiveEffect extends ExpandingEffect {
     }
 
     public ExplosiveEffect(String name, Team team, MyWorld world) {
-        super(name, team, world, EffectType.EXPLOSIVE);
+        super(name + " explosive_effect ", team, world, EffectType.EXPLOSIVE);
         this.active = false;
     }
 

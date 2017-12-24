@@ -51,7 +51,6 @@ public class Rocket extends AimShootEntity {
         this.shape = new ComplexShape(components, location.x, location.y, world);
         world.objectDatabase.put(this.shape.body, this);
         this.logic = new ImmediateAim(this, world.objectDatabase, 500);
-        this.prime();
     }
 
     @Override
@@ -72,6 +71,7 @@ public class Rocket extends AimShootEntity {
         return super.onCollision(contact, componentHit, damage);
     }
 
+    @Override
     public void prime() {
         this.primed = true;
         this.startTime = System.currentTimeMillis();

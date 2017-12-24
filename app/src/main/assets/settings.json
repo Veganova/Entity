@@ -54,6 +54,18 @@
     "barrel": {
       "health": 50
     },
+    "shockcan" : {
+      "health" : 100,
+      "lifetime" : 5000,
+      "emp_effect" : {
+        "percent_start": 0.05,
+        "growth_rate": 0.05,
+        "max_radius": 150,
+        "damage" : 10,
+        "push_back": 2,
+        "duration" : 3000
+      }
+    },
     "mine": {
       "health": 30,
       "radius": 20,

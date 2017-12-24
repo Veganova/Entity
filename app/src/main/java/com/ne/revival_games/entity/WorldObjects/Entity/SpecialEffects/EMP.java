@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
@@ -37,6 +38,11 @@ public class EMP extends ExpandingEffect {
         this.duration = duration;
     }
 
+    public EMP(String name, Team team, MyWorld world) {
+        super(name + " emp_effect ", team, world, EffectType.SHOCKWAVE);
+        this.duration = MySettings.getNum(team.toString(), name + " emp_effect duration");
+    }
+
     @Override
     public boolean inRange(Entity other) {
         //TODO: will break for complex shapes / look crappy since we use shape.convex
@@ -61,6 +67,7 @@ public class EMP extends ExpandingEffect {
     @Override
     public void applyEffect(Entity other) {
         other.isActive = false;
+        //TODO: this should apply a 'pause effect'
         other.isDisabledUntil = System.currentTimeMillis() + duration;
     }
 }
