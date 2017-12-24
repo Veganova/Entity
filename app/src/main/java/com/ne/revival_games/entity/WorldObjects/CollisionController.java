@@ -83,7 +83,7 @@ class CollisionController extends CollisionAdapter {
             }
         } else {
 
-            Sounds.getInstance().playSound(Sounds.SOUND_TYPE.HIT);
+            Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.HIT);
         }
 
         return continueContact;

@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
         screens = new HashMap<>();
 
         // Initialize sounds
-        Sounds s = Sounds.getInstance();
-        s.setContext(this);
+        Sounds s = Sounds.getInstance(this);
 
 
         Serializable message = getIntent().getSerializableExtra("GameMode");
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 //            final MediaPlayer sound = MediaPlayer.create(this, R.raw.round_win);
 //            sound.start();
 
-            Sounds.getInstance().playSound(Sounds.SOUND_TYPE.MODE);
+            Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
 
 
 

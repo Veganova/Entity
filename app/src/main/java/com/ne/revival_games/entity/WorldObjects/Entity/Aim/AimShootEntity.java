@@ -54,7 +54,7 @@ public abstract class AimShootEntity extends AimableEntity implements Shootable 
             this.setVelocity(shootingSpeed, angle);
         }
 
-        Sounds.getInstance().playSound(Sounds.SOUND_TYPE.SHOOT);
+        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.SHOOT);
 
 
 
