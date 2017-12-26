@@ -12,6 +12,7 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by Veganova on 6/30/2017.
@@ -24,6 +25,8 @@ public class GhostEntity {
     private static int PLACEABLE = Color.GREEN;
     private boolean placeable = true;
     private Mass previousType;
+    private double initAngularVelocity = 0;
+    private Vector2 initialVelocity = new Vector2(0,0);
 
     public GhostEntity(Entity entity, MyWorld world) {
         this.entity = entity;
@@ -62,7 +65,7 @@ public class GhostEntity {
     }
 
     public boolean canPlace() {
-        //this.entity.shape.body.b
+        //this.entity.shape.body.bf
         return this.placeable;
     }
 
@@ -130,6 +133,8 @@ public class GhostEntity {
 //        this.team.add(this.entity);
         world.ghosts.remove(this.entity);
         this.entity.prime();                //enables on death effects "on place" function
+        this.entity.setVelocity(initialVelocity.x, initialVelocity.y);
+        this.entity.shape.body.setAngularVelocity(initAngularVelocity);
         this.entity = null;
         this.placeable = false;
         this.wantToPlace = false;
@@ -167,7 +172,6 @@ public class GhostEntity {
         if (this.wantToPlace) {
             this.placeReal();
         } else {
-//            this.placeable = true;
             entity.setColor(PLACEABLE);
             entity.setPaint(Paint.Style.STROKE, world);
         }
@@ -186,6 +190,10 @@ public class GhostEntity {
             joint.getBody1().setLinearVelocity(x, y);
             joint.getBody2().setLinearVelocity(x, y);
         }
+    }
+
+    public void setInitAngularVelocity(double deltaangle) {
+        this.initAngularVelocity = deltaangle;
     }
 
     //will break if x connects to y connects to z connects to x cases
@@ -224,5 +232,10 @@ public class GhostEntity {
             this.world.engineWorld.removeBody(this.entity.shape.body);
             this.entity = null;
         }
+    }
+
+    public void setInitialVelocity(double speed, double angle) {
+        initialVelocity.x = speed;
+        initialVelocity.y = angle;
     }
 }

@@ -16,7 +16,7 @@ import org.dyn4j.geometry.Vector2;
  * Created by vishn on 7/27/2017.
  */
 
-public class Dummy extends ConditionalDestructible {
+public class Dummy extends Entity {
     private EffectType effectType;
 
     public Dummy(Vector2 location, Effect myEffect, MyWorld world, Team team) {

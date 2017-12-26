@@ -2,6 +2,8 @@ package com.ne.revival_games.entity.WorldObjects.Entity;
 
 import org.dyn4j.geometry.Vector2;
 
+import java.util.Random;
+
 /**
  * Created by Veganova on 6/29/2017.
  */
@@ -39,6 +41,11 @@ public class Util {
 
     public static int randomBetweenValues(int min, int max) {
         return (int) (Math.random()*(max-min)) + min + 1;
+    }
+
+    public static double randomBetweenValues(double rangeMin, double rangeMax) {
+        Random r = new Random();
+        return rangeMin + (rangeMax - rangeMin) * r.nextDouble();
     }
 
 }

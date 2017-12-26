@@ -10,6 +10,8 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
+import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.collision.narrowphase.Gjk;
@@ -50,12 +52,27 @@ public class EMP extends ExpandingEffect {
         double current_radius2 = (max_radius - pulse_width) / MyWorld.SCALE * percent_size;
 
         Gjk detector = new Gjk();
-        return detector.detect(other.shape.convex, other.shape.body.getTransform(), new Circle(current_radius1),
-                this.zone.body.getTransform())
-                && !detector.detect(other.shape.convex, other.shape.body.getTransform(),
-                new Circle(current_radius2), this.zone.body.getTransform());
+        //iterates over individual shapes in complex shape
+        if(other.shape instanceof ComplexShape) {
+            boolean inrange = false;
+            for(AShape shape : ((ComplexShape) other.shape).shapes) {
+                if(detector.detect(shape.convex, shape.body.getTransform(), new Circle(current_radius1),
+                        this.zone.body.getTransform())
+                        && !detector.detect(shape.convex, shape.body.getTransform(),
+                        new Circle(current_radius2), this.zone.body.getTransform())) {
+                    return true;
+                }
+            }
 
-
+            return false;
+        }
+        else  {
+            //checks if within the two circles
+            return detector.detect(other.shape.convex, other.shape.body.getTransform(), new Circle(current_radius1),
+                    this.zone.body.getTransform())
+                    && !detector.detect(other.shape.convex, other.shape.body.getTransform(),
+                    new Circle(current_radius2), this.zone.body.getTransform());
+        }
     }
 
     @Override

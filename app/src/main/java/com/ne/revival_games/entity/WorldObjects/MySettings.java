@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects;
 
 import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -105,7 +106,7 @@ public class MySettings {
     }
 
     public static double getNum(String team, String query) {
-        System.out.println(query);
+        System.out.println("The query was " +  query);
         return Double.parseDouble(get(team, query));
     }
 
@@ -114,11 +115,18 @@ public class MySettings {
         for(int cur = start; cur < query.length; ++cur) {
             if(obj.has(query[cur])) {
                 if(cur == query.length-1) {
-                    try{
-                        return obj.getString(query[cur]);
+                    try {
+                        obj = obj.getJSONObject(query[cur]);
+                        double lower = obj.getDouble("lower"), upper = obj.getDouble("upper");
+                        return Double.toString(Util.randomBetweenValues(lower, upper));
                     }
                     catch(JSONException e) {
-                        e.printStackTrace();
+                        try{
+                            return obj.getString(query[cur]);
+                        }
+                        catch(JSONException error) {
+                            error.printStackTrace();
+                        }
                     }
                 }
                 else {

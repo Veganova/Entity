@@ -16,6 +16,7 @@ public class Missile extends Entity {
     public static int RADIUS = 10;
     public static double LINEAR_DAMPING = 0;
     public static double ANGULAR_DAMPING = 0;
+    public static double lifeTime = 15000;
 
 
 
@@ -28,8 +29,15 @@ public class Missile extends Entity {
                 .init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);
+        this.prime();
     }
 
 
+    @Override
+    protected boolean deathCondition() {
+        boolean val = this.startTime + this.lifeTime <= System.currentTimeMillis() || this.shape.body.getLinearVelocity().getMagnitude() < 2;
+        System.out.println("DEAD: " + val);
 
+        return val;
+    }
 }
