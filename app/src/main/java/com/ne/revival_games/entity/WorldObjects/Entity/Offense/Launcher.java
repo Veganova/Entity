@@ -25,8 +25,6 @@ import java.util.HashMap;
  */
 
 public class Launcher implements Updatable {
-
-
     private final MyWorld world;
     private final Team team;
     protected int level = 1;

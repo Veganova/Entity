@@ -91,6 +91,7 @@ import org.dyn4j.resources.Messages;
  * @since 1.0.0
  */
 public class World implements Shiftable, DataContainer {
+
 	/** Earths gravity constant */
 	public static final Vector2 EARTH_GRAVITY = new Vector2(0.0, -9.8);
 	

@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
+import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Vector2;
@@ -24,20 +25,41 @@ public abstract class Effect {
     public Entity applier;
     protected boolean status = true;
     private boolean draw = false;
+    // Number of frames that this effect will take place 40fps
+    private int COOLDOWN_MAX;
+    private int cooldown;
 
-    public void basicInit(Entity applier, AShape zone, EffectType type, MyWorld world) {
+    /**
+     *
+     * @param applier
+     * @param zone
+     * @param type
+     * @param world
+     * @param cooldown  cooldown in seconds
+     */
+    void basicInit(Entity applier, AShape zone, EffectType type, MyWorld world, double cooldown) {
         this.applier = applier;
         this.effectType = type;
         this.world = world;
         this.zone = zone;
+
+        this.COOLDOWN_MAX = (int)Math.ceil(cooldown * MyWorld.FPS);
+        this.cooldown = 0;//starts off at no cooldown
     }
 
-    public void aoeJoint(Entity applier, AShape zone, EffectType type,
-                         Vector2 jointDisplacement, MyWorld world){
-        this.applier = applier;
-        this.effectType = type;
-        this.world = world;
-        this.zone = zone;
+    /**
+     *
+     * @param applier
+     * @param zone
+     * @param type
+     * @param jointDisplacement
+     * @param world
+     * @param cooldown cooldown in seconds
+     */
+    void aoeJoint(Entity applier, AShape zone, EffectType type,
+                  Vector2 jointDisplacement, MyWorld world, double cooldown){
+        basicInit(applier, zone, type, world, cooldown);
+
         Paint p = zone.getPaint();
         p.setStyle(Paint.Style.STROKE);
         p.setPathEffect( new DashPathEffect(new float[]{1f, .8f} , 0 ));
@@ -83,6 +105,11 @@ public abstract class Effect {
 
     public void draw(Canvas canvas) {if (draw && status) zone.draw(canvas);}
 
+    /**
+     * Gets called every frame.
+     *
+     * @param world
+     */
     public void update(MyWorld world) {}
 
     public void onRemove(){

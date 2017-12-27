@@ -14,6 +14,7 @@ public class SlowEffect extends Effect {
     private double slowFactor;
     public static double percentRealRadius = 0.95;
 
+    public static int COOLDOWN = 5;
     /**
      * joins a given shape to the applier at a given displacement from the center using a weldjoint
      *
@@ -26,7 +27,7 @@ public class SlowEffect extends Effect {
 
     public SlowEffect(Entity applier, AShape zone, Vector2 jointDisplacement,
                       double slowFactor, MyWorld world) {
-        aoeJoint(applier, zone, effectType.SLOW, jointDisplacement, world);
+        aoeJoint(applier, zone, effectType.SLOW, jointDisplacement, world, COOLDOWN);
         this.slowFactor = slowFactor;
         world.objectDatabase.put(this.zone.body, applier);
     }

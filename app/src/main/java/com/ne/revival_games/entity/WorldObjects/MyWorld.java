@@ -39,6 +39,9 @@ import static com.ne.revival_games.entity.WorldObjects.MySettings.getSettings;
 
 public class MyWorld {
 
+    /** FPS OF THE GAME **/
+    public static int FPS = 40;
+
     public Database objectDatabase;
 //    public HashMap<GhostEntity, Team> entitiestoAdd = new HashMap<>();
 //    public ArrayList<Body> bodiestodelete;
@@ -182,6 +185,7 @@ public class MyWorld {
 //        Team.OFFENSE.add(turret2);
 
         launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
+        this.addUpdatable(0, FrameTime.getNewReference());
     }
 
     private Launcher launcher;
@@ -255,6 +259,9 @@ public class MyWorld {
 
     public void addUpdatable(Updatable updatable) {
         this.updatables.add(updatable);
+    }
+    public void addUpdatable(int index, Updatable updatable) {
+        this.updatables.add(index, updatable);
     }
 
     public boolean removeUpdatable(Updatable updatable) {
