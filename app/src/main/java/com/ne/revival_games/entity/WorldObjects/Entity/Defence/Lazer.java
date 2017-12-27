@@ -1,7 +1,6 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.ConditionalDestructible;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.GravityEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.SlowEffect;
@@ -18,7 +17,7 @@ import org.dyn4j.geometry.Vector2;
  * Created by vishn on 7/2/2017.
  */
 
-public class Lazer extends ConditionalDestructible {
+public class Lazer extends Entity {
     public double damage;
     public double lazer_width = 0;         //unscaled width
     public double lazer_angle = 0;              //angle in RADIANS

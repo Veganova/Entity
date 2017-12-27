@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void initPlayers(boolean playerSelection, boolean playPause, int numPlayers) {
+    public void  initPlayers(boolean playerSelection, boolean playPause, int numPlayers) {
 
         if (numPlayers == 1) {
             this.MAP_HEIGHT = 2400;
@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
             screens.put(panel, panel.getHolder());
 //            myThread.addNewPanel(panel, panel.getHolder());
         }
-
 
         relativeLayout.addView(myGroup);
 
@@ -309,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
 //        this.onStop();
         super.finish();
 
-        if (this.myThread != null) {
+         if (this.myThread != null) {
             this.myThread.end();
         }
 

@@ -1,7 +1,6 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.ConditionalDestructible;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
@@ -17,10 +16,10 @@ import org.dyn4j.geometry.Vector2;
  * Created by vishn on 9/5/2017.
  */
 
-public class Mine extends ConditionalDestructible{
+public class Mine extends Entity{
     boolean contacted = false;
 
-    public Mine(Vector2 location, double angle, double health, Team team, MyWorld world, String tag){
+    public Mine(Vector2 location, Team team, MyWorld world, String tag){
         super(0, 0, team, tag + "mine");
         this.shape = new ObjCircle(MySettings.getNum(team.toString(), name_tag + " radius"));
         this.shape.getBuilder(true, world).setXY(location.x, location.y)

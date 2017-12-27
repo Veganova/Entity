@@ -1,22 +1,32 @@
 {
   "levels" : {
+    "max_level" : 10,
     "1" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 2,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 15,
       "units" : ["comet"],
       "comet" : {
+        "radius": {"lower" : 10, "upper" : 50},
         "number" : 10,
-        "health" : 20,
-        "speed" : 20
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 1, "upper" : 50},
+        "angular_velocity" : 2
       },
       "break" : 20
     },
     "2" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 3,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 20,
       "units" : ["comet", "emp"],
       "comet" : {
+        "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
-        "health" : 20,
-        "speed" : 30
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "emp" : {
         "number" : 1,
@@ -26,6 +36,9 @@
       "break" : 20
     },
     "3" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 4,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 25,
       "units" : ["comet", "emp", "rocket"],
       "comet" : {
@@ -46,6 +59,9 @@
       "break" : 25
     },
     "4" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 5,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 30,
       "units" : ["comet", "emp", "rocket"],
       "comet" : {
@@ -66,8 +82,11 @@
       "break" : 25
     },
     "5" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 6,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 30,
-      "units" : ["comet", "emp", "rocket", "turret-1"],
+      "units" : ["comet", "emp", "rocket"],
       "comet" : {
         "number" : 75,
         "health" : 30,
@@ -87,6 +106,9 @@
 
     },
     "6" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 8,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 30,
       "units" : ["comet", "emp", "rocket", "turret-1"],
       "comet" : {
@@ -114,6 +136,9 @@
 
     },
     "7" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 8,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 35,
       "units" : ["comet", "emp", "rocket", "turret-1"],
       "comet" : {
@@ -140,6 +165,9 @@
       "break" : 25
     },
     "8" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 10,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 40,
       "units" : ["comet", "emp", "rocket", "turret-1", "turret-2"],
       "comet" : {
@@ -172,6 +200,9 @@
       "break" : 25
     },
     "9" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 10,
+      "ammoFiredAtOnceVariance": 2,
       "units" : ["comet", "emp", "rocket", "turret-1", "turret-2", "turret-3"],
       "duration" : 40,
       "comet" : {
@@ -210,6 +241,9 @@
       "break" : 25
     },
     "10" : {
+      "breakBetweenFiring" : 1000,
+      "ammoFiredAtOnce": 11,
+      "ammoFiredAtOnceVariance": 2,
       "duration" : 45,
       "units" : ["comet", "emp", "rocket", "turret-1", "turret-2", "turret-3"],
       "comet" : {

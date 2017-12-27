@@ -9,7 +9,7 @@ import java.util.List;
  * NOTE: Static variables can sustain values added to them over programs.
  */
 public enum Team {
-    OFFENSE(Color.rgb(40, 240, 200)), DEFENCE(Color.rgb(236, 38, 101)), NEUTRAL(Color.MAGENTA);
+    OFFENSE(Color.rgb(236, 38, 101)), DEFENCE(Color.rgb(40, 240, 200)), NEUTRAL(Color.MAGENTA);
 
 
     Team(int color) {

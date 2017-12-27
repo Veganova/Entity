@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
@@ -31,6 +32,8 @@ public class Entity implements Effector {
     public Vector2 oldVelocity = new Vector2(-1,-1);
     public Team team;
     public String name_tag;
+    public boolean primed = false;
+    protected double startTime = -1;
 
     public AShape shape;
     protected double direction;
@@ -61,7 +64,7 @@ public class Entity implements Effector {
         this.direction = direction;
         this.speed = speed;
         this.health = (int) MySettings.getNum(team.toString(), name + " health");
-        this.MAX_HEALTH = health;
+        this.MAX_HEALTH = (int) health;
         this.frictionCoefficent = MySettings.getNum(team.toString(), name + " real_friction");
         this.invulnerable = Boolean.parseBoolean(
                 MySettings.get(team.toString(), name + "invulnerable"));
@@ -75,6 +78,11 @@ public class Entity implements Effector {
     public MyDeque.Node getNode() {
         return node;
     }
+
+    public void normalizeBot(GhostEntity ghost, double angle) {
+
+    }
+
 
     public void setNode(MyDeque.Node node) {
         this.node = node;
@@ -91,6 +99,12 @@ public class Entity implements Effector {
         if (this.dead) {
             world.objectDatabase.remove(this.shape.body);
             return true;
+        }
+
+        if(deathCondition() && this.primed) {
+            this.health = -1;
+            this.dead = true;
+            world.objectDatabase.remove(this.shape.body);
         }
 
         for (Effect effect : effects.values()) {
@@ -145,6 +159,11 @@ public class Entity implements Effector {
 //        double direction = shape.body.getTransform().getRotation();
         this.shape.body.setLinearVelocity(speed * Math.cos(Math.toRadians(direction)),
                 speed * Math.sin(Math.toRadians(direction)));
+    }
+
+    public void setVelocity(Vector2 vel) {
+//        double direction = shape.body.getTransform().getRotation();
+        this.shape.body.setLinearVelocity(vel.x, vel.y);
     }
 
     public void setVelocity(double speed, double angle) {
@@ -332,6 +351,17 @@ public class Entity implements Effector {
         }
     }
 
+    public void prime(){
+        this.primed = true;
+        this.startTime = System.currentTimeMillis();
+    }
+
+
+    protected boolean deathCondition() {
+        return false;
+    }
+
+
 
     /**
      * Override this if the object (like turret) and has subparts to be colored.
@@ -341,8 +371,6 @@ public class Entity implements Effector {
     public void setColor(int color, MyWorld world) {
         this.shape.setColor(color);
     }
-
-    public void prime(){};
 
     public double getMaxVelocity(double percentSpeed) {
         return MAX_INITIAL_SPEED;

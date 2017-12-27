@@ -1,6 +1,6 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Shared.ConditionalDestructible;
+import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EMP;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
@@ -15,9 +15,10 @@ import org.dyn4j.geometry.Vector2;
  * Created by vishn on 7/27/2017.
  */
 
-public class ShockwaveCanister extends ConditionalDestructible {
+public class ShockwaveCanister extends Entity {
     public static int HEALTH = 20;
     private double lifeTime = 5000;
+    boolean naturalDeath = false;
 
     public ShockwaveCanister(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world, String tag) {
         super(direction, speed, team, tag + "shockcan");
@@ -28,11 +29,6 @@ public class ShockwaveCanister extends ConditionalDestructible {
 
     }
 
-    @Override
-    public void prime() {
-        this.primed = true;
-        this.startTime = System.currentTimeMillis();
-    }
 
     @Override
     protected boolean deathCondition() {

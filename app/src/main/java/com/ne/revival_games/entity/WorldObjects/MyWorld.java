@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects;
 import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
@@ -12,6 +13,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.MyList;
+import com.ne.revival_games.entity.WorldObjects.Players.AI_Bot;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -111,7 +113,6 @@ public class MyWorld {
         coords = new ArrayList<double[]>();
         this.objectDatabase = new Database ();
         this.ghosts = new HashMap<>();
-//        this.bodiestodelete = new ArrayList<>();
         this.engineWorld = new World();
         this.players = new ArrayList<>();
         this.updatables = new ArrayList<>();
@@ -125,8 +126,11 @@ public class MyWorld {
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
+        Nexus kek = new Nexus(0, 0, 0, this, Team.DEFENCE, "");
+        //TODO: ADD THIS KEK TO A PLAYER
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
+        bot = new AI_Bot(2000, 2000, this, Team.OFFENSE, kek);
 
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
 //        settings.setLinearTolerance(150*settings.getLinearTolerance());
@@ -184,11 +188,12 @@ public class MyWorld {
 //        Turret turret2 = new Turret(new Vector2(300, 300), 0, this, Team.OFFENSE);
 //        Team.OFFENSE.add(turret2);
 
-        launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
+//        launcher = new Launcher(2000, 2000, this, Team.OFFENSE);
         this.addUpdatable(0, FrameTime.getNewReference());
     }
 
-    private Launcher launcher;
+//    private Launcher launcher;
+    private AI_Bot bot;
     //need a way to add an object (check what kind of object it is, etc.)
     //alternative is to add a new object on creation in MainThread
     /**
@@ -217,7 +222,8 @@ public class MyWorld {
      */
     public void drawObjects(Canvas canvas){
         this.bounds.draw(canvas);
-        launcher.draw(canvas);
+//        launcher.draw(canvas);
+        bot.draw(canvas);
 
         MyList l = this.objectDatabase.values();
 

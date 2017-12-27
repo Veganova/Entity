@@ -69,11 +69,6 @@ public class Rocket extends AimShootEntity {
         return super.onCollision(contact, componentHit, damage);
     }
 
-    @Override
-    public void prime() {
-        this.primed = true;
-        this.startTime = System.currentTimeMillis();
-    }
 
     protected boolean deathCondition() {
         return collided || (startTime + lifeTime < System.currentTimeMillis() && startTime != -1);

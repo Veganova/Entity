@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ComplexShape extends AShape {
 
-    List<AShape> shapes;
+    public List<AShape> shapes;
     boolean isComplexBody;
 
     /**

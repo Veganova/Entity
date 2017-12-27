@@ -67,7 +67,7 @@ public enum Entities {
             new EntityLeaf("MINE") {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                    return new Mine(new Vector2(x, y), angle, 200.0, team, world, producerName);
+                    return new Mine(new Vector2(x, y), team, world, producerName);
                 }
             },
           new EntityLeaf("ROCKET") {
@@ -76,7 +76,7 @@ public enum Entities {
                     return new Rocket(new Vector2(x, y), angle, 200.0, 20, team, world, producerName);
                 }
             },
-            new EntityLeaf("EMP") {
+            new EntityLeaf("EMP", new String[]{"shockcan", }) {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
                     return new ShockwaveCanister(new Vector2(x, y), angle, 200.0, 20, team, world, producerName);
@@ -110,13 +110,24 @@ public enum Entities {
     public static EntityLeaf findLeaf(String id) {
         for (Entities e: Entities.values()) {
             for (EntityLeaf leaf: e.produceables) {
-                if (leaf.name.equals(id) || leaf.name.equals(id.toLowerCase())) {
+                if (leaf.name.toLowerCase().equals(id.toLowerCase())
+                        || checkAltNames(leaf, id)) {
                     return leaf;
                 }
             }
         }
 
-        throw new IllegalArgumentException("Not a valid Leaf ID");
+        throw new IllegalArgumentException("Not a valid Leaf ID: " + id);
+    }
+
+    public static boolean checkAltNames(EntityLeaf leaf, String id) {
+        for(int i = 0; i < leaf.altnames.length; ++i) {
+            if(id.toLowerCase() == leaf.altnames[i].toLowerCase()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public EntityLeaf getDefaultLeaf() {
