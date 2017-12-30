@@ -20,7 +20,6 @@ public class MySettings {
     private static MySettings myinstance = null;
 
     public MySettings() {
-        super();
 
     }
 
