@@ -82,6 +82,16 @@ public class EMP extends ExpandingEffect {
     }
 
     @Override
+    public int getMaxCooldown() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxActiveTime() {
+        return 0;
+    }
+
+    @Override
     public void applyEffect(Entity other) {
         other.isActive = false;
         //TODO: this should apply a 'pause effect'

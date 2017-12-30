@@ -86,5 +86,13 @@ public class ExplosiveEffect extends ExpandingEffect {
     }
 
 
+    @Override
+    public int getMaxCooldown() {
+        return 0;
+    }
 
+    @Override
+    public int getMaxActiveTime() {
+        return 0;
+    }
 }

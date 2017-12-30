@@ -10,6 +10,7 @@ import android.graphics.RectF;
 import android.view.ViewGroup;
 
 import com.ne.revival_games.entity.GamePanel;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -28,6 +29,7 @@ public class ActiveBar {
     private Entity entity;
     private boolean on;
     private Paint paint, blur;
+    private Effect effect;
 
     public enum PathType {
         FILLED_CIRCLE, CIRCLE, RECTANGLE, ROUNDED_RECTANGLE, LINE;
@@ -102,6 +104,10 @@ public class ActiveBar {
 
     private IntAnimator healthAnim;
     public void draw(Canvas c) {
+        if (effect != null && effect.getStatus() != this.on) {
+            this.toggle();
+        }
+
         // Entity health is changed
         if (this.entity.health != targetHealth) {
             this.targetHealth = this.entity.health;
@@ -160,21 +166,42 @@ public class ActiveBar {
         // c.drawPath(path, selected);
     }
 
+    private boolean disable() {
+        this.on = false;
+        paint.setColor(INACTIVE_COLOR);
+        return false;
+    }
+
+    private boolean enable() {
+        this.on = true;
+        paint.setColor(ACTIVE_COLOR);
+        return true;
+    }
+
+
     /**
      * Toggles the Active bar.
      *
      * @return  Returns whether this activebar is currently on or not (after the toggle)
      */
     public boolean toggle() {
-        if (this.on) {
-            this.on = false;
-            paint.setColor(INACTIVE_COLOR);
-            return false;
-        } else {
-            this.on = true;
-            paint.setColor(ACTIVE_COLOR);
-            return true;
+        if (this.effect != null) {
+            this.effect.toggle();
         }
+        
+        if (this.on) {
+            return this.disable();
+        } else {
+            return this.enable();
+        }
+    }
+
+    public void linkEffect(Effect e) {
+        this.effect = e;
+    }
+
+    public void unlinkEffect() {
+        this.effect = null;
     }
 
     // Does'nt work

@@ -75,15 +75,18 @@ public class Entity implements Effector {
         this.targetExceptions = new Untargetable(this);
     }
 
-    public MyDeque.Node getNode() {
-        return node;
-    }
+
 
     public void normalizeBot(GhostEntity ghost, double angle) {
 
     }
 
+    // For quick deletions in the data structure
+    public MyDeque.Node getNode() {
+        return node;
+    }
 
+    // For quick deletions in the data structure
     public void setNode(MyDeque.Node node) {
         this.node = node;
     }

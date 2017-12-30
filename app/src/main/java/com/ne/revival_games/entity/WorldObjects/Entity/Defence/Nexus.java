@@ -78,6 +78,7 @@ public class Nexus extends Entity {
         this.addEffect(gravEffect);
 
         this.bar = new ActiveBar(this, 1f);
+        this.bar.linkEffect(gravEffect);
 //        this.bar.setPathType(ActiveBar.PathType.LINE, 200);
     }
 
@@ -91,7 +92,6 @@ public class Nexus extends Entity {
     @Override
     public void interact() {
         super.interact();
-        this.gravEffect.toggle();
     }
 
     boolean gameRunning = true;

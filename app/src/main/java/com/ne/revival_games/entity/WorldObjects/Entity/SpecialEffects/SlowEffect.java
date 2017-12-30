@@ -27,7 +27,7 @@ public class SlowEffect extends Effect {
 
     public SlowEffect(Entity applier, AShape zone, Vector2 jointDisplacement,
                       double slowFactor, MyWorld world) {
-        aoeJoint(applier, zone, effectType.SLOW, jointDisplacement, world, COOLDOWN);
+        aoeJoint(applier, zone, effectType.SLOW, jointDisplacement, world);
         this.slowFactor = slowFactor;
         world.objectDatabase.put(this.zone.body, applier);
     }
@@ -50,5 +50,15 @@ public class SlowEffect extends Effect {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getMaxCooldown() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxActiveTime() {
+        return 0;
     }
 }

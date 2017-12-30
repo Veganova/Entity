@@ -14,7 +14,7 @@ import org.dyn4j.geometry.Vector2;
 
 public class GravityEffect extends Effect{
     private double gravityValue;
-    public static int COOLDOWN = 10;
+
     /**
      * joins a given shape to the applier at a given displacement from the center using a weldjoint
      *
@@ -26,7 +26,7 @@ public class GravityEffect extends Effect{
      */
     public GravityEffect(Entity applier, AShape zone, double gravityValue,
                          Vector2 jointDisplacement, MyWorld world){
-        aoeJoint(applier, zone, effectType.GRAVITY, jointDisplacement, world, COOLDOWN);
+        aoeJoint(applier, zone, effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
     }
 
@@ -41,7 +41,7 @@ public class GravityEffect extends Effect{
      */
     public GravityEffect(Entity applier, double radius, double gravityValue,
                          Vector2 jointDisplacement, MyWorld world) {
-        aoeJoint(applier, new ObjCircle(radius), effectType.GRAVITY, jointDisplacement, world, COOLDOWN);
+        aoeJoint(applier, new ObjCircle(radius), effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
         world.objectDatabase.put(this.zone.body, applier);
     }
@@ -75,10 +75,7 @@ public class GravityEffect extends Effect{
                 magnitude -= other.shape.body.getMass().getMass() * other.frictionCoefficent * MyWorld.kineticFriction;
             }
 
-
-
             magnitude = Math.max(magnitude, 0) * 0.01;
-
 
             other.shape.body.applyForce(new Vector2(magnitude * Math.cos(angle),
                     magnitude * Math.sin(angle)));
@@ -86,6 +83,16 @@ public class GravityEffect extends Effect{
         }
         return false;
 
+    }
+
+    @Override
+    public int getMaxCooldown() {
+        return 5 * MyWorld.FPS;
+    }
+
+    @Override
+    public int getMaxActiveTime() {
+        return 3 * MyWorld.FPS;
     }
 
 }
