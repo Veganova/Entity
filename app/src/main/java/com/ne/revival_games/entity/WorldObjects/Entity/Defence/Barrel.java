@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Aim.ShootableEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -37,6 +38,7 @@ public class Barrel extends ShootableEntity {
         this.world = world;
         this.toShoot = toShoot;
         this.world.objectDatabase.put(this.shape.body, this);
+        this.setShootingSpeed(MySettings.getNum(team.toString(), name_tag + " shooting_speed"));
 
         this.myTurret = turret;
 
@@ -49,14 +51,14 @@ public class Barrel extends ShootableEntity {
                 this.shape = new ObjRectangle(90, 20);
                 AShape.InitBuilder builderSingle = this.shape.getBuilder(true, world);
                 builderSingle.setXY(location.x, location.y).setAngle(angle).init();
-                magnitude = 0;
+                magnitude = 60;
                 break;
             case SIDE:
                 this.shape = new ObjRectangle(120, 20);
                 AShape.InitBuilder builderSide = this.shape.getBuilder(true, world);
                 builderSide.setXY(50 + (location.x), 100 + (location.y)).setAngle(angle).init();
 
-                magnitude = 50;
+                magnitude = 80;
 
 //                this.shape.rotateBody(angle);
 //                this.shape.body.getTransform().rotate(1);
@@ -120,7 +122,6 @@ public class Barrel extends ShootableEntity {
 //        if(this.myTurret == contact) {
 //            return false;
 //        }
-        System.out.println("COLLIDING barrel");
 
         return super.onCollision(contact, componentHit, damage);
     }
@@ -133,5 +134,20 @@ public class Barrel extends ShootableEntity {
            }
            this.myTurret = null;
         super.onDeath(world);
+    }
+
+    @Override
+    public void freezeAngularForces() {
+        if(this.myTurret != null && !myTurret.dead) {
+            this.myTurret.freezeAngularForces();
+        }
+        else {
+            super.freezeAngularForces();
+        }
+    }
+
+    @Override
+    public void rotateEntity(double angle) {
+            super.rotateEntity(angle);
     }
 }

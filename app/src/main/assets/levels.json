@@ -2,34 +2,36 @@
   "levels" : {
     "max_level" : 10,
     "1" : {
-      "breakBetweenFiring" : 1000,
+      "breakBetweenFiring" : 3000,
       "ammoFiredAtOnce": 2,
-      "ammoFiredAtOnceVariance": 2,
+      "ammoFiredAtOnceVariance": 0,
       "duration" : 15,
       "units" : ["comet"],
       "comet" : {
-        "radius": {"lower" : 10, "upper" : 50},
+        "friction" : 0,
+        "radius": {"lower" : 10, "upper" : 30},
         "number" : 10,
         "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 1, "upper" : 50},
+        "speed" : {"lower" : 10, "upper" : 40},
         "angular_velocity" : 2
       },
       "break" : 20
     },
     "2" : {
-      "breakBetweenFiring" : 1000,
-      "ammoFiredAtOnce": 3,
-      "ammoFiredAtOnceVariance": 2,
+      "breakBetweenFiring" : 3000,
+      "ammoFiredAtOnce": 2,
+      "ammoFiredAtOnceVariance": 1,
       "duration" : 20,
       "units" : ["comet", "emp"],
       "comet" : {
+        "friction" : 0,
         "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
         "health" : {"lower" : 10, "upper" : 35},
         "speed" : {"lower" : 15, "upper" : 30}
       },
       "emp" : {
-        "number" : 1,
+        "number" : 3,
         "health" : 60,
         "speed" : 35
       },
@@ -37,14 +39,16 @@
     },
     "3" : {
       "breakBetweenFiring" : 1000,
-      "ammoFiredAtOnce": 4,
+      "ammoFiredAtOnce": 2,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 25,
       "units" : ["comet", "emp", "rocket"],
       "comet" : {
-        "number" : 35,
-        "health" : 30,
-        "speed" : 30
+        "friction" : 0,
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 1,
@@ -65,9 +69,10 @@
       "duration" : 30,
       "units" : ["comet", "emp", "rocket"],
       "comet" : {
-        "number" : 40,
-        "health" : 30,
-        "speed" : 30
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 2,
@@ -88,9 +93,10 @@
       "duration" : 30,
       "units" : ["comet", "emp", "rocket"],
       "comet" : {
-        "number" : 75,
-        "health" : 30,
-        "speed" : 30
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 5,
@@ -112,9 +118,10 @@
       "duration" : 30,
       "units" : ["comet", "emp", "rocket", "turret-1"],
       "comet" : {
-        "number" : 85,
-        "health" : 30,
-        "speed" : 30
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 7,
@@ -142,9 +149,10 @@
       "duration" : 35,
       "units" : ["comet", "emp", "rocket", "turret-1"],
       "comet" : {
-        "number" : 105,
-        "health" : 30,
-        "speed" : 30
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 9,
@@ -171,9 +179,10 @@
       "duration" : 40,
       "units" : ["comet", "emp", "rocket", "turret-1", "turret-2"],
       "comet" : {
-        "number" : 115,
-        "health" : 30,
-        "speed" : 30
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 8,
@@ -206,9 +215,10 @@
       "units" : ["comet", "emp", "rocket", "turret-1", "turret-2", "turret-3"],
       "duration" : 40,
       "comet" : {
-        "number" : 135,
-        "health" : 30,
-        "speed" : 30
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 12,
@@ -247,9 +257,10 @@
       "duration" : 45,
       "units" : ["comet", "emp", "rocket", "turret-1", "turret-2", "turret-3"],
       "comet" : {
-        "number" : 200,
-        "health" : 30,
-        "speed" : 30
+        "radius": {"lower" : 10, "upper" : 25},
+        "number" : 20,
+        "health" : {"lower" : 10, "upper" : 35},
+        "speed" : {"lower" : 15, "upper" : 30}
       },
       "rocket" : {
         "number" : 25,

@@ -361,6 +361,16 @@ public class Entity implements Effector {
         return false;
     }
 
+    //freezes angular velocity and angular forces
+    public void freezeAngularForces() {
+        this.shape.body.clearAccumulatedTorque();
+        this.shape.body.clearTorque();
+        this.shape.body.setAngularVelocity(0);
+    }
+
+    public void rotateEntity(double angle) {
+        this.shape.body.getTransform().setRotation(angle);
+    }
 
 
     /**

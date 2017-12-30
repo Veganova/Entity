@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.Random;
+import java.util.Vector;
 
 /**
  * Created by Veganova on 6/29/2017.
@@ -46,6 +47,18 @@ public class Util {
     public static double randomBetweenValues(double rangeMin, double rangeMax) {
         Random r = new Random();
         return rangeMin + (rangeMax - rangeMin) * r.nextDouble();
+    }
+
+    public static Vector2 intersectionBetweenTwoLines(Vector2 lineOne, Vector2 lineTwo) {
+        if(lineOne.x == lineTwo.x ) {
+            return new Vector2(-1,-1);
+        }
+        else {
+            double x = (lineTwo.y - lineOne.y) / (lineOne.x - lineTwo.x);
+            double y = lineOne.x * x + lineOne.y;
+
+            return new Vector2(x,y);
+        }
     }
 
 }

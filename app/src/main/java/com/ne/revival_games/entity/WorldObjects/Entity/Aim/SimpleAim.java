@@ -14,15 +14,15 @@ import java.util.Iterator;
  */
 
 public class SimpleAim implements AimLogic {
-    public static double WIGGLE_ROOM = 0.03;
-    private double turnSpeed = 10;
+    public static double WIGGLE_ROOM = 0.1;
+    protected double turnSpeed = 10;
 
-    private final AimableEntity aimEntity;
-    private final Database objectDatabase;
-    private final double range;
-    private Entity enemy;
+    protected final AimableEntity aimEntity;
+    protected final Database objectDatabase;
+    protected final double range;
+    protected Entity enemy;
     private boolean first = false;
-    private int lastDirection;
+    protected int lastDirection;
     private boolean continuousFiring = false;
 
     public SimpleAim(AimableEntity aimEntity, Database objectDatabase, double range, boolean continuousFiring) {
@@ -91,15 +91,15 @@ public class SimpleAim implements AimLogic {
         this.lastDirection = turnCounterClock;
 
         if (Math.abs(angleDifference) <= WIGGLE_ROOM) {
-            if(this.continuousFiring)
-            this.aimEntity.shape.body.getTransform().setRotation(angleTo);
+
+            this.aimEntity.freezeAngularForces();
+            //(angle + angleTo)/2 % (2*Math.PI)
+//            System.out.println("ANGLETO: " + angleTo + " " + aimWith.shape.body.getTransform().getRotation());
+            if(!Util.nearValue(aimWith.shape.body.getTransform().getRotation(), angleTo, 0.001)) {
+                aimWith.rotateEntity(angleTo);
+                this.aimEntity.freezeAngularForces();
+            }
             this.aimEntity.fire();
-
-//            mainBarrel.shape.body.clearAccumulatedTorque();
-//            mainBarrel.shape.body.clearAccumulatedForce();
-            aimWith.shape.body.setAngularVelocity(0);
-
-            this.aimEntity.shape.body.setAngularVelocity(0);
         } else {
             this.aimEntity.shape.body.setAngularVelocity(turnCounterClock * turnSpeed);
         }

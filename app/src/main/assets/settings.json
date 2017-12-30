@@ -61,8 +61,10 @@
       "health": 150,
       "barrel": {
         "health": 50,
+        "shooting_speed" : 500,
         "missile": {
-          "health" : 30
+          "health" : 30,
+          "radius" : 15
         }
       }
     },

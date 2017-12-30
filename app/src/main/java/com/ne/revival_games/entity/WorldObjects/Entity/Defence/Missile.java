@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
@@ -23,7 +24,7 @@ public class Missile extends Entity {
     public Missile(double x, double y, double direction, double speed,
                    MyWorld world, Team team, String tag) {
         super(direction, speed, team, tag + "missile");
-        shape = new ObjCircle(RADIUS);
+        shape = new ObjCircle(MySettings.getNum(team.toString(), name_tag + " radius"));
         shape.getBuilder(true, world).setXY(x, y)
                 .setBasics(team.toString(), name_tag)
                 .init();
@@ -36,7 +37,6 @@ public class Missile extends Entity {
     @Override
     protected boolean deathCondition() {
         boolean val = this.startTime + this.lifeTime <= System.currentTimeMillis() || this.shape.body.getLinearVelocity().getMagnitude() < 2;
-        System.out.println("DEAD: " + val);
 
         return val;
     }

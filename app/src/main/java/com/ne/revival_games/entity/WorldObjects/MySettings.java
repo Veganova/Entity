@@ -40,6 +40,8 @@ public class MySettings {
         String result = null;
         String [] query = term.split(" ");
 
+
+        //checks levels for 'OFFENSE' AI
         try {
             InputStream is;
 
@@ -61,6 +63,7 @@ public class MySettings {
 
             }
 
+            //looks through settings.json for general and player unit details
             is = MainActivity.giveContext().getAssets().open("settings.json");
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
@@ -106,8 +109,15 @@ public class MySettings {
     }
 
     public static double getNum(String team, String query) {
-        System.out.println("The query was " +  query);
-        return Double.parseDouble(get(team, query));
+        try {
+            return Double.parseDouble(get(team, query));
+        }
+        catch(Exception e) {
+            System.out.printf("Query was " + query);
+            System.exit(1);
+        }
+
+        return 0;
     }
 
     private static String findVal(JSONObject obj, String[] query, int start) {

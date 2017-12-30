@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.GeniusAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -30,9 +31,9 @@ public class Turret extends AimableEntity {
     public static int MASS = 25;
     public static double LINEAR_DAMPING = 5;
     public static double ANGULAR_DAMPING = 0.09;
-    private static double reload = 3000;
+    private static double reload = 2000;
     private double lastfired = 0;
-    private double range = 800;
+    private double range = 200;
 
     private MyWorld world;
     public List<Barrel> barrels = new ArrayList<>();
@@ -55,7 +56,7 @@ public class Turret extends AimableEntity {
         this.frictionCoefficent = 60;
         this.world = world;
         initializeTurret(location, world);
-        this.logic = new SimpleAim(this, world.objectDatabase, range, false);
+        this.logic = new GeniusAim(this, world.objectDatabase, range, 30);
 
         this.bar = new ActiveBar(this, 0.587f);
     };
@@ -213,7 +214,7 @@ public class Turret extends AimableEntity {
 
     @Override
     public double getTurnSpeed() {
-        return 10;
+        return 15;
     }
 
 //    @Override
@@ -258,6 +259,16 @@ public class Turret extends AimableEntity {
             }
         }
         return false;
+    }
+
+    @Override
+    public void freezeAngularForces() {
+        super.freezeAngularForces();
+        for (Barrel barrel: this.barrels) {
+            this.shape.body.clearAccumulatedTorque();
+            this.shape.body.clearTorque();
+            this.shape.body.setAngularVelocity(0);
+        }
     }
 }
 
