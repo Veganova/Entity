@@ -214,7 +214,6 @@ public class Entity implements Effector {
 
     @OverridingMethodsMustInvokeSuper
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-//        System.out.println("contact type " + contact.getClass().getSimpleName());
 
         if (this.targetExceptions.isContactDisallowedWith(contact)
                 || contact.targetExceptions.isContactDisallowedWith(this)) {

@@ -22,14 +22,13 @@ public abstract class Effect {
     public MyWorld world;
     public Entity applier;
     private double cooldown;
+
     /**
      * Says whether this effect is on or not.
      */
     protected boolean status = true;
     protected boolean onCooldown = false;
     private boolean draw = false;
-
-
 
     /**
      *  @param applier
@@ -94,7 +93,8 @@ public abstract class Effect {
 
     //TODO: use engine possibly to avoid checking if effect is hitting applier
     private boolean canApply(Entity other) {
-        return this.status && this.cooldown != getMaxCooldown() && other != applier && !other.targetExceptions.isContactDisallowedWith(this);
+        return this.status && this.cooldown != getMaxCooldown()
+                && other != applier && !other.targetExceptions.isContactDisallowedWith(this);
     }
 
     public void toggleDraw() {draw = !draw;}
@@ -108,22 +108,33 @@ public abstract class Effect {
      */
     @OverridingMethodsMustInvokeSuper
     public void update(MyWorld world) {
-        // is active and the effect has an activation duration
-        if (this.status && this.getMaxActiveTime() != 0) {
-            System.out.println("cooldown - " + cooldown);
-            // when it runs for Max_active_time, it will reach maxcooldown
-            this.cooldown += getMaxCooldown() / (getMaxActiveTime() * 1.0);
+        // logic only for effects/abilities that have a capped duration of usage (and then a cooldown time for coming back up for usage)
+        if (this.getMaxCooldown() != 0) {
+            // is active and the effect has an activation duration
+            if (this.status && this.getMaxActiveTime() != 0) {
+//            System.out.println("cooldown - " + cooldown);
+                // when it runs for Max_active_time, it will reach maxcooldown
 
-            // the ability has reached the max cooldown (has been used for as long as it can be)
-            if (this.cooldown >= this.getMaxCooldown()) {
-                this.disable();
-                this.cooldown = getMaxCooldown();//set cooldown to max
-            }
-        } else {
-            if (this.cooldown >= 0) {
-                this.cooldown -= 1;
+                if (this.cooldown < this.getMaxCooldown()) {
+                    this.cooldown += getMaxCooldown() / (getMaxActiveTime() * 1.0);
+                }
+                // the ability has reached the max cooldown (has been used for as long as it can be)
+                else {
+                    this.disable();
+                    this.cooldown = getMaxCooldown();//set cooldown to max
+                }
+            } else {
+                if (this.cooldown >= 0) {
+                    this.cooldown -= 1;
+                }
+
+                // double arithmetic safety
+                if (this.cooldown < 0) {
+                    this.cooldown = 0;
+                }
             }
         }
+
     }
 
     public void onRemove(){
@@ -146,5 +157,9 @@ public abstract class Effect {
 
     public boolean getStatus() {
         return status;
+    }
+
+    public double getCooldown() {
+        return cooldown;
     }
 }
