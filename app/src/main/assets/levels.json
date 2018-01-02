@@ -3,16 +3,16 @@
     "max_level" : 10,
     "1" : {
       "breakBetweenFiring" : 3000,
-      "ammoFiredAtOnce": 2,
+      "ammoFiredAtOnce": 1,
       "ammoFiredAtOnceVariance": 0,
       "duration" : 15,
       "units" : ["comet"],
       "comet" : {
         "friction" : 0,
-        "radius": {"lower" : 10, "upper" : 30},
+        "radius": {"lower" : 10, "upper" : 15},
         "number" : 10,
         "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 10, "upper" : 40},
+        "speed" : {"lower" : 1, "upper" : 40},
         "angular_velocity" : 2
       },
       "break" : 20

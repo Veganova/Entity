@@ -4,9 +4,16 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
  * Created by vishn on 12/27/2017.
  */
 
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
@@ -29,6 +36,7 @@ public class GeniusAim extends SimpleAim {
     public static double angleCheck = 0.05;
     private State state = State.not_executing;
     public double execTime = Double.MAX_VALUE;
+    protected Vector2 tryPoint;
 
     public GeniusAim(AimableEntity aimEntity, Database objectDatabase, double range, double projectileSpeed) {
         super(aimEntity, objectDatabase, range, false);
@@ -60,20 +68,29 @@ public class GeniusAim extends SimpleAim {
             return;
         }
 
+        Paint paint =  new Paint();
+        paint.setColor(Color.YELLOW);
+
+        enemy.shape.paint = paint;
+
         if(this.state == State.executing) {
 
             //turning
             turnToward(aimWith);
+            this.state = State.waiting_callback;
 
-            //waiting
-            if(waitTime >= System.currentTimeMillis()) {
-                System.out.println(waitTime);
-            }
-            //fire
-            else {
-                this.aimEntity.fire();
-                this.state = State.not_executing;
-            }
+            //waiting, then fire
+             FrameTime.getReference().addCallBackAtDeltaFrames((long) waitTime,
+                     new Runnable() {
+                         @Override
+                         public void run() {
+                             aimEntity.fire();
+                             state = State.not_executing;
+                         }
+                     });
+        }
+        else if(state == State.waiting_callback) {
+            turnToward(aimWith);
         }
         else {
 
@@ -81,7 +98,7 @@ public class GeniusAim extends SimpleAim {
             double angle = (Math.PI * 2 + aimWith.shape.getOrientation()
                     + aimWith.shape.body.getTransform().getRotation()) % (Math.PI * 2);
 
-            calculateTrajectory(angle);
+            calculateTrajectory(aimWith, angle);
 
             this.state = State.executing;
         }
@@ -93,11 +110,19 @@ public class GeniusAim extends SimpleAim {
     }
 
     private void turnToward(Entity aimWith) {
+        Vector2 centerofRotation = aimWith.shape.body.getWorldCenter();
+
+        Vector2 targetPoint = tryPoint;
+
         double angle = (Math.PI * 2 + aimWith.shape.getOrientation()
                 + aimWith.shape.body.getTransform().getRotation()) % (Math.PI * 2);
 
-        double angleDifference = (Math.PI * 2 + angle - getToAngle) % (Math.PI * 2);
-        double counterclockDist = (Math.PI * 2 + getToAngle - angle) % (Math.PI * 2);
+        double angleTo = Math.atan2(targetPoint.y - centerofRotation.y,
+                targetPoint.x - centerofRotation.x);
+        angleTo = (2 * Math.PI + angleTo) % (2 * Math.PI);
+
+        double angleDifference = (Math.PI * 2 + angle - angleTo) % (Math.PI * 2);
+        double counterclockDist = (Math.PI * 2 + angleTo - angle) % (Math.PI * 2);
 
         int turnCounterClock = -1;               //false
 
@@ -119,9 +144,10 @@ public class GeniusAim extends SimpleAim {
         if (Math.abs(angleDifference) <= WIGGLE_ROOM) {
 
             this.aimEntity.freezeAngularForces();
-            //(angle + getToAngle)/2 % (2*Math.PI)
-            if(!Util.nearValue(aimWith.shape.body.getTransform().getRotation(), getToAngle, 0.001)) {
-                aimWith.rotateEntity(getToAngle);
+            //(angle + angleTo)/2 % (2*Math.PI)
+//            System.out.println("ANGLETO: " + angleTo + " " + aimWith.shape.body.getTransform().getRotation());
+            if(!Util.nearValue(aimWith.shape.body.getTransform().getRotation(), angleTo, 0.001)) {
+                aimWith.rotateEntity(angleTo);
                 this.aimEntity.freezeAngularForces();
             }
         } else {
@@ -129,75 +155,70 @@ public class GeniusAim extends SimpleAim {
         }
     }
 
-    private Vector2 calculateTrajectory(double currentAngle) {
+    private Vector2 calculateTrajectory(Entity aimWith, double currentAngle) {
         //pair
 
 
         //timeStep
         double timeStep = 0.05;
 
-        //position to rotate to
-        double rotationTo = 0;
+//        //position to rotate to
+//        double rotationTo = 0;
+//
+//        double thetaTargetCurrent = Util.absoluteAngle(this.aimEntity.shape.body.getWorldCenter(),
+//                enemy.shape.body.getWorldCenter());
 
+        tryPoint = enemy.shape.body.getWorldCenter().copy()
+                .add(enemy.shape.body.getLinearVelocity().copy().multiply(timeStep));
 
-        double thetaTargetCurrent = Util.absoluteAngle(this.aimEntity.shape.body.getWorldCenter(),
-                enemy.shape.body.getWorldCenter());
+//        //timeStep * sign
+//        double increment = Math.signum(Util.absoluteAngle(this.aimEntity.shape.body.getWorldCenter(),
+//                   tryPoint)) * angleCheck;
+//
+//
+//        boolean seemsPossible = true;
 
-        Vector2 tryPoint = enemy.shape.body.getWorldCenter()
-                .add(enemy.shape.body.getLinearVelocity()).multiply(timeStep);
-
-        //timeStep * sign
-        double increment = Math.signum(Util.absoluteAngle(this.aimEntity.shape.body.getWorldCenter(),
-                   tryPoint)) * angleCheck;
-
-
-        boolean seemsPossible = true;
-
+        double timeToGuessedAngle = 0, timeProjectiletoGuessPoint = 0, timeMyMissiletoPoint = 0;
         for(int i = 0; i < 1000; ++i) {
-            double toTarget = Util.absoluteAngle(this.aimEntity.shape.body.getWorldCenter(), tryPoint);
+            Vector2 centerofRotation = aimWith.shape.body.getWorldCenter();
+
+           double toTarget = Math.atan2(tryPoint.y - centerofRotation.y, tryPoint.x - centerofRotation.x);
+
 
             //timeTo that angle
-            double timeToGuessedAngle = Math.abs(toTarget - currentAngle) % Math.PI / (turnSpeed);
+            timeToGuessedAngle = Math.abs(toTarget - currentAngle) % Math.PI / (turnSpeed);
 
             //target linear velocity
             Vector2 targetVelocity = enemy.shape.body.getLinearVelocity();
             //target current position
             Vector2 curpos = enemy.shape.body.getWorldCenter();
 
-            //y = getLinearVelocity.y * (t) + current _ y
-            //x = getLinearVelocity.x * (t) + current_x, t = (x - current_x) / linearvelocity x
-            double slope_target =  targetVelocity.y / targetVelocity.x;
-            double start =  curpos.y - (slope_target * curpos.x);
+             timeProjectiletoGuessPoint = (tryPoint.distance(curpos) / targetVelocity.getMagnitude());
+             timeMyMissiletoPoint = (tryPoint.distance(centerofRotation)-2/5) / (projectileSpeed);
 
-            //TODO: other_start is not accurate since the thing is fired a bit away
-            double other_slope = this.projectileSpeed*(Math.tan(toTarget));
-            double other_start = 0;
-
-            Vector2 guessPoint = Util.intersectionBetweenTwoLines(new Vector2(slope_target, start),
-                    new Vector2(other_slope, other_start));
-
-//            System.out.println("LINE ONE: " + slope_target + "x " + start);
-//            System.out.println("LINE TWO: " + other_slope + "x " + other_start);
+//            System.out.println(getToAngle);
 
 
-            double timeProjectiletoGuessPoint = (guessPoint.x - curpos.x) / targetVelocity.x;
-            double timeMyMissiletoPoint = (guessPoint.x - 30*Math.cos(toTarget))
-                    / (projectileSpeed*Math.cos(toTarget));
-
-            System.out.println(timeProjectiletoGuessPoint + " " + timeMyMissiletoPoint);
-            if(timeMyMissiletoPoint + timeToGuessedAngle < timeMyMissiletoPoint) {
-                waitTime = timeMyMissiletoPoint + timeToGuessedAngle - timeProjectiletoGuessPoint;
+            if(timeMyMissiletoPoint + timeToGuessedAngle < timeProjectiletoGuessPoint) {
+                waitTime = Math.abs(timeMyMissiletoPoint + timeToGuessedAngle - timeProjectiletoGuessPoint);
                 getToAngle = toTarget;
 
                 break;
             }
 
-
-
-            tryPoint = tryPoint.add(aimEntity.shape.body.getLinearVelocity().multiply(timeStep));
+            tryPoint.add(enemy.shape.body.getLinearVelocity().copy().multiply(timeStep));
 
         }
 
+        System.out.println("turn:" + timeToGuessedAngle + "fire: " + timeMyMissiletoPoint + "target: " + timeProjectiletoGuessPoint);
+
+//        if(aimEntity instanceof Turret) {
+//            Turret myTurret = (Turret) aimEntity;
+//            ObjCircle target = new ObjCircle(15);
+////            System.out.println("TRY-POINT:" + tryPoint.x + " " + tryPoint.y);
+//            target.getBuilder(true, myTurret.world).setXY(tryPoint.x*MyWorld.SCALE, tryPoint.y*MyWorld.SCALE).init();
+//            myTurret.drawme.add(target);
+//        }
 
 
         return new Vector2(0,0);
@@ -236,7 +257,7 @@ public class GeniusAim extends SimpleAim {
     }
 
     private enum State {
-           executing, not_executing
+           executing, waiting_callback, not_executing
     }
 }
 

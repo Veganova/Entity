@@ -34,7 +34,7 @@ public abstract class AShape implements Shape {
      */
     protected double angle;
     public Convex convex;
-    protected Paint paint;
+    public Paint paint;
 
     AShape() {
         this.paint = new Paint();

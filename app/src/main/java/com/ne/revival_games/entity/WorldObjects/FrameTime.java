@@ -29,7 +29,7 @@ public class FrameTime implements Updatable {
      *
      * @return
      */
-    private static FrameTime getReference() {
+    public static FrameTime getReference() {
         if (singleRef == null) {
             singleRef = new FrameTime();
         }
@@ -41,7 +41,7 @@ public class FrameTime implements Updatable {
     /**
      * Represents the time in terms of frames.
      */
-    private long frameNum;
+    public long frameNum;
 
     /**
      * Stores the CB - CallBacks.
@@ -65,7 +65,7 @@ public class FrameTime implements Updatable {
             this.callbacks.poll();
 
             // when the frame is a match, run the associated runnable in a separate thread.
-            if (top.frame == this.frameNum) {
+            if (top.frame == this.frameNum || top.frame < this.frameNum) {
                 Thread t = new Thread(top.r);
                 t.start();
             }

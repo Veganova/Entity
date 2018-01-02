@@ -32,7 +32,7 @@ public abstract class ShootableEntity extends Entity implements Shootable {
         y = magnitude * Math.sin(angle) + MyWorld.SCALE*shape.body.getWorldCenter().y;
 
         Entity shooting = getNewBodyToShoot(x, y, Math.toDegrees(angle));
-        shooting.setVelocity(30);
+        shooting.setVelocity(shootingSpeed);
         shooting.addToPlayer(this.player);
 
         Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.SHOOT);

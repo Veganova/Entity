@@ -5,9 +5,9 @@
     "speed" : 0,
     "angular_velocity" : 0,
     "angular_damping": 0.02,
-    "linear_damping": 0.5,
-    "friction" : 0.2,
-    "real_friction" : 0.2,
+    "linear_damping": 0,
+    "friction" : 0,
+    "real_friction" : 0,
     "invulnerable" : false,
     "restitution" : 0.0,
     "density" : 1.0,
@@ -61,7 +61,7 @@
       "health": 150,
       "barrel": {
         "health": 50,
-        "shooting_speed" : 500,
+        "shooting_speed" : 35,
         "missile": {
           "health" : 30,
           "radius" : 15
