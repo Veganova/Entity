@@ -49,10 +49,12 @@ public class Totem extends Entity {
 
 
         this.slow = new SlowEffect(this, new ObjCircle(265), new Vector2(0, 0), 4, world);
+        this.slow.setInitialState(false);
         this.slow.toggleDraw();
         this.addEffect(this.slow);
 
         this.bar = new ActiveBar(this, 1f);
+        this.bar.linkEffect(slow);
         this.bar.setPathType(ActiveBar.PathType.FILLED_CIRCLE, 0.6);
     }
 
@@ -61,7 +63,7 @@ public class Totem extends Entity {
     @Override
     public void interact() {
         super.interact();
-        this.slow.toggle();
+//        this.slow.toggle();
     }
 
     private static double ANGULAR_SPEED = 2.5;

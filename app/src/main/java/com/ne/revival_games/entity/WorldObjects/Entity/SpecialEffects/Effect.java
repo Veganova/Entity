@@ -8,9 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
-import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.joint.RevoluteJoint;
-import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Vector2;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -23,42 +21,40 @@ public abstract class Effect {
     public AShape zone;
     public MyWorld world;
     public Entity applier;
-    protected boolean status = true;
-    private boolean draw = false;
-    // Number of frames that this effect will take place 40fps
-    private int COOLDOWN_MAX;
-    private int cooldown;
+    private double cooldown;
+    private boolean initialState = false;
 
     /**
-     *
-     * @param applier
+     * Says whether this effect is on or not.
+     */
+    protected boolean status = true;
+    protected boolean onCooldown = false;
+    private boolean draw = false;
+
+    /**
+     *  @param applier
      * @param zone
      * @param type
      * @param world
-     * @param cooldown  cooldown in seconds
      */
-    void basicInit(Entity applier, AShape zone, EffectType type, MyWorld world, double cooldown) {
+    void basicInit(Entity applier, AShape zone, EffectType type, MyWorld world) {
         this.applier = applier;
         this.effectType = type;
         this.world = world;
         this.zone = zone;
-
-        this.COOLDOWN_MAX = (int)Math.ceil(cooldown * MyWorld.FPS);
-        this.cooldown = 0;//starts off at no cooldown
+        this.cooldown = 0.0;
     }
 
     /**
-     *
-     * @param applier
+     *  @param applier
      * @param zone
      * @param type
      * @param jointDisplacement
      * @param world
-     * @param cooldown cooldown in seconds
      */
     void aoeJoint(Entity applier, AShape zone, EffectType type,
-                  Vector2 jointDisplacement, MyWorld world, double cooldown){
-        basicInit(applier, zone, type, world, cooldown);
+                  Vector2 jointDisplacement, MyWorld world){
+        basicInit(applier, zone, type, world);
 
         Paint p = zone.getPaint();
         p.setStyle(Paint.Style.STROKE);
@@ -98,7 +94,8 @@ public abstract class Effect {
 
     //TODO: use engine possibly to avoid checking if effect is hitting applier
     private boolean canApply(Entity other) {
-        return this.status && other != applier && !other.targetExceptions.isContactDisallowedWith(this);
+        return this.status && this.cooldown != getMaxCooldown()
+                && other != applier && !other.targetExceptions.isContactDisallowedWith(this);
     }
 
     public void toggleDraw() {draw = !draw;}
@@ -110,7 +107,36 @@ public abstract class Effect {
      *
      * @param world
      */
-    public void update(MyWorld world) {}
+    @OverridingMethodsMustInvokeSuper
+    public void update(MyWorld world) {
+        // logic only for effects/abilities that have a capped duration of usage (and then a cooldown time for coming back up for usage)
+        if (this.getMaxCooldown() != 0) {
+            // is active and the effect has an activation duration
+            if (this.status && this.getMaxActiveTime() != 0) {
+//            System.out.println("cooldown - " + cooldown);
+                // when it runs for Max_active_time, it will reach maxcooldown
+
+                if (this.cooldown < this.getMaxCooldown()) {
+                    this.cooldown += getMaxCooldown() / (getMaxActiveTime() * 1.0);
+                }
+                // the ability has reached the max cooldown (has been used for as long as it can be)
+                if (this.cooldown >= this.getMaxCooldown()) {
+                    this.disable();
+                    this.cooldown = getMaxCooldown();//set cooldown to max
+                }
+            } else {
+                if (this.cooldown >= 0) {
+                    this.cooldown -= 1;
+                }
+
+                // double arithmetic safety
+                if (this.cooldown < 0) {
+                    this.cooldown = 0;
+                }
+            }
+        }
+
+    }
 
     public void onRemove(){
         this.world.engineWorld.removeBody(this.zone.body);
@@ -118,5 +144,35 @@ public abstract class Effect {
 
     public void setColor(int color) {
         this.zone.setColor(color);
+    }
+
+    /**
+     * @return  Returns the cooldown in frames of that effect.
+     */
+    public abstract int getMaxCooldown();
+
+    /**
+     * @return Returns the active time in frames of that effect.
+     */
+    abstract public int getMaxActiveTime();
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public double getCooldown() {
+        return cooldown;
+    }
+
+
+    public void setInitialState(boolean state) {
+        this.initialState = state;
+    }
+
+    /**
+     * To be used by the ghost when placing the entity.
+     */
+    public void setStatusToInitial() {
+        this.status = this.initialState;
     }
 }

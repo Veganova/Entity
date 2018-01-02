@@ -10,6 +10,7 @@ import android.graphics.RectF;
 import android.view.ViewGroup;
 
 import com.ne.revival_games.entity.GamePanel;
+import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -27,7 +28,8 @@ public class ActiveBar {
     private float startingAngle = 225f;
     private Entity entity;
     private boolean on;
-    private Paint paint, blur;
+    private Paint paint, paint2, blur;
+    private Effect effect;
 
     public enum PathType {
         FILLED_CIRCLE, CIRCLE, RECTANGLE, ROUNDED_RECTANGLE, LINE;
@@ -51,6 +53,16 @@ public class ActiveBar {
         paint.setColor(ACTIVE_COLOR);
         paint.setStrokeWidth(0.16f * strokeWidthFraction);
         paint.setStyle(Paint.Style.STROKE);
+
+
+
+        paint2 = new Paint();
+        //smoothing
+        paint2.setAntiAlias(true);
+        paint2.setColor(INACTIVE_COLOR);
+        paint2.setStrokeWidth(0.16f * strokeWidthFraction);
+        paint2.setStyle(Paint.Style.STROKE);
+
 
         blur = new Paint();
         blur.set(paint);
@@ -102,6 +114,11 @@ public class ActiveBar {
 
     private IntAnimator healthAnim;
     public void draw(Canvas c) {
+        if (effect != null && effect.getStatus() != this.on) {
+            // sync the active bar and the effect status
+            this.selfToggle();
+        }
+
         // Entity health is changed
         if (this.entity.health != targetHealth) {
             this.targetHealth = this.entity.health;
@@ -121,9 +138,11 @@ public class ActiveBar {
         float angle = (float) this.entity.shape.body.getTransform().getRotation();
         float healthPercentage = (1.0f * lastHealth) / entity.MAX_HEALTH;
 //        System.out.println("Health percentage: " + healthPercentage);
+
         Path path = new Path();
         switch(pathType) {
             case FILLED_CIRCLE:
+                paint2.setStyle(Paint.Style.FILL);
                 paint.setStyle(Paint.Style.FILL);
             case CIRCLE:
                 float radius = (float)this.entity.shape.body.getFixture(0).getShape().getRadius() / 2;
@@ -153,12 +172,47 @@ public class ActiveBar {
                 break;
         }
 
-        if (this.on) {
-//            c.drawPath(path, blur);
+        // bar will represent the cooldown as well
+        if (this.effect != null) {
+            this.drawPath(c, path, paint2, false);
+            double frac = (effect.getMaxCooldown() - effect.getCooldown())/(1.0 * effect.getMaxCooldown());
+            if (frac > 1) { // need to do this due to error in arithmetic when using type double
+                frac = 1;
+            }
+            int alpha = (int)(255 * frac);
+            paint.setColor(ACTIVE_COLOR);
+//            System.out.println(alpha);
+            paint.setAlpha(alpha);
+
+            this.drawPath(c, path, paint, false);
+        } else {
+            this.drawPath(c, path, paint, false);
+        }
+    }
+
+    private void drawPath(Canvas c, Path path, Paint paint, boolean blur) {
+        if (blur && this.on) {
+            c.drawPath(path, paint);
+
         }
         c.drawPath(path, paint);
-        // c.drawPath(path, selected);
+//        c.drawPath(path, selected);
     }
+
+    private boolean disable() {
+        this.on = false;
+
+//        paint.setColor((int)((INACTIVE_COLOR * 0.5) + (ACTIVE_COLOR * 0.5)));
+        paint.setColor(INACTIVE_COLOR);
+        return false;
+    }
+
+    private boolean enable() {
+        this.on = true;
+        paint.setColor(ACTIVE_COLOR);
+        return true;
+    }
+
 
     /**
      * Toggles the Active bar.
@@ -166,15 +220,27 @@ public class ActiveBar {
      * @return  Returns whether this activebar is currently on or not (after the toggle)
      */
     public boolean toggle() {
-        if (this.on) {
-            this.on = false;
-            paint.setColor(INACTIVE_COLOR);
-            return false;
-        } else {
-            this.on = true;
-            paint.setColor(ACTIVE_COLOR);
-            return true;
+        if (this.effect != null) {
+            this.effect.toggle();
         }
+
+        return this.selfToggle();
+    }
+
+    private boolean selfToggle() {
+        if (this.on) {
+            return this.disable();
+        } else {
+            return this.enable();
+        }
+    }
+
+    public void linkEffect(Effect e) {
+        this.effect = e;
+    }
+
+    public void unlinkEffect() {
+        this.effect = null;
     }
 
     // Does'nt work

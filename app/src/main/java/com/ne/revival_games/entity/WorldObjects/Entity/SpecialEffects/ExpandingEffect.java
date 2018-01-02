@@ -28,7 +28,7 @@ public abstract class ExpandingEffect extends Effect {
 
     public ExpandingEffect(Entity applier, Vector2 location, double percentStartSize, double growth_rate, double damage,
                            double max_radius, double explosionPower, Team team, MyWorld world, EffectType type){
-        basicInit(applier, zone, type, world, COOLDOWN);
+        basicInit(applier, zone, type, world);
         this.active = true;
         this.damage = damage;
         this.max_radius = max_radius;
@@ -44,7 +44,7 @@ public abstract class ExpandingEffect extends Effect {
 
     public ExpandingEffect(double percentStartSize, double growth_rate, double damage,
                            double max_radius, double explosionPower, Team team, MyWorld world, EffectType type){
-        basicInit(null, zone, type, world, COOLDOWN);
+        basicInit(null, zone, type, world);
         this.active = false;
         this.damage = damage;
         this.max_radius = max_radius;
@@ -55,7 +55,7 @@ public abstract class ExpandingEffect extends Effect {
     }
 
     public ExpandingEffect(String name, Team team, MyWorld world, EffectType type){
-        basicInit(null, zone, type, world, COOLDOWN);
+        basicInit(null, zone, type, world);
         this.active = false;
         this.percent_size = MySettings.getNum(team.toString(), name + " percent_start");
         this.growth_rate = MySettings.getNum(team.toString(), name + " growth_rate");
@@ -100,6 +100,7 @@ public abstract class ExpandingEffect extends Effect {
 
     @Override
     public void update(MyWorld world){
+        super.update(world);
         if(!active){
             return;
         }

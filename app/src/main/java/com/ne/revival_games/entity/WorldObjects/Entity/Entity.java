@@ -75,15 +75,18 @@ public class Entity implements Effector {
         this.targetExceptions = new Untargetable(this);
     }
 
-    public MyDeque.Node getNode() {
-        return node;
-    }
+
 
     public void normalizeBot(GhostEntity ghost, double angle) {
 
     }
 
+    // For quick deletions in the data structure
+    public MyDeque.Node getNode() {
+        return node;
+    }
 
+    // For quick deletions in the data structure
     public void setNode(MyDeque.Node node) {
         this.node = node;
     }
@@ -211,7 +214,6 @@ public class Entity implements Effector {
 
     @OverridingMethodsMustInvokeSuper
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-//        System.out.println("contact type " + contact.getClass().getSimpleName());
 
         if (this.targetExceptions.isContactDisallowedWith(contact)
                 || contact.targetExceptions.isContactDisallowedWith(this)) {
@@ -347,7 +349,8 @@ public class Entity implements Effector {
 
     public void enableAllEffects() {
         for (Effect effect : this.effects.values()) {
-            effect.enable();
+//            effect.enable();
+            effect.setStatusToInitial();
         }
     }
 

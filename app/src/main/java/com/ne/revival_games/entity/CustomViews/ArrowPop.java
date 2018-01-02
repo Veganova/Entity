@@ -136,7 +136,6 @@ public class ArrowPop extends HorizontalScrollView {
     }
 
     private void hide() {
-        System.out.println("HIDE!!");
         if (side == SIDE.LEFT) {
             ArrowPop.this.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
         } else {
@@ -146,7 +145,6 @@ public class ArrowPop extends HorizontalScrollView {
     }
 
     void show() {
-        System.out.println("SHOW!!");
         if (side == SIDE.LEFT) {
             ArrowPop.this.fullScroll(HorizontalScrollView.FOCUS_LEFT);
         } else {
