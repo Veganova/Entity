@@ -29,13 +29,14 @@ import java.util.List;
 public class Turret extends AimableEntity {
     public static int COST = 200;
     public static int MASS = 25;
+    public ArrayList<AShape> drawme = new ArrayList<>();
     public static double LINEAR_DAMPING = 5;
     public static double ANGULAR_DAMPING = 0.09;
-    private static double reload = 2000;
+    private static double reload = 3000;
     private double lastfired = 0;
     private double range = 200;
 
-    private MyWorld world;
+    public MyWorld world;
     public List<Barrel> barrels = new ArrayList<>();
     private final int numBarrels;
     private Barrel mainBarrel = null;
@@ -52,6 +53,7 @@ public class Turret extends AimableEntity {
     //need to include the angle somehow
     public Turret(Vector2 location, double angle, MyWorld world, Team team, int numBarrels, String tag){
         super(angle, 0, team, tag + "turret");
+        this.world = world;
         this.numBarrels = numBarrels;
         this.frictionCoefficent = 60;
         this.world = world;
@@ -237,6 +239,9 @@ public class Turret extends AimableEntity {
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
+        for(int x = 0; x < drawme.size(); ++x) {
+                drawme.get(x).draw(canvas);
+        }
     }
 
     @Override
@@ -270,6 +275,7 @@ public class Turret extends AimableEntity {
             this.shape.body.setAngularVelocity(0);
         }
     }
+
 }
 
 
