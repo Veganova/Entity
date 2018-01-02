@@ -349,7 +349,8 @@ public class Entity implements Effector {
 
     public void enableAllEffects() {
         for (Effect effect : this.effects.values()) {
-            effect.enable();
+//            effect.enable();
+            effect.setStatusToInitial();
         }
     }
 

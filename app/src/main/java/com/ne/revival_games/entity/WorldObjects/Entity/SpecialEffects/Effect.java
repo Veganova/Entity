@@ -22,6 +22,7 @@ public abstract class Effect {
     public MyWorld world;
     public Entity applier;
     private double cooldown;
+    private boolean initialState = false;
 
     /**
      * Says whether this effect is on or not.
@@ -119,7 +120,7 @@ public abstract class Effect {
                     this.cooldown += getMaxCooldown() / (getMaxActiveTime() * 1.0);
                 }
                 // the ability has reached the max cooldown (has been used for as long as it can be)
-                else {
+                if (this.cooldown >= this.getMaxCooldown()) {
                     this.disable();
                     this.cooldown = getMaxCooldown();//set cooldown to max
                 }
@@ -161,5 +162,17 @@ public abstract class Effect {
 
     public double getCooldown() {
         return cooldown;
+    }
+
+
+    public void setInitialState(boolean state) {
+        this.initialState = state;
+    }
+
+    /**
+     * To be used by the ghost when placing the entity.
+     */
+    public void setStatusToInitial() {
+        this.status = this.initialState;
     }
 }

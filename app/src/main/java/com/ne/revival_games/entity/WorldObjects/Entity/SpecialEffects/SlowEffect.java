@@ -30,6 +30,7 @@ public class SlowEffect extends Effect {
         aoeJoint(applier, zone, EffectType.SLOW, jointDisplacement, world);
         this.slowFactor = slowFactor;
         world.objectDatabase.put(this.zone.body, applier);
+
     }
 
     @Override
@@ -37,6 +38,12 @@ public class SlowEffect extends Effect {
         super.update(world);
 
         System.out.println(status);
+    }
+
+    @Override
+    public void toggle() {
+        super.toggle();
+        System.out.println("TOGGLED SLOW");
     }
 
     @Override

@@ -74,11 +74,12 @@ public class Nexus extends Entity {
                 MySettings.getNum(team.toString(), name_tag + " gravity_effect radius"),
                 MySettings.getNum(team.toString(), name_tag + " gravity_effect strength"),
                 new Vector2(0,0), world);
-
+        gravEffect.setInitialState(false);
         this.addEffect(gravEffect);
 
         this.bar = new ActiveBar(this, 1f);
         this.bar.linkEffect(gravEffect);
+
 //        this.bar.setPathType(ActiveBar.PathType.LINE, 200);
     }
 

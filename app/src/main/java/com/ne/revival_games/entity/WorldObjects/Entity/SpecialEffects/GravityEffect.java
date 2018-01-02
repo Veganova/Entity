@@ -28,6 +28,9 @@ public class GravityEffect extends Effect{
                          Vector2 jointDisplacement, MyWorld world){
         aoeJoint(applier, zone, effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
+
+        // start off
+        this.status = false;
     }
 
     /**

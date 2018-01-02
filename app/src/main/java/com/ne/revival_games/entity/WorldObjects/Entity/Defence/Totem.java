@@ -49,6 +49,7 @@ public class Totem extends Entity {
 
 
         this.slow = new SlowEffect(this, new ObjCircle(265), new Vector2(0, 0), 4, world);
+        this.slow.setInitialState(false);
         this.slow.toggleDraw();
         this.addEffect(this.slow);
 

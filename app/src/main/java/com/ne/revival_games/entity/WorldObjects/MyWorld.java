@@ -3,6 +3,8 @@ package com.ne.revival_games.entity.WorldObjects;
 import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
+import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -126,8 +128,11 @@ public class MyWorld {
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
-        Nexus kek = new Nexus(0, 0, 0, this, Team.DEFENCE, "");
-        //TODO: ADD THIS KEK TO A PLAYER
+
+        GhostEntity n = GhostFactory.produce(Entities.NEXUS.getDefaultLeaf(), 0, 0, 0, this, Team.DEFENCE, "");
+        Entity kek = n.entity;
+        n.place(Team.DEFENCE);//new Nexus(0, 0, 0, this, Team.DEFENCE, "");
+        
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
         bot = new AI_Bot(2000, 2000, this, Team.OFFENSE, kek);

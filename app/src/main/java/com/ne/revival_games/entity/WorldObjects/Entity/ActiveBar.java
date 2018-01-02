@@ -115,7 +115,8 @@ public class ActiveBar {
     private IntAnimator healthAnim;
     public void draw(Canvas c) {
         if (effect != null && effect.getStatus() != this.on) {
-            this.toggle();
+            // sync the active bar and the effect status
+            this.selfToggle();
         }
 
         // Entity health is changed
@@ -222,7 +223,11 @@ public class ActiveBar {
         if (this.effect != null) {
             this.effect.toggle();
         }
-        
+
+        return this.selfToggle();
+    }
+
+    private boolean selfToggle() {
         if (this.on) {
             return this.disable();
         } else {
