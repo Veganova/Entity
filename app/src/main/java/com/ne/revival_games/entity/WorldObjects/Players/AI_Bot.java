@@ -141,7 +141,7 @@ public class AI_Bot extends Launcher {
     //get break time
     private void setBreakTime() {
         breakUntil =  System.currentTimeMillis() +
-                1000*MySettings.getNum("OFFENSE", Integer.toString(level) + " break");
+                1000 * MySettings.getNum("OFFENSE", Integer.toString(level) + " break");
     }
 
     private void prepNextRound() {

@@ -60,7 +60,7 @@ public class ActiveBar {
         //smoothing
         paint2.setAntiAlias(true);
         paint2.setColor(INACTIVE_COLOR);
-        paint2.setStrokeWidth(0.16f * strokeWidthFraction);
+        paint2.setStrokeWidth(0.135f * strokeWidthFraction);
         paint2.setStyle(Paint.Style.STROKE);
 
 

@@ -15,6 +15,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.MyList;
 import com.ne.revival_games.entity.WorldObjects.Players.AI_Bot;
+import com.ne.revival_games.entity.WorldObjects.Players.InitializeWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
@@ -131,11 +132,12 @@ public class MyWorld {
 //        Nexus kek = new Nexus(0, 0, 0, this, Team.DEFENCE, "");
 //        Turret kek = new Turret(new Vector2(0,0),0, this,
 //                Team.DEFENCE, 1, "");
-//        //TODO: IF WANT MONEY STILL NEED TO ASSOCIATE IT WITH A PLAYER
+//        TODO: IF WANT MONEY STILL NEED TO ASSOCIATE IT WITH A PLAYER
 //        GhostEntity n = GhostFactory.produce(Entities.TURRET.getDefaultLeaf(), 0, 0, 0, this, Team.DEFENCE, "");
 //        Entity kek = n.entity;
 //        n.place(Team.DEFENCE);//new Nexus(0, 0, 0, this, Team.DEFENCE, "");
-        Nexus kek = new Nexus(0,0 , 0, this, Team.DEFENCE, "");
+//        Nexus kek = new Nexus(0,0 , 0, this, Team.DEFENCE, "");
+        Nexus kek = InitializeWorld.init("single_player", this);
         //TODO: ADD THIS KEK TO A PLAYER
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();

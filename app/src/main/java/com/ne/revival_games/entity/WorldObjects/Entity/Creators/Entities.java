@@ -138,6 +138,21 @@ public enum Entities {
         return Entities.values()[new Random().nextInt(Entities.values().length)];
     }
 
+    public static EntityLeaf fromString(String ent) {
+        String uEnt = ent.toUpperCase();
+
+        for (Entities e: values()) {
+
+            for (EntityLeaf leaf : e.produceables) {
+                if (leaf.name.toUpperCase().equals(uEnt)) {
+                    return leaf;
+                }
+            }
+        }
+        // default is defence
+        throw new IllegalArgumentException("No such entity exists");
+    }
+
 
 }
 

@@ -3,6 +3,8 @@ package com.ne.revival_games.entity.WorldObjects.Entity;
 import android.graphics.Color;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -37,7 +39,23 @@ public enum Team {
     }
 
 
+    /**
+     * Helper method for conversion from string data (in json files) to the Team enumerator type
+     *
+     * @param team
+     * @return
+     */
+    public static Team fromString(String team) {
+        String uTeam = team.toUpperCase();
 
+        for (Team t: values()) {
+            if (t.toString().toUpperCase().equals(uTeam)) {
+                return t;
+            }
+        }
+        // default is defence
+        return DEFENCE;
+    }
 
 //    public void empty() {
 //        this.teamObjects.clear();
