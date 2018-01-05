@@ -1,19 +1,19 @@
 {
   "single_player" : {
-    "nexus" : [{
-      "x" : 0.0,
-      "y" : 0.0,
-      "angle" : 0.0,
-      "team" : "DEFENSE"
-    }],
-    "barrier" : [{
-      "x" : 0.0,
-      "y" : -100.0,
-      "angle" : 60.0,
-      "team" : "DEFENSE"
-    }]
+    "ai" : true,
+    "units" : {
+      "nexus": [
+        {
+          "x": 0.0,
+          "y": 0.0,
+          "angle": 0.0,
+          "team": "DEFENCE"
+        }
+      ]
+    }
   },
   "tutorial_turret" : {
+    "ai" : false,
     "turret-1" : [],
     "turret-2" : [],
     "turret-3" : [],

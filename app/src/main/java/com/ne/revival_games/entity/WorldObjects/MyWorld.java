@@ -137,11 +137,11 @@ public class MyWorld {
 //        Entity kek = n.entity;
 //        n.place(Team.DEFENCE);//new Nexus(0, 0, 0, this, Team.DEFENCE, "");
 //        Nexus kek = new Nexus(0,0 , 0, this, Team.DEFENCE, "");
-        Nexus kek = InitializeWorld.init("single_player", this);
+
         //TODO: ADD THIS KEK TO A PLAYER
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
-        bot = new AI_Bot(2000, 2000, this, Team.OFFENSE, kek);
+        bot = InitializeWorld.init("single_player", this);
 
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
 //        settings.setLinearTolerance(150*settings.getLinearTolerance());
@@ -234,7 +234,11 @@ public class MyWorld {
     public void drawObjects(Canvas canvas){
         this.bounds.draw(canvas);
 //        launcher.draw(canvas);
-        bot.draw(canvas);
+        if (bot == null) {
+//            System.out.println("BOT IS NULL LLELL");
+        } else {
+            bot.draw(canvas);
+        }
 
         MyList l = this.objectDatabase.values();
 

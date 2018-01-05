@@ -19,15 +19,18 @@ import java.io.InputStream;
 import java.util.Iterator;
 
 /**
- * Put in the correct world items from stored json
+ * Put in the correct world items from stored json.
+ * Initializes an AI as well.
  */
 public class InitializeWorld {
+
     /**
-     * Give it a type that matches a section in the json object 'init.json'
+     * Give it a type that matches a section in the json object 'init.json'.
+     * If the initializations contain a Defense Nexus it will use that so that the AI can use it to fire.
      *
-     * @param type  If the initializations contain a Defense Nexus it will return that so that the AI can use it to fire.
+     * @param type  Returns an AI_Bot if specified
      */
-    public static Nexus init(String type, MyWorld world) {
+    public static AI_Bot init(String type, MyWorld world) {
         InputStream is;
         Nexus target = null;
         try {
@@ -39,11 +42,14 @@ public class InitializeWorld {
             JSONObject info = (new JSONObject(new String(buffer, "UTF-8")))
                     .getJSONObject(type);
 
-            for (Iterator<String> it = info.keys(); it.hasNext(); ) {
+
+            JSONObject units = info.getJSONObject("units");
+            for (Iterator<String> it = units.keys(); it.hasNext(); ) {
                 // specifies a unit type
                 String entity = it.next();
 
-                JSONArray arr = info.getJSONArray(entity);
+
+                JSONArray arr = units.getJSONArray(entity);
 
                 for (int i = 0 ; i < arr.length(); i += 1) {
                     JSONObject entityInfo = arr.getJSONObject(i);
@@ -57,7 +63,7 @@ public class InitializeWorld {
                     Team team = Team.fromString(entityInfo.getString("team"));
                     //TODO: TURRET WONT WORK HERE!
                     GhostEntity n = GhostFactory.produce(entType, x, y, angle, world, team, "");
-                    if (team == Team.DEFENCE && entType.name.equals("NEXUS")) {
+                    if (team == Team.DEFENCE && entType.name.toUpperCase().equals("NEXUS")) {
                         target = (Nexus)n.entity;
                     }
                     if (n.canPlace()) {
@@ -66,7 +72,10 @@ public class InitializeWorld {
                         throw new IllegalArgumentException("Invalid position for the " + entType.name + " at (" + x + ", " + y + ")");
                     }
                 }
+            }
 
+            if (info.getBoolean("ai") && target != null) {
+                return new AI_Bot(2000, 2000, world, Team.OFFENSE, target);
             }
 
         } catch(IOException e) {
@@ -74,7 +83,8 @@ public class InitializeWorld {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return target;
+
+        return null;
     }
 
 
