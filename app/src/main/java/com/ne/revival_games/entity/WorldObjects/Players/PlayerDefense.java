@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Players;
 
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.MainActivity;
@@ -10,6 +11,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.geometry.Vector2;
@@ -131,9 +133,11 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        if (readytoPlace(e)) {
-
+        double cost;
+        if (readytoPlace(e) && (cost = MySettings.getNum(team.toString(),
+                ghost.entity.getNameTag() + " cost")) <= this.getMoney()) {
             this.ghost.place(this);
+            this.addMoney(-1*cost);
             this.ghost = null;
             holdingGhost = false;
         } else if (!holdingGhost) {
@@ -152,19 +156,17 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//        float maxFlingVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
-//        velocityX = velocityX / maxFlingVelocity;
-//        velocityY = velocityY / maxFlingVelocity;
-//
-//        if (holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
-//            holdingGhost = false;
-//            this.ghost.removeGhost();
-//            this.ghost = null;
-//        } else if (!holdingGhost) {
-//            if (velocityX > 0.3 || velocityY > 0.3) {
-//
-//            }
-//        }
+        float maxFlingVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
+        velocityX = velocityX / maxFlingVelocity;
+        velocityY = velocityY / maxFlingVelocity;
+
+        if (holdingGhost && velocityX > 0.5 || velocityY > 0.5) {
+            holdingGhost = false;
+            this.ghost.removeGhost();
+            this.ghost = null;
+        } else if (!holdingGhost) {
+
+        }
         return false;
     }
 

@@ -41,6 +41,10 @@ public class Util {
     }
 
     public static int randomBetweenValues(int min, int max) {
+        if(max == min) {
+            return max;
+        }
+
         return (int) (Math.random()*(max-min)) + min + 1;
     }
 
@@ -49,15 +53,16 @@ public class Util {
         return rangeMin + (rangeMax - rangeMin) * r.nextDouble();
     }
 
-    public static Vector2 intersectionBetweenTwoLines(Vector2 lineOne, Vector2 lineTwo) {
-        if(lineOne.x == lineTwo.x ) {
+    public static Vector2 intersectionBetweenTwoLines(double slopeOne, Vector2 startPointOne, double slopeTwo, Vector2 startPointTwo) {
+        if(slopeOne == slopeTwo) {
             return new Vector2(-1,-1);
         }
         else {
-            double x = (lineTwo.y - lineOne.y) / (lineOne.x - lineTwo.x);
-            double y = lineOne.x * x + lineOne.y;
+            double xfinal = (slopeOne*startPointOne.x - slopeTwo*startPointTwo.x) + startPointTwo.y - startPointTwo.y;
+            xfinal /= (slopeOne - slopeTwo);
+            double yfinal = slopeOne * (xfinal - startPointOne.x) + startPointOne.y;
 
-            return new Vector2(x,y);
+            return new Vector2(xfinal, yfinal);
         }
     }
 

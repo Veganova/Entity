@@ -2,27 +2,29 @@
   "levels" : {
     "max_level" : 10,
     "1" : {
-      "breakBetweenFiring" : 3000,
+      "breakBetweenFiring" : 3,
+      "money_awarded" : 600,
       "ammoFiredAtOnce": 1,
       "ammoFiredAtOnceVariance": 0,
       "duration" : 15,
       "units" : ["comet"],
       "comet" : {
         "friction" : 0,
-        "radius": {"lower" : 10, "upper" : 15},
+        "radius": {"lower" : 15, "upper" : 30},
         "number" : 10,
         "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 1, "upper" : 40},
+        "speed" : {"lower" : 10, "upper" : 20},
         "angular_velocity" : 2
       },
-      "break" : 20
+      "break" : 10
     },
     "2" : {
-      "breakBetweenFiring" : 3000,
-      "ammoFiredAtOnce": 2,
+      "breakBetweenFiring" : 3,
+      "ammoFiredAtOnce": 1,
+      "money_awarded" : 300,
       "ammoFiredAtOnceVariance": 1,
       "duration" : 20,
-      "units" : ["comet", "emp"],
+      "units" : ["comet", "shockcan"],
       "comet" : {
         "friction" : 0,
         "radius": {"lower" : 10, "upper" : 25},
@@ -30,19 +32,20 @@
         "health" : {"lower" : 10, "upper" : 35},
         "speed" : {"lower" : 15, "upper" : 30}
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 3,
         "health" : 60,
         "speed" : 35
       },
-      "break" : 20
+      "break" : 10
     },
     "3" : {
-      "breakBetweenFiring" : 1000,
+      "breakBetweenFiring" : 3,
       "ammoFiredAtOnce": 2,
-      "ammoFiredAtOnceVariance": 2,
+      "money_awarded" : 400,
+      "ammoFiredAtOnceVariance": 1,
       "duration" : 25,
-      "units" : ["comet", "emp", "rocket"],
+      "units" : ["comet", "shockcan", "rocket"],
       "comet" : {
         "friction" : 0,
         "radius": {"lower" : 10, "upper" : 25},
@@ -55,19 +58,20 @@
         "health" : 60,
         "acceleration" : 2
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 3,
         "health" : 40,
         "speed" : 35
       },
-      "break" : 25
+      "break" : 10
     },
     "4" : {
-      "breakBetweenFiring" : 1000,
-      "ammoFiredAtOnce": 5,
-      "ammoFiredAtOnceVariance": 2,
+      "money_awarded" : 400,
+      "breakBetweenFiring" : 3,
+      "ammoFiredAtOnce": 2,
+      "ammoFiredAtOnceVariance": 1,
       "duration" : 30,
-      "units" : ["comet", "emp", "rocket"],
+      "units" : ["comet", "shockcan", "rocket"],
       "comet" : {
         "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
@@ -79,19 +83,20 @@
         "health" : 40,
         "acceleration" : 3
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 5,
         "health" : 40,
         "speed" : 30
       },
-      "break" : 25
+      "break" : 1
     },
     "5" : {
-      "breakBetweenFiring" : 1000,
+      "money_awarded" : 500,
+      "breakBetweenFiring" : 2,
       "ammoFiredAtOnce": 6,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 30,
-      "units" : ["comet", "emp", "rocket"],
+      "units" : ["comet", "shockcan", "rocket"],
       "comet" : {
         "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
@@ -103,7 +108,7 @@
         "health" : 40,
         "acceleration" : 3
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 5,
         "health" : 40,
         "speed" : 30
@@ -112,11 +117,12 @@
 
     },
     "6" : {
-      "breakBetweenFiring" : 1000,
+      "money_awarded" : 600,
+      "breakBetweenFiring" : 2,
       "ammoFiredAtOnce": 8,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 30,
-      "units" : ["comet", "emp", "rocket", "turret-1"],
+      "units" : ["comet", "shockcan", "rocket", "1_turret"],
       "comet" : {
         "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
@@ -128,26 +134,27 @@
         "health" : 40,
         "acceleration" : 3
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 7,
         "health" : 40,
         "speed" : 30
       },
-      "turret-1" : {
+      "1_turret" : {
         "number" : 1,
         "health" : 80,
         "stub" : 20,
-        "speed" : 5
+        "speed" : 20
       },
       "break" : 25
 
     },
     "7" : {
-      "breakBetweenFiring" : 1000,
+      "money_awarded" : 600,
+      "breakBetweenFiring" : 2,
       "ammoFiredAtOnce": 8,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 35,
-      "units" : ["comet", "emp", "rocket", "turret-1"],
+      "units" : ["comet", "shockcan", "rocket", "1_turret"],
       "comet" : {
         "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
@@ -159,12 +166,12 @@
         "health" : 40,
         "acceleration" : 3
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 9,
         "health" : 40,
         "speed" : 30
       },
-      "turret-1" : {
+      "1_turret" : {
         "number" : 3,
         "health" : 80,
         "stub" : 20,
@@ -173,11 +180,12 @@
       "break" : 25
     },
     "8" : {
-      "breakBetweenFiring" : 1000,
+      "money_awarded" : 800,
+      "breakBetweenFiring" : 1,
       "ammoFiredAtOnce": 10,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 40,
-      "units" : ["comet", "emp", "rocket", "turret-1", "turret-2"],
+      "units" : ["comet", "shockcan", "rocket", "1_turret", "2_turret"],
       "comet" : {
         "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
@@ -189,18 +197,18 @@
         "health" : 40,
         "acceleration" : 3
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 15,
         "health" : 40,
         "speed" : 30
       },
-      "turret-1" : {
+      "1_turret" : {
         "number" : 5,
         "health" : 80,
         "stub" : 20,
         "speed" : 5
       },
-      "turret-2" : {
+      "2_turret" : {
         "number" : 2,
         "health" : 120,
         "stub" : 40,
@@ -209,10 +217,11 @@
       "break" : 25
     },
     "9" : {
-      "breakBetweenFiring" : 1000,
+      "money_awarded" : 1000,
+      "breakBetweenFiring" : 1,
       "ammoFiredAtOnce": 10,
       "ammoFiredAtOnceVariance": 2,
-      "units" : ["comet", "emp", "rocket", "turret-1", "turret-2", "turret-3"],
+      "units" : ["comet", "shockcan", "rocket", "1_turret", "2_turret", "3_turret"],
       "duration" : 40,
       "comet" : {
         "radius": {"lower" : 10, "upper" : 25},
@@ -225,24 +234,24 @@
         "health" : 40,
         "acceleration" : 4
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 12,
         "health" : 40,
         "speed" : 30
       },
-      "turret-1" : {
+      "1_turret" : {
         "number" : 6,
         "health" : 80,
         "stub" : 20,
         "speed" : 5
       },
-      "turret-2" : {
+      "2_turret" : {
         "number" : 4,
         "health" : 120,
         "stub" : 40,
         "speed" : 5
       },
-      "turret-3" : {
+      "3_turret" : {
         "number" : 1,
         "health" : 250,
         "stub" : 80,
@@ -251,11 +260,12 @@
       "break" : 25
     },
     "10" : {
-      "breakBetweenFiring" : 1000,
+      "money_awarded" : 1200,
+      "breakBetweenFiring" : 1,
       "ammoFiredAtOnce": 11,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 45,
-      "units" : ["comet", "emp", "rocket", "turret-1", "turret-2", "turret-3"],
+      "units" : ["comet", "shockcan", "rocket", "1_turret", "2_turret", "3_turret"],
       "comet" : {
         "radius": {"lower" : 10, "upper" : 25},
         "number" : 20,
@@ -267,24 +277,24 @@
         "health" : 60,
         "acceleration" : 4
       },
-      "emp" : {
+      "shockcan" : {
         "number" : 25,
         "health" : 40,
         "speed" : 30
       },
-      "turret-1" : {
+      "1_turret" : {
         "number" : 10,
         "health" : 80,
         "stub" : 20,
         "speed" : 5
       },
-      "turret-2" : {
+      "2_turret" : {
         "number" : 8,
         "health" : 120,
         "stub" : 40,
         "speed" : 5
       },
-      "turret-3" : {
+      "3_turret" : {
         "number" : 3,
         "health" : 250,
         "stub" : 80,

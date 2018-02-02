@@ -147,7 +147,7 @@ public class Barrel extends ShootableEntity {
     }
 
     @Override
-    public void rotateEntity(double angle) {
-            super.rotateEntity(angle);
+    public void setRotation(double angle) {
+            super.setRotation(angle);
     }
 }

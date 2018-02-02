@@ -13,6 +13,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Pair;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Updatable;
@@ -28,7 +29,7 @@ import java.util.HashMap;
  */
 
 public class Launcher implements Updatable {
-    private final MyWorld world;
+    protected final MyWorld world;
     protected final Team team;
     protected int level = 1;
     protected Vector2 target;
@@ -38,9 +39,9 @@ public class Launcher implements Updatable {
 
     // These values can be manipulated to represent different levels.
     // Defaults
-    protected double rate = 100;
+    protected double rate;
     protected int atOnce = 1, atOnce_range = 2;
-    protected long lastFired = 0;
+    protected long lastFired;
 
     // A shape that is described by one or many RandomPodoubleSelectors.
     // To choose a podouble randomly:
@@ -120,11 +121,11 @@ public class Launcher implements Updatable {
     }
 
     public void firingRound(String tag, double endTime) {
-        if((endTime != -1 && endTime < System.currentTimeMillis())) {
+        if(endTime != -1 ) {
         int numberToShoot = Util.randomBetweenValues(atOnce-atOnce_range, atOnce+atOnce_range);
-        if (System.currentTimeMillis() - this.lastFired >= this.rate) {
+        if (FrameTime.getTime() - this.lastFired >= this.rate) {
+            System.out.println("NUMBERSHOOT " + numberToShoot + " LASTFIRED " + lastFired);
             for (int i = 0; i < numberToShoot;  i++) {
-                this.lastFired = System.currentTimeMillis();
                 fireRandom(tag);
             }
         }
@@ -157,7 +158,7 @@ public class Launcher implements Updatable {
                         unit.setInitAngularVelocity(getAngularVelocity(unit_type));
                         modifyEntity(unit);
                         unit.place(Team.OFFENSE);
-                        this.lastFired = System.currentTimeMillis();
+                        this.lastFired = FrameTime.getTime();
                     } else {
                         System.out.println("CONFLICT CANNOT PLACE HERE launcher comet issue!!!!!!!");
                     }

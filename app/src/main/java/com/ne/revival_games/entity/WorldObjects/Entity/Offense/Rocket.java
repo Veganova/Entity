@@ -2,13 +2,13 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimShootEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.ImmediateAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
@@ -16,7 +16,6 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +26,11 @@ import java.util.List;
 
 public class Rocket extends AimShootEntity {
     public static int HEALTH = 20;
-    private double lifeTime = 8000;
+    private long lifeTime = 320;
     private boolean collided = false;
-    protected boolean naturalDeath = false;
-    protected boolean primed = false;
-    protected double startTime = -1;
 
-    public Rocket(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world, String tag) {
-        super(direction, speed, team, tag + "rocket", true);
+    public Rocket(double x, double y, double angle, double speed, Team team, MyWorld world, String tag) {
+        super(angle, speed, team, tag + "rocket", true);
         List<AShape> components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(50, 20);
@@ -46,9 +42,9 @@ public class Rocket extends AimShootEntity {
         tri1.getBuilder(false, world).setXY(0, 0).init();
         components.add(tri1);
 
-        this.shape = new ComplexShape(components, location.x, location.y, world);
+        this.shape = new ComplexShape(components, x, y, world);
         world.objectDatabase.put(this.shape.body, this);
-        this.logic = new SimpleAim(this, world.objectDatabase, 500, true);
+        this.logic = new SimpleAim(this, world.objectDatabase, 1000, true);
     }
 
     @Override
@@ -71,7 +67,7 @@ public class Rocket extends AimShootEntity {
 
 
     protected boolean deathCondition() {
-        return collided || (startTime + lifeTime < System.currentTimeMillis() && startTime != -1);
+        return collided || (startTime + lifeTime < FrameTime.getTime());
     }
 
     @Override

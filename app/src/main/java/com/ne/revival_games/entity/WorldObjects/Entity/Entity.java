@@ -7,6 +7,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effector;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
+import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.MyDeque;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -33,7 +34,7 @@ public class Entity implements Effector {
     public Team team;
     public String name_tag;
     public boolean primed = false;
-    protected double startTime = -1;
+    protected long startTime = -1;
 
     public AShape shape;
     protected double direction;
@@ -354,9 +355,10 @@ public class Entity implements Effector {
         }
     }
 
-    public void prime(){
+    public Entity prime() {
         this.primed = true;
-        this.startTime = System.currentTimeMillis();
+        this.startTime = FrameTime.getTime();
+        return this;
     }
 
 
@@ -371,8 +373,12 @@ public class Entity implements Effector {
         this.shape.body.setAngularVelocity(0);
     }
 
-    public void rotateEntity(double angle) {
+    public void setRotation(double angle) {
         this.shape.body.getTransform().setRotation(angle);
+    }
+
+    public void rotate(double angle) {
+        this.shape.body.rotate(angle, this.shape.body.getWorldCenter());
     }
 
 
@@ -407,5 +413,13 @@ public class Entity implements Effector {
             this.shape.body.setLinearVelocity(x,y);
         }
 
+    }
+
+    public void setAngularVelocity(double angularVelocity) {
+        this.shape.body.setAngularVelocity(angularVelocity);
+    }
+
+    public String getNameTag() {
+        return name_tag;
     }
 }

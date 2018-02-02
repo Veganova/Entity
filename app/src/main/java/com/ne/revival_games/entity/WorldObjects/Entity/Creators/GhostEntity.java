@@ -218,18 +218,7 @@ public class GhostEntity {
 
     public void removeGhost() {
         if (this.entity != null && this.entity.shape != null) {
-            for (Joint joint : this.entity.shape.body.getJoints()) {
-                if (joint.getBody1() != this.entity.shape.body) {
-                    this.world.objectDatabase.remove(joint.getBody1());
-                    this.world.engineWorld.removeBody(joint.getBody1());
-                } else {
-                    this.world.objectDatabase.remove(joint.getBody2());
-                    this.world.engineWorld.removeBody(joint.getBody2());
-                }
-
-            }
-            this.world.objectDatabase.remove(this.entity.shape.body);
-            this.world.engineWorld.removeBody(this.entity.shape.body);
+            this.entity.dead = true;
             this.entity = null;
         }
     }

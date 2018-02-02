@@ -80,7 +80,7 @@ public class Database {
 
             Body body = this.toRemove.poll();
             Entity toDelete = this.get(body);
-            System.out.println("REMOVING " + toDelete.simpleString());
+//            System.out.println("REMOVING " + toDelete.simpleString());
             if (toDelete != null) {
 //                if (toDelete.team != null)
 //                    toDelete.team.getTeamObjects().remove(toDelete);

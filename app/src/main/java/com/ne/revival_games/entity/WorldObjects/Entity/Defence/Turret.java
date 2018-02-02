@@ -5,11 +5,12 @@ import android.graphics.Canvas;
 import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Aim.DivineAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.GeniusAim;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -32,9 +33,9 @@ public class Turret extends AimableEntity {
     public ArrayList<AShape> drawme = new ArrayList<>();
     public static double LINEAR_DAMPING = 5;
     public static double ANGULAR_DAMPING = 0.09;
-    private static double reload = 3000;
+    private static double reload = 1000;
     private double lastfired = 0;
-    private double range = 200;
+    private double range = 700;
 
     public MyWorld world;
     public List<Barrel> barrels = new ArrayList<>();
@@ -51,14 +52,15 @@ public class Turret extends AimableEntity {
 
 
     //need to include the angle somehow
-    public Turret(Vector2 location, double angle, MyWorld world, Team team, int numBarrels, String tag){
+    public Turret(double x, double y, double angle, MyWorld world, Team team, int numBarrels, String tag){
         super(angle, 0, team, tag + "turret");
         this.world = world;
         this.numBarrels = numBarrels;
         this.frictionCoefficent = 60;
         this.world = world;
-        initializeTurret(location, world);
-        this.logic = new GeniusAim(this, world.objectDatabase, range, 30);
+        initializeTurret(new Vector2(x,y), world);
+        double speed = MySettings.getNum(team.toString(), name_tag + " barrel shooting_speed");
+        this.logic = new DivineAim(this, world.objectDatabase, range, speed);
 
         this.bar = new ActiveBar(this, 0.587f);
     };
@@ -67,12 +69,7 @@ public class Turret extends AimableEntity {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
 //        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, team, false);
 
-        Barrel b = new Barrel(new EntityLeaf("Missile") {
-            @Override
-            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producername) {
-                return new Missile(x, y, angle, 0, world, team, producername + " ");
-            }
-        }, type, this, world, angle, team, location, name_tag + " ");
+        Barrel b = new Barrel(getProjectile(), type, this, world, angle, team, location, name_tag + " ");
 //        Barrel b = new Barrel(new EntityLeaf("Missile") {
 //            @Override
 //            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
@@ -87,6 +84,17 @@ public class Turret extends AimableEntity {
         // this.world.objectDatabase.put(b.shape.body, this);
         // this.components.add(b.shape);
         // this.shape = new ComplexShape(components, location.x, location.y, world);
+    }
+
+
+    protected EntityLeaf getProjectile() {
+        return new EntityLeaf("Missile") {
+            @Override
+            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producername) {
+                return new Missile(x, y, angle, 0, world, team, producername + " ");
+//                return new Mine(new Vector2(x,y), angle, team, world, producername + " ").prime();
+            }
+        };
     }
 
     /**
@@ -273,6 +281,26 @@ public class Turret extends AimableEntity {
             this.shape.body.clearAccumulatedTorque();
             this.shape.body.clearTorque();
             this.shape.body.setAngularVelocity(0);
+        }
+    }
+
+    @Override
+    public void setAngularVelocity(double angularVelocity) {
+        freezeAngularForces();
+        this.shape.body.setAngularVelocity(angularVelocity);
+        for (Barrel barrel: this.barrels)
+        {
+            this.shape.body.setAngularVelocity(angularVelocity);
+        }
+    }
+
+    @Override
+    public void rotate(double angle) {
+        super.rotate(angle);
+
+        for (Barrel barrel: this.barrels)
+        {
+            barrel.rotate(angle);
         }
     }
 

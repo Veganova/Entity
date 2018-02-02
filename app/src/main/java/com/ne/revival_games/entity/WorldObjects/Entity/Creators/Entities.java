@@ -41,52 +41,59 @@ public enum Entities {
     TOTEM(new EntityLeaf[]{new EntityLeaf("TOTEM") {
         @Override
         public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-            return new Totem(x, y, angle, world, team, 3, producerName);
+            return new Totem(x, y, angle, world, team, 3, producerName).prime();
         }
     }}),
 
-    BARRIER(new EntityLeaf[]{new EntityLeaf("BARRIER") {
+    BARRIER(new EntityLeaf[]{new EntityLeaf("BARRIER SMALL") {
         @Override
         public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-            return new Barrier(x, y, angle, world, team, producerName);
+            return new Barrier(x, y, angle, world, team, producerName + " small_");
         }
-    }}),
-    TURRET(new EntityLeaf[]{
-            new EntityLeaf("TURRET-1") {
+    },
+            new EntityLeaf("BARRIER LARGE") {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                    return new Turret(new Vector2(x, y), angle, world, team, 1, producerName);
+                    return new Barrier(x, y, angle, world, team, producerName + " large_");
+                }
+            }
+    }),
+    TURRET(new EntityLeaf[]{
+            new EntityLeaf("TURRET-1", new String[]{"1_turret"}) {
+                @Override
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                    return new Turret(x, y, angle, world, team, 1, producerName + " 1_");
                 }
             },
-            new EntityLeaf("TURRET-2") {
+            new EntityLeaf("TURRET-2",  new String[]{"2_turret"}) {
         @Override
         public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-            return new Turret(new Vector2(x, y), angle, world, team, 2, "");
+            return new Turret(x, y, angle, world, team, 2, producerName + " 2_");
         }
     },
             new EntityLeaf("MINE") {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                    return new Mine(new Vector2(x, y), team, world, producerName);
+                    return new Mine(x, y, angle, team, world, producerName).prime();
                 }
             },
           new EntityLeaf("ROCKET") {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                    return new Rocket(new Vector2(x, y), angle, 200.0, 20, team, world, producerName);
+                    return new Rocket(x, y, angle, 0, team, world, producerName).prime();
                 }
             },
-            new EntityLeaf("EMP", new String[]{"shockcan", }) {
+            new EntityLeaf("SHOCKCAN") {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                    return new ShockwaveCanister(new Vector2(x, y), angle, 200.0, 20, team, world, producerName);
+                    return new ShockwaveCanister(x, y, angle, team, world, producerName).prime();
                 }
             },
 
-            new EntityLeaf("TURRET-3") {
+            new EntityLeaf("TURRET-3",  new String[]{"3_turret"}) {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                    return new Turret(new Vector2(x, y), angle, world, team, 3, producerName);
+                    return new Turret(x, y, angle, world, team, 3, producerName + " 3_");
                 }
             }
     });
@@ -122,7 +129,7 @@ public enum Entities {
 
     public static boolean checkAltNames(EntityLeaf leaf, String id) {
         for(int i = 0; i < leaf.altnames.length; ++i) {
-            if(id.toLowerCase() == leaf.altnames[i].toLowerCase()) {
+            if(id.toLowerCase().equals(leaf.altnames[i].toLowerCase())) {
                 return true;
             }
         }

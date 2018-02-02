@@ -17,9 +17,35 @@ import java.util.Arrays;
  */
 
 public class MySettings {
+    private static JSONArray gensettings;
+    private static JSONObject levelsettings;
     private static MySettings myinstance = null;
 
     public MySettings() {
+        try {
+            InputStream is;
+
+            //initializes levelsettings
+            is = MainActivity.giveContext().getAssets().open("levels.json");
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            is.close();
+
+            levelsettings = (new JSONObject(new String(buffer, "UTF-8")))
+                    .getJSONObject("levels");
+
+
+
+            //initializes gensettings
+            is = MainActivity.giveContext().getAssets().open("settings.json");
+            buffer = new byte[is.available()];
+            is.read(buffer);
+            is.close();
+            gensettings = new JSONArray(new String(buffer, "UTF-8"));
+        }
+        catch(Exception e) {
+            throw new IllegalArgumentException("FAILURE OF CONSTRUCTOR");
+        }
 
     }
 
@@ -36,42 +62,30 @@ public class MySettings {
     }
 
     public static String get(String team, String term) {
+
+        if(myinstance == null) {
+            myinstance = new MySettings();
+        }
+
         String result = null;
         String [] query = term.split(" ");
 
-
         //checks levels for 'OFFENSE' AI
         try {
-            InputStream is;
+
 
             //custom AI lookup path into levels scheme (different query format)
             if(team.equals("OFFENSE")) {
-                is = MainActivity.giveContext().getAssets().open("levels.json");
-                byte[] buffer = new byte[is.available()];
-                is.read(buffer);
-                is.close();
-
-                JSONObject json = (new JSONObject(new String(buffer, "UTF-8")))
-                        .getJSONObject("levels");
-
-             result = findVal(json, query, 0);
-
+                result = findVal(levelsettings, query, 0);
              if(result != null) {
                  return result;
              }
-
             }
 
             //looks through settings.json for general and player unit details
-            is = MainActivity.giveContext().getAssets().open("settings.json");
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            is.close();
-            JSONArray jsonArray = new JSONArray(new String(buffer, "UTF-8"));
-
             if(!team.equals("GENERAL")) {
-                for(int i = 0; i < jsonArray.length(); ++i) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
+                for(int i = 0; i < gensettings.length(); ++i) {
+                    JSONObject obj = gensettings.getJSONObject(i);
 
                     if(obj.getString("name").equals(team)) {
                         result = findVal(obj, query, 0);
@@ -88,17 +102,13 @@ public class MySettings {
 
             //queries the default section (SHOULD ALWAYS BE SECTION 0)
             for(int x = 0; x < query.length; ++x) {
-                result = findVal(jsonArray.getJSONObject(0), query, x);
+                result = findVal(gensettings.getJSONObject(0), query, x);
                 if(result != null) {
                     return result;
                 }
             }
 
             return result;
-        }
-        catch(IOException e) {
-            System.out.println(Arrays.asList(query));
-            e.printStackTrace();
         }
         catch(JSONException e) {
             e.printStackTrace();
@@ -124,6 +134,8 @@ public class MySettings {
         for(int cur = start; cur < query.length; ++cur) {
             if(obj.has(query[cur])) {
                 if(cur == query.length-1) {
+
+                    //this could be slowing down the parse
                     try {
                         obj = obj.getJSONObject(query[cur]);
                         double lower = obj.getDouble("lower"), upper = obj.getDouble("upper");
