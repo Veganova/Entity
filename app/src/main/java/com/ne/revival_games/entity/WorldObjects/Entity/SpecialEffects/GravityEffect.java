@@ -12,7 +12,7 @@ import org.dyn4j.geometry.Vector2;
  * Created by vishn on 7/12/2017.
  */
 
-public class GravityEffect extends Effect{
+public class GravityEffect extends Effect {
     private double gravityValue;
 
     /**
@@ -89,13 +89,18 @@ public class GravityEffect extends Effect{
     }
 
     @Override
-    public int getMaxCooldown() {
+    public double getMaxCooldown() {
         return 5 * MyWorld.FPS;
     }
 
     @Override
-    public int getMaxActiveTime() {
+    public double getMaxActiveTime() {
         return 3 * MyWorld.FPS;
+    }
+
+    @Override
+    protected double getStartupCost() {
+        return 0.5 * MyWorld.FPS;
     }
 
 }

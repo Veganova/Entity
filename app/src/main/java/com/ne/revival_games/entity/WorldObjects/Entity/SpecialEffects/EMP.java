@@ -4,10 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EffectType;
-import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
-import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
@@ -82,12 +79,17 @@ public class EMP extends ExpandingEffect {
     }
 
     @Override
-    public int getMaxCooldown() {
+    public double getMaxCooldown() {
         return 0;
     }
 
     @Override
-    public int getMaxActiveTime() {
+    public double getMaxActiveTime() {
+        return 0;
+    }
+
+    @Override
+    protected double getStartupCost() {
         return 0;
     }
 

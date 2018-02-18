@@ -12,6 +12,25 @@
       ]
     }
   },
+  "multi_player" : {
+    "ai" : true,
+    "units" : {
+      "nexus": [
+        {
+          "x": -300.0,
+          "y": 300.0,
+          "angle": 0.0,
+          "team": "DEFENCE"
+        },
+        {
+          "x": 300.0,
+          "y": -300.0,
+          "angle": 0.0,
+          "team": "OFFENSE"
+        }
+      ]
+    }
+  },
   "tutorial_turret" : {
     "ai" : false,
     "turret-1" : [],

@@ -81,20 +81,33 @@ public abstract class Effect {
 
 
     public void disable() {
-        status = false;
+        this.status = false;
     }
 
     public void enable() {
-        status = true;
+        double newCooldown = this.cooldown + this.getStartupCost();
+
+        // doing for doubles. Think of the case wher ecooldown, startupCost and maxCooldown are all 0
+        if (newCooldown <= this.getMaxCooldown() + 0.005) {
+            this.status = true;
+            this.cooldown = newCooldown;
+        } else {
+            // enabling not allowed when cooldown will surpass the max cooldown
+        }
     }
 
+
     public void toggle() {
-        status = !status;
+        if (this.status) {
+            this.disable();
+        } else {
+            this.enable();
+        }
     }
 
     //TODO: use engine possibly to avoid checking if effect is hitting applier
     private boolean canApply(Entity other) {
-        return this.status && this.cooldown != getMaxCooldown()
+        return this.status && this.cooldown < getMaxCooldown()
                 && other != applier && !other.targetExceptions.isContactDisallowedWith(this);
     }
 
@@ -149,12 +162,18 @@ public abstract class Effect {
     /**
      * @return  Returns the cooldown in frames of that effect.
      */
-    public abstract int getMaxCooldown();
+    public abstract double getMaxCooldown();
 
     /**
      * @return Returns the active time in frames of that effect.
      */
-    abstract public int getMaxActiveTime();
+    abstract public double getMaxActiveTime();
+
+    /**
+     *
+     * @return Cost for abilities when initially turned on - prevents spamming
+     */
+    protected abstract double getStartupCost();
 
     public boolean getStatus() {
         return status;

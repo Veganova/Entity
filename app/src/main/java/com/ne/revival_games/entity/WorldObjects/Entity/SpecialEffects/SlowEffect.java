@@ -67,12 +67,17 @@ public class SlowEffect extends Effect {
     }
 
     @Override
-    public int getMaxCooldown() {
-        return 5 * MyWorld.FPS;
+    public double getMaxCooldown() {
+        return 0.5 * MyWorld.FPS;
     }
 
     @Override
-    public int getMaxActiveTime() {
+    public double getMaxActiveTime() {
         return 3 * MyWorld.FPS;
+    }
+
+    @Override
+    protected double getStartupCost() {
+        return 0;
     }
 }

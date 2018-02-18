@@ -27,7 +27,7 @@ public class MainMenu extends LinearLayout {
     private MainActivity activity;
 
     public enum GameMode {
-        SINGLEPLAYER("Single Player"), MULTIPLAYER("Multiplayer");
+        SINGLEPLAYER("Single Player"), MULTIPLAYER("Multiplayer"), TUTORIAL("Tutorial");
         private String val;
 
         GameMode(String s) {

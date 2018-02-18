@@ -84,13 +84,6 @@ public class Nexus extends Entity {
     }
 
     @Override
-    public boolean update(MyWorld world){
-//        System.out.println(this.shape.body.getWorldCenter().x*MyWorld.SCALE + " " +
-//                this.shape.body.getWorldCenter().y*MyWorld.SCALE);
-        return super.update(world);
-    }
-
-    @Override
     public void interact() {
         super.interact();
     }

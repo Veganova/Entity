@@ -3,7 +3,6 @@ package com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
-import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.collision.narrowphase.Gjk;
@@ -17,19 +16,6 @@ import org.dyn4j.geometry.Vector2;
 
 public class ExplosiveEffect extends ExpandingEffect {
     public boolean primed = false;
-
-    /**
-     *
-     * @param applier
-     * @param location
-     * @param percentStartSize
-     * @param growth_rate
-     * @param damage
-     * @param max_radius
-     * @param explosionPower
-     * @param team
-     * @param world
-     */
 
     public ExplosiveEffect(Entity applier, Vector2 location, double percentStartSize,
                            double growth_rate, double damage, double max_radius, double explosionPower, Team team, MyWorld world) {
@@ -87,12 +73,17 @@ public class ExplosiveEffect extends ExpandingEffect {
 
 
     @Override
-    public int getMaxCooldown() {
+    public double getMaxCooldown() {
         return 0;
     }
 
     @Override
-    public int getMaxActiveTime() {
+    public double getMaxActiveTime() {
+        return 0;
+    }
+
+    @Override
+    protected double getStartupCost() {
         return 0;
     }
 }

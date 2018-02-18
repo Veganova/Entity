@@ -234,9 +234,7 @@ public class MyWorld {
     public void drawObjects(Canvas canvas){
         this.bounds.draw(canvas);
 //        launcher.draw(canvas);
-        if (bot == null) {
-//            System.out.println("BOT IS NULL LLELL");
-        } else {
+        if (bot != null) {
             bot.draw(canvas);
         }
 

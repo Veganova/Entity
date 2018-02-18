@@ -15,7 +15,6 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".MainMenuActivity">
-
         </activity>
         <activity
             android:name=".MainMenuActivity"
