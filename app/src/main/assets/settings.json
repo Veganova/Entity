@@ -3,6 +3,9 @@
     "name": "DEFAULT",
     "health" : 5,
     "speed" : 0,
+    "cost" : 0,
+    "width" : 50,
+    "height" : 50,
     "angular_velocity" : 0,
     "angular_damping": 0.02,
     "linear_damping": 0,
@@ -10,7 +13,7 @@
     "real_friction" : 0,
     "invulnerable" : false,
     "restitution" : 0.0,
-    "density" : 1.0,
+    "density" : 0.5,
     "acceleration" : 0,
     "lazer" : {
       "speed" : 0,
@@ -28,8 +31,21 @@
         "strength": 20
       }
     },
+    "small_barrier" : {
+        "health" : 125,
+        "width" : 180,
+        "height" : 25,
+        "cost" : 180
+     },
+    "large_barrier" : {
+        "health" : 250,
+        "width" : 240,
+        "height" : 38,
+        "cost" : 350
+    },
     "totem": {
       "health": 50,
+      "cost" : 450,
       "slow_effect": {
         "radius": 150,
         "strength": 4,
@@ -39,6 +55,7 @@
       }
     },
     "missile": {
+      "density" : 0.05,
     "health" : 30
     },
     "dummy" : {
@@ -49,6 +66,7 @@
     },
     "rocket" : {
       "acceleration" : 5,
+      "cost" : 50,
       "explosive_effect": {
         "percent_start": 0.05,
         "growth_rate": 0.05,
@@ -57,20 +75,57 @@
         "damage": 5
       }
     },
-    "turret": {
+    "medic_1_turret": {
+      "health": 50,
+      "cost" : 500,
+      "barrel": {
+        "health": 30,
+        "shooting_speed" : 25,
+        "heal_missile": {
+          "health" : 20,
+          "radius" : 14
+        }
+      }
+    },
+    "1_turret": {
+      "health": 50,
+      "cost" : 500,
+      "barrel": {
+        "health": 30,
+        "shooting_speed" : 25,
+        "missile": {
+          "health" : 20,
+          "radius" : 14
+        }
+      }
+    },
+    "2_turret": {
+      "health": 100,
+      "cost" : 700,
+      "barrel": {
+        "health": 35,
+        "shooting_speed" : 30,
+        "missile": {
+          "health" : 25,
+          "radius" : 13
+        }
+      }
+    },
+    "3_turret": {
       "health": 150,
+      "cost" : 800,
       "barrel": {
         "health": 50,
         "shooting_speed" : 35,
         "missile": {
           "health" : 30,
-          "radius" : 15
+          "radius" : 12
         }
       }
     },
     "shockcan" : {
       "health" : 100,
-      "lifetime" : 5000,
+      "lifetime" : 200,
       "emp_effect" : {
         "percent_start": 0.05,
         "growth_rate": 0.05,
@@ -82,6 +137,7 @@
     },
     "mine": {
       "health": 30,
+      "cost": 50,
       "radius": 20,
       "explosive_effect": {
         "percent_start": 0.05,

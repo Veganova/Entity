@@ -230,6 +230,7 @@ public class GhostEntity {
             }
             this.world.objectDatabase.remove(this.entity.shape.body);
             this.world.engineWorld.removeBody(this.entity.shape.body);
+//            this.entity.dead = true;
             this.entity = null;
         }
     }

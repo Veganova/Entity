@@ -4,6 +4,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Untargetable;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -25,7 +26,9 @@ public class Barrier extends Entity {
 
     public Barrier(double x, double y, double angle, MyWorld world, Team team, String tag) {
         super(angle, 0, team, tag + "barrier");
-        this.shape = new ObjRectangle(WIDTH, HEIGHT);
+        double width = MySettings.getNum(team.toString(), name_tag + " width");
+        this.shape = new ObjRectangle(width,
+                MySettings.getNum(team.toString(), name_tag + " height"));
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setBasics(team.toString(), name_tag).setAngle(angle).setXY(x, y).init();
 
@@ -35,8 +38,8 @@ public class Barrier extends Entity {
 //        this.shape.body.setAngularDamping(this.shape.body.getAngularDamping() * 10);
 //        this.shape.body.setLinearDamping(this.shape.body.getLinearDamping() * 10);
 
-        this.bar = new ActiveBar(this, 0.8f);
-        this.bar.setPathType(ActiveBar.PathType.LINE, 200);
+        this.bar = new ActiveBar(this, (float)(0.8f/200 * width));
+        this.bar.setPathType(ActiveBar.PathType.LINE, width);
 
         this.targetExceptions.addType(Missile.class, Untargetable.FROM.ALLY);
     }

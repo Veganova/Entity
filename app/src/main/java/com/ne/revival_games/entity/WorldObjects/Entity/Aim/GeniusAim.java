@@ -9,6 +9,7 @@ import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Pair;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
@@ -24,20 +25,16 @@ import java.util.Iterator;
  * Created by Veganova on 8/30/2017.
  */
 
+//TODO: get shooting distance somehow
 public class GeniusAim extends SimpleAim {
     public static double WIGGLE_ROOM = 0.1;
     private double turnSpeed = 10;
     private Entity enemy;
-    private boolean first = false;
-    private int lastDirection;
     private double projectileSpeed = 0;
+    private boolean approaching = false;
+    private double timeAhead = 0.05;
     private double waitTime = 0;
-    private double getToAngle = 0;
-    public static double angleCheck = 0.05;
     private State state = State.not_executing;
-    public double execTime = Double.MAX_VALUE;
-    protected Vector2 tryPoint;
-
     public GeniusAim(AimableEntity aimEntity, Database objectDatabase, double range, double projectileSpeed) {
         super(aimEntity, objectDatabase, range, false);
         this.projectileSpeed = projectileSpeed;
@@ -49,8 +46,8 @@ public class GeniusAim extends SimpleAim {
      * @param aimWith
      */
     @Override
-    public void aim(Entity aimWith) {
-
+    public void aim(final Entity aimWith) {
+        System.out.println(this.aimEntity.shape.body.getAngularVelocity());
         if (enemy == null || enemy.health <= 0 || enemy.dead
                 || Util.getDistance(this.enemy.shape.body.getWorldCenter(),
                 this.aimEntity.shape.body.getWorldCenter()) > this.range) {
@@ -60,6 +57,7 @@ public class GeniusAim extends SimpleAim {
         // if no enemy, choose one
         if (enemy == null) {
             this.choose();
+            timeAhead = 0.05;
             this.state = State.not_executing;
         }
 
@@ -73,53 +71,34 @@ public class GeniusAim extends SimpleAim {
 
         enemy.shape.paint = paint;
 
-        if(this.state == State.executing) {
+        turnToward(aimWith);
 
-            //turning
-            turnToward(aimWith);
-            this.state = State.waiting_callback;
-
-            //waiting, then fire
-             FrameTime.getReference().addCallBackAtDeltaFrames((long) waitTime,
-                     new Runnable() {
-                         @Override
-                         public void run() {
-                             aimEntity.fire();
-                             state = State.not_executing;
-                         }
-                     });
+        if(isShootingViable(aimWith)) {
+            aimEntity.fire();
         }
-        else if(state == State.waiting_callback) {
-            turnToward(aimWith);
-        }
-        else {
-
-
-            double angle = (Math.PI * 2 + aimWith.shape.getOrientation()
-                    + aimWith.shape.body.getTransform().getRotation()) % (Math.PI * 2);
-
-            calculateTrajectory(aimWith, angle);
-
-            this.state = State.executing;
-        }
-
-
-
-
-
     }
 
     private void turnToward(Entity aimWith) {
+
         Vector2 centerofRotation = aimWith.shape.body.getWorldCenter();
 
-        Vector2 targetPoint = tryPoint;
+        Vector2 targetPoint = enemy.shape.body.getWorldCenter().copy()
+                .add(enemy.shape.body.getLinearVelocity().copy().multiply(timeAhead));
+
+        approaching = targetPoint.distance(centerofRotation)
+                > enemy.shape.body.getWorldCenter().distance(centerofRotation);
+
 
         double angle = (Math.PI * 2 + aimWith.shape.getOrientation()
                 + aimWith.shape.body.getTransform().getRotation()) % (Math.PI * 2);
 
         double angleTo = Math.atan2(targetPoint.y - centerofRotation.y,
                 targetPoint.x - centerofRotation.x);
+
         angleTo = (2 * Math.PI + angleTo) % (2 * Math.PI);
+
+//        aimWith.rotateEntity(angleTo);
+        this.aimEntity.freezeAngularForces();
 
         double angleDifference = (Math.PI * 2 + angle - angleTo) % (Math.PI * 2);
         double counterclockDist = (Math.PI * 2 + angleTo - angle) % (Math.PI * 2);
@@ -131,97 +110,68 @@ public class GeniusAim extends SimpleAim {
             turnCounterClock = 1;
         }
 
-        if (first) {
-            first = false;
-        } else if (turnCounterClock != this.lastDirection){
-            this.turnSpeed /= 2;
-        } else {
-            this.turnSpeed = this.aimEntity.getTurnSpeed();
-        }
-
-        this.lastDirection = turnCounterClock;
 
         if (Math.abs(angleDifference) <= WIGGLE_ROOM) {
 
             this.aimEntity.freezeAngularForces();
             //(angle + angleTo)/2 % (2*Math.PI)
-//            System.out.println("ANGLETO: " + angleTo + " " + aimWith.shape.body.getTransform().getRotation());
             if(!Util.nearValue(aimWith.shape.body.getTransform().getRotation(), angleTo, 0.001)) {
-                aimWith.rotateEntity(angleTo);
+                this.aimEntity.rotate(angleTo);
                 this.aimEntity.freezeAngularForces();
             }
         } else {
-            this.aimEntity.shape.body.setAngularVelocity(turnCounterClock * turnSpeed);
+            this.aimEntity.setAngularVelocity(turnCounterClock * turnSpeed);
         }
     }
 
-    private Vector2 calculateTrajectory(Entity aimWith, double currentAngle) {
-        //pair
+    public boolean isShootingViable(Entity aimWith) {
+
+        //center of turret
+        Vector2 centerofRotation = aimWith.shape.body.getWorldCenter();
+
+        //current angle
+        double angle = (Math.PI * 2 + aimWith.shape.getOrientation()
+                + aimWith.shape.body.getTransform().getRotation()) % (Math.PI * 2);
 
 
-        //timeStep
-        double timeStep = 0.05;
+        //
+        Vector2 targetVelocity =  enemy.shape.body.getLinearVelocity();
 
-//        //position to rotate to
-//        double rotationTo = 0;
-//
-//        double thetaTargetCurrent = Util.absoluteAngle(this.aimEntity.shape.body.getWorldCenter(),
-//                enemy.shape.body.getWorldCenter());
-
-        tryPoint = enemy.shape.body.getWorldCenter().copy()
-                .add(enemy.shape.body.getLinearVelocity().copy().multiply(timeStep));
-
-//        //timeStep * sign
-//        double increment = Math.signum(Util.absoluteAngle(this.aimEntity.shape.body.getWorldCenter(),
-//                   tryPoint)) * angleCheck;
-//
-//
-//        boolean seemsPossible = true;
-
-        double timeToGuessedAngle = 0, timeProjectiletoGuessPoint = 0, timeMyMissiletoPoint = 0;
-        for(int i = 0; i < 1000; ++i) {
-            Vector2 centerofRotation = aimWith.shape.body.getWorldCenter();
-
-           double toTarget = Math.atan2(tryPoint.y - centerofRotation.y, tryPoint.x - centerofRotation.x);
+        double projSlope = Math.tan(angle);
+        double targetSlope = targetVelocity.y/targetVelocity.x;
 
 
-            //timeTo that angle
-            timeToGuessedAngle = Math.abs(toTarget - currentAngle) % Math.PI / (turnSpeed);
+        Vector2 tryPoint = Util.intersectionBetweenTwoLines(projSlope, centerofRotation,
+                targetSlope, enemy.shape.body.getWorldCenter());
 
-            //target linear velocity
-            Vector2 targetVelocity = enemy.shape.body.getLinearVelocity();
-            //target current position
-            Vector2 curpos = enemy.shape.body.getWorldCenter();
-
-             timeProjectiletoGuessPoint = (tryPoint.distance(curpos) / targetVelocity.getMagnitude());
-             timeMyMissiletoPoint = (tryPoint.distance(centerofRotation)-2/5) / (projectileSpeed);
-
-//            System.out.println(getToAngle);
+        //checks to see if backwards along the line
+        double futureOrCurrentTarg = (tryPoint.x - enemy.shape.body.getWorldCenter().x) / targetVelocity.x;
+        double futureOrCurrentProj = (tryPoint.x - centerofRotation.x) / (projectileSpeed*Math.cos(angle));
 
 
-            if(timeMyMissiletoPoint + timeToGuessedAngle < timeProjectiletoGuessPoint) {
-                waitTime = Math.abs(timeMyMissiletoPoint + timeToGuessedAngle - timeProjectiletoGuessPoint);
-                getToAngle = toTarget;
-
-                break;
-            }
-
-            tryPoint.add(enemy.shape.body.getLinearVelocity().copy().multiply(timeStep));
-
+        //if time is negative then return false
+        if(futureOrCurrentTarg < 0 || futureOrCurrentProj < 0) {
+            return false;
         }
 
-        System.out.println("turn:" + timeToGuessedAngle + "fire: " + timeMyMissiletoPoint + "target: " + timeProjectiletoGuessPoint);
 
-//        if(aimEntity instanceof Turret) {
-//            Turret myTurret = (Turret) aimEntity;
-//            ObjCircle target = new ObjCircle(15);
-////            System.out.println("TRY-POINT:" + tryPoint.x + " " + tryPoint.y);
-//            target.getBuilder(true, myTurret.world).setXY(tryPoint.x*MyWorld.SCALE, tryPoint.y*MyWorld.SCALE).init();
-//            myTurret.drawme.add(target);
-//        }
+        if(Util.nearValue(targetSlope, projSlope, 0.025)) {
+            return true;
+        }
+
+        double timeProjToPoint = (tryPoint.distance(centerofRotation) - 6/5) / projectileSpeed;
+        double timeTargToPoint = tryPoint.distance(enemy.shape.body.getWorldCenter()) /
+                        targetVelocity.getMagnitude();
+
+        if(Math.abs(timeProjToPoint - timeTargToPoint) > 0.03) {
+            timeAhead += 0.0225;
+        }
+        if(timeAhead > 0.02 || approaching) {
+            timeAhead -= 0.02;
+        }
 
 
-        return new Vector2(0,0);
+        return Util.nearValue(timeProjToPoint, timeTargToPoint, 0.01);
     }
 
 
@@ -243,22 +193,19 @@ public class GeniusAim extends SimpleAim {
             }
         }
 
-        this.first = true;
         this.turnSpeed = this.aimEntity.getTurnSpeed();
         this.enemy = possibleChoice;
 
-    }
-
-    private double incrementFunction(double angleDifference) {
-        if (angleDifference == 0) {
-            return 0;
-        }
-        return (0.5 / Math.pow(Math.E, Math.PI)) * Math.pow(Math.E, (angleDifference)) + 0.02;
     }
 
     private enum State {
            executing, waiting_callback, not_executing
     }
 }
+
+
+
+
+
 
 

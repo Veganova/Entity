@@ -1,8 +1,10 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
+import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
@@ -16,6 +18,7 @@ import java.util.Iterator;
 public class SimpleAim implements AimLogic {
     public static double WIGGLE_ROOM = 0.1;
     protected double turnSpeed = 10;
+    protected Team thisTeam;
 
     protected final AimableEntity aimEntity;
     protected final Database objectDatabase;
@@ -28,8 +31,18 @@ public class SimpleAim implements AimLogic {
     public SimpleAim(AimableEntity aimEntity, Database objectDatabase, double range, boolean continuousFiring) {
         this.aimEntity = aimEntity;
         this.objectDatabase = objectDatabase;
-        this.range = range;
+        this.range = range/ MyWorld.SCALE;
+        this.thisTeam = aimEntity.team;
         this.continuousFiring = continuousFiring;
+    }
+
+    public SimpleAim(AimableEntity aimEntity, Database objectDatabase, double range, Team teamToShoot) {
+        this.aimEntity = aimEntity;
+        this.objectDatabase = objectDatabase;
+        this.range = range/ MyWorld.SCALE;
+        this.thisTeam = aimEntity.team;
+        this.continuousFiring = false;
+        this.thisTeam = teamToShoot;
     }
 
     /**
@@ -96,7 +109,7 @@ public class SimpleAim implements AimLogic {
             //(angle + angleTo)/2 % (2*Math.PI)
 //            System.out.println("ANGLETO: " + angleTo + " " + aimWith.shape.body.getTransform().getRotation());
             if(!Util.nearValue(aimWith.shape.body.getTransform().getRotation(), angleTo, 0.001)) {
-                aimWith.rotateEntity(angleTo);
+                aimWith.setRotation(angleTo);
                 this.aimEntity.freezeAngularForces();
             }
             this.aimEntity.fire();
@@ -110,7 +123,7 @@ public class SimpleAim implements AimLogic {
 
     @Override
     public void choose() {
-        Iterator<Entity> enemies = objectDatabase.getTeamIterator(aimEntity.team.getOpposite());
+        Iterator<Entity> enemies = objectDatabase.getTeamIterator(this.thisTeam.getOpposite());
 
         Entity possibleChoice = null;
 

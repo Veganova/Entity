@@ -60,22 +60,31 @@ public class FrameTime implements Updatable {
         // Callback logic:
         CB top = this.callbacks.peek();
 
-        while (top != null && top.frame <= this.frameNum) {
+        while (top != null && top.frame == this.frameNum) {
             // if a time is found to be <= cur frame, take it out of the priority queue.
             this.callbacks.poll();
 
             // when the frame is a match, run the associated runnable in a separate thread.
             if (top.frame == this.frameNum || top.frame < this.frameNum) {
-                Thread t = new Thread(top.r);
-                t.start();
+                top.r.run();
             }
 
             top = this.callbacks.peek();
         }
     }
 
+    public static long getTime() {
+        return getReference().frameNum;
+    }
+
     public static void addCallBackAtFrame(long frame, Runnable r) {
+
         FrameTime me = getReference();
+
+        if(frame == me.frameNum) {
+            r.run();
+            return;
+        }
 
         me.callbacks.add(new CB(frame, r));
     }

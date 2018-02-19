@@ -25,7 +25,6 @@ import java.util.List;
 public abstract class AShape implements Shape {
 
     private static final float STROKE_WIDTH = 0.1f;
-    public static final double DEFAULT_DENSITY = 0.5D;
     public Body body;
     public List<Convex> myConvexes = new ArrayList<>();
 

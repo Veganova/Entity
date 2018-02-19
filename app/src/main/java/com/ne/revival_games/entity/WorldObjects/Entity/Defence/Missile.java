@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Defence;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
@@ -11,21 +12,17 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
  */
 
 public class Missile extends Entity {
-
-    public static double SPEED = 30.0;
-    public static int HEALTH = 30;
-    public static int RADIUS = 10;
-    public static double LINEAR_DAMPING = 0;
-    public static double ANGULAR_DAMPING = 0;
-    public static double lifeTime = 15000;
+    public static double lifeTime = 320;
 
 
 
-    public Missile(double x, double y, double direction, double speed,
+    public Missile(double x, double y, double angle, double speed,
                    MyWorld world, Team team, String tag) {
-        super(direction, speed, team, tag + "missile");
+        super(angle, speed, team, tag + "missile");
+        System.out.println(MySettings.getNum(team.toString(), name_tag + " density"));
         shape = new ObjCircle(MySettings.getNum(team.toString(), name_tag + " radius"));
         shape.getBuilder(true, world).setXY(x, y)
+                .setDensity(MySettings.getNum(team.toString(), name_tag + " density"))
                 .setBasics(team.toString(), name_tag)
                 .init();
 //        shape.body.setBullet(true);
@@ -36,7 +33,8 @@ public class Missile extends Entity {
 
     @Override
     protected boolean deathCondition() {
-        boolean val = this.startTime + this.lifeTime <= System.currentTimeMillis() || this.shape.body.getLinearVelocity().getMagnitude() < 2;
+        boolean val = this.startTime + this.lifeTime < FrameTime.getTime()
+                || this.shape.body.getLinearVelocity().getMagnitude() < 2;
 
         return val;
     }

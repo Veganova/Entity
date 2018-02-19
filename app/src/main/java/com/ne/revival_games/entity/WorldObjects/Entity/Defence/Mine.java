@@ -19,10 +19,10 @@ import org.dyn4j.geometry.Vector2;
 public class Mine extends Entity{
     boolean contacted = false;
 
-    public Mine(Vector2 location, Team team, MyWorld world, String tag){
-        super(0, 0, team, tag + "mine");
+    public Mine(double x, double y, double angle, Team team, MyWorld world, String tag) {
+        super(angle, 0, team, tag + "mine");
         this.shape = new ObjCircle(MySettings.getNum(team.toString(), name_tag + " radius"));
-        this.shape.getBuilder(true, world).setXY(location.x, location.y)
+        this.shape.getBuilder(true, world).setXY(x, y)
                 .setBasics(team.toString(), name_tag)
                 .init();
         world.objectDatabase.put(this.shape.body, this);
@@ -32,9 +32,8 @@ public class Mine extends Entity{
     public boolean onCollision(Entity contact, Body componentHit, double damage){
         contacted = super.onCollision(contact, componentHit, damage);
 
-        if(primed && contact.team.opposite(this.team)) {
-           contacted = true;
-        }
+        if(this.primed)
+        contacted = true;
 
         return true;
     }

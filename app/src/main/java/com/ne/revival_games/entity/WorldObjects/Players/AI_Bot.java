@@ -3,15 +3,13 @@ package com.ne.revival_games.entity.WorldObjects.Players;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Comet;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
 import com.ne.revival_games.entity.WorldObjects.Entity.Pair;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
-import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.geometry.Vector2;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +24,7 @@ import java.io.InputStream;
 
 public class AI_Bot extends Launcher {
     private State curState;
-    private double breakUntil = 0, endTime = 0;
+    private double breakUntil = 0, roundDuration = 0;
     private int max_level = 0;
     private Entity targetEntity;
 
@@ -48,31 +46,47 @@ public class AI_Bot extends Launcher {
        switch (curState) {
            case NOT_READY_BREAK:
                ++level;
+               System.out.println("LEVEL " + level + " +++++++++++++++++++++++++++++++++++++++++++");
+               final int curlevel = level;
                if(max_level > level) {
-                   setBreakTime();
                    emptySet();
-                   fillAmmo();
                    prepNextRound();
+                   this.curState = State.READY_BREAK;
+
+                   //sets call_back for round start & round end
+                   FrameTime.addCallBackAtDeltaFrames((long) breakUntil, new Runnable() {
+                       @Override
+                       public void run() {
+                           curState = State.IN_ROUND;
+                           System.out.println("BREAK iS OVER " + FrameTime.getTime());
+                           FrameTime.addCallBackAtDeltaFrames((long) roundDuration + 2, new Runnable() {
+                               @Override
+                               public void run() {
+                                   System.out.println("ROUND IS OVER: " + FrameTime.getTime());
+                                   if(curlevel == level)
+                                   curState = State.NOT_READY_BREAK;
+                               }
+                           });
+                       }
+                   });
                }
                else {
                    curState = State.GAME_OVER;
                }
            case READY_BREAK:
-               if(breakUntil <= System.currentTimeMillis()) {
-                   break;
-               }
-               else {
-                   this.curState = State.IN_ROUND;
-               }
+               //waits in this state until callback
+            //in a round of the game
+               break;
            case IN_ROUND:
-                if(this.endTime >= System.currentTimeMillis() || ammoLeft() != 0) {
+                if(ammoLeft() != 0) {
                     updateTarget();
-                    firingRound(Integer.toString(level) + " ", endTime);
+                    firingRound(Integer.toString(level) + " ", roundDuration);
                 }
                 else {
-                    curState = State.NOT_READY_BREAK;
+                    this.curState = State.NOT_READY_BREAK;
                 }
                break;
+                //end of the game
            case GAME_OVER:
                System.out.println("YOU WIN!");
                break;
@@ -145,13 +159,22 @@ public class AI_Bot extends Launcher {
     }
 
     private void prepNextRound() {
+        double moneyForRound = MySettings.getNum(Team.OFFENSE.toString(), level + " money_awarded");
+
+        for(Player player :this.world.getPlayers()) {
+            if(player.team == Team.DEFENCE)
+            player.addMoney(moneyForRound);
+        }
+
         String levelString = Integer.toString(level) + " ";
-        this.endTime = System.currentTimeMillis() + 1000*MySettings.getNum("OFFENSE",
+        this.breakUntil = 40*MySettings.getNum("OFFENSE", Integer.toString(level) + " break");
+        this.roundDuration = 40*MySettings.getNum("OFFENSE",
                 levelString + "duration");
-        this.rate = MySettings.getNum("OFFENSE", levelString + "breakBetweenFiring");
+        this.rate = 40*MySettings.getNum("OFFENSE", levelString + "breakBetweenFiring");
         this.atOnce = (int) MySettings.getNum("OFFENSE", levelString + "ammoFiredAtOnce");
         this.atOnce_range =
                 (int) MySettings.getNum("OFFENSE", levelString + "ammoFiredAtOnceVariance");
+        fillAmmo();
 
     }
 

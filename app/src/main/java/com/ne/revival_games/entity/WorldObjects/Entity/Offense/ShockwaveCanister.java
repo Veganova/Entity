@@ -5,11 +5,10 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.Dummy;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.EMP;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExpandingEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
-
-import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by vishn on 7/27/2017.
@@ -17,14 +16,14 @@ import org.dyn4j.geometry.Vector2;
 
 public class ShockwaveCanister extends Entity {
     public static int HEALTH = 20;
-    private double lifeTime = 5000;
+    private long lifeTime;
     boolean naturalDeath = false;
 
-    public ShockwaveCanister(Vector2 location, double angle, double direction, double speed, Team team, MyWorld world, String tag) {
-        super(direction, speed, team, tag + "shockcan");
+    public ShockwaveCanister(double x, double y, double angle, Team team, MyWorld world, String tag) {
+        super(angle, 0, team, tag + "shockcan");
         this.shape = new ObjRectangle(50, 20);
-        this.lifeTime = MySettings.getNum(team.toString(), name_tag + " lifetime");
-        this.shape.getBuilder(true, world).setXY(location.x, location.y).setAngle(angle).init();
+        this.lifeTime = (long) MySettings.getNum(team.toString(), name_tag + " lifetime");
+        this.shape.getBuilder(true, world).setXY(x, y).setAngle(angle).init();
         world.objectDatabase.put(this.shape.body, this);
 
     }
@@ -36,7 +35,7 @@ public class ShockwaveCanister extends Entity {
             this.naturalDeath = true;
         }
 
-        return this.primed && System.currentTimeMillis() > (startTime+lifeTime);
+        return this.primed && (startTime+lifeTime) < FrameTime.getTime();
     }
 
     @Override
