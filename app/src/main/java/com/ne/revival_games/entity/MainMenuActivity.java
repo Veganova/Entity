@@ -11,11 +11,11 @@ public class MainMenuActivity extends MainActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.print("Menu ");
         super.onCreate(savedInstanceState);
         //set screen to fullscreen
         this.initPlayers(false, false, 1);
         this.addMenu();
+        super.world.initializeWorld();
     }
 
 }

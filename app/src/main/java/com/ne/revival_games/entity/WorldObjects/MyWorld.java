@@ -51,7 +51,6 @@ public class MyWorld {
     public Database objectDatabase;
 //    public HashMap<GhostEntity, Team> entitiestoAdd = new HashMap<>();
 //    public ArrayList<Body> bodiestodelete;
-    public ArrayList<double []> coords;
     protected List<Player> players;
     public List<JSONObject> addtoWorld;
     public HashMap<Entity, GhostEntity> ghosts;
@@ -94,12 +93,17 @@ public class MyWorld {
     private MainActivity activity;
 
     /**
-     * default constructor for MyWorld (calls initialize engineWorld, can vary based off game type, etc.)
+     * default constructor for MyWorld. Default sets initialize type to single_player
      *
      */
     public MyWorld(MainActivity activity) {
         this.activity = activity;
-        initializeWorld();
+        this.objectDatabase = new Database ();
+        this.ghosts = new HashMap<>();
+        this.engineWorld = new World();
+        this.players = new ArrayList<>();
+        this.updatables = Collections.synchronizedList(new ArrayList<Updatable>());
+        this.initializeType = "single_player";
     };
 
     public void addPlayers(List<Player> players) {
@@ -112,28 +116,21 @@ public class MyWorld {
      * Basically the same shapes from the Shapes test in
      * the TestBed.
      */
-    protected void initializeWorld() {
+    public void initializeWorld() {
         // create the engineWorld
-        coords = new ArrayList<double[]>();
-        this.objectDatabase = new Database ();
-        this.ghosts = new HashMap<>();
-        this.engineWorld = new World();
-        this.players = new ArrayList<>();
-        this.updatables = new ArrayList<>();
-        this.updatables = Collections.synchronizedList(updatables);
-
-        this.engineWorld.setGravity(new Vector2(0, 0));
+        this.bounds = new Boundary(2000, this);
         CollisionListener skip = new CollisionController(this);
         ContactListener contact = new ContactController(this);
         StepController step = new StepController();
-        bounds = new Boundary(2000, this);
+        this.engineWorld.setGravity(new Vector2(0, 0));
         this.engineWorld.addListener(skip);
         this.engineWorld.addListener(contact);
         this.engineWorld.addListener(step);
 
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
-        bot = InitializeWorld.init("single_player", this);
+        System.out.println("INITIALIZE" + initializeType);
+        bot = InitializeWorld.init(initializeType, this);
 
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
 //        settings.setLinearTolerance(150*settings.getLinearTolerance());
@@ -196,6 +193,11 @@ public class MyWorld {
         this.addUpdatable(0, FrameTime.getNewReference());
     }
 
+    private String initializeType;
+    public void setInitializeType(String type) {
+        this.initializeType = type;
+    }
+
 //    private Launcher launcher;
     private AI_Bot bot;
     //need a way to add an object (check what kind of object it is, etc.)
@@ -253,21 +255,21 @@ public class MyWorld {
 
     }
 
-    public void testlocation(double x1, double x2, double y1, double y2, double grain, AShape shape){
-        x1 = x1/SCALE;
-        x2 = x2/SCALE;
-        y1 = y1/SCALE;
-        y2 = y2/SCALE;
-        grain = grain/SCALE;
-        for(double x=x1; x<x2; x+=grain){
-            for(double y=y1; y<y2; y+=grain){
-                if(shape.body.contains(new Vector2(x,y))){
-                    double [] hi = {x, y};
-                    coords.add(hi);
-                }
-            }
-        }
-    }
+//    public void testlocation(double x1, double x2, double y1, double y2, double grain, AShape shape){
+//        x1 = x1/SCALE;
+//        x2 = x2/SCALE;
+//        y1 = y1/SCALE;
+//        y2 = y2/SCALE;
+//        grain = grain/SCALE;
+//        for(double x=x1; x<x2; x+=grain){
+//            for(double y=y1; y<y2; y+=grain){
+//                if(shape.body.contains(new Vector2(x,y))){
+//                    double [] hi = {x, y};
+//                    coords.add(hi);
+//                }
+//            }
+//        }
+//    }
 
     public void addUpdatable(Updatable updatable) {
         this.updatables.add(updatable);

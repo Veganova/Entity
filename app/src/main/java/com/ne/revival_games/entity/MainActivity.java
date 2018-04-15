@@ -31,7 +31,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     private PlayerDefense player1, player2, curPlayer;
-    private MyWorld world;
+    protected MyWorld world;
 
     public MainThread myThread;
     public float SCREEN_WIDTH;
@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //turn title off
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        world = new MyWorld(this);
-        myThread = new MainThread(this.world);
+
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -72,9 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main_thread);
         relativeLayout = (RelativeLayout)this.findViewById(R.id.main);
-
-
-
+        world = new MyWorld(this);
+        myThread = new MainThread(this.world);
         screens = new HashMap<>();
 
         // Initialize sounds
@@ -83,20 +81,28 @@ public class MainActivity extends AppCompatActivity {
 
         Serializable message = getIntent().getSerializableExtra("GameMode");
         if (message != null) {
-            // case where the actual game has been started (when it is null we are still in the main menu)i
+            // case where the actual game has been started (when it is null we are still in the main menu).
             System.out.println("GAME " + message.toString());
             choice = (MainMenu.GameMode)message;
             switch(choice) {
                 case SINGLEPLAYER:
-//                    initOnePlayer();
                     initPlayers(true, true, 1);
+                    Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+                    world.setInitializeType("single_player");
                     break;
 
                 case MULTIPLAYER:
-//                    initTwoPlayer(true);
                     initPlayers(true, true, 2);
+                    Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+                    world.setInitializeType("single_player");
+                    break;
+                case TUTORIAL:
+                    initTutorial();
+                    Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+                    world.setInitializeType("tutorial");
                     break;
             }
+            world.initializeWorld();
         }
     }
 
@@ -126,6 +132,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void initTutorial() {
+//        this.MAP_HEIGHT = 2400;
+//        this.MAP_WIDTH = 1350;
+//
+//        GamePanel panel = new GamePanel(this, world);
+//        Screen screen = new Screen(this, panel);
+//        DoubleScreen.LayoutParams parms = new DoubleScreen.LayoutParams(SCREEN_WIDTH,
+//                SCREEN_HEIGHT);
+
+        this.initPlayers(false, false, 1);
+        this.world.setInitializeType("single_player");
+
+
+    }
 
     public void  initPlayers(boolean playerSelection, boolean playPause, int numPlayers) {
 
@@ -187,34 +207,9 @@ public class MainActivity extends AppCompatActivity {
         if (playPause) {
             this.addPlayPause();
             this.addRestartHome();
-
-
-//            final MediaPlayer sound = MediaPlayer.create(this, R.raw.round_win);
-//            sound.start();
-
-            Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
-
-
-
-//            this.gameOver();
-//            Runnable r = new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        Thread.sleep(5000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    gameOver();
-//                }
-//            };
-
-//             t = new (r);
-//            t.start();
         }
 
-//        myThread.setRunning(true);
-//        myThread.start();
+
   }
 
     public void gameOver() {
