@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +15,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-import com.ne.revival_games.entity.CustomViews.MainMenu;
+import com.ne.revival_games.entity.CustomViews.MenuFactory;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.RestartHome;
 import com.ne.revival_games.entity.CustomViews.Screen;
+import com.ne.revival_games.entity.Modes.BaseMode;
+import com.ne.revival_games.entity.Modes.GameMode;
+import com.ne.revival_games.entity.Modes.TutorialMode;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean paused = true;
     private static Context myContext = null;
 
-    private MainMenu.GameMode choice = null;
+    private Intent intent = null;
 
 
     @Override
@@ -78,38 +82,65 @@ public class MainActivity extends AppCompatActivity {
         // Initialize sounds
         Sounds s = Sounds.getInstance(this);
 
+        this.intent = getIntent();
 
-        Serializable message = getIntent().getSerializableExtra("GameMode");
-        if (message != null) {
+        Serializable message = intent.getSerializableExtra("enumType");
+
             // case where the actual game has been started (when it is null we are still in the main menu).
-            System.out.println("GAME " + message.toString());
-            choice = (MainMenu.GameMode)message;
-            switch(choice) {
-                case SINGLEPLAYER:
-                    initPlayers(true, true, 1);
-                    Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
-                    world.setInitializeType("single_player");
-                    break;
+        if (message != null) {
+            String enumTypeClass = (String) message;
 
-                case MULTIPLAYER:
-                    initPlayers(true, true, 2);
-                    Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
-                    world.setInitializeType("single_player");
-                    break;
-                case TUTORIAL:
-                    initTutorial();
-                    Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
-                    world.setInitializeType("tutorial");
-                    break;
+            if (enumTypeClass.equals(GameMode.class.getSimpleName())) {
+                GameMode gameChoice = (GameMode) intent.getSerializableExtra("enumVal");
+                switch (gameChoice) {
+                    case SINGLEPLAYER:
+                        initPlayers(true, true, 1);
+                        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+                        world.setInitializeType("single_player");
+                        break;
+
+                    case MULTIPLAYER:
+                        initPlayers(true, true, 2);
+                        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+                        world.setInitializeType("single_player");
+                        break;
+                    case TUTORIAL:
+//                    initTutorial();
+//                    initPlayers(false, false, 1);
+                        this.initPlayers(false, false, 1);
+                        addTutorialButtons();
+// todo
+//                    buttons here on screeen choose - spawn tutorial, game mechanics, each unit tutorial
+//                        buttons will lead to TutorialActivity.java extends MainActivity and add more cases here for clicking on the buttons above.
+                        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+//                    world.setInitializeType("tutorial");
+                        break;
+                }
+            } else if(enumTypeClass.equals(TutorialMode.class.getSimpleName())) {
+                TutorialMode tutorialChoice = (TutorialMode) getIntent().getSerializableExtra("enumVal");
+
+                switch(tutorialChoice) {
+                    case NEXUSTUTORIAL:
+                        System.out.println("NEXUS TOTIRLA!");
+                        break;
+                    case TURRETTUTORIAL:
+                        System.out.println("TurretTtoirai");
+                        break;
+                }
             }
-            world.initializeWorld();
+        } else {
+            // set fullscreen
+            this.initPlayers(false, false, 1);
         }
+        world.initializeWorld();
     }
 
-    protected View menu;
-    protected void addMenu(){
-        menu = new MainMenu(getApplicationContext(), this, SCREEN_WIDTH);
-        relativeLayout.addView(menu);
+    private void addTutorialButtons() {
+        MenuFactory factory = new MenuFactory(TutorialMode.class);
+        for (TutorialMode tutorialMode: TutorialMode.values()) {
+            factory.addButton(tutorialMode);
+        }
+        this.relativeLayout.addView(factory.build(getApplicationContext(), this, MainActivity.class));
     }
 
     private View playPauseButton;
@@ -120,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestartHome restartHome;
     private void addRestartHome(){
-        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, choice, SCREEN_WIDTH);
+        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, null, SCREEN_WIDTH);
         relativeLayout.addView(restartHome);
     }
 
@@ -142,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 //                SCREEN_HEIGHT);
 
         this.initPlayers(false, false, 1);
-        this.world.setInitializeType("single_player");
+//        this.world.setInitializeType("single_player");
 
 
     }

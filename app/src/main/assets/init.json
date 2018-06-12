@@ -1,4 +1,8 @@
 {
+  "empty" : {
+    "ai" : false,
+    "units" : {}
+  } ,
   "single_player" : {
     "ai" : true,
     "units" : {
@@ -33,15 +37,19 @@
   },
   "tutorial" : {
     "ai" : false,
-    "turret-1" : [],
-    "turret-2" : [],
-    "turret-3" : [],
-    "mine" : [],
-    "totem" : [{
-      "x": 0.0,
-      "y": 0.0,
-      "angle": 0.0,
-      "team": "DEFENCE"
-    }]
+    "units" : {
+      "turret-1": [],
+      "turret-2": [],
+      "turret-3": [],
+      "mine": [],
+      "totem": [
+        {
+          "x": 0.0,
+          "y": 0.0,
+          "angle": 0.0,
+          "team": "DEFENCE"
+        }
+      ]
+    }
   }
 }

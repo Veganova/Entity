@@ -2,47 +2,24 @@ package com.ne.revival_games.entity.CustomViews;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.ne.revival_games.entity.Modes.GameMode;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
-import com.ne.revival_games.entity.R;
 
 /**
  * Created by Veganova on 7/23/2017.
  */
 
-public class MainMenu extends LinearLayout {
+public class MainMenuComplex extends LinearLayout {
 
     private MainActivity activity;
 
-    public enum GameMode {
-        SINGLEPLAYER("Single Player"), MULTIPLAYER("Multiplayer"), TUTORIAL("Tutorial");
-        private String val;
-
-        GameMode(String s) {
-            this.val = s;
-        }
-
-        @Override
-        public String toString() {
-            return this.val;
-        }
-    }
-
-
-//    private int HEIGHT;
-    public MainMenu(final Context context, final MainActivity activity, float SCREEN_WIDTH) {
+    public MainMenuComplex(final Context context, final MainActivity activity, float SCREEN_WIDTH) {
         super(context);
         this.activity = activity;
 

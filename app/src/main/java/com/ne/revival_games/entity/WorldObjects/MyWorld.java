@@ -103,7 +103,7 @@ public class MyWorld {
         this.engineWorld = new World();
         this.players = new ArrayList<>();
         this.updatables = Collections.synchronizedList(new ArrayList<Updatable>());
-        this.initializeType = "single_player";
+        this.initializeType = "empty";
     };
 
     public void addPlayers(List<Player> players) {

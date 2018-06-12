@@ -7,23 +7,15 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.Space;
-import android.widget.TextView;
 
+import com.ne.revival_games.entity.Modes.GameMode;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
+import com.ne.revival_games.entity.Modes.ModeInitUtil;
 import com.ne.revival_games.entity.R;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
-import com.ne.revival_games.entity.WorldObjects.Players.Player;
-
-import java.sql.SQLOutput;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Veganova on 9/10/2017.
@@ -38,7 +30,7 @@ public class RestartHome extends RelativeLayout {
     private ArrowPop a1, a2;
 
 
-    public RestartHome(Context context, float parentHeight, MainActivity activity, MainMenu.GameMode mode, float SCREEN_WIDTH) {
+    public RestartHome(Context context, float parentHeight, MainActivity activity, GameMode mode, float SCREEN_WIDTH) {
         super(context);
         this.SCREEN_WIDTH = SCREEN_WIDTH;
         this.HEIGHT = (int) (parentHeight * 0.07);
@@ -106,7 +98,7 @@ public class RestartHome extends RelativeLayout {
         }
     }
 
-    private class HomeButton extends ImageView {
+    private class HomeButton extends android.support.v7.widget.AppCompatImageView {
         HomeButton(Context context, final MainActivity activity) {
             super(context);
 
@@ -128,8 +120,8 @@ public class RestartHome extends RelativeLayout {
         }
     }
 
-    private class RestartButton extends ImageView {
-        RestartButton(final Context context, final MainActivity activity, final MainMenu.GameMode mode) {
+    private class RestartButton extends android.support.v7.widget.AppCompatImageView {
+        RestartButton(final Context context, final MainActivity activity, final GameMode mode) {
             super(context);
 
             this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -145,24 +137,7 @@ public class RestartHome extends RelativeLayout {
             this.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("GameMode", mode);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                    // wait for the current activity thread to end. (so that it will let go of the canvas lock)
-                    activity.finish();
-                    if (activity.myThread.hasEnded()) {
-
-                    } else {
-                        try {
-                            synchronized (activity.myThread) {
-                                activity.myThread.wait();
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    activity.startActivity(intent);
+                    ModeInitUtil.startActivityWithIntent(context, mode, activity);
                 }
             });
         }
