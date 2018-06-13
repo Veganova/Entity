@@ -10,6 +10,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
+import org.dyn4j.geometry.Vector2;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,16 +59,26 @@ public class InitializeWorld {
 
                     double x = entityInfo.getDouble("x");
                     double y = entityInfo.getDouble("y");
+                    final double dx = entityInfo.has("dx") ? entityInfo.getDouble("dx") : 0;
+                    final double dy = entityInfo.has("dy") ? entityInfo.getDouble("dy") : 0;
+
                     double angle = entityInfo.getDouble("angle");
 
                     Team team = Team.fromString(entityInfo.getString("team"));
                     //TODO: TURRET WONT WORK HERE!
                     GhostEntity n = GhostFactory.produce(entType, x, y, angle, world, team, "");
+
+
                     if (team == Team.DEFENCE && entType.name.toUpperCase().equals("NEXUS")) {
                         target = (Nexus)n.entity;
                     }
                     if (n.canPlace()) {
-                        n.place(team);
+                        n.place(team, new GhostEntity.Callback<Entity>() {
+                            @Override
+                            public void apply(Entity entity) {
+                                entity.setVelocity(new Vector2(dx, dy));
+                            }
+                        });
                     } else {
                         throw new IllegalArgumentException("Invalid position for the " + entType.name + " at (" + x + ", " + y + ")");
                     }

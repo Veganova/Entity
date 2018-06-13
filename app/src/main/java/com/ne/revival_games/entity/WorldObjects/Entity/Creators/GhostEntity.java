@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Creators;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -13,6 +14,8 @@ import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+
+import java.util.function.Consumer;
 
 /**
  * Created by Veganova on 6/30/2017.
@@ -26,7 +29,7 @@ public class GhostEntity {
     private boolean placeable = true;
     private Mass previousType;
     private double initAngularVelocity = 0;
-    private Vector2 initialVelocity = new Vector2(0,0);
+    private Vector2 initialPolarVelocity = new Vector2(0,0);
 
     public GhostEntity(Entity entity, MyWorld world) {
         this.entity = entity;
@@ -71,6 +74,15 @@ public class GhostEntity {
 
     private Team team;
     private Player player;
+    public interface Callback<T> {
+        void apply(T t);
+    }
+    private Callback<Entity> callback;
+
+    public void place(Team team, Callback<Entity> callback) {
+        this.place(team);
+        this.callback = callback;
+    }
 
     public void place(Team team) {
         if (this.placeable) {
@@ -133,11 +145,17 @@ public class GhostEntity {
 //        this.team.add(this.entity);
         world.ghosts.remove(this.entity);
         this.entity.prime();                //enables on death effects "on place" function
-        this.entity.setVelocity(initialVelocity.x, initialVelocity.y);
+        this.entity.setVelocity(initialPolarVelocity.x, initialPolarVelocity.y);
         this.entity.shape.body.setAngularVelocity(initAngularVelocity);
+
+        if (this.callback != null) {
+            this.callback.apply(this.entity);
+        }
+        this.callback = null;
         this.entity = null;
         this.placeable = false;
         this.wantToPlace = false;
+
         // TODO: 7/11/2017 might want to place the entity created into the team lists right here
 //        return toPlace;
     }
@@ -236,7 +254,7 @@ public class GhostEntity {
     }
 
     public void setInitialVelocity(double speed, double angle) {
-        initialVelocity.x = speed;
-        initialVelocity.y = angle;
+        initialPolarVelocity.x = speed;
+        initialPolarVelocity.y = angle;
     }
 }
