@@ -80,53 +80,22 @@ public class MainActivity extends AppCompatActivity {
         screens = new HashMap<>();
 
         // Initialize sounds
-        Sounds s = Sounds.getInstance(this);
+        Sounds.getInstance(this);
 
         this.intent = getIntent();
 
-        Serializable message = intent.getSerializableExtra("enumType");
+        Serializable menuType = intent.getSerializableExtra("enumType");
 
             // case where the actual game has been started (when it is null we are still in the main menu).
-        if (message != null) {
-            String enumTypeClass = (String) message;
+        if (menuType != null) {
+            String enumTypeClass = (String) menuType;
 
             if (enumTypeClass.equals(GameMode.class.getSimpleName())) {
                 GameMode gameChoice = (GameMode) intent.getSerializableExtra("enumVal");
-                switch (gameChoice) {
-                    case SINGLEPLAYER:
-                        initPlayers(true, true, 1);
-                        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
-                        world.setInitializeType("single_player");
-                        break;
-
-                    case MULTIPLAYER:
-                        initPlayers(true, true, 2);
-                        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
-                        world.setInitializeType("single_player");
-                        break;
-                    case TUTORIAL:
-//                    initTutorial();
-//                    initPlayers(false, false, 1);
-                        this.initPlayers(false, false, 1);
-                        addTutorialButtons();
-// todo
-//                    buttons here on screeen choose - spawn tutorial, game mechanics, each unit tutorial
-//                        buttons will lead to TutorialActivity.java extends MainActivity and add more cases here for clicking on the buttons above.
-                        Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
-//                    world.setInitializeType("tutorial");
-                        break;
-                }
+                this.initGameMode(gameChoice);
             } else if(enumTypeClass.equals(TutorialMode.class.getSimpleName())) {
                 TutorialMode tutorialChoice = (TutorialMode) getIntent().getSerializableExtra("enumVal");
-
-                switch(tutorialChoice) {
-                    case NEXUSTUTORIAL:
-                        System.out.println("NEXUS TOTIRLA!");
-                        break;
-                    case TURRETTUTORIAL:
-                        System.out.println("TurretTtoirai");
-                        break;
-                }
+                this.initTutorial(tutorialChoice);
             }
         } else {
             // set fullscreen
@@ -135,12 +104,52 @@ public class MainActivity extends AppCompatActivity {
         world.initializeWorld();
     }
 
+    private void initGameMode(GameMode gameChoice) {
+        switch (gameChoice) {
+            case SINGLEPLAYER:
+                initPlayers(true, true, 1);
+                Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+                world.setInitializeType("single_player");
+                break;
+
+            case MULTIPLAYER:
+                initPlayers(true, true, 2);
+                Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+                world.setInitializeType("single_player");
+                break;
+            case TUTORIAL:
+//                    initTutorial();
+//                    initPlayers(false, false, 1);
+                this.initPlayers(false, false, 1);
+                addTutorialButtons();
+// todo
+//                    buttons here on screeen choose - spawn tutorial, game mechanics, each unit tutorial
+//                        buttons will lead to TutorialActivity.java extends MainActivity and add more cases here for clicking on the buttons above.
+                Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
+//                    world.setInitializeType("tutorial");
+                break;
+        }
+    }
+
+    private void initTutorial(TutorialMode tutorialChoice) {
+        switch(tutorialChoice) {
+            case NEXUSTUTORIAL:
+                this.initPlayers(false, true, 1);
+                world.setInitializeType("tutorial-nexus");
+                restartHome.pop();
+                break;
+            case TURRETTUTORIAL:
+                System.out.println("TurretTtoirai");
+                break;
+        }
+    }
+
     private void addTutorialButtons() {
         MenuFactory factory = new MenuFactory(TutorialMode.class);
         for (TutorialMode tutorialMode: TutorialMode.values()) {
             factory.addButton(tutorialMode);
         }
-        this.relativeLayout.addView(factory.build(getApplicationContext(), this, MainActivity.class));
+        this.relativeLayout.addView(factory.build(getApplicationContext(), this));
     }
 
     private View playPauseButton;
@@ -151,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestartHome restartHome;
     private void addRestartHome(){
-        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, null, SCREEN_WIDTH);
+        restartHome = new RestartHome(getApplicationContext(), SCREEN_HEIGHT, this, this.intent, SCREEN_WIDTH);
         relativeLayout.addView(restartHome);
     }
 
@@ -163,21 +172,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void initTutorial() {
-//        this.MAP_HEIGHT = 2400;
-//        this.MAP_WIDTH = 1350;
-//
-//        GamePanel panel = new GamePanel(this, world);
-//        Screen screen = new Screen(this, panel);
-//        DoubleScreen.LayoutParams parms = new DoubleScreen.LayoutParams(SCREEN_WIDTH,
-//                SCREEN_HEIGHT);
-
-        this.initPlayers(false, false, 1);
-//        this.world.setInitializeType("single_player");
-
-
-    }
-
+    /**
+     * Initializes screen based on the provided parameters. Configures the gamepanel.
+     * @param playerSelection   Whether the menu and money and other interactive UI elements should be displayed or not
+     * @param playPause         Whether the play pause button should be displayed. Also whether the RestartHome buttons should be displayed
+     * @param numPlayers        Number of players that are playing in this round.
+     */
     public void  initPlayers(boolean playerSelection, boolean playPause, int numPlayers) {
 
         if (numPlayers == 1) {

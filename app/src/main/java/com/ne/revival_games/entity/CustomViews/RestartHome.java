@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.ne.revival_games.entity.Modes.GameMode;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.Modes.ModeInitUtil;
@@ -30,7 +29,7 @@ public class RestartHome extends RelativeLayout {
     private ArrowPop a1, a2;
 
 
-    public RestartHome(Context context, float parentHeight, MainActivity activity, GameMode mode, float SCREEN_WIDTH) {
+    public RestartHome(Context context, float parentHeight, MainActivity activity, Intent intent, float SCREEN_WIDTH) {
         super(context);
         this.SCREEN_WIDTH = SCREEN_WIDTH;
         this.HEIGHT = (int) (parentHeight * 0.07);
@@ -39,7 +38,7 @@ public class RestartHome extends RelativeLayout {
         this.setGravity(Gravity.LEFT | Gravity.CENTER);
 
         home = new HomeButton(context, activity);
-        rb = new RestartButton(context, activity, mode);
+        rb = new RestartButton(context, activity, intent);
     }
 
     private boolean first = true;
@@ -121,7 +120,7 @@ public class RestartHome extends RelativeLayout {
     }
 
     private class RestartButton extends android.support.v7.widget.AppCompatImageView {
-        RestartButton(final Context context, final MainActivity activity, final GameMode mode) {
+        RestartButton(final Context context, final MainActivity activity, final Intent intent) {
             super(context);
 
             this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -137,7 +136,7 @@ public class RestartHome extends RelativeLayout {
             this.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ModeInitUtil.startActivityWithIntent(context, mode, activity);
+                    ModeInitUtil.startNewActivity(context, activity, intent, true);
                 }
             });
         }

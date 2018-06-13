@@ -157,7 +157,7 @@ public enum Entities {
             }
         }
         // default is defence
-        throw new IllegalArgumentException("No such entity exists");
+        throw new IllegalArgumentException("No such entity exists " + ent);
     }
 
 

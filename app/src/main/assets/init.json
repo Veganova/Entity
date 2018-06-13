@@ -51,5 +51,34 @@
         }
       ]
     }
+  },
+  "tutorial-nexus" : {
+    "ai" : false,
+    "units" : {
+      "comet": [
+        {
+          "x": 0.0,
+          "y": -300.0,
+          "angle": 0.0,
+          "team": "OFFENSE"
+        }
+      ],
+      "barrier small": [
+        {
+          "x": 0.0,
+          "y": 200.0,
+          "angle": 0.0,
+          "team": "DEFENCE"
+        }
+      ],
+      "nexus": [
+        {
+          "x": 0.0,
+          "y": 0.0,
+          "angle": 0.0,
+          "team": "DEFENCE"
+        }
+      ]
+    }
   }
 }

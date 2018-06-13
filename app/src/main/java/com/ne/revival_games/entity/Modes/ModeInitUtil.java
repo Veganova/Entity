@@ -1,6 +1,5 @@
 package com.ne.revival_games.entity.Modes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -12,24 +11,40 @@ import com.ne.revival_games.entity.MainActivity;
 
 public class ModeInitUtil {
 
-    public static void startActivityWithIntent(final Context context, BaseMode mode, MainActivity activity) {
+    public static void startNewActivity(final Context context, MainActivity caller, String modeClassName, BaseMode mode, boolean endCurrentActivity) {
         final Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("GameMode", mode);
+        intent.putExtra("enumType", modeClassName);
+        intent.putExtra("enumVal", mode);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
         // wait for the current activity thread to end. (so that it will let go of the canvas lock)
-        activity.finish();
-        if (activity.myThread.hasEnded()) {
+        caller.myThread.end();
+        if (caller.myThread.hasEnded()) {
 
         } else {
             try {
-                synchronized (activity.myThread) {
-                    activity.myThread.wait();
+                synchronized (caller.myThread) {
+                    caller.myThread.wait();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        activity.startActivity(intent);
+        if (endCurrentActivity) {
+            caller.startActivity(intent);
+            caller.finish();
+        } else {
+            caller.startActivity(intent);
+        }
+    }
+
+    /**
+     * Uses an old intent object to configure a new one - extracts the mode values.
+     */
+    public static void startNewActivity(final Context context, MainActivity caller, Intent oldIntent, boolean endCurrentActivity) {
+        String modeClassName = (String) oldIntent.getSerializableExtra("enumType");
+        BaseMode mode = (BaseMode) oldIntent.getSerializableExtra("enumVal");
+
+        startNewActivity(context, caller, modeClassName, mode, endCurrentActivity);
     }
 }

@@ -19,7 +19,7 @@ public class MainMenuActivity extends MainActivity {
         View menu = new MenuFactory(GameMode.class)
                 .addButton(GameMode.SINGLEPLAYER)
                 .addButton(GameMode.MULTIPLAYER)
-                .addButton(GameMode.TUTORIAL).build(getApplicationContext(), this, MainActivity.class);
+                .addButton(GameMode.TUTORIAL).build(getApplicationContext(), this);
         relativeLayout.addView(menu);
     }
 }
