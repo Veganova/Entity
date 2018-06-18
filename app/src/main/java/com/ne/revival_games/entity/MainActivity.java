@@ -37,9 +37,6 @@ import com.ne.revival_games.entity.WorldObjects.Sounds;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import in.goodiebag.carouselpicker.CarouselPicker;
 
 public class MainActivity extends AppCompatActivity {
 
