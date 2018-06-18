@@ -14,6 +14,7 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjTriangle;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -97,5 +98,13 @@ public class Nexus extends Entity {
             world.gameOver();
             gameRunning = false;
         }
+    }
+
+
+    public static List<String> getDescription() {
+        return Arrays.asList(
+                "This is the main entity that you will want to protect.",
+                "Its special ability is a gravity well which can be toggled for a short duration and will charge back up after.",
+                "The Nexus has plenty of health and is very hard to move.");
     }
 }

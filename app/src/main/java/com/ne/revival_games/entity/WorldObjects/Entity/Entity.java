@@ -412,7 +412,6 @@ public class Entity implements Effector {
             this.oldVelocity = this.shape.body.getLinearVelocity();
             this.shape.body.setLinearVelocity(x,y);
         }
-
     }
 
     public void setAngularVelocity(double angularVelocity) {

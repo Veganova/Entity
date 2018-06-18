@@ -4,16 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
 
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.ne.revival_games.entity.CustomViews.MenuFactory;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
@@ -22,6 +27,7 @@ import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.Modes.BaseMode;
 import com.ne.revival_games.entity.Modes.GameMode;
 import com.ne.revival_games.entity.Modes.TutorialMode;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
@@ -31,6 +37,9 @@ import com.ne.revival_games.entity.WorldObjects.Sounds;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import in.goodiebag.carouselpicker.CarouselPicker;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -137,6 +146,33 @@ public class MainActivity extends AppCompatActivity {
                 this.initPlayers(false, true, 1);
                 world.setInitializeType("tutorial-nexus");
                 restartHome.pop();
+
+                RelativeLayout container = new RelativeLayout(this);
+                container.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                container.setGravity(Gravity.BOTTOM);
+                container.setPadding(50 , 0, 50, 50);
+
+                final Button b = new Button(this);
+                b.setText(Nexus.getDescription().get(0));
+                b.setTextColor(GamePanel.background_dark);
+                b.setTextSize(15);
+                b.setAllCaps(false);
+                b.setBackground(ContextCompat.getDrawable(this, R.drawable.roundedbox));
+                b.setPadding(10, 0, 10, 0);
+
+                b.setOnClickListener(new View.OnClickListener() {
+                    private int i = 0;
+                    @Override
+                    public void onClick(View v) {
+                        i  = (i + 1) % Nexus.getDescription().size();
+                        b.setText(Nexus.getDescription().get(i));
+                    }
+                });
+                container.addView(b);
+
+
+                this.relativeLayout.addView(container);
+
                 break;
             case TURRETTUTORIAL:
                 System.out.println("TurretTtoirai");
