@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ne.revival_games.entity.CustomViews.GestureView;
 import com.ne.revival_games.entity.CustomViews.MenuFactory;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.RestartHome;
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 initPlayers(true, true, 1);
                 Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
                 world.setInitializeType("single_player");
+                relativeLayout.addView(new GestureView(this));
                 break;
 
             case MULTIPLAYER:
