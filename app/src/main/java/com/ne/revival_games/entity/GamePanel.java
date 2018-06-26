@@ -25,6 +25,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int cream = Color.rgb(224, 213, 218);
     public static final int background_dark = Color.rgb(39,40,34);
     public static final int background_red = Color.rgb(100,40,34);
+    public static final int highlight = Color.rgb(226,171,61);
     // yellow Color.YELLOW
     //private float scaleX = 1, scaleY = 1;
     public Vector2 scales;

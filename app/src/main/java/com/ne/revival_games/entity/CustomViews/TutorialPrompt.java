@@ -1,6 +1,8 @@
 package com.ne.revival_games.entity.CustomViews;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
@@ -27,8 +29,9 @@ public class TutorialPrompt extends android.support.v7.widget.AppCompatButton {
         this.setTextColor(GamePanel.background_dark);
         this.setTextSize(15);
         this.setAllCaps(false);
-        this.setBackground(ContextCompat.getDrawable(context, R.drawable.roundedbox));
-        this.setPadding(25, 0, 25, 0);
+//        this.setBackground(ContextCompat.getDrawable(context, R.drawable.roundedbox));
+        this.setPadding(18, 10, 18, 10);
+        this.setBackgroundColor(GamePanel.highlight);
     }
 
     public void setOnClickChain(final List<String> descriptions, final int startIndex) {
@@ -40,5 +43,32 @@ public class TutorialPrompt extends android.support.v7.widget.AppCompatButton {
                 i  = (i + 1) % descriptions.size();
             }
         });
+    }
+
+    public void setText(String txt) {
+        super.setText(txt);
+
+//        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
+//        anim.setDuration(2000);
+//        final int targetColor = GamePanel.cream;
+//        final int startColor = GamePanel.highlight;
+//
+//        TutorialPrompt.this.setBackgroundColor(startColor);
+//
+//        int runColor;
+//        int hue = 0;
+//        final float[] hsv = new float[3]; // Transition color
+//        hsv[1] = 1;
+//        hsv[2] = 1;
+//        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                System.out.println(animation.getAnimatedFraction());
+//                TutorialPrompt.this.setBackgroundColor((int) (startColor * (animation.getAnimatedFraction())));
+//            }
+//        });
+//        anim.start();
+
     }
 }

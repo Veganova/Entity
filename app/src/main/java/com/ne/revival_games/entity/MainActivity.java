@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTutorial(TutorialMode tutorialChoice) {
         switch(tutorialChoice) {
-            case GESTURE:
+            case BASICS:
                 this.initPlayers(true, false, 1, true);
 
 
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                                                 player.setOnGhostPlace(new GestureCallback() {
                                                     @Override
                                                     public boolean apply() {
-                                                        gestureExplanation.setText("Well done!");
+                                                        gestureExplanation.setText("Well done! PS: you can scroll horizontally in the menu as well as vertically on certain types of units such as turrets.");
                                                         player.setOnGhostPlace(null);
                                                         return true;
                                                     }
