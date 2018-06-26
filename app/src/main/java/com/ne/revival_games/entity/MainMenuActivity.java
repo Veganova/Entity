@@ -23,6 +23,5 @@ public class MainMenuActivity extends MainActivity {
                 .addButton(GameMode.TUTORIAL).build(getApplicationContext(), this);
 
         relativeLayout.addView(menu);
-        relativeLayout.addView(new GestureView(this));
     }
 }

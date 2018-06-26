@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
@@ -16,18 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.ne.revival_games.entity.CustomViews.GestureView;
 import com.ne.revival_games.entity.CustomViews.MenuFactory;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.RestartHome;
 import com.ne.revival_games.entity.CustomViews.Screen;
-import com.ne.revival_games.entity.Modes.BaseMode;
+import com.ne.revival_games.entity.CustomViews.TutorialPrompt;
 import com.ne.revival_games.entity.Modes.GameMode;
 import com.ne.revival_games.entity.Modes.TutorialMode;
+import com.ne.revival_games.entity.TouchListeners.GestureCallback;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
@@ -38,6 +35,8 @@ import com.ne.revival_games.entity.WorldObjects.Sounds;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             // set fullscreen
-            this.initPlayers(false, false, 1);
+            this.initPlayers(false, false, 1, false);
         }
         world.initializeWorld();
     }
@@ -114,21 +113,20 @@ public class MainActivity extends AppCompatActivity {
     private void initGameMode(GameMode gameChoice) {
         switch (gameChoice) {
             case SINGLEPLAYER:
-                initPlayers(true, true, 1);
+                initPlayers(true, true, 1, false);
                 Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
                 world.setInitializeType("single_player");
-                relativeLayout.addView(new GestureView(this));
                 break;
 
             case MULTIPLAYER:
-                initPlayers(true, true, 2);
+                initPlayers(true, true, 2, false);
                 Sounds.getInstance(null).playSound(Sounds.SOUND_TYPE.MODE);
                 world.setInitializeType("single_player");
                 break;
             case TUTORIAL:
 //                    initTutorial();
 //                    initPlayers(false, false, 1);
-                this.initPlayers(false, false, 1);
+                this.initPlayers(false, false, 1, false);
                 addTutorialButtons();
 // todo
 //                    buttons here on screeen choose - spawn tutorial, game mechanics, each unit tutorial
@@ -141,32 +139,106 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTutorial(TutorialMode tutorialChoice) {
         switch(tutorialChoice) {
+            case GESTURE:
+                this.initPlayers(true, false, 1, true);
+
+
+                final GestureView gestureView = new GestureView(this, R.raw.swipe, true);
+                final RelativeLayout gestureContainer = new RelativeLayout(this);
+                gestureContainer.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+                gestureContainer.setGravity(Gravity.CENTER);
+                gestureContainer.addView(gestureView);
+                this.relativeLayout.addView(gestureContainer);
+
+                RelativeLayout gestureTextContainer = new RelativeLayout(this);
+                gestureTextContainer.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+                gestureTextContainer.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+                gestureTextContainer.setPadding(50 , 0, 50, 220);
+
+                final TutorialPrompt gestureExplanation = new TutorialPrompt(this, "Swipe to move around the world");
+                gestureTextContainer.addView(gestureExplanation);
+                this.relativeLayout.addView(gestureTextContainer);
+
+                final Player player = world.getPlayers().get(0);
+                player.addMoney(9999);
+
+                player.getMenu().getListing().getTray().setToggleListener(new GestureCallback() {
+                    @Override
+                    public boolean apply() {
+                        return false;
+                    }
+                });
+
+                player.addOnMoveListener(new GestureCallback() {
+                    int timesToMove = 5;
+                    @Override
+                    public boolean apply() {
+                        timesToMove--;
+                        if (timesToMove <= 0) {
+                            gestureView.pauseAnimation();
+                            gestureView.setAnimation(R.raw.zoom_out);
+                            gestureView.playAnimation();
+                            gestureExplanation.setText("Pinch to control zoom");
+                            player.addOnMoveListener(null);
+                            player.addOnScaleListener(new GestureCallback() {
+                                boolean scaledYet = false;
+                                @Override
+                                public boolean apply() {
+                                    if (!scaledYet) {
+                                        scaledYet = true;
+                                        gestureExplanation.setText("Tap such triangles to open and close elements");
+
+                                        int[] location = new int[2];
+                                        player.getMenu().getListing().getTray().getLocationInWindow(location);
+                                        gestureView.setX(location[0]);
+                                        gestureView.setY(location[1]);
+                                        gestureView.setAnimation(R.raw.tap);
+                                        gestureView.playAnimation();
+                                        player.addOnScaleListener(null);
+                                        player.getMenu().getListing().getTray().setToggleListener(new GestureCallback() {
+                                            @Override
+                                            public boolean apply() {
+                                                gestureView.pauseAnimation();
+                                                gestureContainer.removeAllViews();
+                                                gestureExplanation.setText("This is the unit-selection menu. Tap to a unit to select, then drag the silhouette over to your desired location and tap again to place it in the world");
+                                                player.getMenu().getListing().getTray().setToggleListener(null);
+                                                player.setOnGhostPlace(new GestureCallback() {
+                                                    @Override
+                                                    public boolean apply() {
+                                                        gestureExplanation.setText("Well done!");
+                                                        player.setOnGhostPlace(null);
+                                                        return true;
+                                                    }
+                                                });
+                                                return true;
+                                            }
+                                        });
+                                        return true;
+                                    }
+                                    return true;
+                                }
+                            });
+                        }
+                        return true;
+                    }
+                } );
+
+
+
+                world.setInitializeType("gesture");
+                break;
             case NEXUSTUTORIAL:
-                this.initPlayers(false, true, 1);
+                this.initPlayers(false, true, 1, false);
                 world.setInitializeType("tutorial-nexus");
                 restartHome.pop();
 
                 RelativeLayout container = new RelativeLayout(this);
-                container.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                container.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
                 container.setGravity(Gravity.BOTTOM);
                 container.setPadding(50 , 0, 50, 50);
 
-                final Button b = new Button(this);
-                b.setText(Nexus.getDescription().get(0));
-                b.setTextColor(GamePanel.background_dark);
-                b.setTextSize(15);
-                b.setAllCaps(false);
-                b.setBackground(ContextCompat.getDrawable(this, R.drawable.roundedbox));
-                b.setPadding(10, 0, 10, 0);
-
-                b.setOnClickListener(new View.OnClickListener() {
-                    private int i = 0;
-                    @Override
-                    public void onClick(View v) {
-                        i  = (i + 1) % Nexus.getDescription().size();
-                        b.setText(Nexus.getDescription().get(i));
-                    }
-                });
+                final TutorialPrompt b = new TutorialPrompt(this, Nexus.getDescription().get(0));
+                b.setOnClickChain(Nexus.getDescription(), 1);
                 container.addView(b);
 
 
@@ -212,8 +284,9 @@ public class MainActivity extends AppCompatActivity {
      * @param playerSelection   Whether the menu and money and other interactive UI elements should be displayed or not
      * @param playPause         Whether the play pause button should be displayed. Also whether the RestartHome buttons should be displayed
      * @param numPlayers        Number of players that are playing in this round.
+     * @param startHidden       If UI elements are to be present, start them off hidden
      */
-    public void  initPlayers(boolean playerSelection, boolean playPause, int numPlayers) {
+    public void  initPlayers(boolean playerSelection, boolean playPause, int numPlayers, boolean startHidden) {
 
         if (numPlayers == 1) {
             this.MAP_HEIGHT = 2400;
@@ -262,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
             // loop over all players and do this..
             for (Player player: players) {
 //                relativeLayout.addView(player.getMenu());
-                player.addMenu((int)SCREEN_HEIGHT, SCREEN_WIDTH);
+                player.addMenu((int)SCREEN_HEIGHT, SCREEN_WIDTH, startHidden);
                 player.addMoneyView(this, SCREEN_WIDTH);
 //                relativeLayout.addView(new MoneyView(this, getApplicationContext(), world, player));
             }

@@ -52,6 +52,19 @@
       ]
     }
   },
+  "gesture" : {
+    "ai": false,
+    "units": {
+      "nexus": [
+        {
+          "x": 0.0,
+          "y": 0.0,
+          "angle": 0.0,
+          "team": "DEFENSE"
+        }
+      ]
+    }
+  },
   "tutorial-nexus" : {
     "ai": false,
     "units": {

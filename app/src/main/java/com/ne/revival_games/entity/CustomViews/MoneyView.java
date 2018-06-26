@@ -64,7 +64,11 @@ public class MoneyView extends RelativeLayout {
 //                        addView(container);
                         first = false;
                     } else {
-                        text.setText("$" + Integer.toString((int)player.getMoney()));
+                        if (player.getMoney() > 99999) {
+                            text.setText("∞");
+                        } else {
+                            text.setText("$" + Integer.toString((int) player.getMoney()));
+                        }
                     }
             }
         });

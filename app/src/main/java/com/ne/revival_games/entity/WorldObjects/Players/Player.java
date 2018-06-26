@@ -18,6 +18,7 @@ import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.CustomViews.Menu;
+import com.ne.revival_games.entity.TouchListeners.GestureCallback;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -61,6 +62,11 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     private double money;
     // money per tick
     private double mpt;
+    private GestureCallback onScaleListener;
+    private GestureCallback onMoveListener;
+    private Menu menu;
+    private MoneyView moneyView;
+    protected GestureCallback onGhostPlace;
 
     public Player(int id, Team team, MyWorld world, Screen screen, MainActivity activity, boolean addListenertoPanel) {
         this.playerNumber = id;
@@ -150,6 +156,27 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         this.money += damage;
     }
 
+
+    public void addOnScaleListener(GestureCallback callback) {
+        this.onScaleListener = callback;
+    }
+
+    public void addOnMoveListener(GestureCallback callback) {
+        this.onMoveListener = callback;
+    }
+
+    public void callScaleListener() {
+        if (this.onScaleListener != null) {
+            this.onScaleListener.apply();
+        }
+    }
+
+    public void callMoveListener() {
+        if (this.onMoveListener != null) {
+            this.onMoveListener.apply();
+        }
+    }
+
     public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
         protected double refX = 0;
         protected double refY = 0;
@@ -179,7 +206,6 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             camera.relativeZoom(scaleFactor, scaleFactor);
             camera.move(-1* refX, -1* refY);
             camera.relativeMove(-1*absoluteX/camera.zoomXY.x*MyWorld.SCALE, -1*absoluteY/camera.zoomXY.y*MyWorld.SCALE);
-
             return true;
         }
 
@@ -204,30 +230,19 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         @Override
         public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
             lastDownPress = System.currentTimeMillis();
+            Player.this.callScaleListener();
         }
     }
 
-//    public Menu getMenu() {
-//        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-//        Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        int height = size.y;
-//
-//        if (this.playerNumber == 1) {
-//            return new Menu(context, this, 0);
-//        } else if (this.playerNumber == 2) {
-//            return new Menu(context, this, height - 400);
-//        } else {
-//            return new Menu(context, this, 0);
-//        }
-//    }
-
-    public void addMenu(int parentHeight, float SCREEN_WIDTH) {
-        this.screen.addView(new Menu(context, parentHeight, this, Gravity.BOTTOM, SCREEN_WIDTH));
+    public void addMenu(int parentHeight, float SCREEN_WIDTH, boolean startHidden) {
+        this.menu = new Menu(context, parentHeight, this, Gravity.BOTTOM, SCREEN_WIDTH, startHidden);
+        this.screen.addView(menu);
     }
+
+
     public void addMoneyView(MainActivity activity, float SCREEN_WIDTH) {
-        this.screen.addView(new MoneyView(activity, context, world, this, SCREEN_WIDTH));
+        this.moneyView = new MoneyView(activity, context, world, this, SCREEN_WIDTH);
+        this.screen.addView(moneyView);
     }
 
     public boolean readytoPlace(MotionEvent e){
@@ -235,5 +250,21 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
                 && e.getPointerCount() < 2 && ghost.entity.isFlingable()
                 && holdingGhost && this.ghost.canPlace();
     }
+
+
+    public void setOnGhostPlace(GestureCallback onGhostPlace) {
+        this.onGhostPlace = onGhostPlace;
+    }
+
+
+    public Menu getMenu() {
+        return this.menu;
+    }
+
+    public MoneyView getMoneyView() {
+        return this.moneyView;
+    }
+
+
 
 }

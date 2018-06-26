@@ -80,8 +80,6 @@ public class Nexus extends Entity {
 
         this.bar = new ActiveBar(this, 1f);
         this.bar.linkEffect(gravEffect);
-
-//        this.bar.setPathType(ActiveBar.PathType.LINE, 200);
     }
 
     @Override

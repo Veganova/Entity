@@ -6,7 +6,7 @@ package com.ne.revival_games.entity.Modes;
 
 public enum TutorialMode implements BaseMode {
 
-    NEXUSTUTORIAL("Nexus"), TURRETTUTORIAL("Turret");
+    GESTURE("Gestures"), NEXUSTUTORIAL("Nexus"), TURRETTUTORIAL("Turret");
 
     private String val;
 

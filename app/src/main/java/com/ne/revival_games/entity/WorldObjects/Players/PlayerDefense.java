@@ -125,6 +125,7 @@ public class PlayerDefense extends Player {
         } else if (lastDownPress + 30 < System.currentTimeMillis()) {
             camera.relativeMove(scrollSpeed * (int)(distanceX) / MyWorld.SCALE, -1 * scrollSpeed
                     * (int)(distanceY) / MyWorld.SCALE);
+            this.callMoveListener();
         }
 
 
@@ -140,6 +141,9 @@ public class PlayerDefense extends Player {
             this.addMoney(-1*cost);
             this.ghost = null;
             holdingGhost = false;
+            if (this.onGhostPlace != null) {
+                this.onGhostPlace.apply();
+            }
         } else if (!holdingGhost) {
             Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
             Iterator<Entity> looper = this.world.objectDatabase.getForwardTeamIterator(this.team);

@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 
 import com.ne.revival_games.entity.R;
+import com.ne.revival_games.entity.TouchListeners.GestureCallback;
 
-import static com.ne.revival_games.entity.CustomViews.ArrowPop.SIDE.LEFT;
 import static com.ne.revival_games.entity.CustomViews.ArrowPop.SIDE.RIGHT;
 
 //TODO: bug - when startedHidden is true, there is a flicker.
@@ -24,6 +24,8 @@ import static com.ne.revival_games.entity.CustomViews.ArrowPop.SIDE.RIGHT;
  * The image to be clicked on to pop out the view is assumed to be an arrow.
  */
 public class ArrowPop extends HorizontalScrollView {
+
+    private GestureCallback toggleListener;
 
     public enum SIDE {
         LEFT, RIGHT
@@ -94,6 +96,12 @@ public class ArrowPop extends HorizontalScrollView {
                     if (interactable) {
                         arrowButton.setOnClickListener(new ImageView.OnClickListener() {
                             public void onClick(View v) {
+                                if (ArrowPop.this.toggleListener != null) {
+                                    if (!ArrowPop.this.toggleListener.apply()) {
+                                        return;
+                                    }
+                                }
+
                                 if (hidden) {
                                     show();
                                 } else {
@@ -135,7 +143,12 @@ public class ArrowPop extends HorizontalScrollView {
 
     }
 
-    private void hide() {
+
+    public void setToggleListener(GestureCallback callback) {
+        this.toggleListener = callback;
+    }
+
+    public void hide() {
         if (side == SIDE.LEFT) {
             ArrowPop.this.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
         } else {
@@ -144,7 +157,7 @@ public class ArrowPop extends HorizontalScrollView {
         hidden = true;
     }
 
-    void show() {
+    public void show() {
         if (side == SIDE.LEFT) {
             ArrowPop.this.fullScroll(HorizontalScrollView.FOCUS_LEFT);
         } else {
@@ -165,10 +178,12 @@ public class ArrowPop extends HorizontalScrollView {
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                // if we can scroll pass the event to the superclass
-                if (mScrollable) return super.onTouchEvent(ev);
-                // only continue to handle the touch event if scrolling enabled
-                return mScrollable; // mScrollable is always false at this point
+                // if we can scroll pass the event to the superclass - handle the touch event if scrolling enabled
+                if (mScrollable) {
+                    return super.onTouchEvent(ev);
+                }
+
+                return false;
             default:
                 return super.onTouchEvent(ev);
         }

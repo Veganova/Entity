@@ -7,30 +7,26 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.VideoView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.ne.revival_games.entity.R;
 
 /**
  * Created by veganova on 6/21/18.
  */
 
-public class GestureView extends RelativeLayout{
+public class GestureView extends LottieAnimationView {
 
-    public GestureView(Context context) {
+    public GestureView(Context context, int rawJson, boolean loop) {
         super(context);
-        this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        this.setGravity(Gravity.BOTTOM);
-        final LottieAnimationView videoView = new LottieAnimationView(context);
+        this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        this.setAnimation(rawJson);
+        this.setScale(0.5f);
+        if (loop) {
+            this.setRepeatCount(LottieDrawable.INFINITE);
+        }
 
-        videoView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        videoView.setAnimation(R.raw.tap);
-
-        this.addView(videoView);
-
-
-        videoView.playAnimation();
-
+        this.playAnimation();
     }
 }
