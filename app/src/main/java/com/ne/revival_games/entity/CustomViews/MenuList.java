@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 
 import java.util.Arrays;
@@ -122,7 +123,9 @@ public class MenuList extends LinearLayout {
                 this.setPadding(50, 0, 50, 0);
 
                 this.setTextColor(GamePanel.background_dark);
-                this.setText(toProduce.name);
+                Double cost = MySettings.getNum(String.valueOf(owner.team),toProduce.name.toLowerCase() + " cost");
+                String text = toProduce.name + "($" + cost + ")";
+                this.setText(text);
 
                 // TODO: 8/25/2017 for now manually setting the height.. might be kinda bad idk.
                 this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
