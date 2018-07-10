@@ -124,7 +124,7 @@ public class MenuList extends LinearLayout {
 
                 this.setTextColor(GamePanel.background_dark);
                 Double cost = MySettings.getNum(String.valueOf(owner.team),toProduce.name.toLowerCase() + " cost");
-                String text = toProduce.name + "($" + cost + ")";
+                String text = toProduce.name;
                 this.setText(text);
 
                 // TODO: 8/25/2017 for now manually setting the height.. might be kinda bad idk.

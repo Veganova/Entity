@@ -63,6 +63,12 @@ public class MoneyView extends RelativeLayout {
                         container.addView(text);
 //                        addView(container);
                         first = false;
+                        text.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                player.addMoney(100000);
+                            }
+                        });
                     } else {
                         if (player.getMoney() > 99999) {
                             text.setText("∞");
@@ -72,6 +78,8 @@ public class MoneyView extends RelativeLayout {
                     }
             }
         });
+
+
 
 
         creator.start();

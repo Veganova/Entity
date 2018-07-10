@@ -42,7 +42,7 @@ public class ShockwaveCanister extends Entity {
     public void onDeath(MyWorld world){
         if(this.naturalDeath) {
             ExpandingEffect emp = new EMP(name_tag, this.team, world);
-            Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), emp, world, this.team);
+            Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), emp, world, Team.NEUTRAL);
             emp.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
         }
         super.onDeath(world);
