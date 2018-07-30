@@ -1,12 +1,8 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 
-import android.media.MediaPlayer;
-
-import com.ne.revival_games.entity.R;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
-import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Sounds;
 
 import org.dyn4j.geometry.Vector2;
@@ -23,8 +19,8 @@ public abstract class AimShootEntity extends AimableEntity implements Shootable 
     private double shootingSpeed = 30, acceleration = 0;
     private boolean isThrust = false;
 
-    public AimShootEntity(double direction, double speed, Team team, String name, boolean isThrust) {
-        super(direction, speed, team, name);
+    public AimShootEntity(double direction, double speed, Team team, boolean isThrust) {
+        super(direction, speed, team);
         this.isThrust = isThrust;
         this.acceleration = MySettings.getNum(team.toString(), name + " acceleration");
     }

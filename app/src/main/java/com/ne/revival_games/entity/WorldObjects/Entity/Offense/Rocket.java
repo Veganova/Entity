@@ -30,7 +30,7 @@ public class Rocket extends AimShootEntity {
     private boolean collided = false;
 
     public Rocket(double x, double y, double angle, double speed, Team team, MyWorld world, String tag) {
-        super(angle, speed, team, tag + "rocket", true);
+        super(angle, speed, team, true);
         List<AShape> components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(50, 20);

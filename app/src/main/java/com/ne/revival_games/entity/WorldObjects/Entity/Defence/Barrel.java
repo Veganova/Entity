@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
@@ -31,17 +32,19 @@ public class Barrel extends ShootableEntity {
     public Turret myTurret = null;
     private double sleepUntil = 0;
 
-    public Barrel(EntityLeaf toShoot, BarrelType type,
-                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location, String tag) {
-        super(0, 0, team, tag + "barrel");
+    public Barrel(BarrelType type,
+                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location, Entity parent) {
+        super(0, 0, team, parent);
         initBarrel(type, location, world, angle);
         this.world = world;
-        this.toShoot = toShoot;
         this.world.objectDatabase.put(this.shape.body, this);
-        this.setShootingSpeed(MySettings.getNum(team.toString(), name_tag + " shooting_speed"));
+        this.setShootingSpeed(MySettings.getNum(team.toString(), new Query(this.getName(), "shooting_speed")));
 
         this.myTurret = turret;
+    }
 
+    public void setToShoot(EntityLeaf toShoot) {
+        this.toShoot = toShoot;
     }
 
     private void initBarrel(BarrelType type, Vector2 location, MyWorld world, double angle) {
@@ -77,7 +80,7 @@ public class Barrel extends ShootableEntity {
 
     @Override
     public Entity getNewBodyToShoot(double x, double y, double angle) {
-        return toShoot.produce(x, y, angle, world, this.team, name_tag);
+        return toShoot.produce(x, y, angle, world, this.team);
     }
 
 //    @Override

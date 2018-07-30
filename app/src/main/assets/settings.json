@@ -22,7 +22,7 @@
       "length" : 60,
       "width" : 10
     },
-    "nexus": {
+    "Nexus": {
       "health": 1000,
       "angular_damping": 0.25,
       "linear_damping": 2,
@@ -31,19 +31,19 @@
         "strength": 20
       }
     },
-    "small_barrier" : {
+    "BarrierSmall" : {
         "health" : 125,
         "width" : 180,
         "height" : 25,
         "cost" : 180
      },
-    "large_barrier" : {
+    "BarrierLarge" : {
         "health" : 250,
         "width" : 240,
         "height" : 38,
         "cost" : 350
     },
-    "totem": {
+    "temtem": {
       "health": 50,
       "cost" : 450,
       "slow_effect": {
@@ -54,7 +54,7 @@
         }
       }
     },
-    "missile": {
+    "Missile": {
       "density" : 0.05,
     "health" : 30
     },
@@ -64,7 +64,7 @@
     "custom": {
 
     },
-    "rocket" : {
+    "Rocket" : {
       "acceleration" : 5,
       "cost" : 50,
       "explosive_effect": {
@@ -81,49 +81,49 @@
       "barrel": {
         "health": 30,
         "shooting_speed" : 25,
-        "heal_missile": {
+        "heal_Missile": {
           "health" : 20,
           "radius" : 14
         }
       }
     },
-    "1_turret": {
+    "TurretOneBarrel": {
       "health": 50,
       "cost" : 500,
       "barrel": {
         "health": 30,
         "shooting_speed" : 25,
-        "missile": {
+        "Missile": {
           "health" : 20,
           "radius" : 14
         }
       }
     },
-    "2_turret": {
+    "TurretTwoBarrel": {
       "health": 100,
       "cost" : 700,
       "barrel": {
         "health": 35,
         "shooting_speed" : 30,
-        "missile": {
+        "Missile": {
           "health" : 25,
           "radius" : 13
         }
       }
     },
-    "3_turret": {
+    "TurretThreeBarrel": {
       "health": 150,
       "cost" : 800,
       "barrel": {
         "health": 50,
         "shooting_speed" : 35,
-        "missile": {
+        "Missile": {
           "health" : 30,
           "radius" : 12
         }
       }
     },
-    "shockcan" : {
+    "ShockwaveCanister" : {
       "health" : 100,
       "lifetime" : 200,
       "emp_effect" : {
@@ -135,7 +135,7 @@
         "duration" : 3000
       }
     },
-    "mine": {
+    "Mine": {
       "health": 30,
       "cost": 50,
       "radius": 20,
@@ -147,7 +147,7 @@
         "damage": 0.5
       }
     },
-    "comet" : {
+    "Comet" : {
       "radius" : 10
     }
   },

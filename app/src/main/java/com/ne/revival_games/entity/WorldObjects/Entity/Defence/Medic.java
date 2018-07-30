@@ -19,7 +19,7 @@ public class Medic extends Turret {
     protected EntityLeaf getProjectile() {
         return new EntityLeaf("Medic Turret") {
             @Override
-            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+            public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                 return new HealShot(x, y, angle, 0, world, team, producerName);
             }
         };

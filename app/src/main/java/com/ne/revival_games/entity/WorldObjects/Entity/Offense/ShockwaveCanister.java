@@ -20,7 +20,7 @@ public class ShockwaveCanister extends Entity {
     boolean naturalDeath = false;
 
     public ShockwaveCanister(double x, double y, double angle, Team team, MyWorld world, String tag) {
-        super(angle, 0, team, tag + "shockcan");
+        super(angle, 0, team);
         this.shape = new ObjRectangle(50, 20);
         this.lifeTime = (long) MySettings.getNum(team.toString(), name_tag + " lifetime");
         this.shape.getBuilder(true, world).setXY(x, y).setAngle(angle).init();

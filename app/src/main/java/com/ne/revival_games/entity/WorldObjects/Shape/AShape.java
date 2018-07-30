@@ -5,8 +5,8 @@ import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 
-import org.dyn4j.collision.Fixture;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
@@ -16,7 +16,6 @@ import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -157,12 +156,12 @@ public abstract class AShape implements Shape {
             return this;
         }
 
-        public InitBuilder setBasics(String team, String name) {
-            this.setAngularDamping(MySettings.getNum(team, name + " angular_damping"));
-            this.setLinearDamping(MySettings.getNum(team, name + " linear_damping"));
-            this.setDensity(MySettings.getNum(team, name + " density"));
-            this.setRestitution(MySettings.getNum(team, name + " restitution"));
-            this.setFriction(MySettings.getNum(team, name + " friction"));
+        public InitBuilder setBasics(String team, Query baseQuery) {
+            this.setAngularDamping(MySettings.getNum(team, new Query(baseQuery, "angular_damping")));
+            this.setLinearDamping(MySettings.getNum(team, new Query(baseQuery, "linear_damping")));
+            this.setDensity(MySettings.getNum(team, new Query(baseQuery, "density")));
+            this.setRestitution(MySettings.getNum(team, new Query(baseQuery, "restitution")));
+            this.setFriction(MySettings.getNum(team, new Query(baseQuery, "friction")));
             return this;
         }
 

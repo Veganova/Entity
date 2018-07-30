@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.SlowEffect
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
@@ -35,13 +36,12 @@ public class Totem extends Entity {
 
 
     public Totem(double x, double y, double angle, MyWorld world, Team team, int numbers, String tag) {
-        super(angle, 0, team, tag + "totem");
+        super(angle, 0, team);
 
         this.shape = new ObjCircle(30);
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
-        builder.setAngle(angle).setXY(x, y).setBasics(team.toString(), name_tag).init();
+        builder.setAngle(angle).setXY(x, y).setBasics(team.toString(), new Query(getName())).init();
 
-        //this.shape.rotateBody(Math.toRadians(angle));
         world.objectDatabase.put(this.shape.body, this);
 
         initBars(x, y, world, numbers);
@@ -111,7 +111,7 @@ public class Totem extends Entity {
             AShape bar = new ObjRectangle(20, 100);
             AShape.InitBuilder builder = bar.getBuilder(true, world);
             builder.setAngle(Math.toDegrees(theta * 2)).setXY(barX, barY)
-                    .setBasics(team.toString(), name_tag + " totem_stub")
+                    .setBasics(team.toString(), new Query(getName(),"totem_stub"))
                     .init();
 
             this.bars.add(new CustomEntity(bar, 0, STUB_HEALTH, false, team, world));

@@ -10,7 +10,6 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by vishn on 9/5/2017.
@@ -20,7 +19,7 @@ public class Mine extends Entity{
     boolean contacted = false;
 
     public Mine(double x, double y, double angle, Team team, MyWorld world, String tag) {
-        super(angle, 0, team, tag + "mine");
+        super(angle, 0, team);
         this.shape = new ObjCircle(MySettings.getNum(team.toString(), name_tag + " radius"));
         this.shape.getBuilder(true, world).setXY(x, y)
                 .setBasics(team.toString(), name_tag)

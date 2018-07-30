@@ -18,7 +18,7 @@ public abstract class EntityLeaf {
         this.altnames = altnames;
     }
 
-    public abstract Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName);
+    public abstract Entity produce(double x, double y, double angle, MyWorld world, Team team);
 
     @Override
     public String toString() {

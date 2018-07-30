@@ -35,7 +35,7 @@ public class ObjRectangle extends AShape {
         this.angle = this.body.getTransform().getRotation();
         canvas.save();
         //ideal order would be rotate, translate
-        ////getCenter is relative to orientation so I need to multiple by like sign or cosign of the angle
+        ////getCenter is relative to orientation so I need to multiple by like sin or cosine of the angle
 
         canvas.rotate((float)Math.toDegrees(this.angle),
                 (float)this.getX(), (float)this.getY());

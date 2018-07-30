@@ -6,19 +6,15 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Pair;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.FrameTime;
-import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Updatable;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
@@ -149,8 +145,8 @@ public class Launcher implements Updatable {
                     String unit_type = getAmmoName(randomIndex);
                     GhostEntity unit = GhostFactory.produce(Entities.findLeaf(unit_type),
                             MyWorld.SCALE * location.x,
-                            MyWorld.SCALE * location.y, 0, world, team,
-                            tag);
+                            MyWorld.SCALE * location.y, 0, world, team
+                    );
 
 
                     if (unit.canPlace()) {

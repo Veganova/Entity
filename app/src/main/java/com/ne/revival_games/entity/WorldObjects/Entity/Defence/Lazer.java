@@ -27,7 +27,7 @@ public class Lazer extends Entity {
 
 
     public Lazer(double x, double y, double angle, MyWorld world, Team team, String tag) {
-        super(angle, 0, team, tag + "lazer");
+        super(angle, 0, team);
         this.world = world;
         this.invulnerable = true;
         this.isCollisionAuthority = true;

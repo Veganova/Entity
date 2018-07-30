@@ -7,14 +7,24 @@
       "ammoFiredAtOnce": 1,
       "ammoFiredAtOnceVariance": 0,
       "duration" : 15,
-      "units" : ["comet"],
-      "comet" : {
-        "friction" : 0,
-        "radius": {"lower" : 15, "upper" : 30},
-        "number" : 10,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 10, "upper" : 20},
-        "angular_velocity" : 2
+      "units" : {
+        "Comet": {
+          "friction": 0,
+          "radius": {
+            "lower": 15,
+            "upper": 30
+          },
+          "number": 10,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 10,
+            "upper": 20
+          },
+          "angular_velocity": 2
+        }
       },
       "break" : 10
     },
@@ -24,18 +34,28 @@
       "money_awarded" : 300,
       "ammoFiredAtOnceVariance": 1,
       "duration" : 20,
-      "units" : ["comet", "shockcan"],
-      "comet" : {
-        "friction" : 0,
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "shockcan" : {
-        "number" : 3,
-        "health" : 60,
-        "speed" : 35
+      "units" : {
+        "Comet": {
+          "friction": 0,
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "ShockwaveCanister": {
+          "number": 3,
+          "health": 60,
+          "speed": 35
+        }
       },
       "break" : 10
     },
@@ -45,23 +65,33 @@
       "money_awarded" : 400,
       "ammoFiredAtOnceVariance": 1,
       "duration" : 25,
-      "units" : ["comet", "shockcan", "rocket"],
-      "comet" : {
-        "friction" : 0,
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 1,
-        "health" : 60,
-        "acceleration" : 2
-      },
-      "shockcan" : {
-        "number" : 3,
-        "health" : 40,
-        "speed" : 35
+      "units" : {
+        "Comet": {
+          "friction": 0,
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 1,
+          "health": 60,
+          "acceleration": 2
+        },
+        "ShockwaveCanister": {
+          "number": 3,
+          "health": 40,
+          "speed": 35
+        }
       },
       "break" : 10
     },
@@ -71,22 +101,32 @@
       "ammoFiredAtOnce": 2,
       "ammoFiredAtOnceVariance": 1,
       "duration" : 30,
-      "units" : ["comet", "shockcan", "rocket"],
-      "comet" : {
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 2,
-        "health" : 40,
-        "acceleration" : 3
-      },
-      "shockcan" : {
-        "number" : 5,
-        "health" : 40,
-        "speed" : 30
+      "units" : {
+        "Comet": {
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 2,
+          "health": 40,
+          "acceleration": 3
+        },
+        "ShockwaveCanister": {
+          "number": 5,
+          "health": 40,
+          "speed": 30
+        }
       },
       "break" : 1
     },
@@ -96,22 +136,32 @@
       "ammoFiredAtOnce": 6,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 30,
-      "units" : ["comet", "shockcan", "rocket"],
-      "comet" : {
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 5,
-        "health" : 40,
-        "acceleration" : 3
-      },
-      "shockcan" : {
-        "number" : 5,
-        "health" : 40,
-        "speed" : 30
+      "units" : {
+        "Comet": {
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 5,
+          "health": 40,
+          "acceleration": 3
+        },
+        "ShockwaveCanister": {
+          "number": 5,
+          "health": 40,
+          "speed": 30
+        }
       },
       "break" : 25
 
@@ -122,28 +172,38 @@
       "ammoFiredAtOnce": 8,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 30,
-      "units" : ["comet", "shockcan", "rocket", "1_turret"],
-      "comet" : {
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 7,
-        "health" : 40,
-        "acceleration" : 3
-      },
-      "shockcan" : {
-        "number" : 7,
-        "health" : 40,
-        "speed" : 30
-      },
-      "1_turret" : {
-        "number" : 1,
-        "health" : 80,
-        "stub" : 20,
-        "speed" : 20
+      "units" : {
+        "Comet": {
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 7,
+          "health": 40,
+          "acceleration": 3
+        },
+        "ShockwaveCanister": {
+          "number": 7,
+          "health": 40,
+          "speed": 30
+        },
+        "TurretOneBarrel": {
+          "number": 1,
+          "health": 80,
+          "stub": 20,
+          "speed": 20
+        }
       },
       "break" : 25
 
@@ -154,28 +214,38 @@
       "ammoFiredAtOnce": 8,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 35,
-      "units" : ["comet", "shockcan", "rocket", "1_turret"],
-      "comet" : {
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 9,
-        "health" : 40,
-        "acceleration" : 3
-      },
-      "shockcan" : {
-        "number" : 9,
-        "health" : 40,
-        "speed" : 30
-      },
-      "1_turret" : {
-        "number" : 3,
-        "health" : 80,
-        "stub" : 20,
-        "speed" : 5
+      "units" : {
+        "Comet": {
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 9,
+          "health": 40,
+          "acceleration": 3
+        },
+        "ShockwaveCanister": {
+          "number": 9,
+          "health": 40,
+          "speed": 30
+        },
+        "TurretOneBarrel": {
+          "number": 3,
+          "health": 80,
+          "stub": 20,
+          "speed": 5
+        }
       },
       "break" : 25
     },
@@ -185,34 +255,44 @@
       "ammoFiredAtOnce": 10,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 40,
-      "units" : ["comet", "shockcan", "rocket", "1_turret", "2_turret"],
-      "comet" : {
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 8,
-        "health" : 40,
-        "acceleration" : 3
-      },
-      "shockcan" : {
-        "number" : 15,
-        "health" : 40,
-        "speed" : 30
-      },
-      "1_turret" : {
-        "number" : 5,
-        "health" : 80,
-        "stub" : 20,
-        "speed" : 5
-      },
-      "2_turret" : {
-        "number" : 2,
-        "health" : 120,
-        "stub" : 40,
-        "speed" : 5
+      "units" : {
+        "Comet": {
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 8,
+          "health": 40,
+          "acceleration": 3
+        },
+        "ShockwaveCanister": {
+          "number": 15,
+          "health": 40,
+          "speed": 30
+        },
+        "TurretOneBarrel": {
+          "number": 5,
+          "health": 80,
+          "stub": 20,
+          "speed": 5
+        },
+        "TurretTwoBarrel": {
+          "number": 2,
+          "health": 120,
+          "stub": 40,
+          "speed": 5
+        }
       },
       "break" : 25
     },
@@ -221,41 +301,51 @@
       "breakBetweenFiring" : 1,
       "ammoFiredAtOnce": 10,
       "ammoFiredAtOnceVariance": 2,
-      "units" : ["comet", "shockcan", "rocket", "1_turret", "2_turret", "3_turret"],
-      "duration" : 40,
-      "comet" : {
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 12,
-        "health" : 40,
-        "acceleration" : 4
-      },
-      "shockcan" : {
-        "number" : 12,
-        "health" : 40,
-        "speed" : 30
-      },
-      "1_turret" : {
-        "number" : 6,
-        "health" : 80,
-        "stub" : 20,
-        "speed" : 5
-      },
-      "2_turret" : {
-        "number" : 4,
-        "health" : 120,
-        "stub" : 40,
-        "speed" : 5
-      },
-      "3_turret" : {
-        "number" : 1,
-        "health" : 250,
-        "stub" : 80,
-        "speed" : 5
+      "units" : {
+        "duration": 40,
+        "Comet": {
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 12,
+          "health": 40,
+          "acceleration": 4
+        },
+        "ShockwaveCanister": {
+          "number": 12,
+          "health": 40,
+          "speed": 30
+        },
+        "TurretOneBarrel": {
+          "number": 6,
+          "health": 80,
+          "stub": 20,
+          "speed": 5
+        },
+        "TurretTwoBarrel": {
+          "number": 4,
+          "health": 120,
+          "stub": 40,
+          "speed": 5
+        },
+        "TurretThreeBarrel": {
+          "number": 1,
+          "health": 250,
+          "stub": 80,
+          "speed": 5
+        }
       },
       "break" : 25
     },
@@ -265,40 +355,50 @@
       "ammoFiredAtOnce": 11,
       "ammoFiredAtOnceVariance": 2,
       "duration" : 45,
-      "units" : ["comet", "shockcan", "rocket", "1_turret", "2_turret", "3_turret"],
-      "comet" : {
-        "radius": {"lower" : 10, "upper" : 25},
-        "number" : 20,
-        "health" : {"lower" : 10, "upper" : 35},
-        "speed" : {"lower" : 15, "upper" : 30}
-      },
-      "rocket" : {
-        "number" : 25,
-        "health" : 60,
-        "acceleration" : 4
-      },
-      "shockcan" : {
-        "number" : 25,
-        "health" : 40,
-        "speed" : 30
-      },
-      "1_turret" : {
-        "number" : 10,
-        "health" : 80,
-        "stub" : 20,
-        "speed" : 5
-      },
-      "2_turret" : {
-        "number" : 8,
-        "health" : 120,
-        "stub" : 40,
-        "speed" : 5
-      },
-      "3_turret" : {
-        "number" : 3,
-        "health" : 250,
-        "stub" : 80,
-        "speed" : 5
+      "units" : {
+        "Comet": {
+          "radius": {
+            "lower": 10,
+            "upper": 25
+          },
+          "number": 20,
+          "health": {
+            "lower": 10,
+            "upper": 35
+          },
+          "speed": {
+            "lower": 15,
+            "upper": 30
+          }
+        },
+        "Rocket": {
+          "number": 25,
+          "health": 60,
+          "acceleration": 4
+        },
+        "ShockwaveCanister": {
+          "number": 25,
+          "health": 40,
+          "speed": 30
+        },
+        "TurretOneBarrel": {
+          "number": 10,
+          "health": 80,
+          "stub": 20,
+          "speed": 5
+        },
+        "TurretTwoBarrel": {
+          "number": 8,
+          "health": 120,
+          "stub": 40,
+          "speed": 5
+        },
+        "TurretThreeBarrel": {
+          "number": 3,
+          "health": 250,
+          "stub": 80,
+          "speed": 5
+        }
       },
       "break" : 25
     }

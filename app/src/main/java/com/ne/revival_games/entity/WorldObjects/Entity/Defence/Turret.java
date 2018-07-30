@@ -6,13 +6,13 @@ import com.ne.revival_games.entity.WorldObjects.Entity.ActiveBar;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Aim.DivineAim;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.GeniusAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
@@ -50,10 +50,9 @@ public class Turret extends AimableEntity {
 //    private AimLogic logic;
 //    public boolean aiming = true;
 
-
     //need to include the angle somehow
-    public Turret(double x, double y, double angle, MyWorld world, Team team, int numBarrels, String tag){
-        super(angle, 0, team, tag + "turret");
+    public Turret(double x, double y, double angle, MyWorld world, Team team, int numBarrels){
+        super(angle, 0, team);
         this.world = world;
         this.numBarrels = numBarrels;
         this.frictionCoefficent = 60;
@@ -69,7 +68,8 @@ public class Turret extends AimableEntity {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
 //        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, team, false);
 
-        Barrel b = new Barrel(getProjectile(), type, this, world, angle, team, location, name_tag + " ");
+        Barrel b = new Barrel(type, this, world, angle, team, location, this);
+        b.setToShoot(getProjectile(b));
 //        Barrel b = new Barrel(new EntityLeaf("Missile") {
 //            @Override
 //            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
@@ -90,7 +90,7 @@ public class Turret extends AimableEntity {
     protected EntityLeaf getProjectile() {
         return new EntityLeaf("Missile") {
             @Override
-            public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producername) {
+            public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                 return new Missile(x, y, angle, 0, world, team, producername + " ");
 //                return new Mine(new Vector2(x,y), angle, team, world, producername + " ").prime();
             }

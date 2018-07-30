@@ -1,14 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimLogic;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimShootEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.AimableEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.ImmediateAim;
-import com.ne.revival_games.entity.WorldObjects.Entity.Aim.SimpleAim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Missile;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
@@ -16,7 +9,6 @@ import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by Veganova on 7/10/2017.
@@ -30,7 +22,7 @@ public class Comet extends Entity {
     public double radius;
 
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team, String tag) {
-        super(direction, speed, team, tag + "comet");
+        super(direction, speed, team);
 
         radius = MySettings.getNum(team.toString(), name_tag + " radius");
         shape = new ObjCircle(radius);

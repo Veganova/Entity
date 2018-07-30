@@ -3,23 +3,18 @@ package com.ne.revival_games.entity.WorldObjects;
 import android.graphics.Canvas;
 
 import com.ne.revival_games.entity.MainActivity;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
-import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.TurretOneBarrel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Launcher;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.Database;
 import com.ne.revival_games.entity.WorldObjects.MyCollections.MyList;
 import com.ne.revival_games.entity.WorldObjects.Players.AI_Bot;
 import com.ne.revival_games.entity.WorldObjects.Players.InitializeWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
-import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.Settings;
@@ -30,13 +25,10 @@ import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.geometry.Vector2;
 import org.json.JSONObject;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.ne.revival_games.entity.WorldObjects.MySettings.getSettings;
 
 
 /**
@@ -146,6 +138,9 @@ public class MyWorld {
 //        bam = new MassLazer(-200, -200, 30, this);
 //        this.ghostNexus = new GhostEntity(nex);
 
+        new TurretOneBarrel(0, 0, 0, this, Team.DEFENCE, "");
+//         GhostEntity ge = new GhostEntity(new TurretOneBarrel(0, 0, 0, this, Team.DEFENCE, ""), this);
+//         ge.place(players.get(0));
 //        circ = new ObjCircle(0, 150, 10, this);
 //        List<AShape> objects = new ArrayList<AShape>();
 

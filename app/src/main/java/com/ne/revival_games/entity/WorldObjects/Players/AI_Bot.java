@@ -74,8 +74,8 @@ public class AI_Bot extends Launcher {
                    curState = State.GAME_OVER;
                }
            case READY_BREAK:
-               //waits in this state until callback
-            //in a round of the game
+               // waits in this state until callback
+               // in a round of the game
                break;
            case IN_ROUND:
                 if(ammoLeft() != 0) {

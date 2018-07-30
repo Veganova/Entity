@@ -12,10 +12,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Offense.ShockwaveCanister
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 
-import org.dyn4j.geometry.Vector2;
-
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -26,7 +23,7 @@ public enum Entities {
 
     COMET(new EntityLeaf[]{new EntityLeaf("COMET") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
             return new Comet(x, y, angle, 0, world, team, producerName);
         }
     }}),
@@ -34,78 +31,78 @@ public enum Entities {
 
     NEXUS(new EntityLeaf[]{new EntityLeaf("NEXUS") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-            return new Nexus(x, y, angle, world, team, producerName);
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+            return new Nexus(x, y, angle, world, team);
         }
     }}),
     TOTEM(new EntityLeaf[]{new EntityLeaf("TOTEM") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
             return new Totem(x, y, angle, world, team, 3, producerName).prime();
         }
     }}),
 
     BARRIER(new EntityLeaf[]{new EntityLeaf("BARRIER SMALL") {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-            return new Barrier(x, y, angle, world, team, producerName + " small_");
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+            return new Barrier(x, y, angle, world, team);
         }
     },
             new EntityLeaf("BARRIER LARGE") {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
-                    return new Barrier(x, y, angle, world, team, producerName + " large_");
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+                    return new Barrier(x, y, angle, world, team);
                 }
             }
     }),
     TURRET(new EntityLeaf[]{
             new EntityLeaf("TURRET-1", new String[]{"1_turret"}) {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                     return new Turret(x, y, angle, world, team, 1, producerName + " 1_");
                 }
             },
             new EntityLeaf("TURRET-2",  new String[]{"2_turret"}) {
         @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
             return new Turret(x, y, angle, world, team, 2, producerName + " 2_");
         }
     },
             new EntityLeaf("MINE") {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                     return new Mine(x, y, angle, team, world, producerName).prime();
                 }
             },
           new EntityLeaf("ROCKET") {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                     return new Rocket(x, y, angle, 0, team, world, producerName).prime();
                 }
             },
             new EntityLeaf("SHOCKCAN") {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                     return new ShockwaveCanister(x, y, angle, team, world, producerName).prime();
                 }
             },
 
             new EntityLeaf("TURRET-3",  new String[]{"3_turret"}) {
                 @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team, String producerName) {
+                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
                     return new Turret(x, y, angle, world, team, 3, producerName + " 3_");
                 }
             }
     });
 
-    public List<EntityLeaf> produceables;
+    public EntityLeaf produceable;
 
-    Entities(EntityLeaf[] leafs) {
-        produceables = Arrays.asList(leafs);
+    Entities(EntityLeaf leaf) {
+        produceable = Arrays.asList(leafs);
     }
 
     public EntityLeaf getLeaf(String id) {
-        for (EntityLeaf leaf: this.produceables) {
+        for (EntityLeaf leaf: this.produceables flatten out the menu since there is no nesting within Entities) {
             if (leaf.name.equals(id)) {
                 return leaf;
             }
