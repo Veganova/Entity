@@ -32,9 +32,8 @@ public class Barrel extends ShootableEntity {
     public Turret myTurret = null;
     private double sleepUntil = 0;
 
-    public Barrel(BarrelType type,
-                  @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location, Entity parent) {
-        super(0, 0, team, parent);
+    public Barrel(BarrelType type, @NonNull Turret turret, MyWorld world, double angle, Team team, Vector2 location) {
+        super(0, 0, team, turret);
         initBarrel(type, location, world, angle);
         this.world = world;
         this.world.objectDatabase.put(this.shape.body, this);

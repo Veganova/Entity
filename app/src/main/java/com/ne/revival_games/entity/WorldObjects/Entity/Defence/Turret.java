@@ -58,7 +58,7 @@ public class Turret extends AimableEntity {
         this.frictionCoefficent = 60;
         this.world = world;
         initializeTurret(new Vector2(x,y), world);
-        double speed = MySettings.getNum(team.toString(), name_tag + " barrel shooting_speed");
+        double speed = MySettings.getNum(team.toString(), new Query(this.getName(), Barrel.class.getSimpleName(), "shooting_speed"));
         this.logic = new DivineAim(this, world.objectDatabase, range, speed);
 
         this.bar = new ActiveBar(this, 0.587f);
@@ -68,7 +68,7 @@ public class Turret extends AimableEntity {
         //Projectile project = new SimpleLazer(new Vector2(0,0), 0, 400, 20, 300, 0, this.world);//
 //        Projectile projectile = new Missile(0, 0, Missile.SPEED, 0, world, team, false);
 
-        Barrel b = new Barrel(type, this, world, angle, team, location, this);
+        Barrel b = new Barrel(type, this, world, angle, team, location);
         b.setToShoot(getProjectile(b));
 //        Barrel b = new Barrel(new EntityLeaf("Missile") {
 //            @Override
@@ -87,12 +87,11 @@ public class Turret extends AimableEntity {
     }
 
 
-    protected EntityLeaf getProjectile() {
+    protected EntityLeaf getProjectile(final Barrel b) {
         return new EntityLeaf("Missile") {
             @Override
             public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-                return new Missile(x, y, angle, 0, world, team, producername + " ");
-//                return new Mine(new Vector2(x,y), angle, team, world, producername + " ").prime();
+                return new Missile(x, y, angle, 0, world, team, b);
             }
         };
     }

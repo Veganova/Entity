@@ -72,7 +72,7 @@ public class Rocket extends AimShootEntity {
 
     @Override
     public void onDeath(MyWorld world){
-            ExpandingEffect boom = new ExplosiveEffect(name_tag, this.team, world);
+            ExpandingEffect boom = new ExplosiveEffect(this.team, world, this);
             Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), boom, world, this.team);
             boom.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
             super.onDeath(world);

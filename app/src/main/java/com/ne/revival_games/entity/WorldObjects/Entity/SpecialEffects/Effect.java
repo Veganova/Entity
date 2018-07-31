@@ -6,6 +6,7 @@ import android.graphics.Paint;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.joint.RevoluteJoint;
@@ -30,6 +31,11 @@ public abstract class Effect {
     protected boolean status = true;
     protected boolean onCooldown = false;
     private boolean draw = false;
+    protected Query baseQueryName;
+
+    public Query getName() {
+        return new Query(this.baseQueryName);
+    }
 
     /**
      *  @param applier
@@ -43,8 +49,13 @@ public abstract class Effect {
         this.world = world;
         this.zone = zone;
         this.cooldown = 0.0;
+        this.baseQueryName = new Query(this.getClass().getSimpleName());
     }
 
+    void basicInit(Entity applier, AShape zone, EffectType type, MyWorld world, Entity parent) {
+        basicInit(applier, zone, type, world);
+        this.baseQueryName = new Query(parent.getName(), this.getClass().getSimpleName());
+    }
     /**
      *  @param applier
      * @param zone

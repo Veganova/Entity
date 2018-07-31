@@ -15,7 +15,7 @@
     "restitution" : 0.0,
     "density" : 0.5,
     "acceleration" : 0,
-    "lazer" : {
+    "Lazer" : {
       "speed" : 0,
       "damage" : 10,
       "lifetime" : -1,
@@ -26,7 +26,7 @@
       "health": 1000,
       "angular_damping": 0.25,
       "linear_damping": 2,
-      "gravity_effect": {
+      "GravityEffect": {
         "radius": 1000,
         "strength": 20
       }
@@ -43,20 +43,22 @@
         "height" : 38,
         "cost" : 350
     },
-    "temtem": {
+    "Totem": {
       "health": 50,
       "cost" : 450,
-      "slow_effect": {
+      "SlowEffect": {
         "radius": 150,
-        "strength": 4,
-        "totem_stub" : {
-          "health" : 50
-        }
+        "strength": 4
+      },
+      "TotemStub" : {
+        "health" : 50,
+        "distance": 90
       }
     },
     "Missile": {
       "density" : 0.05,
-    "health" : 30
+      "health" : 30,
+      "radius" : 12
     },
     "dummy" : {
     "invulnerable" : true
@@ -67,7 +69,7 @@
     "Rocket" : {
       "acceleration" : 5,
       "cost" : 50,
-      "explosive_effect": {
+      "ExplosiveEffect": {
         "percent_start": 0.05,
         "growth_rate": 0.05,
         "max_radius": 120,
@@ -78,10 +80,10 @@
     "medic_1_turret": {
       "health": 50,
       "cost" : 500,
-      "barrel": {
+      "Barrel": {
         "health": 30,
         "shooting_speed" : 25,
-        "heal_Missile": {
+        "HealShot": {
           "health" : 20,
           "radius" : 14
         }
@@ -90,7 +92,7 @@
     "TurretOneBarrel": {
       "health": 50,
       "cost" : 500,
-      "barrel": {
+      "Barrel": {
         "health": 30,
         "shooting_speed" : 25,
         "Missile": {
@@ -102,7 +104,7 @@
     "TurretTwoBarrel": {
       "health": 100,
       "cost" : 700,
-      "barrel": {
+      "Barrel": {
         "health": 35,
         "shooting_speed" : 30,
         "Missile": {
@@ -114,7 +116,7 @@
     "TurretThreeBarrel": {
       "health": 150,
       "cost" : 800,
-      "barrel": {
+      "Barrel": {
         "health": 50,
         "shooting_speed" : 35,
         "Missile": {
@@ -126,7 +128,7 @@
     "ShockwaveCanister" : {
       "health" : 100,
       "lifetime" : 200,
-      "emp_effect" : {
+      "EmpEffect" : {
         "percent_start": 0.05,
         "growth_rate": 0.05,
         "max_radius": 150,
@@ -139,7 +141,7 @@
       "health": 30,
       "cost": 50,
       "radius": 20,
-      "explosive_effect": {
+      "ExplosiveEffect": {
         "percent_start": 0.05,
         "growth_rate": 0.05,
         "max_radius": 120,

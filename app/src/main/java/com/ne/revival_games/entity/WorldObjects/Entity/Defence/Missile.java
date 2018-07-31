@@ -15,14 +15,12 @@ import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 public class Missile extends Entity {
     public static double lifeTime = 320;
 
-
-
     public Missile(double x, double y, double angle, double speed, MyWorld world, Team team, Entity parent) {
-        super(angle, speed, team);
-        shape = new ObjCircle(MySettings.getNum(team.toString(), new Query(getName(), "radius"));
+        super(angle, speed, team, parent);
+        shape = new ObjCircle(MySettings.getNum(team.toString(), new Query(getName(), "radius")));
         shape.getBuilder(true, world).setXY(x, y)
                 .setDensity(MySettings.getNum(team.toString(), new Query(getName(), "density")))
-                .setBasics(team.toString(), new Query(parent.getName(), getName()))
+                .setBasics(team.toString(), new Query(this.getName()))
                 .init();
 //        shape.body.setBullet(true);
         world.objectDatabase.put(this.shape.body, this);

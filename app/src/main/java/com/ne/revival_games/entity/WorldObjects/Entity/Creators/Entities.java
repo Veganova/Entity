@@ -1,10 +1,13 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Creators;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Barrier;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.BarrierLarge;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.BarrierSmall;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Mine;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Nexus;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Totem;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.Turret;
+import com.ne.revival_games.entity.WorldObjects.Entity.Defence.TurretOneBarrel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Comet;
 import com.ne.revival_games.entity.WorldObjects.Entity.Offense.Rocket;
@@ -21,45 +24,43 @@ import java.util.Random;
 
 public enum Entities {
 
-    COMET(new EntityLeaf[]{new EntityLeaf("COMET") {
+    Comet(new EntityLeaf() {
         @Override
         public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-            return new Comet(x, y, angle, 0, world, team, producerName);
+            return new Comet(x, y, angle, 0, world, team);
         }
-    }}),
+    }),
 
-
-    NEXUS(new EntityLeaf[]{new EntityLeaf("NEXUS") {
+    Nexus(new EntityLeaf() {
         @Override
         public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
             return new Nexus(x, y, angle, world, team);
         }
-    }}),
-    TOTEM(new EntityLeaf[]{new EntityLeaf("TOTEM") {
-        @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-            return new Totem(x, y, angle, world, team, 3, producerName).prime();
-        }
-    }}),
-
-    BARRIER(new EntityLeaf[]{new EntityLeaf("BARRIER SMALL") {
-        @Override
-        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-            return new Barrier(x, y, angle, world, team);
-        }
-    },
-            new EntityLeaf("BARRIER LARGE") {
-                @Override
-                public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-                    return new Barrier(x, y, angle, world, team);
-                }
-            }
     }),
-    TURRET(new EntityLeaf[]{
+    Totem(new EntityLeaf() {
+        @Override
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+            return new Totem(x, y, angle, world, team, 3).prime();
+        }
+    }),
+
+    BarrierSmall(new EntityLeaf() {
+        @Override
+        public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+            return new BarrierSmall(x, y, angle, world, team);
+        }
+    }),
+    BarrierLarge(new EntityLeaf() {
+         @Override
+         public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
+             return new BarrierLarge(x, y, angle, world, team);
+         }
+    }),
+    TurretOneBarrel(new EntityLeaf[]{
             new EntityLeaf("TURRET-1", new String[]{"1_turret"}) {
                 @Override
                 public Entity produce(double x, double y, double angle, MyWorld world, Team team) {
-                    return new Turret(x, y, angle, world, team, 1, producerName + " 1_");
+                    return new TurretOneBarrel(x, y, angle, world, team, 1, producerName + " 1_");
                 }
             },
             new EntityLeaf("TURRET-2",  new String[]{"2_turret"}) {
@@ -98,7 +99,8 @@ public enum Entities {
     public EntityLeaf produceable;
 
     Entities(EntityLeaf leaf) {
-        produceable = Arrays.asList(leafs);
+        produceable = leaf;
+        produceable.setName(this.toString());
     }
 
     public EntityLeaf getLeaf(String id) {

@@ -7,6 +7,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ComplexShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
@@ -19,27 +20,27 @@ import org.dyn4j.geometry.Vector2;
  * Created by vishn on 7/23/2017.
  */
 
-public class EMP extends ExpandingEffect {
+public class EMPEffect extends ExpandingEffect {
     private double pulse_width = 50;
     private double duration = 2000;
 
-    public EMP(Entity applier, Vector2 location, double percentStartSize,
-               double growth_rate, double damage, double max_radius, double explosionPower, Team team,
-               MyWorld world, double duration) {
+    public EMPEffect(Entity applier, Vector2 location, double percentStartSize,
+                     double growth_rate, double damage, double max_radius, double explosionPower, Team team,
+                     MyWorld world, double duration) {
         super(applier, location, percentStartSize, growth_rate, damage, max_radius, explosionPower, team, world, EffectType.SHOCKWAVE);
         this.duration = duration;
     }
 
-    public EMP(double percentStartSize,
-               double growth_rate, double damage, double max_radius, double explosionPower, Team team,
-               MyWorld world, double duration) {
+    public EMPEffect(double percentStartSize,
+                     double growth_rate, double damage, double max_radius, double explosionPower, Team team,
+                     MyWorld world, double duration) {
         super(percentStartSize, growth_rate, damage, max_radius, explosionPower, team, world, EffectType.SHOCKWAVE);
         this.duration = duration;
     }
 
-    public EMP(String name, Team team, MyWorld world) {
-        super(name + " emp_effect", team, world, EffectType.SHOCKWAVE);
-        this.duration = MySettings.getNum(team.toString(), name + " emp_effect duration");
+    public EMPEffect(Team team, MyWorld world, Entity parent) {
+        super(team, world, EffectType.SHOCKWAVE, parent);
+        this.duration = MySettings.getNum(team.toString(), new Query(this.getName(), "emp_effect", "duration"));
     }
 
     @Override

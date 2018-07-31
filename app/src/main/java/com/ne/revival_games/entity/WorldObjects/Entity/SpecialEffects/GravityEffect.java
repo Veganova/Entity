@@ -1,8 +1,11 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
+import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
@@ -37,13 +40,14 @@ public class GravityEffect extends Effect {
      * joins a given shape to the applier at a given displacement from the center using a weldjoint
      *
      * @param applier
-     * @param radius
      * @param jointDisplacement displacement from the center point of the applier to join at
-     * @param gravityValue
      * @param world
      */
-    public GravityEffect(Entity applier, double radius, double gravityValue,
-                         Vector2 jointDisplacement, MyWorld world) {
+    public GravityEffect(Entity applier, Vector2 jointDisplacement, MyWorld world) {
+        this.baseQueryName = new Query(applier.getName(), this.getClass().getSimpleName());
+        Team team = applier.team;
+        double radius =  MySettings.getNum(team.toString(),  new Query(this.getName(),"radius"));
+        double gravityValue = MySettings.getNum(team.toString(),  new Query(this.getName(), "strength"));
         aoeJoint(applier, new ObjCircle(radius), effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
         world.objectDatabase.put(this.zone.body, applier);
@@ -85,7 +89,6 @@ public class GravityEffect extends Effect {
             return true;
         }
         return false;
-
     }
 
     @Override

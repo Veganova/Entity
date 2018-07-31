@@ -156,7 +156,7 @@ public class MyWorld {
 //        ObjCircle hi = new ObjCircle(20);
 //        hi.getBuilder(true, this).setXY(100, 100).setRestitution(0).init();
 //        CustomEntity wow = new CustomEntity(hi, 0, 100, true, Team.NEUTRAL, this);
-//        wow.addEffect( new EMP(wow, new Vector2(100,100), 0.1, 0.01, 10, 500, 200, wow.team, this, 6000));
+//        wow.addEffect( new EMPEffect(wow, new Vector2(100,100), 0.1, 0.01, 10, 500, 200, wow.team, this, 6000));
 
         //MAKE THE STADIUM - TEMPORARY SO THAT THINGS DOING GO FLYING OUT
 //        ObjRectangle up = new ObjRectangle(800, 20);

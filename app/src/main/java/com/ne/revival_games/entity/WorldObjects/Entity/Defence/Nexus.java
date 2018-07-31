@@ -75,11 +75,7 @@ public class Nexus extends Entity {
         this.team = team;
 
         // Gravity Effect initialization
-        gravEffect = new GravityEffect(this,
-                MySettings.getNum(team.toString(),  new Query(name, "gravity_effect", "radius")),
-                MySettings.getNum(team.toString(),  new Query(name, "gravity_effect", "strength")),
-                new Vector2(0,0),
-                world);
+        gravEffect = new GravityEffect(this, new Vector2(0,0), world);
         gravEffect.setInitialState(false);
         this.addEffect(gravEffect);
 

@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.Effect;
 import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.SlowEffect;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
 import com.ne.revival_games.entity.WorldObjects.Query;
@@ -26,14 +27,7 @@ import java.util.List;
 
 public class Totem extends Entity {
 
-    public static int HEALTH = 50;
-    public static int STUB_HEALTH = 30;
-
-    private static int DISTANCE = 90;
-
-
     private Effect slow;
-
 
     public Totem(double x, double y, double angle, MyWorld world, Team team, int numbers, String tag) {
         super(angle, 0, team);
@@ -71,7 +65,6 @@ public class Totem extends Entity {
     @Override
     public boolean update(MyWorld world) {
         double dTetha = this.shape.body.getAngularVelocity();
-//        System.out.println(dTetha);
         // ccw
         if (dTetha > 0) {
             normalize(dTetha, ANGULAR_SPEED);
@@ -100,22 +93,23 @@ public class Totem extends Entity {
     private List<Entity> bars = new ArrayList<>();
 
     private void initBars(double x, double y, MyWorld world, int numBars) {
+        double distance = MySettings.getNum(this.team.toString(), new Query(this.getName(), "TotemStub", "distance"));
+        int stubHealth = (int)MySettings.getNum(this.team.toString(), new Query(this.getName(), "TotemStub", "health"));
 
         double delta = 2 * Math.PI / numBars;
 
         for (double theta = 0; theta < 2 * Math.PI; theta += delta) {
 
-            double barX = DISTANCE * Math.cos(theta) + x;
-            double barY = DISTANCE * Math.sin(theta) + y;
+            double barX = distance * Math.cos(theta) + x;
+            double barY = distance * Math.sin(theta) + y;
 
             AShape bar = new ObjRectangle(20, 100);
             AShape.InitBuilder builder = bar.getBuilder(true, world);
             builder.setAngle(Math.toDegrees(theta * 2)).setXY(barX, barY)
-                    .setBasics(team.toString(), new Query(getName(),"totem_stub"))
+                    .setBasics(team.toString(), new Query(getName(),"TotemStub"))
                     .init();
 
-            this.bars.add(new CustomEntity(bar, 0, STUB_HEALTH, false, team, world));
-
+            this.bars.add(new CustomEntity(bar, 0, stubHealth, false, team, world));
 
             WeldJoint joint = new WeldJoint(this.shape.body, bar.body, this.shape.body.getWorldCenter());
 
