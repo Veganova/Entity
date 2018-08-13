@@ -10,19 +10,14 @@
       "units" : {
         "Comet": {
           "friction": 0,
-          "radius": {
-            "lower": 15,
-            "upper": 30
-          },
           "number": 10,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 10,
-            "upper": 20
-          },
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
           "angular_velocity": 2
         }
       },
@@ -37,19 +32,14 @@
       "units" : {
         "Comet": {
           "friction": 0,
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20
         },
         "ShockwaveCanister": {
           "number": 3,
@@ -68,19 +58,15 @@
       "units" : {
         "Comet": {
           "friction": 0,
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 1,
@@ -103,19 +89,16 @@
       "duration" : 30,
       "units" : {
         "Comet": {
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
+          "friction": 0,
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 2,
@@ -138,19 +121,16 @@
       "duration" : 30,
       "units" : {
         "Comet": {
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
+          "friction": 0,
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 5,
@@ -174,19 +154,16 @@
       "duration" : 30,
       "units" : {
         "Comet": {
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
+          "friction": 0,
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 7,
@@ -216,19 +193,16 @@
       "duration" : 35,
       "units" : {
         "Comet": {
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
+          "friction": 0,
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 9,
@@ -257,19 +231,16 @@
       "duration" : 40,
       "units" : {
         "Comet": {
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
+          "friction": 0,
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 8,
@@ -304,19 +275,16 @@
       "units" : {
         "duration": 40,
         "Comet": {
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
+          "friction": 0,
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 12,
@@ -357,19 +325,16 @@
       "duration" : 45,
       "units" : {
         "Comet": {
-          "radius": {
-            "lower": 10,
-            "upper": 25
-          },
+          "friction": 0,
           "number": 20,
-          "health": {
-            "lower": 10,
-            "upper": 35
-          },
-          "speed": {
-            "lower": 15,
-            "upper": 30
-          }
+          "health": 20,
+          "radiusLower": 15,
+          "radiusUpper": 30,
+          "healthLower": 10,
+          "healthUpper": 35,
+          "speedLower": 10,
+          "speedUpper": 20,
+          "angular_velocity": 2
         },
         "Rocket": {
           "number": 25,

@@ -135,14 +135,19 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        double cost =  MySettings.getNum(team.toString(), new Query(ghost.entity.getName(), "cost"));
-        if (readytoPlace(e) && cost <= this.getMoney()) {
-            this.ghost.place(this);
-            this.addMoney(-1 * cost);
-            this.ghost = null;
-            holdingGhost = false;
-            if (this.onGhostPlace != null) {
-                this.onGhostPlace.apply();
+
+        if (readytoPlace(e)) {
+            double cost =  MySettings.getNum(team.toString(), new Query(ghost.entity.getName(), "cost"));
+            if (cost <= this.getMoney()) {
+                this.ghost.place(this);
+                this.addMoney(-1 * cost);
+                this.ghost = null;
+                holdingGhost = false;
+                if (this.onGhostPlace != null) {
+                    this.onGhostPlace.apply();
+                }
+            } else {
+                System.out.println("NOT ENOUGH CASH TO GET A " + ghost.entity.getName());
             }
         } else if (!holdingGhost) {
             Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);

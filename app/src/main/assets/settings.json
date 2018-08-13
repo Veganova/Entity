@@ -1,20 +1,21 @@
 [
   {
-    "name": "DEFAULT",
-    "health" : 5,
-    "speed" : 0,
-    "cost" : 0,
-    "width" : 50,
-    "height" : 50,
-    "angular_velocity" : 0,
-    "angular_damping": 0.02,
-    "linear_damping": 0,
-    "friction" : 0,
-    "real_friction" : 0,
-    "invulnerable" : false,
-    "restitution" : 0.0,
-    "density" : 0.5,
-    "acceleration" : 0,
+    "Default" : {
+      "health" : 5,
+      "speed" : 0,
+      "cost" : 0,
+      "width" : 50,
+      "height" : 50,
+      "angular_velocity" : 0,
+      "angular_damping": 0.02,
+      "linear_damping": 0,
+      "friction" : 0,
+      "real_friction" : 0,
+      "invulnerable" : false,
+      "restitution" : 0.0,
+      "density" : 0.5,
+      "acceleration" : 0
+    },
     "Lazer" : {
       "speed" : 0,
       "damage" : 10,
@@ -150,7 +151,8 @@
       }
     },
     "Comet" : {
-      "radius" : 10
+      "radius" : 10,
+      "health": 20
     }
   },
   {

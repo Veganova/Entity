@@ -9,6 +9,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,12 +17,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 
 /**
- * Created by vishn on 12/23/2017.
+ * CURRENTLY TEAM IS ASSUMED TO BE OFFENSE. WILL NOT WORK WITH TEAM SET TO DEFENSE.
  */
-
 public class AI_Bot extends Launcher {
     private State curState;
     private double breakUntil = 0, roundDuration = 0;
@@ -36,8 +37,9 @@ public class AI_Bot extends Launcher {
     public AI_Bot(double width, double height, MyWorld world, Team team, Entity target) {
         super(width, height, world, team);
         this.curState = State.NOT_READY_BREAK;
-        this.max_level = (int) MySettings.getNum(team.toString(), "max_level");
-        this.level = 0;
+        // Set team query to random value because we don't want to have a level attached the front of the query (which happens automatically in Mysettings for offense team)
+        this.max_level = (int) MySettings.getNum(this.team.toString(), new Query("max_level"));
+        this.setLevel(0);
         this.targetEntity = target;
     }
 
@@ -45,7 +47,7 @@ public class AI_Bot extends Launcher {
     public void update() {
        switch (curState) {
            case NOT_READY_BREAK:
-               ++level;
+               this.setLevel(level + 1);
                System.out.println("LEVEL " + level + " +++++++++++++++++++++++++++++++++++++++++++");
                final int curlevel = level;
                if(max_level > level) {
@@ -80,7 +82,7 @@ public class AI_Bot extends Launcher {
            case IN_ROUND:
                 if(ammoLeft() != 0) {
                     updateTarget();
-                    firingRound(Integer.toString(level) + " ", roundDuration);
+                    firingRound(roundDuration);
                 }
                 else {
                     this.curState = State.NOT_READY_BREAK;
@@ -93,6 +95,11 @@ public class AI_Bot extends Launcher {
        }
     }
 
+    private void setLevel(int level) {
+        this.level = level;
+        MySettings.getSettings().setLevel(level);
+    }
+
 
     //make static changes prior to place
     @Override
@@ -103,14 +110,12 @@ public class AI_Bot extends Launcher {
 
     @Override
     protected double getSpeed(String unit_type) {
-        return MySettings.getNum(team.toString(), Integer.toString(level) + " "
-                + unit_type + " speed");
+        return MySettings.getNum(this.team.toString() + "-LEVEL", new Query(unit_type, "speed"));
     }
 
     @Override
     protected double getAngularVelocity(String unit_type) {
-        return MySettings.getNum(team.toString(), Integer.toString(level) + " "
-                + unit_type + " angular_velocity");
+        return MySettings.getNum(this.team.toString() + "-LEVEL", new Query(unit_type, "angular_velocity"));
     }
 
 
@@ -124,16 +129,15 @@ public class AI_Bot extends Launcher {
             is.read(buffer);
             is.close();
 
-            JSONObject json = (new JSONObject(new String(buffer, "UTF-8")))
-                    .getJSONObject("levels");
+            JSONObject levelsJson = (new JSONObject(new String(buffer, "UTF-8"))).getJSONObject("levels").getJSONObject(Integer.toString(level));
 
-            JSONArray array = json.getJSONObject(Integer.toString(level)).getJSONArray("units");
+            JSONObject unitJson = levelsJson.getJSONObject("units");
 
-            for(int i = 0; i < array.length(); ++i) {
-                String unit_type = array.getString(i);
-                int num = json.getJSONObject(Integer.toString(level))
-                        .getJSONObject(unit_type).getInt("number");
-                    ammoSet.add(new Pair<>(unit_type, num));
+            Iterator<String> units = unitJson.keys();
+            while (units.hasNext()) {
+                String unit_type = units.next();
+                int num = unitJson.getJSONObject(unit_type).getInt("number");
+                ammoSet.add(new Pair<>(unit_type, num));
             }
         }
         catch(IOException e) {
@@ -148,32 +152,30 @@ public class AI_Bot extends Launcher {
     //wrap_up
     public void emptySet() {
         while (ammoLeft() > 0) {
-            fireRandom(Integer.toString(level)+ " ");
+            fireRandom();
         }
     }
 
     //get break time
     private void setBreakTime() {
         breakUntil =  System.currentTimeMillis() +
-                1000 * MySettings.getNum("OFFENSE", Integer.toString(level) + " break");
+                1000 * MySettings.getNum(this.team.toString() + "-LEVEL", new Query("break"));
     }
 
     private void prepNextRound() {
-        double moneyForRound = MySettings.getNum(Team.OFFENSE.toString(), level + " money_awarded");
+        double moneyForRound = MySettings.getNum(this.team.toString() + "-LEVEL", new Query("money_awarded"));
 
         for(Player player :this.world.getPlayers()) {
             if(player.team == Team.DEFENCE)
             player.addMoney(moneyForRound);
         }
 
-        String levelString = Integer.toString(level) + " ";
-        this.breakUntil = 40*MySettings.getNum("OFFENSE", Integer.toString(level) + " break");
-        this.roundDuration = 40*MySettings.getNum("OFFENSE",
-                levelString + "duration");
-        this.rate = 40*MySettings.getNum("OFFENSE", levelString + "breakBetweenFiring");
-        this.atOnce = (int) MySettings.getNum("OFFENSE", levelString + "ammoFiredAtOnce");
-        this.atOnce_range =
-                (int) MySettings.getNum("OFFENSE", levelString + "ammoFiredAtOnceVariance");
+
+        this.breakUntil = 40*MySettings.getNum(this.team.toString() + "-LEVEL", new Query("break"));
+        this.roundDuration = 40*MySettings.getNum(this.team.toString() + "-LEVEL", new Query("duration"));
+        this.rate = 40*MySettings.getNum(this.team.toString() + "-LEVEL", new Query("breakBetweenFiring"));
+        this.atOnce = (int) MySettings.getNum(this.team.toString() + "-LEVEL", new Query("ammoFiredAtOnce"));
+        this.atOnce_range = (int) MySettings.getNum(this.team.toString() + "-LEVEL", new Query("ammoFiredAtOnceVariance"));
         fillAmmo();
 
     }

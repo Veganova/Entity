@@ -3,6 +3,7 @@ package com.ne.revival_games.entity.WorldObjects.Entity.Aim;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Sounds;
 
 import org.dyn4j.geometry.Vector2;
@@ -22,7 +23,7 @@ public abstract class AimShootEntity extends AimableEntity implements Shootable 
     public AimShootEntity(double direction, double speed, Team team, boolean isThrust) {
         super(direction, speed, team);
         this.isThrust = isThrust;
-        this.acceleration = MySettings.getNum(team.toString(), name + " acceleration");
+        this.acceleration = MySettings.getNum(team.toString(), new Query(this.getName(),  "acceleration"));
     }
 
     @OverridingMethodsMustInvokeSuper

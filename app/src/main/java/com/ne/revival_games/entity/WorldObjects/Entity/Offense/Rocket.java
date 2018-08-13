@@ -29,7 +29,7 @@ public class Rocket extends AimShootEntity {
     private long lifeTime = 320;
     private boolean collided = false;
 
-    public Rocket(double x, double y, double angle, double speed, Team team, MyWorld world, String tag) {
+    public Rocket(double x, double y, double angle, double speed, Team team, MyWorld world) {
         super(angle, speed, team, true);
         List<AShape> components = new ArrayList<>();
 

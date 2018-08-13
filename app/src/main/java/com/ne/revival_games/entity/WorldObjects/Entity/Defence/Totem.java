@@ -29,7 +29,7 @@ public class Totem extends Entity {
 
     private Effect slow;
 
-    public Totem(double x, double y, double angle, MyWorld world, Team team, int numbers, String tag) {
+    public Totem(double x, double y, double angle, MyWorld world, Team team, int numbers) {
         super(angle, 0, team);
 
         this.shape = new ObjCircle(30);

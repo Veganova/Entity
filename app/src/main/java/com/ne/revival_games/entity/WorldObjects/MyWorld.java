@@ -138,7 +138,6 @@ public class MyWorld {
 //        bam = new MassLazer(-200, -200, 30, this);
 //        this.ghostNexus = new GhostEntity(nex);
 
-        new TurretOneBarrel(0, 0, 0, this, Team.DEFENCE, "");
 //         GhostEntity ge = new GhostEntity(new TurretOneBarrel(0, 0, 0, this, Team.DEFENCE, ""), this);
 //         ge.place(players.get(0));
 //        circ = new ObjCircle(0, 150, 10, this);

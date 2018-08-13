@@ -37,7 +37,6 @@ public class Comet extends Entity {
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {
-        Entities.NEXUS.getDefaultLeaf();
         boolean regular = super.onCollision(contact, componentHit, damage);
 
         if (!regular || this.dead) {
@@ -64,12 +63,12 @@ public class Comet extends Entity {
     public void normalizeBot(GhostEntity ghost, double angle) {
         Comet myComet = this;
 
-        double lower_health = MySettings.getNum(team.toString(), new Query(getName(), "health", "lower"));
-        double upper_health = MySettings.getNum(team.toString(), new Query(getName(), "health", "upper"));
-        double size_lower   = MySettings.getNum(team.toString(), new Query(getName(), "radius", "lower"));
-        double size_upper   = MySettings.getNum(team.toString(), new Query(getName(), "radius", "upper"));
-        double speed_upper  = MySettings.getNum(team.toString(), new Query(getName(), "speed", "upper"));
-        double speed_lower  = MySettings.getNum(team.toString(), new Query(getName(), "speed" , "lower"));
+        double lower_health = MySettings.getNum(team.toString(), new Query(getName(), "healthLower"));
+        double upper_health = MySettings.getNum(team.toString(), new Query(getName(), "healthUpper"));
+        double size_lower   = MySettings.getNum(team.toString(), new Query(getName(), "radiusLower"));
+        double size_upper   = MySettings.getNum(team.toString(), new Query(getName(), "radiusUpper"));
+        double speed_upper  = MySettings.getNum(team.toString(), new Query(getName(), "speedUpper"));
+        double speed_lower  = MySettings.getNum(team.toString(), new Query(getName(), "speedLower"));
 
         double ratio = (myComet.radius - size_lower) / (size_upper - size_lower);
 

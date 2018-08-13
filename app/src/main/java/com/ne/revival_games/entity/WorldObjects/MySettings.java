@@ -60,7 +60,7 @@ public class MySettings {
 
     }
 
-    private int level;
+    private int level = 0;
     public void setLevel(int level) {
         this.level = level;
     }
@@ -78,37 +78,59 @@ public class MySettings {
 
 
             //custom AI lookup path into levels scheme (different query format)
-            if(team.equals("OFFENSE")) {
+            if(team.equals("OFFENSE-LEVEL")) {
+                // offense is always gotten from levels.json. Adding on the level to the query.
+
+                query.add(0, String.valueOf(myinstance.level));
+                System.out.print("OFFENSE-LEVEL | ");
                 result = findVal(levelSettings, query, 0);
-             if(result != null) {
+                 if(result == null) {
+                    throw new IllegalArgumentException("The query given is not available under the OFFENSE-LEVEL branch logic. Query: " + query.toString());
+                 }
                  return result;
-             }
             }
 
-            //looks through settings.json for general and player unit details
-            if(!team.equals("GENERAL")) {
-                for(int i = 0; i < genSettings.length(); ++i) {
-                    JSONObject obj = genSettings.getJSONObject(i);
-
-                    if(obj.getString("name").equals(team)) {
-                        result = findVal(obj, query, 0);
-
-                        if(result != null) {
-                            return result;
-                        }
-                        else {
-                            break;
-                        }
-                    }
+            if (team.equals("OFFENSE")) {
+                result = findVal(levelSettings, query, 0);
+                if(result == null) {
+                    throw new IllegalArgumentException("The query given is not available under the OFFENSE branch logic. Query: " + query.toString());
                 }
+                return result;
             }
+
+//            //looks through settings.json for general and player unit details
+//            if(!team.equals("GENERAL")) {
+//                for(int i = 0; i < genSettings.length(); ++i) {
+//                    JSONObject obj = genSettings.getJSONObject(i);
+//
+//                    if(obj.getString("name").equals(team)) {
+//                        System.out.print("DEFENSE | ");
+//                        result = findVal(obj, query, 0);
+//
+//                        if(result != null) {
+//                            return result;
+//                        }
+//                        else {
+//                            throw new IllegalArgumentException("The query given is not available under the not general branch logic. Query: " + query.toString());
+//                        }
+//                    }
+//                }
+//            }
 
             //queries the default section (SHOULD ALWAYS BE SECTION 0)
             for(int x = 0; x < query.size(); ++x) {
+                System.out.print("GENERAL | ");
                 result = findVal(genSettings.getJSONObject(0), query, x);
-                if(result != null) {
-                    return result;
+                if(result == null) {
+//                    figure out who is calling
+//                            MySettings.getNum("Defence", [comet, cost]);
+                    query.set(0, "Default");
+                    result = findVal(genSettings.getJSONObject(0), query, x);
                 }
+                if (result == null) {
+                    throw new IllegalArgumentException("The query given is not available under the DEFAULT branch logic. Query: " + query.toString());
+                }
+                return result;
             }
 
             return result;
@@ -126,14 +148,14 @@ public class MySettings {
         }
         catch(Exception e) {
             System.out.printf("Query was " + query);
-            System.exit(1);
+            throw e;
+//            System.exit(1);
         }
 
-        return 0;
+//        return 0;
     }
 
     private static String findVal(JSONObject obj, List<String> query, int start) {
-
         for(int cur = start; cur < query.size(); ++cur) {
             if(obj.has(query.get(cur))) {
                 if(cur == query.size() - 1) {
@@ -158,6 +180,7 @@ public class MySettings {
                         obj = obj.getJSONObject(query.get(cur));
                     }
                     catch(JSONException e) {
+                        System.out.println("query: " + query.toString());
                         e.printStackTrace();
                     }
 
