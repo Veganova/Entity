@@ -157,11 +157,11 @@ public abstract class AShape implements Shape {
         }
 
         public InitBuilder setBasics(String team, Query baseQuery) {
-            this.setAngularDamping(MySettings.getNum(team, new Query(baseQuery, "angular_damping")));
-            this.setLinearDamping(MySettings.getNum(team, new Query(baseQuery, "linear_damping")));
-            this.setDensity(MySettings.getNum(team, new Query(baseQuery, "density")));
-            this.setRestitution(MySettings.getNum(team, new Query(baseQuery, "restitution")));
-            this.setFriction(MySettings.getNum(team, new Query(baseQuery, "friction")));
+            this.setAngularDamping(MySettings.getEntityNum(team, new Query(baseQuery, "angular_damping"), true));
+            this.setLinearDamping(MySettings.getEntityNum(team, new Query(baseQuery, "linear_damping"), true));
+            this.setDensity(MySettings.getEntityNum(team, new Query(baseQuery, "density"), true));
+            this.setRestitution(MySettings.getEntityNum(team, new Query(baseQuery, "restitution"), true));
+            this.setFriction(MySettings.getEntityNum(team, new Query(baseQuery, "friction"), true));
             return this;
         }
 

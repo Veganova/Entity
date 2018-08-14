@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ne.revival_games.entity.GamePanel;
@@ -125,7 +124,7 @@ public class MenuList extends LinearLayout {
                 this.setPadding(50, 0, 50, 0);
 
                 this.setTextColor(GamePanel.background_dark);
-                Double cost = MySettings.getNum(String.valueOf(owner.team), new Query(toProduce.name, "cost"));
+                Double cost = MySettings.getEntityNum(String.valueOf(owner.team), new Query(toProduce.name, "cost"), true);
                 String text = toProduce.name;
                 this.setText(text);
 

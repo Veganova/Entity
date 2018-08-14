@@ -23,7 +23,7 @@ public class ShockwaveCanister extends Entity {
     public ShockwaveCanister(double x, double y, double angle, Team team, MyWorld world) {
         super(angle, 0, team);
         this.shape = new ObjRectangle(50, 20);
-        this.lifeTime = (long) MySettings.getNum(team.toString(), new Query(this.getName(), "lifetime"));
+        this.lifeTime = (long) MySettings.getEntityNum(team.toString(), new Query(this.getName(), "lifetime"), true);
         this.shape.getBuilder(true, world).setXY(x, y).setAngle(angle).init();
         world.objectDatabase.put(this.shape.body, this);
 

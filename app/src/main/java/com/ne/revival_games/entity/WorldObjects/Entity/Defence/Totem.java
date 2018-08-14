@@ -93,8 +93,8 @@ public class Totem extends Entity {
     private List<Entity> bars = new ArrayList<>();
 
     private void initBars(double x, double y, MyWorld world, int numBars) {
-        double distance = MySettings.getNum(this.team.toString(), new Query(this.getName(), "TotemStub", "distance"));
-        int stubHealth = (int)MySettings.getNum(this.team.toString(), new Query(this.getName(), "TotemStub", "health"));
+        double distance = MySettings.getEntityNum(this.team.toString(), new Query(this.getName(), "TotemStub", "distance"), true);
+        int stubHealth = (int)MySettings.getEntityNum(this.team.toString(), new Query(this.getName(), "TotemStub", "health"), true);
 
         double delta = 2 * Math.PI / numBars;
 

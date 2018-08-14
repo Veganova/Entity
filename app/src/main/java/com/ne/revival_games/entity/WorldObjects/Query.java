@@ -18,4 +18,10 @@ public class Query extends ArrayList<String> {
         this.addAll(Arrays.asList(restQuery));
     }
 
+    public Query getCopy() {
+        Query q = new Query();
+        q.addAll(this);
+        return q;
+    }
+
 }

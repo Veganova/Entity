@@ -17,9 +17,9 @@ public class Missile extends Entity {
 
     public Missile(double x, double y, double angle, double speed, MyWorld world, Team team, Entity parent) {
         super(angle, speed, team, parent);
-        shape = new ObjCircle(MySettings.getNum(team.toString(), new Query(getName(), "radius")));
+        shape = new ObjCircle(MySettings.getEntityNum(team.toString(), new Query(getName(), "radius"), true));
         shape.getBuilder(true, world).setXY(x, y)
-                .setDensity(MySettings.getNum(team.toString(), new Query(getName(), "density")))
+                .setDensity(MySettings.getEntityNum(team.toString(), new Query(getName(), "density"), true))
                 .setBasics(team.toString(), new Query(this.getName()))
                 .init();
 //        shape.body.setBullet(true);

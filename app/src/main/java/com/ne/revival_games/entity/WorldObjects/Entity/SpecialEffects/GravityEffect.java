@@ -46,8 +46,8 @@ public class GravityEffect extends Effect {
     public GravityEffect(Entity applier, Vector2 jointDisplacement, MyWorld world) {
         this.baseQueryName = new Query(applier.getName(), this.getClass().getSimpleName());
         Team team = applier.team;
-        double radius =  MySettings.getNum(team.toString(),  new Query(this.getName(),"radius"));
-        double gravityValue = MySettings.getNum(team.toString(),  new Query(this.getName(), "strength"));
+        double radius =  MySettings.getEntityNum(team.toString(),  new Query(this.getName(),"radius"), true);
+        double gravityValue = MySettings.getEntityNum(team.toString(),  new Query(this.getName(), "strength"), true);
         aoeJoint(applier, new ObjCircle(radius), effectType.GRAVITY, jointDisplacement, world);
         this.gravityValue = gravityValue;
         world.objectDatabase.put(this.zone.body, applier);

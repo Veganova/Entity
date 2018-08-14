@@ -27,9 +27,9 @@ public class Barrier extends Entity {
 
     public Barrier(double x, double y, double angle, MyWorld world, Team team) {
         super(angle, 0, team);
-        double width = MySettings.getNum(team.toString(), new Query(getName(), "width"));
+        double width = MySettings.getEntityNum(team.toString(), new Query(getName(), "width"), true);
         this.shape = new ObjRectangle(width,
-                MySettings.getNum(team.toString(), new Query(getName(), "height")));
+                MySettings.getEntityNum(team.toString(), new Query(getName(), "height"), true));
         AShape.InitBuilder builder = this.shape.getBuilder(true, world);
         builder.setBasics(team.toString(), new Query(getName())).setAngle(angle).setXY(x, y).init();
 

@@ -65,7 +65,13 @@ public class MySettings {
         this.level = level;
     }
 
-    public static String get(String team, Query query) {
+    /**
+     * Query order for offense: levels.json -> settings.json -> settings.json/default
+     * Query order for defence: settings.json -> settings.json/default
+     */
+    public static String get(String team, Query queryOriginal, boolean unit, boolean useDefault) {
+        String error = "";
+        Query query = queryOriginal.getCopy();
 
         if(myinstance == null) {
             myinstance = new MySettings();
@@ -75,62 +81,48 @@ public class MySettings {
 
         //checks levels for 'OFFENSE' AI
         try {
-
-
-            //custom AI lookup path into levels scheme (different query format)
-            if(team.equals("OFFENSE-LEVEL")) {
+            if(team.equals("OFFENSE")) {
                 // offense is always gotten from levels.json. Adding on the level to the query.
+                Query levelUnitsQ = null;
+                if (unit) {
+                    levelUnitsQ = query.getCopy();
+                    levelUnitsQ.add(0, String.valueOf(myinstance.level));
+                    levelUnitsQ.add(1, "units");
 
-                query.add(0, String.valueOf(myinstance.level));
-                System.out.print("OFFENSE-LEVEL | ");
-                result = findVal(levelSettings, query, 0);
-                 if(result == null) {
-                    throw new IllegalArgumentException("The query given is not available under the OFFENSE-LEVEL branch logic. Query: " + query.toString());
-                 }
-                 return result;
+                    result = findVal(levelSettings, levelUnitsQ, 0);
+                } else {
+                    // Logic supporting values such as max_level that are not attached to a particular level but related.
+                    result = findVal(levelSettings, query, 0);
+                    if (result == null) {
+                        Query levelQ = query.getCopy();
+                        levelQ.add(0, String.valueOf(myinstance.level));
+                        result = findVal(levelSettings, levelQ, 0);
+                    }
+                }
+
+                if(result == null) {
+                    error = "The query given is not available under the OFFENSE branch logic. Query: " +
+                            (unit ? levelUnitsQ.toString() : query.toString()) + " on level: " + myinstance.level;
+                }
             }
 
-            if (team.equals("OFFENSE")) {
-                result = findVal(levelSettings, query, 0);
-                if(result == null) {
-                    throw new IllegalArgumentException("The query given is not available under the OFFENSE branch logic. Query: " + query.toString());
+
+            if (result == null) {
+                result = findVal(genSettings.getJSONObject(0), query,0);
+
+                if (result == null && useDefault) {
+                    // Assume that the query is looking for a unit value that exists in the default section. Check if the stat exists in default section.
+                    Query defaultSecQ = new Query();
+                    defaultSecQ.add("Default");
+                    defaultSecQ.add(query.get(query.size() - 1));
+                    result = findVal(genSettings.getJSONObject(0), defaultSecQ,0);
+
+                    error += "\n no Default value for query: " + query.toString() + ". Default query: " + defaultSecQ.toString();
                 }
-                return result;
             }
 
-//            //looks through settings.json for general and player unit details
-//            if(!team.equals("GENERAL")) {
-//                for(int i = 0; i < genSettings.length(); ++i) {
-//                    JSONObject obj = genSettings.getJSONObject(i);
-//
-//                    if(obj.getString("name").equals(team)) {
-//                        System.out.print("DEFENSE | ");
-//                        result = findVal(obj, query, 0);
-//
-//                        if(result != null) {
-//                            return result;
-//                        }
-//                        else {
-//                            throw new IllegalArgumentException("The query given is not available under the not general branch logic. Query: " + query.toString());
-//                        }
-//                    }
-//                }
-//            }
-
-            //queries the default section (SHOULD ALWAYS BE SECTION 0)
-            for(int x = 0; x < query.size(); ++x) {
-                System.out.print("GENERAL | ");
-                result = findVal(genSettings.getJSONObject(0), query, x);
-                if(result == null) {
-//                    figure out who is calling
-//                            MySettings.getNum("Defence", [comet, cost]);
-                    query.set(0, "Default");
-                    result = findVal(genSettings.getJSONObject(0), query, x);
-                }
-                if (result == null) {
-                    throw new IllegalArgumentException("The query given is not available under the DEFAULT branch logic. Query: " + query.toString());
-                }
-                return result;
+            if (result == null) {
+                throw new IllegalArgumentException("No such json path available as shown in the query: " + query.toString() + "\n " + error);
             }
 
             return result;
@@ -142,17 +134,18 @@ public class MySettings {
         return null;
     }
 
-    public static double getNum(String team, Query query) {
-        try {
-            return Double.parseDouble(get(team, query));
-        }
-        catch(Exception e) {
-            System.out.printf("Query was " + query);
-            throw e;
-//            System.exit(1);
-        }
+    /**
+     * Only to be used to query values for configuring the AI_Bot/Launcher such as number of rounds.
+     */
+    public static double getConfigNum(String team, Query query) {
+        return Double.parseDouble(get(team, query, false, false));
+    }
 
-//        return 0;
+    /**
+     * Only to be used for querying unit specific values such as health.
+     */
+    public static double getEntityNum(String team, Query query, boolean useDefault) {
+        return Double.parseDouble(get(team, query, true, true));
     }
 
     private static String findVal(JSONObject obj, List<String> query, int start) {

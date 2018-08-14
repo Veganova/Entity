@@ -58,7 +58,7 @@ public class Turret extends AimableEntity {
         this.frictionCoefficent = 60;
         this.world = world;
         initializeTurret(new Vector2(x,y), world);
-        double speed = MySettings.getNum(team.toString(), new Query(this.getName(), Barrel.class.getSimpleName(), "shooting_speed"));
+        double speed = MySettings.getEntityNum(team.toString(), new Query(this.getName(), Barrel.class.getSimpleName(), "shooting_speed"), true);
         this.logic = new DivineAim(this, world.objectDatabase, range, speed);
 
         this.bar = new ActiveBar(this, 0.587f);

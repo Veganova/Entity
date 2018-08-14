@@ -23,7 +23,7 @@ public abstract class AimShootEntity extends AimableEntity implements Shootable 
     public AimShootEntity(double direction, double speed, Team team, boolean isThrust) {
         super(direction, speed, team);
         this.isThrust = isThrust;
-        this.acceleration = MySettings.getNum(team.toString(), new Query(this.getName(),  "acceleration"));
+        this.acceleration = MySettings.getEntityNum(team.toString(), new Query(this.getName(),  "acceleration"), true);
     }
 
     @OverridingMethodsMustInvokeSuper

@@ -11,7 +11,6 @@ import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Query;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,7 +20,7 @@ import java.util.Iterator;
 
 
 /**
- * CURRENTLY TEAM IS ASSUMED TO BE OFFENSE. WILL NOT WORK WITH TEAM SET TO DEFENSE.
+ * CURRENTLY TEAM IS ASSUMED TO BE OFFENSELEVEL. WILL NOT WORK WITH TEAM SET TO DEFENSE.
  */
 public class AI_Bot extends Launcher {
     private State curState;
@@ -38,7 +37,7 @@ public class AI_Bot extends Launcher {
         super(width, height, world, team);
         this.curState = State.NOT_READY_BREAK;
         // Set team query to random value because we don't want to have a level attached the front of the query (which happens automatically in Mysettings for offense team)
-        this.max_level = (int) MySettings.getNum(this.team.toString(), new Query("max_level"));
+        this.max_level = (int) MySettings.getConfigNum(this.team.toString(), new Query("max_level"));
         this.setLevel(0);
         this.targetEntity = target;
     }
@@ -110,12 +109,12 @@ public class AI_Bot extends Launcher {
 
     @Override
     protected double getSpeed(String unit_type) {
-        return MySettings.getNum(this.team.toString() + "-LEVEL", new Query(unit_type, "speed"));
+        return MySettings.getEntityNum(this.team.toString(), new Query(unit_type, "speed"), true);
     }
 
     @Override
     protected double getAngularVelocity(String unit_type) {
-        return MySettings.getNum(this.team.toString() + "-LEVEL", new Query(unit_type, "angular_velocity"));
+        return MySettings.getEntityNum(this.team.toString(), new Query(unit_type, "angular_velocity"), true);
     }
 
 
@@ -159,11 +158,11 @@ public class AI_Bot extends Launcher {
     //get break time
     private void setBreakTime() {
         breakUntil =  System.currentTimeMillis() +
-                1000 * MySettings.getNum(this.team.toString() + "-LEVEL", new Query("break"));
+                1000 * MySettings.getConfigNum(this.team.toString(), new Query("break"));
     }
 
     private void prepNextRound() {
-        double moneyForRound = MySettings.getNum(this.team.toString() + "-LEVEL", new Query("money_awarded"));
+        double moneyForRound = MySettings.getConfigNum(this.team.toString(), new Query("money_awarded"));
 
         for(Player player :this.world.getPlayers()) {
             if(player.team == Team.DEFENCE)
@@ -171,11 +170,11 @@ public class AI_Bot extends Launcher {
         }
 
 
-        this.breakUntil = 40*MySettings.getNum(this.team.toString() + "-LEVEL", new Query("break"));
-        this.roundDuration = 40*MySettings.getNum(this.team.toString() + "-LEVEL", new Query("duration"));
-        this.rate = 40*MySettings.getNum(this.team.toString() + "-LEVEL", new Query("breakBetweenFiring"));
-        this.atOnce = (int) MySettings.getNum(this.team.toString() + "-LEVEL", new Query("ammoFiredAtOnce"));
-        this.atOnce_range = (int) MySettings.getNum(this.team.toString() + "-LEVEL", new Query("ammoFiredAtOnceVariance"));
+        this.breakUntil = 40*MySettings.getConfigNum(this.team.toString(), new Query("break"));
+        this.roundDuration = 40*MySettings.getConfigNum(this.team.toString(), new Query("duration"));
+        this.rate = 40*MySettings.getConfigNum(this.team.toString(), new Query("breakBetweenFiring"));
+        this.atOnce = (int) MySettings.getConfigNum(this.team.toString(), new Query("ammoFiredAtOnce"));
+        this.atOnce_range = (int) MySettings.getConfigNum(this.team.toString(), new Query("ammoFiredAtOnceVariance"));
         fillAmmo();
 
     }

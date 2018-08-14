@@ -58,11 +58,11 @@ public abstract class ExpandingEffect extends Effect {
     public ExpandingEffect(Team team, MyWorld world, EffectType type, Entity parent) {
         basicInit(null, zone, type, world, parent);
         this.active = false;
-        this.percent_size = MySettings.getNum(team.toString(), new Query(this.getName(), "percent_start"));
-        this.growth_rate = MySettings.getNum(team.toString(), new Query(this.getName(),"growth_rate"));
-        this.damage = MySettings.getNum(team.toString(), new Query(this.getName(),"damage"));
-        this.max_radius = MySettings.getNum(team.toString(), new Query(this.getName(),"max_radius"));
-        this.explosionPower = MySettings.getNum(team.toString(), new Query(this.getName(),"push_back"));
+        this.percent_size = MySettings.getEntityNum(team.toString(), new Query(this.getName(), "percent_start"), true);
+        this.growth_rate = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"growth_rate"), true);
+        this.damage = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"damage"), true);
+        this.max_radius = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"max_radius"), true);
+        this.explosionPower = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"push_back"), true);
         this.zone = new ObjCircle(max_radius);
     }
 

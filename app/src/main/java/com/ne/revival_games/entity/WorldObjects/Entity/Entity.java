@@ -83,11 +83,10 @@ public class Entity implements Effector {
      */
     private void init() {
         Query name = getName();
-        this.health = (int) MySettings.getNum(team.toString(), new Query(name, "health"));
-        this.MAX_HEALTH = (int) health;
-        this.frictionCoefficent = MySettings.getNum(team.toString(),  new Query(name,"real_friction"));
-        this.invulnerable = Boolean.parseBoolean(
-                MySettings.get(team.toString(),  new Query(name, "invulnerable")));
+        this.health = (int) MySettings.getEntityNum(team.toString(), new Query(name, "health"), true);
+        this.MAX_HEALTH = health;
+        this.frictionCoefficent = MySettings.getEntityNum(team.toString(),  new Query(name,"real_friction"), true);
+        this.invulnerable = Boolean.parseBoolean(MySettings.get(team.toString(),  new Query(name, "invulnerable"), true, true));
         this.targetExceptions = new Untargetable(this);
     }
 

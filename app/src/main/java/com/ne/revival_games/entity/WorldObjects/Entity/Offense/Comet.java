@@ -1,6 +1,5 @@
 package com.ne.revival_games.entity.WorldObjects.Entity.Offense;
 
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
@@ -25,7 +24,7 @@ public class Comet extends Entity {
     public Comet(double x, double y, double direction, double speed, MyWorld world, Team team) {
         super(direction, speed, team);
 
-        radius = MySettings.getNum(team.toString(), new Query(this.getName(), "radius"));
+        radius = MySettings.getEntityNum(team.toString(), new Query(this.getName(), "radius"), true);
         shape = new ObjCircle(radius);
         shape.getBuilder(true, world).setXY(x, y)
                 .setBasics(team.toString(), this.getName())
@@ -63,12 +62,12 @@ public class Comet extends Entity {
     public void normalizeBot(GhostEntity ghost, double angle) {
         Comet myComet = this;
 
-        double lower_health = MySettings.getNum(team.toString(), new Query(getName(), "healthLower"));
-        double upper_health = MySettings.getNum(team.toString(), new Query(getName(), "healthUpper"));
-        double size_lower   = MySettings.getNum(team.toString(), new Query(getName(), "radiusLower"));
-        double size_upper   = MySettings.getNum(team.toString(), new Query(getName(), "radiusUpper"));
-        double speed_upper  = MySettings.getNum(team.toString(), new Query(getName(), "speedUpper"));
-        double speed_lower  = MySettings.getNum(team.toString(), new Query(getName(), "speedLower"));
+        double lower_health = MySettings.getEntityNum(team.toString(), new Query(getName(), "healthLower"), true);
+        double upper_health = MySettings.getEntityNum(team.toString(), new Query(getName(), "healthUpper"), true);
+        double size_lower   = MySettings.getEntityNum(team.toString(), new Query(getName(), "radiusLower"), true);
+        double size_upper   = MySettings.getEntityNum(team.toString(), new Query(getName(), "radiusUpper"), true);
+        double speed_upper  = MySettings.getEntityNum(team.toString(), new Query(getName(), "speedUpper"), true);
+        double speed_lower  = MySettings.getEntityNum(team.toString(), new Query(getName(), "speedLower"), true);
 
         double ratio = (myComet.radius - size_lower) / (size_upper - size_lower);
 

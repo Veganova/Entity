@@ -40,7 +40,7 @@ public class EMPEffect extends ExpandingEffect {
 
     public EMPEffect(Team team, MyWorld world, Entity parent) {
         super(team, world, EffectType.SHOCKWAVE, parent);
-        this.duration = MySettings.getNum(team.toString(), new Query(this.getName(), "emp_effect", "duration"));
+        this.duration = MySettings.getEntityNum(team.toString(), new Query(this.getName(), "duration"), false);
     }
 
     @Override

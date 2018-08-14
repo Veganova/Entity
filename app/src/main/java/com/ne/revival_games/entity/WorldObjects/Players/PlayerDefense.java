@@ -137,7 +137,7 @@ public class PlayerDefense extends Player {
     public boolean onSingleTapUp(MotionEvent e) {
 
         if (readytoPlace(e)) {
-            double cost =  MySettings.getNum(team.toString(), new Query(ghost.entity.getName(), "cost"));
+            double cost =  MySettings.getEntityNum(team.toString(), new Query(ghost.entity.getName(), "cost"), true);
             if (cost <= this.getMoney()) {
                 this.ghost.place(this);
                 this.addMoney(-1 * cost);

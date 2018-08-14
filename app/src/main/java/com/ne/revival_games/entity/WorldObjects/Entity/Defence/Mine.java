@@ -21,7 +21,7 @@ public class Mine extends Entity {
 
     public Mine(double x, double y, double angle, Team team, MyWorld world) {
         super(angle, 0, team);
-        this.shape = new ObjCircle(MySettings.getNum(team.toString(), new Query(getName(),"radius")));
+        this.shape = new ObjCircle(MySettings.getEntityNum(team.toString(), new Query(getName(),"radius"), true));
         this.shape.getBuilder(true, world).setXY(x, y)
                 .setBasics(team.toString(), getName())
                 .init();

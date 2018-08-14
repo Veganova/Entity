@@ -37,7 +37,7 @@ public class Barrel extends ShootableEntity {
         initBarrel(type, location, world, angle);
         this.world = world;
         this.world.objectDatabase.put(this.shape.body, this);
-        this.setShootingSpeed(MySettings.getNum(team.toString(), new Query(this.getName(), "shooting_speed")));
+        this.setShootingSpeed(MySettings.getEntityNum(team.toString(), new Query(this.getName(), "shooting_speed"), true));
 
         this.myTurret = turret;
     }
