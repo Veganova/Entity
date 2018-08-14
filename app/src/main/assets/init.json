@@ -6,7 +6,7 @@
   "single_player" : {
     "ai" : true,
     "units" : {
-      "nexus": [
+      "Nexus": [
         {
           "x": 0.0,
           "y": 0.0,
@@ -19,7 +19,7 @@
   "multi_player" : {
     "ai" : true,
     "units" : {
-      "nexus": [
+      "Nexus": [
         {
           "x": -300.0,
           "y": 300.0,
@@ -38,11 +38,9 @@
   "tutorial" : {
     "ai" : false,
     "units" : {
-      "turret-1": [],
-      "turret-2": [],
-      "turret-3": [],
+      "TurretOneBarrel": [],
       "mine": [],
-      "totem": [
+      "Totem": [
         {
           "x": 0.0,
           "y": 0.0,
@@ -55,7 +53,7 @@
   "gesture" : {
     "ai": false,
     "units": {
-      "nexus": [
+      "Nexus": [
         {
           "x": 0.0,
           "y": 0.0,
@@ -63,7 +61,7 @@
           "team": "DEFENSE"
         }
       ],
-      "barrier small": [
+      "BarrierSmall": [
         {
           "x" : 200.0,
           "y" : 0.0,
@@ -75,10 +73,10 @@
       ]
     }
   },
-  "tutorial-nexus" : {
+  "tutorial-Nexus" : {
     "ai": false,
     "units": {
-      "comet": [
+      "Comet": [
         {
           "x": 0.0,
           "y": -300.0,
@@ -86,7 +84,7 @@
           "team": "OFFENSE"
         }
       ],
-      "barrier small": [
+      "BarrierSmall": [
         {
           "x": 0.0,
           "y": 200.0,
@@ -96,7 +94,7 @@
           "team": "DEFENCE"
         }
       ],
-      "nexus": [
+      "Nexus": [
         {
           "x": 0.0,
           "y": 0.0,
@@ -109,7 +107,7 @@
     "tutorial-turret" : {
       "ai" : false,
       "units" : {
-        "comet": [
+        "Comet": [
           {
             "x": 0.0,
             "y": -300.0,
@@ -117,7 +115,7 @@
             "team": "OFFENSE"
           }
         ],
-        "barrier small": [
+        "BarrierSmall": [
           {
             "x": 0.0,
             "y": 200.0,
@@ -127,7 +125,7 @@
             "team": "DEFENCE"
           }
         ],
-        "nexus": [
+        "Nexus": [
           {
             "x": 0.0,
             "y": 0.0,

@@ -6,6 +6,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.geometry.Vector2;
@@ -54,14 +55,14 @@ public abstract class ExpandingEffect extends Effect {
         this.zone = new ObjCircle(max_radius);
     }
 
-    public ExpandingEffect(String name, Team team, MyWorld world, EffectType type){
-        basicInit(null, zone, type, world);
+    public ExpandingEffect(Team team, MyWorld world, EffectType type, Entity parent) {
+        basicInit(null, zone, type, world, parent);
         this.active = false;
-        this.percent_size = MySettings.getNum(team.toString(), name + " percent_start");
-        this.growth_rate = MySettings.getNum(team.toString(), name + " growth_rate");
-        this.damage = MySettings.getNum(team.toString(), name + " damage");
-        this.max_radius = MySettings.getNum(team.toString(), name + " max_radius");
-        this.explosionPower = MySettings.getNum(team.toString(), name + " push_back");
+        this.percent_size = MySettings.getEntityNum(team.toString(), new Query(this.getName(), "percent_start"), true);
+        this.growth_rate = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"growth_rate"), true);
+        this.damage = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"damage"), true);
+        this.max_radius = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"max_radius"), true);
+        this.explosionPower = MySettings.getEntityNum(team.toString(), new Query(this.getName(),"push_back"), true);
         this.zone = new ObjCircle(max_radius);
     }
 

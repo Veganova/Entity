@@ -13,6 +13,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 
 import org.dyn4j.geometry.Vector2;
 
@@ -81,8 +82,8 @@ public class PlayerDefense extends Player {
                         addToWorld.getDouble("y"),
                         0,
                         world,
-                        team,
-                        "");
+                        team
+                );
                 this.addToWorld = null;
             }
             catch (Exception e){
@@ -134,15 +135,19 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        double cost;
-        if (readytoPlace(e) && (cost = MySettings.getNum(team.toString(),
-                ghost.entity.getNameTag() + " cost")) <= this.getMoney()) {
-            this.ghost.place(this);
-            this.addMoney(-1*cost);
-            this.ghost = null;
-            holdingGhost = false;
-            if (this.onGhostPlace != null) {
-                this.onGhostPlace.apply();
+
+        if (readytoPlace(e)) {
+            double cost =  MySettings.getEntityNum(team.toString(), new Query(ghost.entity.getName(), "cost"), true);
+            if (cost <= this.getMoney()) {
+                this.ghost.place(this);
+                this.addMoney(-1 * cost);
+                this.ghost = null;
+                holdingGhost = false;
+                if (this.onGhostPlace != null) {
+                    this.onGhostPlace.apply();
+                }
+            } else {
+                System.out.println("NOT ENOUGH CASH TO GET A " + ghost.entity.getName());
             }
         } else if (!holdingGhost) {
             Vector2 clickPos = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);

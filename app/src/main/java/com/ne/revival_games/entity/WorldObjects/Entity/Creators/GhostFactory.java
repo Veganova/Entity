@@ -17,14 +17,13 @@ public class GhostFactory {
      * @param x Give the x.
      * @param y Give the y.
      * @param angle
-     * @param producerName
      * @return
      */
     // TODO: 7/1/2017 need some way to rotate here or in the ghost entities.
     public static GhostEntity produce(EntityLeaf toProduce, double x,
-                                      double y, double angle, MyWorld world, Team team, String producerName) {
+                                      double y, double angle, MyWorld world, Team team) {
 
-        Entity entity = toProduce.produce(x, y, angle, world, team, producerName);
+        Entity entity = toProduce.produce(x, y, angle, world, team);
         GhostEntity ghost = new GhostEntity(entity, world);
 
         if (entity != null) {

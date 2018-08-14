@@ -12,6 +12,7 @@ import com.ne.revival_games.entity.WorldObjects.MyCollections.MyDeque;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.AShape;
 
 import org.dyn4j.dynamics.Body;
@@ -32,7 +33,6 @@ public class Entity implements Effector {
     public boolean storedPrevVelocity = false;
     public Vector2 oldVelocity = new Vector2(-1,-1);
     public Team team;
-    public String name_tag;
     public boolean primed = false;
     protected long startTime = -1;
 
@@ -43,40 +43,56 @@ public class Entity implements Effector {
     public boolean isCollisionAuthority = false;
     public boolean invisible = false;
     public boolean invulnerable;
-    protected Player player;
+    protected Player player = null;
     public boolean isActive = true;
     public double isDisabledUntil = 0;
     public boolean ghost = false;
     public Untargetable targetExceptions;
-//    public boolean untargetable = false;
     public boolean dead = false;
 
     public double frictionCoefficent = DEFAULT_FRICTION;
-    public HashMap<EffectType, Effect> effects;
-    public HashMap<Body, Effect> zoneToEffect;
+    public HashMap<EffectType, Effect> effects = new HashMap<>();
+    public HashMap<Body, Effect> zoneToEffect = new HashMap<>();;
     protected ActiveBar bar;
     public static double DEFAULT_FRICTION = 1;
 
     private MyDeque.Node node;
+    private Query baseQueryName;
 
-    // TODO: 7/5/2017 some fields here are not needed 
-    public Entity(double direction, double speed, Team team, String name) {
-        this.name_tag = name;
+    public Entity(double direction, double speed, Team team) {
         this.direction = direction;
         this.speed = speed;
-        this.health = (int) MySettings.getNum(team.toString(), name + " health");
-        this.MAX_HEALTH = (int) health;
-        this.frictionCoefficent = MySettings.getNum(team.toString(), name + " real_friction");
-        this.invulnerable = Boolean.parseBoolean(
-                MySettings.get(team.toString(), name + "invulnerable"));
-        this.player = null;
         this.team = team;
-        this.effects = new HashMap<>();
-        this.zoneToEffect = new HashMap<>();
-        this.targetExceptions = new Untargetable(this);
+
+        this.baseQueryName = new Query(this.getClass().getSimpleName());
+        init();
+    }
+
+    public Entity(double direction, double speed, Team team, Entity parent) {
+        this.direction = direction;
+        this.speed = speed;
+        this.team = team;
+
+        this.baseQueryName = new Query(parent.getName(), this.getClass().getSimpleName());
+        init();
     }
 
 
+    /**
+     * Inserts values into fields from settings.json and levels.json (based on the query)
+     */
+    private void init() {
+        Query name = getName();
+        this.health = (int) MySettings.getEntityNum(team.toString(), new Query(name, "health"), true);
+        this.MAX_HEALTH = health;
+        this.frictionCoefficent = MySettings.getEntityNum(team.toString(),  new Query(name,"real_friction"), true);
+        this.invulnerable = Boolean.parseBoolean(MySettings.get(team.toString(),  new Query(name, "invulnerable"), true, true));
+        this.targetExceptions = new Untargetable(this);
+    }
+
+    public Query getName() {
+        return this.baseQueryName;
+    }
 
     public void normalizeBot(GhostEntity ghost, double angle) {
 
@@ -416,9 +432,5 @@ public class Entity implements Effector {
 
     public void setAngularVelocity(double angularVelocity) {
         this.shape.body.setAngularVelocity(angularVelocity);
-    }
-
-    public String getNameTag() {
-        return name_tag;
     }
 }

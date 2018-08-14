@@ -8,6 +8,7 @@ import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Untargetable;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjRectangle;
 
 import org.dyn4j.dynamics.Body;
@@ -27,15 +28,15 @@ public class Lazer extends Entity {
 
 
     public Lazer(double x, double y, double angle, MyWorld world, Team team, String tag) {
-        super(angle, 0, team, tag + "lazer");
+        super(angle, 0, team);
         this.world = world;
         this.invulnerable = true;
         this.isCollisionAuthority = true;
-        this.lazer_length = MySettings.getNum(team.toString(), name_tag + " lazer length");
-        this.lazer_width = MySettings.getNum(team.toString(), name_tag + " lazer width");
+        this.lazer_length = MySettings.getEntityNum(team.toString(), new Query(getName(), "length"), true);
+        this.lazer_width = MySettings.getEntityNum(team.toString(),  new Query(getName(), "width"), true);
         this.start = System.currentTimeMillis();
-        this.lifeTime = MySettings.getNum(team.toString(), name_tag + " lazer lifetime");
-        this.damage = MySettings.getNum(team.toString(), name_tag + " lazer damage");
+        this.lifeTime = MySettings.getEntityNum(team.toString(),  new Query(getName(), "lifetime"), true);
+        this.damage = MySettings.getEntityNum(team.toString(),  new Query(getName(), "damage"), true);
         this.lazer_angle = Math.toRadians(angle);
         Vector2 newPoint = new Vector2(x + lazer_length*Math.cos(lazer_angle),
                 y + lazer_length*Math.sin(lazer_angle));
@@ -47,7 +48,7 @@ public class Lazer extends Entity {
                 y + lazer_length*Math.sin(lazer_angle)/ 2).init();
         this.shape.rotateBody(lazer_angle);
 
-        this.setVelocity(MySettings.getNum(team.toString(), name_tag + " lazer speed"));
+        this.setVelocity(MySettings.getEntityNum(team.toString(), new Query(getName(),"speed"), true));
         world.objectDatabase.put(this.shape.body, this);
         this.targetExceptions.addType(GravityEffect.class, Untargetable.FROM.ALL);
         this.targetExceptions.addType(SlowEffect.class, Untargetable.FROM.ALL);

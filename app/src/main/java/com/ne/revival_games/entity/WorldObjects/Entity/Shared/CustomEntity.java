@@ -13,7 +13,7 @@ public class CustomEntity extends Entity {
 
     public CustomEntity(AShape shape, double speed,
                         int health, boolean invulnerable, Team team, MyWorld world) {
-        super(0, speed, team, "custom");
+        super(0, speed, team);
         this.shape = shape;
         this.health = health;
 //        this.shape.setColor(Color.MAGENTA);
@@ -22,7 +22,7 @@ public class CustomEntity extends Entity {
 
     public CustomEntity(AShape shape, double speed,
                         int health, boolean invulnerable, Player player, MyWorld world) {
-        super(0, speed, player.team, "custom");
+        super(0, speed, player.team);
         this.health = health;
         this.shape = shape;
         world.objectDatabase.put(this.shape.body, this, player);
