@@ -60,9 +60,6 @@ public class GhostEntity {
 
             num++;
         }
-        System.out.println(entity.simpleString() + ": NUM JOINTS - " + num);
-//        System.out.println(entity);
-
         this.entity.invulnerable = true;
         this.entity.disableAllEffects();
     }

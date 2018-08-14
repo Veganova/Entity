@@ -2,8 +2,10 @@ package com.ne.revival_games.entity.CustomViews;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.v4.view.GestureDetectorCompat;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -92,8 +94,6 @@ public class MenuList extends LinearLayout {
             this.addView(container);
         }
 
-
-
 //        private class EntScroll extends ScrollView {
 //
 //            public EntScroll(Context context, final Entities entType, Player player) {
@@ -115,7 +115,11 @@ public class MenuList extends LinearLayout {
 //            }
 //        }
 
+
         private class EntButton extends TextView {
+
+
+            private final GestureDetectorCompat mDetector;
 
             public EntButton(Context context, final EntityLeaf toProduce, final Player owner) {
                 super(context);
@@ -127,18 +131,57 @@ public class MenuList extends LinearLayout {
                 Double cost = MySettings.getEntityNum(String.valueOf(owner.team), new Query(toProduce.name, "cost"), true);
                 String text = toProduce.name;
                 this.setText(text);
-
+                this.mDetector = new GestureDetectorCompat(context, new MenuDragListener());
                 // TODO: 8/25/2017 for now manually setting the height.. might be kinda bad idk.
                 this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         MenuList.this.HEIGHT));
 
-                this.setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        owner.setGhost(toProduce);
-                    }
-                });
+//                this.setOnClickListener(new OnClickListener() {
+//                    public void onClick(View v) {
+//                        owner.setGhost(toProduce);
+//                    }
+//                });
             }
+
+            @Override
+            public boolean onTouchEvent(MotionEvent ev) {
+                this.mDetector.onTouchEvent(ev);
+                return false;
+            }
+//                int mask = (ev.getAction() & MotionEvent.ACTION_MASK);
+//
+//                if (mask == MotionEvent.ACTION_DOWN) {
+//                    System.out.println("TOUCHING " + this.getText());
+//                }
+//                System.out.println("NORMAL");
+//
+//                return true;
+//            }
+
+
+//            @Override
+//            public boolean onTouchEvent(MotionEvent event) {
+//                int x = (int)event.getX();
+//                int y = (int)event.getY();
+//
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        System.out.println("D: " + x + " " + y);
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        System.out.println("M: " + x + " " + y);
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        System.out.println("U: " + x + " " + y);
+//                        break;
+//                    default:
+//                        System.out.println("asdf");
+//                }
+//                return false;
+//            }
         }
+
+
 
     }
 }
