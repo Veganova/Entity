@@ -67,7 +67,6 @@ public class GeniusAim extends SimpleAim {
         }
 
         Paint paint =  new Paint();
-        paint.setColor(Color.YELLOW);
 
         enemy.shape.paint = paint;
 

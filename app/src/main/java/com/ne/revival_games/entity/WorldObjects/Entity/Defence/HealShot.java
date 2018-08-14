@@ -14,10 +14,9 @@ import org.dyn4j.dynamics.Body;
 public class HealShot extends Missile {
     //TODO: "heal_missile"
 
-    public HealShot(double x, double y, double angle, double speed, MyWorld world, Team team, String tag) {
-        super(x, y, angle, speed, world, team, tag + "heal_");
+    public HealShot(double x, double y, double angle, double speed, MyWorld world, Team team, Entity parent) {
+        super(x, y, angle, speed, world, team, parent);
     }
-
 
     @Override
     public boolean onCollision(Entity contact, Body componentHit, double damage) {

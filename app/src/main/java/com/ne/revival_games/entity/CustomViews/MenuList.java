@@ -10,13 +10,14 @@ import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
+import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.Players.Player;
+import com.ne.revival_games.entity.WorldObjects.Query;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,33 +86,34 @@ public class MenuList extends LinearLayout {
 
             // Add all the entities as buttons to this scroll view
             for (Entities entityType : this.toDisplay) {
-                EntScroll entScroll = new EntScroll(context, entityType, owner);
-                container.addView(entScroll);
+                container.addView(new EntButton(context, entityType.produceable, owner));
             }
 
             this.addView(container);
         }
 
-        private class EntScroll extends ScrollView {
-
-            public EntScroll(Context context, final Entities entType, Player player) {
-                super(context);
-
-                this.setVerticalScrollBarEnabled(false);
-
-                LinearLayout container = new LinearLayout(context);
-                container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT));
-                container.setOrientation(LinearLayout.VERTICAL);
-
-                for (EntityLeaf producer : entType.produceables) {
-                    container.addView(new EntButton(context, producer, player));
-                }
 
 
-                this.addView(container);
-            }
-        }
+//        private class EntScroll extends ScrollView {
+//
+//            public EntScroll(Context context, final Entities entType, Player player) {
+//                super(context);
+//
+//                this.setVerticalScrollBarEnabled(false);
+//
+//                LinearLayout container = new LinearLayout(context);
+//                container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+//                        LinearLayout.LayoutParams.MATCH_PARENT));
+//                container.setOrientation(LinearLayout.VERTICAL);
+//
+//                for (EntityLeaf producer : entType.produceables) {
+//                    container.addView(new EntButton(context, producer, player));
+//                }
+//
+//
+//                this.addView(container);
+//            }
+//        }
 
         private class EntButton extends TextView {
 
@@ -122,7 +124,9 @@ public class MenuList extends LinearLayout {
                 this.setPadding(50, 0, 50, 0);
 
                 this.setTextColor(GamePanel.background_dark);
-                this.setText(toProduce.name);
+                Double cost = MySettings.getEntityNum(String.valueOf(owner.team), new Query(toProduce.name, "cost"), true);
+                String text = toProduce.name;
+                this.setText(text);
 
                 // TODO: 8/25/2017 for now manually setting the height.. might be kinda bad idk.
                 this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,

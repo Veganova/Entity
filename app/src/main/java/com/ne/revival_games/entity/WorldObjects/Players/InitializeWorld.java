@@ -55,7 +55,7 @@ public class InitializeWorld {
                 for (int i = 0 ; i < arr.length(); i += 1) {
                     JSONObject entityInfo = arr.getJSONObject(i);
 
-                    EntityLeaf entType = Entities.fromString(entity);
+                    EntityLeaf entType = Entities.getLeaf(entity);
 
                     double x = entityInfo.getDouble("x");
                     double y = entityInfo.getDouble("y");
@@ -66,7 +66,7 @@ public class InitializeWorld {
 
                     Team team = Team.fromString(entityInfo.getString("team"));
                     //TODO: TURRET WONT WORK HERE!
-                    GhostEntity n = GhostFactory.produce(entType, x, y, angle, world, team, "");
+                    GhostEntity n = GhostFactory.produce(entType, x, y, angle, world, team);
 
 
                     if (team == Team.DEFENCE && entType.name.toUpperCase().equals("NEXUS")) {

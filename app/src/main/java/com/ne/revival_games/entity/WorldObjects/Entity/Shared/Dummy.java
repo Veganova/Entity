@@ -20,7 +20,7 @@ public class Dummy extends Entity {
     private EffectType effectType;
 
     public Dummy(Vector2 location, Effect myEffect, MyWorld world, Team team) {
-        super(0, 0, team, "dummy");
+        super(0, 0, team);
         this.targetExceptions.uninteractable = true;
         this.shape = new ObjCircle(5);
         this.shape.getBuilder(true, world).setXY(location.x, location.y).init();

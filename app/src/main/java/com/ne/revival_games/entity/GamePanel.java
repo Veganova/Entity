@@ -40,7 +40,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         super(mainActivity);
         this.mainActivity = mainActivity;
         this.scales = new Vector2(1, 1);
-        camera = new CameraController(new Vector2(1,1), new Vector2(300, 300), this);
+        camera = new CameraController(new Vector2(1,1), new Vector2(0, 0), this);
 
         this.world = world;
 

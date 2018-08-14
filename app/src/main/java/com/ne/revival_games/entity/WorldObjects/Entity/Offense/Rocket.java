@@ -29,8 +29,8 @@ public class Rocket extends AimShootEntity {
     private long lifeTime = 320;
     private boolean collided = false;
 
-    public Rocket(double x, double y, double angle, double speed, Team team, MyWorld world, String tag) {
-        super(angle, speed, team, tag + "rocket", true);
+    public Rocket(double x, double y, double angle, double speed, Team team, MyWorld world) {
+        super(angle, speed, team, true);
         List<AShape> components = new ArrayList<>();
 
         ObjRectangle rect = new ObjRectangle(50, 20);
@@ -72,7 +72,7 @@ public class Rocket extends AimShootEntity {
 
     @Override
     public void onDeath(MyWorld world){
-            ExpandingEffect boom = new ExplosiveEffect(name_tag, this.team, world);
+            ExpandingEffect boom = new ExplosiveEffect(this.team, world, this);
             Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), boom, world, this.team);
             boom.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
             super.onDeath(world);

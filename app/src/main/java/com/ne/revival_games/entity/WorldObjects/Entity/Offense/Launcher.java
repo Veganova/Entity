@@ -6,19 +6,15 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
-import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostFactory;
-import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Pair;
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.Entity.Util;
 import com.ne.revival_games.entity.WorldObjects.FrameTime;
-import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
 import com.ne.revival_games.entity.WorldObjects.Updatable;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
@@ -117,23 +113,23 @@ public class Launcher implements Updatable {
      * Every update it checks if there is ammo to shoot and if so, if the rate of fire permits a shot at
      */
     public void update() {
-        firingRound("", -1);
+        firingRound(-1);
     }
 
-    public void firingRound(String tag, double endTime) {
+    public void firingRound(double endTime) {
         if(endTime != -1 ) {
         int numberToShoot = Util.randomBetweenValues(atOnce-atOnce_range, atOnce+atOnce_range);
         if (FrameTime.getTime() - this.lastFired >= this.rate) {
             System.out.println("NUMBERSHOOT " + numberToShoot + " LASTFIRED " + lastFired);
             for (int i = 0; i < numberToShoot;  i++) {
-                fireRandom(tag);
+                fireRandom();
             }
         }
         }
     }
 
 
-    public void fireRandom(String tag) {
+    public void fireRandom() {
         int randomArea = (int) (Math.random() * this.totalArea);
 
         int culmArea = 0;
@@ -147,10 +143,10 @@ public class Launcher implements Updatable {
 
                     int randomIndex = (int)(Math.random()*ammoLeft() + 1);
                     String unit_type = getAmmoName(randomIndex);
-                    GhostEntity unit = GhostFactory.produce(Entities.findLeaf(unit_type),
+                    GhostEntity unit = GhostFactory.produce(Entities.getLeaf(unit_type),
                             MyWorld.SCALE * location.x,
-                            MyWorld.SCALE * location.y, 0, world, team,
-                            tag);
+                            MyWorld.SCALE * location.y, 0, world, team
+                    );
 
 
                     if (unit.canPlace()) {
@@ -158,6 +154,7 @@ public class Launcher implements Updatable {
                         unit.setInitAngularVelocity(getAngularVelocity(unit_type));
                         modifyEntity(unit);
                         unit.place(Team.OFFENSE);
+
                         this.lastFired = FrameTime.getTime();
                     } else {
                         System.out.println("CONFLICT CANNOT PLACE HERE launcher comet issue!!!!!!!");

@@ -7,23 +7,23 @@ import com.ne.revival_games.entity.WorldObjects.Entity.SpecialEffects.ExplosiveE
 import com.ne.revival_games.entity.WorldObjects.Entity.Team;
 import com.ne.revival_games.entity.WorldObjects.MySettings;
 import com.ne.revival_games.entity.WorldObjects.MyWorld;
+import com.ne.revival_games.entity.WorldObjects.Query;
 import com.ne.revival_games.entity.WorldObjects.Shape.ObjCircle;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by vishn on 9/5/2017.
  */
 
-public class Mine extends Entity{
+public class Mine extends Entity {
     boolean contacted = false;
 
-    public Mine(double x, double y, double angle, Team team, MyWorld world, String tag) {
-        super(angle, 0, team, tag + "mine");
-        this.shape = new ObjCircle(MySettings.getNum(team.toString(), name_tag + " radius"));
+    public Mine(double x, double y, double angle, Team team, MyWorld world) {
+        super(angle, 0, team);
+        this.shape = new ObjCircle(MySettings.getEntityNum(team.toString(), new Query(getName(),"radius"), true));
         this.shape.getBuilder(true, world).setXY(x, y)
-                .setBasics(team.toString(), name_tag)
+                .setBasics(team.toString(), getName())
                 .init();
         world.objectDatabase.put(this.shape.body, this);
     }
@@ -39,8 +39,8 @@ public class Mine extends Entity{
     }
 
     @Override
-    public void onDeath(MyWorld world){
-        ExpandingEffect boom = new ExplosiveEffect(name_tag, this.team, world);
+    public void onDeath(MyWorld world) {
+        ExpandingEffect boom = new ExplosiveEffect(this.team, world, this);
         Dummy dum = new Dummy(this.shape.body.getWorldCenter().multiply(MyWorld.SCALE), boom, world, this.team);
         boom.addToWorld(dum.shape.body.getWorldCenter().multiply(MyWorld.SCALE), dum, world);
         super.onDeath(world);

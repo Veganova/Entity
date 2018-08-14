@@ -15,14 +15,9 @@ public abstract class AimableEntity extends Entity implements Aimable {
     protected AimLogic logic;
     protected boolean aiming = true;
 
-    public AimableEntity(double direction, double speed, Team team, String name) {
-        super(direction, speed, team, name);
+    public AimableEntity(double direction, double speed, Team team) {
+        super(direction, speed, team);
     }
-//
-//    public AimableEntity(double direction, double speed, int health, boolean invulnerable, Team team, AimLogic logic) {
-//        super(direction, speed, health, invulnerable, team);
-//        this.logic = logic;
-//    }
 
     @Override
     public boolean update(MyWorld world) {

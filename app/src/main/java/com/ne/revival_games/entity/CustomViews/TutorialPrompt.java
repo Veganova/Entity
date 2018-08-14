@@ -29,12 +29,14 @@ public class TutorialPrompt extends android.support.v7.widget.AppCompatButton {
         this.setTextColor(GamePanel.background_dark);
         this.setTextSize(15);
         this.setAllCaps(false);
+        // for curved edges:
 //        this.setBackground(ContextCompat.getDrawable(context, R.drawable.roundedbox));
         this.setPadding(18, 10, 18, 10);
         this.setBackgroundColor(GamePanel.highlight);
     }
 
     public void setOnClickChain(final List<String> descriptions, final int startIndex) {
+        // have the button have a click here for next or continue or have it be glowing between two colors
         this.setOnClickListener(new View.OnClickListener() {
             private int i = startIndex;
             @Override

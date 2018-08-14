@@ -1,62 +1,65 @@
 [
   {
-    "name": "DEFAULT",
-    "health" : 5,
-    "speed" : 0,
-    "cost" : 0,
-    "width" : 50,
-    "height" : 50,
-    "angular_velocity" : 0,
-    "angular_damping": 0.02,
-    "linear_damping": 0,
-    "friction" : 0,
-    "real_friction" : 0,
-    "invulnerable" : false,
-    "restitution" : 0.0,
-    "density" : 0.5,
-    "acceleration" : 0,
-    "lazer" : {
+    "Default" : {
+      "health" : 5,
+      "speed" : 0,
+      "cost" : 0,
+      "width" : 50,
+      "height" : 50,
+      "angular_velocity" : 0,
+      "angular_damping": 0.02,
+      "linear_damping": 0,
+      "friction" : 0,
+      "real_friction" : 0,
+      "invulnerable" : false,
+      "restitution" : 0.0,
+      "density" : 0.5,
+      "acceleration" : 0
+    },
+    "Lazer" : {
       "speed" : 0,
       "damage" : 10,
       "lifetime" : -1,
       "length" : 60,
       "width" : 10
     },
-    "nexus": {
+    "Nexus": {
       "health": 1000,
       "angular_damping": 0.25,
       "linear_damping": 2,
-      "gravity_effect": {
+      "GravityEffect": {
         "radius": 1000,
         "strength": 20
       }
     },
-    "small_barrier" : {
+    "BarrierSmall" : {
         "health" : 125,
         "width" : 180,
         "height" : 25,
         "cost" : 180
      },
-    "large_barrier" : {
+    "BarrierLarge" : {
         "health" : 250,
         "width" : 240,
         "height" : 38,
         "cost" : 350
     },
-    "totem": {
+    "Totem": {
       "health": 50,
       "cost" : 450,
-      "slow_effect": {
+      "SlowEffect": {
         "radius": 150,
-        "strength": 4,
-        "totem_stub" : {
-          "health" : 50
-        }
+        "strength": 4
+      },
+      "TotemStub" : {
+        "health" : 50,
+        "distance": 90
       }
     },
-    "missile": {
+    "Missile": {
       "density" : 0.05,
-    "health" : 30
+      "health" : 30,
+      "radius" : 12
     },
     "dummy" : {
     "invulnerable" : true
@@ -64,10 +67,10 @@
     "custom": {
 
     },
-    "rocket" : {
+    "Rocket" : {
       "acceleration" : 5,
       "cost" : 50,
-      "explosive_effect": {
+      "ExplosiveEffect": {
         "percent_start": 0.05,
         "growth_rate": 0.05,
         "max_radius": 120,
@@ -78,55 +81,55 @@
     "medic_1_turret": {
       "health": 50,
       "cost" : 500,
-      "barrel": {
+      "Barrel": {
         "health": 30,
         "shooting_speed" : 25,
-        "heal_missile": {
+        "HealShot": {
           "health" : 20,
           "radius" : 14
         }
       }
     },
-    "1_turret": {
+    "TurretOneBarrel": {
       "health": 50,
       "cost" : 500,
-      "barrel": {
+      "Barrel": {
         "health": 30,
         "shooting_speed" : 25,
-        "missile": {
+        "Missile": {
           "health" : 20,
           "radius" : 14
         }
       }
     },
-    "2_turret": {
+    "TurretTwoBarrel": {
       "health": 100,
       "cost" : 700,
-      "barrel": {
+      "Barrel": {
         "health": 35,
         "shooting_speed" : 30,
-        "missile": {
+        "Missile": {
           "health" : 25,
           "radius" : 13
         }
       }
     },
-    "3_turret": {
+    "TurretThreeBarrel": {
       "health": 150,
       "cost" : 800,
-      "barrel": {
+      "Barrel": {
         "health": 50,
         "shooting_speed" : 35,
-        "missile": {
+        "Missile": {
           "health" : 30,
           "radius" : 12
         }
       }
     },
-    "shockcan" : {
+    "ShockwaveCanister" : {
       "health" : 100,
       "lifetime" : 200,
-      "emp_effect" : {
+      "EMPEffect" : {
         "percent_start": 0.05,
         "growth_rate": 0.05,
         "max_radius": 150,
@@ -135,11 +138,11 @@
         "duration" : 3000
       }
     },
-    "mine": {
+    "Mine": {
       "health": 30,
       "cost": 50,
       "radius": 20,
-      "explosive_effect": {
+      "ExplosiveEffect": {
         "percent_start": 0.05,
         "growth_rate": 0.05,
         "max_radius": 120,
@@ -147,8 +150,17 @@
         "damage": 0.5
       }
     },
-    "comet" : {
-      "radius" : 10
+    "Comet" : {
+      "radius" : 10,
+      "health": 50,
+      "real_friction": 0,
+      "radiusLower": 15,
+      "radiusUpper": 30,
+      "healthLower": 10,
+      "healthUpper": 35,
+      "speedLower": 10,
+      "speedUpper": 20,
+      "angular_velocity": 2
     }
   },
   {
