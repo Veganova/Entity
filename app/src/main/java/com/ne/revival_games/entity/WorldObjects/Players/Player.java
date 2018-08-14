@@ -74,6 +74,8 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         this.world = world;
         this.screen = screen;
 
+
+
         GamePanel gamePanel = screen.getGamePanel();
         this.scales = gamePanel.scales;
 //        System.out.println(gamePanel.scales);
@@ -194,6 +196,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             //snap screen to focus of zoom
 //          //move screen appropriately by absolute coordinates based on current screen size
 
+
             mDownX = scaleGestureDetector.getFocusX() / scales.x;   //scales coordinates 0 to map width
             mDownY = scaleGestureDetector.getFocusY() / scales.y;   //scales coordinates 0 to map height
             mDownX = (mDownX - WIDTH / 2);     //centers x
@@ -203,9 +206,13 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             mDownX -= camera.translateXY.x * MyWorld.SCALE;
             mDownY -= camera.translateXY.y * MyWorld.SCALE;
 //            System.out.println(mDownX + " " + mDownY);
-            camera.relativeZoom(scaleFactor, scaleFactor);
-            camera.move(-1* refX, -1* refY);
-            camera.relativeMove(-1*absoluteX/camera.zoomXY.x*MyWorld.SCALE, -1*absoluteY/camera.zoomXY.y*MyWorld.SCALE);
+            if(camera.relativeZoom(scaleFactor, scaleFactor)) {
+                camera.move(-1 * refX, -1 * refY);
+                camera.relativeMove(-1 * absoluteX / camera.zoomXY.x * MyWorld.SCALE,
+                        -1 * absoluteY / camera.zoomXY.y * MyWorld.SCALE);
+
+            }
+
             return true;
         }
 

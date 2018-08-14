@@ -32,9 +32,21 @@ public class CameraController {
         this.panel = gamePanel;
     }
 
-    public void relativeZoom(double x, double y) {
-        zoomXY.x *= x;
-        zoomXY.y *= y;
+    /**
+     * scales according to input x and input y
+     *
+     * @param x zoom factor x
+     * @param y zoom factor y
+     * @return true if scale was applied, false if not
+     */
+    public boolean relativeZoom(double x, double y) {
+        x = zoomXY.x * x;
+        y = zoomXY.y * y;
+
+        zoomXY.x = Math.max(zoom_min, Math.min(zoom_max, x));
+        zoomXY.y = Math.max(zoom_min, Math.min(zoom_max, y));
+
+        return x == zoomXY.x && y == zoomXY.y;
     }
 
     public void setCenter(double x, double y) {
@@ -58,8 +70,6 @@ public class CameraController {
     }
 
     public void applyTransforms(Canvas canvas) {
-        zoomXY.x = Math.max(zoom_min, Math.min(zoom_max, zoomXY.x));
-        zoomXY.y = Math.max(zoom_min, Math.min(zoom_max, zoomXY.y));
 
         canvas.scale((float) zoomXY.x, (float) zoomXY.y);
         canvas.translate((float) translateXY.x, (float) translateXY.y);
