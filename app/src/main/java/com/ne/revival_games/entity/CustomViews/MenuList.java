@@ -13,6 +13,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
@@ -121,7 +122,7 @@ public class MenuList extends LinearLayout {
 
             private final GestureDetectorCompat mDetector;
 
-            public EntButton(Context context, final EntityLeaf toProduce, final Player owner) {
+            public EntButton(final Context context, final EntityLeaf toProduce, final Player owner) {
                 super(context);
 
                 this.setGravity(Gravity.CENTER);
@@ -138,25 +139,21 @@ public class MenuList extends LinearLayout {
 
 //                this.setOnClickListener(new OnClickListener() {
 //                    public void onClick(View v) {
-//                        owner.setGhost(toProduce);
+//
 //                    }
 //                });
-            }
+                EntButton.this.setOnTouchListener(new OnSwipeTouchListener(context, MenuList.this.HEIGHT) {
+                    public void onSwipeOut(float x, float y) {
+                        int[] location = new int[2];
+                        EntButton.this.getLocationOnScreen(location);
+//                        Toast.makeText(context, "out!!", Toast.LENGTH_SHORT).show();
+                        owner.setGhost(toProduce, location[0] + x, location[1] + y);
+                    }
 
-            @Override
-            public boolean onTouchEvent(MotionEvent ev) {
-                this.mDetector.onTouchEvent(ev);
-                return false;
+
+                });
+
             }
-//                int mask = (ev.getAction() & MotionEvent.ACTION_MASK);
-//
-//                if (mask == MotionEvent.ACTION_DOWN) {
-//                    System.out.println("TOUCHING " + this.getText());
-//                }
-//                System.out.println("NORMAL");
-//
-//                return true;
-//            }
 
 
 //            @Override

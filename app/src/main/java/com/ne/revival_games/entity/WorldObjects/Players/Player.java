@@ -127,7 +127,7 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     public abstract boolean onSingleTapUp(MotionEvent e);
 
 
-    public void setGhost(EntityLeaf toProduce) {
+    public void setGhost(EntityLeaf toProduce, float x, float y) {
         if (this.holdingGhost) {
             System.out.println("ALREADY HOLDING A GHOST!");
         } else {
@@ -137,8 +137,8 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
 //                    -1 * camera.translateXY.y * MyWorld.SCALE, 0, world, team);
             addToWorld = new JSONObject();
             try{
-                addToWorld.put("x", -1*camera.translateXY.x * MyWorld.SCALE);
-                addToWorld.put("y", -1*camera.translateXY.y * MyWorld.SCALE);
+                addToWorld.put("x", x -1*camera.translateXY.x * MyWorld.SCALE);
+                addToWorld.put("y", y -1*camera.translateXY.y * MyWorld.SCALE);
                 addToWorld.put("type", toProduce);
             }
             catch (Exception e){

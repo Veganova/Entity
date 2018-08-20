@@ -201,8 +201,8 @@
       "breakBetweenFiring" : 1,
       "ammoFiredAtOnce": 10,
       "ammoFiredAtOnceVariance": 2,
+      "duration": 40,
       "units" : {
-        "duration": 40,
         "Comet": {
           "number": 20
         },

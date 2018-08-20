@@ -120,7 +120,7 @@ public class Launcher implements Updatable {
         if(endTime != -1 ) {
         int numberToShoot = Util.randomBetweenValues(atOnce-atOnce_range, atOnce+atOnce_range);
         if (FrameTime.getTime() - this.lastFired >= this.rate) {
-            System.out.println("NUMBERSHOOT " + numberToShoot + " LASTFIRED " + lastFired);
+//            System.out.println("NUMBERSHOOT " + numberToShoot + " LASTFIRED " + lastFired);
             for (int i = 0; i < numberToShoot;  i++) {
                 fireRandom();
             }
