@@ -23,12 +23,15 @@ public class CameraController {
     private Vector2 translateUpdate = new Vector2(0, 0);
     private double zoom_max = 4;
     private double zoom_min = 0.5;
+    private double offsetX;
+    private double offsetY;
 
     public CameraController(Vector2 relativeZoomXY, Vector2 relativeTranslationXY, GamePanel gamePanel) {
         zoomXY = new Vector2(relativeZoomXY.x, relativeZoomXY.y);
         //set to 1,1 default early
         translateXY = new Vector2(relativeTranslationXY.x / MyWorld.SCALE,
                 relativeTranslationXY.y / MyWorld.SCALE);
+        this.setCenter(translateXY.x, translateXY.y);
         this.panel = gamePanel;
     }
 
@@ -38,8 +41,12 @@ public class CameraController {
     }
 
     public void setCenter(double x, double y) {
-        zoomXY.x = x;
-        zoomXY.y = y;
+        this.offsetX = x;
+        this.offsetY = y;
+    }
+
+    public Vector2 getCenter() {
+        return new Vector2(this.translateXY.x - this.offsetX, this.translateXY.y - this.offsetY);
     }
 
     public void relativeMove(double x, double y) {

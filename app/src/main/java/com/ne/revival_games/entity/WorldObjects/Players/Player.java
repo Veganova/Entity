@@ -38,19 +38,19 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  * -one ghost object - have this ghost class implement the listener as well?
  */
 public abstract class Player extends GestureDetector.SimpleOnGestureListener implements View.OnTouchListener {
+    private final GamePanel gamePanel;
+    private final MainActivity activity;
     private Screen screen;
 //    protected Iterator<Entity> entities;
     public CameraController camera;
     protected MyWorld world;
     protected Context context;
-    protected JSONObject addToWorld = null;
+    protected AddToWorld addToWorld;
 
     int playerNumber;
     public Team team;
     protected float WIDTH = 900;
     protected float HEIGHT = 1600;
-    protected float VIEW_WIDTH = 900;
-    protected float VIEW_HEIGHT = 1600;
     protected Vector2 scales;
     protected GestureDetectorCompat mDetector;
     protected ScaleGestureDetector scaleGestureDetector;
@@ -67,13 +67,14 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     private Menu menu;
     private MoneyView moneyView;
     protected GestureCallback onGhostPlace;
+    protected boolean firstGhostHold = false;
 
     public Player(int id, Team team, MyWorld world, Screen screen, MainActivity activity, boolean addListenertoPanel) {
         this.playerNumber = id;
         this.team = team;
         this.world = world;
         this.screen = screen;
-
+        this.activity = activity;
         GamePanel gamePanel = screen.getGamePanel();
         this.scales = gamePanel.scales;
 //        System.out.println(gamePanel.scales);
@@ -85,12 +86,10 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         this.context = activity.getApplicationContext();
         this.WIDTH = activity.MAP_WIDTH;
         this.HEIGHT = activity.MAP_HEIGHT;
-        this.VIEW_HEIGHT = gamePanel.getHeight();
-        this.VIEW_WIDTH = gamePanel.getWidth();
         this.mDetector = new GestureDetectorCompat(activity.getApplicationContext(), this);
         this.mDetector.setIsLongpressEnabled(false);
         this.scaleGestureDetector = new ScaleGestureDetector(gamePanel.getContext(), new ScaleListener());
-
+        this.gamePanel = gamePanel;
         this.money = 0.0;
         this.mpt = 0.0;
     }
@@ -127,27 +126,25 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
     public abstract boolean onSingleTapUp(MotionEvent e);
 
 
-    public void setGhost(EntityLeaf toProduce, float x, float y) {
+    public void setGhost(EntityLeaf toProduce, float creationX, float creationY, MotionEvent e) {
         if (this.holdingGhost) {
             System.out.println("ALREADY HOLDING A GHOST!");
         } else {
             //center of the screen
             this.holdingGhost = true;
-//            this.ghost = GhostFactory.produce(type, -1 * camera.translateXY.x * MyWorld.SCALE,
-//                    -1 * camera.translateXY.y * MyWorld.SCALE, 0, world, team);
-            addToWorld = new JSONObject();
-            try{
-                addToWorld.put("x", x -1*camera.translateXY.x * MyWorld.SCALE);
-                addToWorld.put("y", y -1*camera.translateXY.y * MyWorld.SCALE);
-                addToWorld.put("type", toProduce);
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+            creationY = this.gamePanel.getHeight() - creationY;
+            double cameraX = -1*camera.getCenter().x * MyWorld.SCALE;
+            double cameraY = -1*camera.getCenter().y * MyWorld.SCALE;
+            double distCenterX = (creationX - this.gamePanel.getWidth() / 2);
+            double distCenterY = (creationY - this.gamePanel.getHeight() / 2);
 
-            if(holdingGhost && this.ghost != null){
-                this.pullTowards = this.ghost.entity.shape.body.getWorldCenter();
-            }
+//            System.out.println("CREATED: " + creationX + " " + creationY + " | " + this.WIDTH + ", " + this.HEIGHT + " | " + this.gamePanel.getWidth() + " " + this.gamePanel.getHeight());
+//            System.out.println("CAMERA : " + camera.getCenter() + " " + distCenterX + " " + distCenterY);// camera.translateXY.x + ", " + camera.translateXY.y);
+            addToWorld = new AddToWorld(toProduce, distCenterX + cameraX, distCenterY + cameraY);
+//            this.onTouch(activity.view, e);
+            this.pullTowards = new Vector2(0, 0);
+            this.firstGhostHold = true;
+            gamePanel.dispatchTouchEvent(e);
             this.previousAngle = 0;
         }
     }

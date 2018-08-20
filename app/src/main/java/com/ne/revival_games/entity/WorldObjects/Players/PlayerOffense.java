@@ -41,11 +41,11 @@ public class PlayerOffense extends Player {
         percentSpeed = (percentSpeed + 0.01) % 1;
         if(this.addToWorld != null)
             try{
-                pullTowards = new Vector2(addToWorld.getDouble("x")/MyWorld.SCALE, addToWorld.getDouble("y")/MyWorld.SCALE);
+                pullTowards = new Vector2(addToWorld.getX()/MyWorld.SCALE, addToWorld.getY()/MyWorld.SCALE);
                 this.ghost = GhostFactory.produce(
-                        (EntityLeaf)addToWorld.get("type"),
-                        addToWorld.getDouble("x"),
-                        addToWorld.getDouble("y"),
+                        (EntityLeaf)addToWorld.getType(),
+                        addToWorld.getX(),
+                        addToWorld.getY(),
                         0,
                         world,
                         team

@@ -29,7 +29,35 @@ public class PlayerDefense extends Player {
     }
 
     @Override
+    public void update() {
+        super.update();
+        if(this.addToWorld != null)
+            try{
+//                pullTowards = new Vector2(addToWorld.getX()/MyWorld.SCALE, addToWorld.getY()/MyWorld.SCALE);
+                this.ghost = GhostFactory.produce(
+                        addToWorld.getType(),
+                        addToWorld.getX(),
+                        addToWorld.getY(),
+                        0,
+                        world,
+                        team
+                );
+                this.addToWorld = null;
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+        if (holdingGhost && ghost != null) {
+            Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
+                    pullTowards.y - ghost.entity.shape.getY());
+            ghost.setLinearVelocity(10 * delta.x, 10 * delta.y);
+        }
+    }
+
+    @Override
     public boolean onTouch(View view, MotionEvent ev) {
+
         mDownX = ev.getX() / scales.x;   //scales coordinates 0 to map width
         mDownY = ev.getY() / scales.y;   //scales coordinates 0 to map height
         mDownX = (mDownX - WIDTH / 2);     //centers x
@@ -43,10 +71,19 @@ public class PlayerDefense extends Player {
 
         if (mask == MotionEvent.ACTION_DOWN) {
             lastDownPress = System.currentTimeMillis();
+            if (this.firstGhostHold) {
+                System.out.println("ON TOUCH IN PLAYERDEFESE");
+                this.mDetector.onTouchEvent(ev);
+                return false;
+            }
         } else if (mask == MotionEvent.ACTION_UP || mask == MotionEvent.ACTION_POINTER_UP) {
             previousAngle = 0;
+            if (this.firstGhostHold) {
+                this.firstGhostHold = false;
+            }
         }
 
+        // two finger touch
         if (ev.getPointerCount() > 1) {
             if (holdingGhost && ghost.entity != null) {
 
@@ -71,34 +108,11 @@ public class PlayerDefense extends Player {
     }
 
     @Override
-    public void update() {
-            super.update();
-            if(this.addToWorld != null)
-            try{
-                pullTowards = new Vector2(addToWorld.getDouble("x")/MyWorld.SCALE, addToWorld.getDouble("y")/MyWorld.SCALE);
-                this.ghost = GhostFactory.produce(
-                        (EntityLeaf)addToWorld.get("type"),
-                        addToWorld.getDouble("x"),
-                        addToWorld.getDouble("y"),
-                        0,
-                        world,
-                        team
-                );
-                this.addToWorld = null;
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
-        if (holdingGhost && ghost != null) {
-            Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
-                    pullTowards.y - ghost.entity.shape.getY());
-            ghost.setLinearVelocity(10 * delta.x, 10 * delta.y);
-        }
-    }
-
-    @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+//        if (this.firstGhostHold) {
+//            System.out.println("ON SCROLL IN PLAYERDEFESE");
+//            return false;
+//        }
         double scrollSpeed = 3000 / camera.zoomXY.x;
         double marginDetection = 30;
         double mDownX = e2.getX() / scales.x;
@@ -114,9 +128,11 @@ public class PlayerDefense extends Player {
 
 
         if (holdingGhost) {
+            System.out.println("SCROLLING WITH GHOST!");
             if (lastDownPress + 30 < System.currentTimeMillis()) {
-                if (e2.getPointerCount() < 2 && e1.getPointerCount() < 2) {
+                if (firstGhostHold || (e2.getPointerCount() < 2 && e1.getPointerCount() < 2)) {
                     pullTowards = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
+                    System.out.println(pullTowards);
                 }
             }
             if (camera.nearEdge(e2.getX(), e2.getY(), marginDetection)) {

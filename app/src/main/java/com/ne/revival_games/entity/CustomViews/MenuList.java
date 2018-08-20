@@ -143,11 +143,11 @@ public class MenuList extends LinearLayout {
 //                    }
 //                });
                 EntButton.this.setOnTouchListener(new OnSwipeTouchListener(context, MenuList.this.HEIGHT) {
-                    public void onSwipeOut(float x, float y) {
+                    public void onSwipeOut(MotionEvent e) {
                         int[] location = new int[2];
                         EntButton.this.getLocationOnScreen(location);
 //                        Toast.makeText(context, "out!!", Toast.LENGTH_SHORT).show();
-                        owner.setGhost(toProduce, location[0] + x, location[1] + y);
+                        owner.setGhost(toProduce, location[0] + e.getX(), location[1] + e.getY(), e);
                     }
 
 

@@ -40,8 +40,9 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             if (clickedIn && (e2.getY() < 0 || e2.getY() > containerHeight)) {
-                onSwipeOut(e2.getX(), e2.getY());
+                onSwipeOut(e2);
                 clickedIn = false;
+                return true;
             }
             return super.onScroll(e1, e2, distanceX, distanceY);
         }
@@ -54,10 +55,11 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
     /**
      * Called when user swipes out of context's area.
-     * @param relX  Relative x value where the swipe exited. 0 to component width (left to right)
-     * @param relY  Relative y value where the swipe exited. 0 to component height (top to bottom)
+     * @param event Gives the event that contains the relX, relY and can be passed to another touch to continue
+     *                relX  Relative x value where the swipe exited. 0 to component width (left to right)
+     *                relY  Relative y value where the swipe exited. 0 to component height (top to bottom)
      */
-    public void onSwipeOut(float relX, float relY) {
+    public void onSwipeOut(MotionEvent event) {
 
     }
 }
