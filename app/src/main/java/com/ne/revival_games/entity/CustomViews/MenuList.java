@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -56,7 +57,7 @@ public class MenuList extends LinearLayout {
         return this.tray;
     }
 
-    class Poppist extends HorizontalScrollView {
+    public class Poppist extends HorizontalScrollView {
 
         private List<Entities> toDisplay;
 
@@ -89,40 +90,41 @@ public class MenuList extends LinearLayout {
 
             // Add all the entities as buttons to this scroll view
             for (Entities entityType : this.toDisplay) {
-                container.addView(new EntButton(context, entityType.produceable, owner));
+                container.addView(new EntButton(context, entityType.produceable, owner, this));
             }
 
             this.addView(container);
+
+//            this.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//                @Override
+//                public void onScrollChanged() {
+//                    int scrollY = Poppist.this.getScrollY(); // For ScrollView
+//                    int scrollX = Poppist.this.getScrollX(); // For HorizontalScrollView
+//                    System.out.println("Scroll changed: " + scrollX + " " + scrollY);
+//                    // DO SOMETHING WITH THE SCROLL COORDINATES
+//                }
+//            });
+        }
+        private boolean stopAndDispatch = false;
+
+        @Override
+        public boolean onTouchEvent(MotionEvent ev) {
+            if (stopAndDispatch) {
+                this.owner.getGamePanel().dispatchTouchEvent(ev);
+                this.owner.setStopAndDispatch(this);
+                return true;
+            }
+            return super.onTouchEvent(ev);
         }
 
-//        private class EntScroll extends ScrollView {
-//
-//            public EntScroll(Context context, final Entities entType, Player player) {
-//                super(context);
-//
-//                this.setVerticalScrollBarEnabled(false);
-//
-//                LinearLayout container = new LinearLayout(context);
-//                container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-//                        LinearLayout.LayoutParams.MATCH_PARENT));
-//                container.setOrientation(LinearLayout.VERTICAL);
-//
-//                for (EntityLeaf producer : entType.produceables) {
-//                    container.addView(new EntButton(context, producer, player));
-//                }
-//
-//
-//                this.addView(container);
-//            }
-//        }
+        public void setStopAndDispatch(boolean stopAndDispatch) {
+            this.stopAndDispatch = stopAndDispatch;
+        }
 
 
         private class EntButton extends TextView {
 
-
-            private final GestureDetectorCompat mDetector;
-
-            public EntButton(final Context context, final EntityLeaf toProduce, final Player owner) {
+            public EntButton(final Context context, final EntityLeaf toProduce, final Player owner, final Poppist parent) {
                 super(context);
 
                 this.setGravity(Gravity.CENTER);
@@ -132,7 +134,6 @@ public class MenuList extends LinearLayout {
                 Double cost = MySettings.getEntityNum(String.valueOf(owner.team), new Query(toProduce.name, "cost"), true);
                 String text = toProduce.name;
                 this.setText(text);
-                this.mDetector = new GestureDetectorCompat(context, new MenuDragListener());
                 // TODO: 8/25/2017 for now manually setting the height.. might be kinda bad idk.
                 this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         MenuList.this.HEIGHT));
@@ -142,12 +143,19 @@ public class MenuList extends LinearLayout {
 //
 //                    }
 //                });
+
+                this.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {}
+                });
+
                 EntButton.this.setOnTouchListener(new OnSwipeTouchListener(context, MenuList.this.HEIGHT) {
                     public void onSwipeOut(MotionEvent e) {
                         int[] location = new int[2];
                         EntButton.this.getLocationOnScreen(location);
 //                        Toast.makeText(context, "out!!", Toast.LENGTH_SHORT).show();
                         owner.setGhost(toProduce, location[0] + e.getX(), location[1] + e.getY(), e);
+                        parent.stopAndDispatch = true;
                     }
 
 

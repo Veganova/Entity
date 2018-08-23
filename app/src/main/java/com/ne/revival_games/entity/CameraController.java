@@ -40,6 +40,9 @@ public class CameraController {
         zoomXY.y *= y;
     }
 
+    /**
+     * Refers to the coordinates of the center of the screen as shown by the camera before any translations are applied.
+     */
     public void setCenter(double x, double y) {
         this.offsetX = x;
         this.offsetY = y;

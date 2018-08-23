@@ -13,6 +13,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.ne.revival_games.entity.CameraController;
+import com.ne.revival_games.entity.CustomViews.MenuList;
 import com.ne.revival_games.entity.CustomViews.MoneyView;
 import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.GamePanel;
@@ -138,12 +139,14 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             double distCenterX = (creationX - this.gamePanel.getWidth() / 2);
             double distCenterY = (creationY - this.gamePanel.getHeight() / 2);
 
-//            System.out.println("CREATED: " + creationX + " " + creationY + " | " + this.WIDTH + ", " + this.HEIGHT + " | " + this.gamePanel.getWidth() + " " + this.gamePanel.getHeight());
+            System.out.println("CREATED: " + creationX + " " + creationY + " | " + this.WIDTH + ", " + this.HEIGHT + " | " + this.gamePanel.getWidth() + " " + this.gamePanel.getHeight());
 //            System.out.println("CAMERA : " + camera.getCenter() + " " + distCenterX + " " + distCenterY);// camera.translateXY.x + ", " + camera.translateXY.y);
             addToWorld = new AddToWorld(toProduce, distCenterX + cameraX, distCenterY + cameraY);
 //            this.onTouch(activity.view, e);
             this.pullTowards = new Vector2(0, 0);
             this.firstGhostHold = true;
+//            PERHAPS NEED TO INVOKE THIS ON THE VIEW THREAD:
+//            - calls onscroll once but not getting called repeatedly
             gamePanel.dispatchTouchEvent(e);
             this.previousAngle = 0;
         }
@@ -173,6 +176,11 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
             this.onMoveListener.apply();
         }
     }
+
+    /**
+     * On next touch make poppist.stopAndDispatch = false;
+     */
+    public abstract void setStopAndDispatch(MenuList.Poppist stopAndDispatch);
 
     public class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
         protected double refX = 0;
@@ -262,6 +270,8 @@ public abstract class Player extends GestureDetector.SimpleOnGestureListener imp
         return this.moneyView;
     }
 
-
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
 
 }

@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.ne.revival_games.entity.CustomViews.MenuList;
 import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -24,6 +25,8 @@ import java.util.Iterator;
  */
 
 public class PlayerDefense extends Player {
+    private MenuList.Poppist poppist;
+
     public PlayerDefense(int id, Team team, MyWorld world, Screen screen, MainActivity activity, boolean addListenertoPanel) {
         super(id, team, world, screen, activity, addListenertoPanel);
     }
@@ -49,10 +52,18 @@ public class PlayerDefense extends Player {
             }
 
         if (holdingGhost && ghost != null) {
+            System.out.println("pullTowards in update: " + pullTowards);
             Vector2 delta = new Vector2(pullTowards.x - ghost.entity.shape.getX(),
                     pullTowards.y - ghost.entity.shape.getY());
             ghost.setLinearVelocity(10 * delta.x, 10 * delta.y);
         }
+    }
+
+
+    @Override
+    public void setStopAndDispatch(MenuList.Poppist stopAndDispatch) {
+        // On next touch make poppist.stopAndDispatch = false;
+        this.poppist = stopAndDispatch;
     }
 
     @Override
@@ -80,6 +91,7 @@ public class PlayerDefense extends Player {
             previousAngle = 0;
             if (this.firstGhostHold) {
                 this.firstGhostHold = false;
+                this.poppist.setStopAndDispatch(false);
             }
         }
 
@@ -126,13 +138,13 @@ public class PlayerDefense extends Player {
         mDownX -= camera.translateXY.x * MyWorld.SCALE;
         mDownY -= camera.translateXY.y * MyWorld.SCALE;
 
-
+        System.out.println("SCROLLIG");
         if (holdingGhost) {
             System.out.println("SCROLLING WITH GHOST!");
             if (lastDownPress + 30 < System.currentTimeMillis()) {
                 if (firstGhostHold || (e2.getPointerCount() < 2 && e1.getPointerCount() < 2)) {
                     pullTowards = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
-                    System.out.println(pullTowards);
+                    System.out.println("pullTowards in scroll: " + pullTowards);
                 }
             }
             if (camera.nearEdge(e2.getX(), e2.getY(), marginDetection)) {
