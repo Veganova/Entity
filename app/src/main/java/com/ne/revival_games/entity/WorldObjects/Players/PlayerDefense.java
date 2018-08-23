@@ -143,6 +143,8 @@ public class PlayerDefense extends Player {
             System.out.println("SCROLLING WITH GHOST!");
             if (lastDownPress + 30 < System.currentTimeMillis()) {
                 if (firstGhostHold || (e2.getPointerCount() < 2 && e1.getPointerCount() < 2)) {
+                    // TODO: THE Y coordinate IS WRONG HERE ONLY ON THE FIRST DRAG OUT (when firstghostHold = true) - seems offset by half screen height.
+                    // also there is some small offset problem with the camera.
                     pullTowards = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
                     System.out.println("pullTowards in scroll: " + pullTowards);
                 }

@@ -54,7 +54,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     }
 
     /**
-     * Called when user swipes out of context's area.
+     * Called when user swipes out of context's area vertically.
      * @param event Gives the event that contains the relX, relY and can be passed to another touch to continue
      *                relX  Relative x value where the swipe exited. 0 to component width (left to right)
      *                relY  Relative y value where the swipe exited. 0 to component height (top to bottom)

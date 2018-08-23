@@ -109,7 +109,7 @@ public class MenuList extends LinearLayout {
 
         @Override
         public boolean onTouchEvent(MotionEvent ev) {
-            if (stopAndDispatch) {
+                if (stopAndDispatch) {
                 this.owner.getGamePanel().dispatchTouchEvent(ev);
                 this.owner.setStopAndDispatch(this);
                 return true;
