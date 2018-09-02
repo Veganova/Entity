@@ -2,6 +2,7 @@ package com.ne.revival_games.entity.WorldObjects;
 
 import android.graphics.Canvas;
 
+import com.ne.revival_games.entity.CustomViews.LoadingBar;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Defence.TurretOneBarrel;
 import com.ne.revival_games.entity.WorldObjects.Entity.Shared.CustomEntity;
@@ -108,7 +109,7 @@ public class MyWorld {
      * Basically the same shapes from the Shapes test in
      * the TestBed.
      */
-    public void initializeWorld() {
+    public void initializeWorld(LoadingBar loadingBar) {
         // create the engineWorld
         this.bounds = new Boundary(2000, this);
         CollisionListener skip = new CollisionController(this);
@@ -122,7 +123,7 @@ public class MyWorld {
 //        ExpandingCircle hi = new ExpandingCircle(new Vector2(0,0), 0.2, 0.01, 10, 500, 50, Team.NEUTRAL, this);
         Settings settings = new Settings();
         System.out.println("INITIALIZE" + initializeType);
-        bot = InitializeWorld.init(initializeType, this);
+        bot = InitializeWorld.init(initializeType, this, loadingBar);
 
 //        settings.setAngularTolerance(50*settings.getAngularTolerance());
 //        settings.setLinearTolerance(150*settings.getLinearTolerance());

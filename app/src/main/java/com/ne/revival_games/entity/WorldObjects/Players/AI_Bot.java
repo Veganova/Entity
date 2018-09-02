@@ -1,5 +1,6 @@
 package com.ne.revival_games.entity.WorldObjects.Players;
 
+import com.ne.revival_games.entity.CustomViews.LoadingBar;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -23,6 +24,7 @@ import java.util.Iterator;
  * CURRENTLY TEAM IS ASSUMED TO BE OFFENSELEVEL. WILL NOT WORK WITH TEAM SET TO DEFENSE.
  */
 public class AI_Bot extends Launcher {
+    private final LoadingBar loadingBar;
     private State curState;
     private double breakUntil = 0, roundDuration = 0;
     private int max_level = 0;
@@ -33,65 +35,93 @@ public class AI_Bot extends Launcher {
     }
 
 
-    public AI_Bot(double width, double height, MyWorld world, Team team, Entity target) {
+    public AI_Bot(double width, double height, MyWorld world, Team team, Entity target, LoadingBar loadingBar) {
         super(width, height, world, team);
         this.curState = State.NOT_READY_BREAK;
         // Set team query to random value because we don't want to have a level attached the front of the query (which happens automatically in Mysettings for offense team)
         this.max_level = (int) MySettings.getConfigNum(this.team.toString(), new Query("max_level"));
         this.setLevel(0);
         this.targetEntity = target;
+        this.loadingBar = loadingBar;
+    }
+
+    private void setState(State state) {
+        this.setState(state, state.toString());
+    }
+
+    private void setState(State state, final String message) {
+        this.curState = state;
+        this.loadingBar.post(new Runnable() {
+            @Override
+            public void run() {
+                loadingBar.setMessage(message);
+            }
+        });
+    }
+
+    /**
+     * Sets the state and displays a loading bar configured to reduce by the duration given
+     */
+    private void setStateAndLoading(State state, final String message, final double duration) {
+        this.curState = state;
+        this.loadingBar.post(new Runnable() {
+            @Override
+            public void run() {
+                loadingBar.setProgress((int) duration, message);
+            }
+        });
     }
 
     @Override
     public void update() {
-       switch (curState) {
-           case NOT_READY_BREAK:
-               this.setLevel(level + 1);
-               System.out.println("LEVEL " + level + " +++++++++++++++++++++++++++++++++++++++++++");
-               final int curlevel = level;
-               if(max_level > level) {
-                   emptySet();
-                   prepNextRound();
-                   this.curState = State.READY_BREAK;
+        switch (curState) {
+            // prep for next round
+            case NOT_READY_BREAK:
+                this.setLevel(level + 1);
+                System.out.println("LEVEL " + level + " +++++++++++++++++++++++++++++++++++++++++++");
+                final int curlevel = level;
+                if (max_level > level) {
+                    emptySet();
+                    prepNextRound();
+                    this.setStateAndLoading(State.READY_BREAK, "Break for " + breakUntil + ". Level: " + curlevel, breakUntil);
 
-                   //sets call_back for round start & round end
-                   FrameTime.addCallBackAtDeltaFrames((long) breakUntil, new Runnable() {
-                       @Override
-                       public void run() {
-                           curState = State.IN_ROUND;
-                           System.out.println("BREAK iS OVER " + FrameTime.getTime());
-                           FrameTime.addCallBackAtDeltaFrames((long) roundDuration + 2, new Runnable() {
-                               @Override
-                               public void run() {
-                                   System.out.println("ROUND IS OVER: " + FrameTime.getTime());
-                                   if(curlevel == level)
-                                   curState = State.NOT_READY_BREAK;
-                               }
-                           });
-                       }
-                   });
-               }
-               else {
-                   curState = State.GAME_OVER;
-               }
-           case READY_BREAK:
-               // waits in this state until callback
-               // in a round of the game
-               break;
-           case IN_ROUND:
-                if(ammoLeft() != 0) {
+                    //sets call_back for round start & round end
+                    FrameTime.addCallBackAtDeltaFrames((long) breakUntil, new Runnable() {
+                        @Override
+                        public void run() {
+                            setStateAndLoading(State.IN_ROUND, "Round #" + curlevel + " active. For: " + roundDuration, roundDuration);
+                            System.out.println("BREAK iS OVER " + FrameTime.getTime());
+                            FrameTime.addCallBackAtDeltaFrames((long) roundDuration + 2, new Runnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println("ROUND IS OVER: " + FrameTime.getTime());
+                                    if (curlevel == level) {
+                                        setState(State.NOT_READY_BREAK);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    this.setState(State.GAME_OVER);
+                }
+            case READY_BREAK:
+                // waits in this state until callback
+                // in a round of the game
+                break;
+            case IN_ROUND:
+                if (ammoLeft() != 0) {
                     updateTarget();
                     firingRound(roundDuration);
+                } else {
+                    this.setState(State.NOT_READY_BREAK, "IN ROUND AND OUT OF AMMO!!");
                 }
-                else {
-                    this.curState = State.NOT_READY_BREAK;
-                }
-               break;
-                //end of the game
-           case GAME_OVER:
-               System.out.println("YOU WIN!");
-               break;
-       }
+                break;
+            //end of the game
+            case GAME_OVER:
+                System.out.println("YOU WIN!");
+                break;
+        }
     }
 
     private void setLevel(int level) {
@@ -138,11 +168,9 @@ public class AI_Bot extends Launcher {
                 int num = unitJson.getJSONObject(unit_type).getInt("number");
                 ammoSet.add(new Pair<>(unit_type, num));
             }
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -157,22 +185,22 @@ public class AI_Bot extends Launcher {
 
     //get break time
     private void setBreakTime() {
-        breakUntil =  System.currentTimeMillis() +
+        breakUntil = System.currentTimeMillis() +
                 1000 * MySettings.getConfigNum(this.team.toString(), new Query("break"));
     }
 
     private void prepNextRound() {
         double moneyForRound = MySettings.getConfigNum(this.team.toString(), new Query("money_awarded"));
 
-        for(Player player :this.world.getPlayers()) {
-            if(player.team == Team.DEFENCE)
-            player.addMoney(moneyForRound);
+        for (Player player : this.world.getPlayers()) {
+            if (player.team == Team.DEFENCE)
+                player.addMoney(moneyForRound);
         }
 
 
-        this.breakUntil = 40*MySettings.getConfigNum(this.team.toString(), new Query("break"));
-        this.roundDuration = 40*MySettings.getConfigNum(this.team.toString(), new Query("duration"));
-        this.rate = 40*MySettings.getConfigNum(this.team.toString(), new Query("breakBetweenFiring"));
+        this.breakUntil = 40 * MySettings.getConfigNum(this.team.toString(), new Query("break"));
+        this.roundDuration = 40 * MySettings.getConfigNum(this.team.toString(), new Query("duration"));
+        this.rate = 40 * MySettings.getConfigNum(this.team.toString(), new Query("breakBetweenFiring"));
         this.atOnce = (int) MySettings.getConfigNum(this.team.toString(), new Query("ammoFiredAtOnce"));
         this.atOnce_range = (int) MySettings.getConfigNum(this.team.toString(), new Query("ammoFiredAtOnceVariance"));
         fillAmmo();

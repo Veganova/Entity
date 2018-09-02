@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.ne.revival_games.entity.CustomViews.GestureView;
+import com.ne.revival_games.entity.CustomViews.LoadingBar;
 import com.ne.revival_games.entity.CustomViews.MenuFactory;
 import com.ne.revival_games.entity.Modes.GameMode;
 
@@ -22,6 +23,11 @@ public class MainMenuActivity extends MainActivity {
                 .addButton(GameMode.MULTIPLAYER)
                 .addButton(GameMode.TUTORIAL).build(getApplicationContext(), this);
 
+
+        LoadingBar lb = new LoadingBar(this);
+        lb.setProgress(1000, "Viraj Pajdfasjflksadjfajskfasljf asl");
+
         relativeLayout.addView(menu);
+        relativeLayout.addView(lb);
     }
 }

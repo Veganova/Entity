@@ -76,7 +76,7 @@
           "speed": 30
         }
       },
-      "break" : 1
+      "break" : 10
     },
     "5" : {
       "money_awarded" : 500,

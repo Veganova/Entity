@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.ne.revival_games.entity.CustomViews.GestureView;
+import com.ne.revival_games.entity.CustomViews.LoadingBar;
 import com.ne.revival_games.entity.CustomViews.MenuFactory;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.RestartHome;
@@ -107,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
             // set fullscreen
             this.initPlayers(false, false, 1, false);
         }
-        world.initializeWorld();
+
+        this.addLoadingBar();
+        world.initializeWorld(loadingBar);
     }
 
     private void initGameMode(GameMode gameChoice) {
@@ -249,6 +252,12 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("TurretTtoirai");
                 break;
         }
+    }
+
+    private LoadingBar loadingBar;
+    private void addLoadingBar() {
+        this.loadingBar = new LoadingBar(this);
+        this.relativeLayout.addView(loadingBar);
     }
 
     private void addTutorialButtons() {
