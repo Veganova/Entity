@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.ne.revival_games.entity.CustomViews.MenuList;
 import com.ne.revival_games.entity.CustomViews.Screen;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
@@ -115,5 +116,10 @@ public class PlayerOffense extends Player {
             }
         }
         return false;
+    }
+
+    @Override
+    public void setStopAndDispatch(MenuList.Poppist stopAndDispatch) {
+        throw new UnsupportedOperationException("SET AND STOP DISPATCH NOT SUPPORTED");
     }
 }
