@@ -29,9 +29,10 @@ public class AI_Bot extends Launcher {
     private double breakUntil = 0, roundDuration = 0;
     private int max_level = 0;
     private Entity targetEntity;
+    private int cleanupTime;
 
     public enum State {
-        IN_ROUND, NOT_READY_BREAK, READY_BREAK, GAME_OVER
+        IN_ROUND, NOT_READY_BREAK, READY_BREAK, WAIT_FOR_CLEANUP, GAME_OVER
     }
 
 
@@ -46,11 +47,13 @@ public class AI_Bot extends Launcher {
     }
 
     private void setState(State state) {
-        this.setState(state, state.toString());
+        this.curState = state;
     }
 
     private void setState(State state, final String message) {
         this.curState = state;
+
+//        loadingBar.setMessage(message);
         this.loadingBar.post(new Runnable() {
             @Override
             public void run() {
@@ -64,6 +67,7 @@ public class AI_Bot extends Launcher {
      */
     private void setStateAndLoading(State state, final String message, final double duration) {
         this.curState = state;
+//        loadingBar.setProgress((int) duration, message);
         this.loadingBar.post(new Runnable() {
             @Override
             public void run() {
@@ -78,26 +82,27 @@ public class AI_Bot extends Launcher {
             // prep for next round
             case NOT_READY_BREAK:
                 this.setLevel(level + 1);
-                System.out.println("LEVEL " + level + " +++++++++++++++++++++++++++++++++++++++++++");
                 final int curlevel = level;
                 if (max_level > level) {
                     emptySet();
                     prepNextRound();
-                    this.setStateAndLoading(State.READY_BREAK, "Break for " + breakUntil + ". Level: " + curlevel, breakUntil);
 
                     //sets call_back for round start & round end
+                    if (breakUntil == 0) {
+//                        setStateAndLoading(State.IN_ROUND, "Round #" + curlevel + " active. For: " + roundDuration, roundDuration);
+                        setState(State.IN_ROUND, "Round " + curlevel);
+                        break;
+                    }
+
+                    this.setStateAndLoading(State.READY_BREAK, "Break", breakUntil);
                     FrameTime.addCallBackAtDeltaFrames((long) breakUntil, new Runnable() {
                         @Override
                         public void run() {
-                            setStateAndLoading(State.IN_ROUND, "Round #" + curlevel + " active. For: " + roundDuration, roundDuration);
-                            System.out.println("BREAK iS OVER " + FrameTime.getTime());
-                            FrameTime.addCallBackAtDeltaFrames((long) roundDuration + 2, new Runnable() {
+                            setState(State.IN_ROUND, "Round " + curlevel);
+                            loadingBar.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    System.out.println("ROUND IS OVER: " + FrameTime.getTime());
-                                    if (curlevel == level) {
-                                        setState(State.NOT_READY_BREAK);
-                                    }
+                                    loadingBar.hideBar();
                                 }
                             });
                         }
@@ -105,16 +110,30 @@ public class AI_Bot extends Launcher {
                 } else {
                     this.setState(State.GAME_OVER);
                 }
+                break;
             case READY_BREAK:
                 // waits in this state until callback
                 // in a round of the game
                 break;
+            case WAIT_FOR_CLEANUP:
+                // waits in this state for some amount of time so that most of the comets will fly in and die
+                break;
             case IN_ROUND:
                 if (ammoLeft() != 0) {
+                    // DOES THIS NEED TO BE CALLED EVERY TIME?
                     updateTarget();
                     firingRound(roundDuration);
                 } else {
-                    this.setState(State.NOT_READY_BREAK, "IN ROUND AND OUT OF AMMO!!");
+                    setState(State.WAIT_FOR_CLEANUP);
+                    FrameTime.addCallBackAtDeltaFrames(this.cleanupTime, new Runnable() {
+                        @Override
+                        public void run() {
+                            setState(State.NOT_READY_BREAK);
+//                            setState(State.NOT_READY_BREAK, "IN ROUND AND OUT OF AMMO!!");
+                        }
+                    });
+
+                    System.out.println("AMMO OVER. Clean up for for " + this.cleanupTime);
                 }
                 break;
             //end of the game
@@ -148,9 +167,14 @@ public class AI_Bot extends Launcher {
     }
 
 
-    //fill the ammo each level
-    public void fillAmmo() {
+    /**
+     * fill the ammo each level
+     *
+     * @return the total number of units
+     */
+    public int fillAmmo() {
         try {
+            int total = 0;
             InputStream is;
 
             is = MainActivity.giveContext().getAssets().open("levels.json");
@@ -166,20 +190,24 @@ public class AI_Bot extends Launcher {
             while (units.hasNext()) {
                 String unit_type = units.next();
                 int num = unitJson.getJSONObject(unit_type).getInt("number");
+                total += num;
                 ammoSet.add(new Pair<>(unit_type, num));
             }
+            return total;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return -1;
 
     }
 
     //wrap_up
     public void emptySet() {
         while (ammoLeft() > 0) {
-            fireRandom();
+            throw new UnsupportedOperationException("SHOULD NOT HAVE ANY AMMO LEFT AT POINT");
+//            fireRandom();
         }
     }
 
@@ -197,14 +225,15 @@ public class AI_Bot extends Launcher {
                 player.addMoney(moneyForRound);
         }
 
-
+        double totalUnits = 1.0 * fillAmmo();
         this.breakUntil = 40 * MySettings.getConfigNum(this.team.toString(), new Query("break"));
         this.roundDuration = 40 * MySettings.getConfigNum(this.team.toString(), new Query("duration"));
-        this.rate = 40 * MySettings.getConfigNum(this.team.toString(), new Query("breakBetweenFiring"));
+        this.cleanupTime = 40 * (int) MySettings.getConfigNum(this.team.toString(), new Query("cleanupTime"));
         this.atOnce = (int) MySettings.getConfigNum(this.team.toString(), new Query("ammoFiredAtOnce"));
         this.atOnce_range = (int) MySettings.getConfigNum(this.team.toString(), new Query("ammoFiredAtOnceVariance"));
-        fillAmmo();
 
+        this.rate = this.roundDuration * this.atOnce / (totalUnits);
+        System.out.println(level + " ROUND PREP: " + totalUnits + " " + rate + " CLEANUP TIME - " + this.cleanupTime );
     }
 
     private void updateTarget() {

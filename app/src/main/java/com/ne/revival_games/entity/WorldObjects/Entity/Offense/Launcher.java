@@ -118,7 +118,8 @@ public class Launcher implements Updatable {
 
     public void firingRound(double endTime) {
         if(endTime != -1 ) {
-        int numberToShoot = Util.randomBetweenValues(atOnce-atOnce_range, atOnce+atOnce_range);
+//        int numberToShoot = Util.randomBetweenValues(atOnce-atOnce_range, atOnce+atOnce_range);
+        int numberToShoot = this.atOnce;
         if (FrameTime.getTime() - this.lastFired >= this.rate) {
 //            System.out.println("NUMBERSHOOT " + numberToShoot + " LASTFIRED " + lastFired);
             for (int i = 0; i < numberToShoot;  i++) {
@@ -163,6 +164,8 @@ public class Launcher implements Updatable {
                 }
                 culmArea = areaOfOval;
             }
+        } else {
+            System.out.println("TRYING TO SHOOT WHEN NO AMMO LEFT");
         }
 
 

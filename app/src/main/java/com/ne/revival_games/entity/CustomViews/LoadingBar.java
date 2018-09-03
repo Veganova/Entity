@@ -14,8 +14,9 @@ import android.widget.TextView;
 
 import com.ne.revival_games.entity.GamePanel;
 import com.ne.revival_games.entity.WorldObjects.FrameTime;
+import com.ne.revival_games.entity.WorldObjects.Updatable;
 
-public class LoadingBar extends RelativeLayout {
+public class LoadingBar extends RelativeLayout implements Updatable {
 
     private ProgressBar progressBar;
     private TextView textView;
@@ -79,21 +80,22 @@ public class LoadingBar extends RelativeLayout {
     /**
      * @param frameTime     Amount of frames to load for.
      */
-    public void setProgress(final int frameTime, String message) {
-        System.out.println("SETTING PROGRESS!");
+    public void setProgress(int frameTime, String message) {
+        setMessage(message);
         this.progressBar.setVisibility(VISIBLE);
 
-        setMessage(message);
-        for (int i = 1; i <= frameTime; i++) {
-            final int finalI = i;
-            FrameTime.addCallBackAtDeltaFrames(i, new Runnable() {
-                @Override
-                public void run() {
-//                    System.out.println("Progress: " + finalI + " " + ((int) ((100 * finalI)/ (1.0 * frameTime))) + " " + progressBar.getProgress());
-                    progressBar.setProgress((int) ((100 * finalI)/ (1.0 * frameTime)));
-                }
-            });
-        }
+        this.toReach = frameTime;
+        this.framesLeft = 0;
+//        for (int i = 1; i <= frameTime; i++) {
+//            final int finalI = i;
+//            FrameTime.addCallBackAtDeltaFrames(i, new Runnable() {
+//                @Override
+//                public void run() {
+////                    System.out.println("Progress: " + finalI + " " + ((int) ((100 * finalI)/ (1.0 * frameTime))) + " " + progressBar.getProgress());
+//                    progressBar.setProgress((int) ((100 * finalI)/ (1.0 * frameTime)));
+//                }
+//            });
+//        }
     }
 
     public void hideBar() {
@@ -107,5 +109,16 @@ public class LoadingBar extends RelativeLayout {
 
     public void hideMessage() {
         this.textView.setVisibility(INVISIBLE);
+    }
+
+    private int framesLeft = 0;
+    private int toReach = 0;
+
+    @Override
+    public void update() {
+        if (toReach > 0) {
+            progressBar.setProgress((int) ((100 * framesLeft)/ (1.0 * toReach)));
+            framesLeft++;
+        }
     }
 }

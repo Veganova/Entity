@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         this.addLoadingBar();
+        world.addUpdatable(loadingBar);
+
+
         world.initializeWorld(loadingBar);
     }
 

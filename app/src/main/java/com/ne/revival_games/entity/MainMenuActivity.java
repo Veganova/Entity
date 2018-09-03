@@ -24,10 +24,7 @@ public class MainMenuActivity extends MainActivity {
                 .addButton(GameMode.TUTORIAL).build(getApplicationContext(), this);
 
 
-        LoadingBar lb = new LoadingBar(this);
-        lb.setProgress(1000, "Viraj Pajdfasjflksadjfajskfasljf asl");
 
         relativeLayout.addView(menu);
-        relativeLayout.addView(lb);
     }
 }
