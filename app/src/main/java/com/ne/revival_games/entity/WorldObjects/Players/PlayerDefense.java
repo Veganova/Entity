@@ -26,6 +26,7 @@ import java.util.Iterator;
 
 public class PlayerDefense extends Player {
     private MenuList.Poppist poppist;
+    private static final int MENU_Y = 1016;
 
     public PlayerDefense(int id, Team team, MyWorld world, Screen screen, MainActivity activity, boolean addListenertoPanel) {
         super(id, team, world, screen, activity, addListenertoPanel);
@@ -121,14 +122,19 @@ public class PlayerDefense extends Player {
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//        if (this.firstGhostHold) {
-//            System.out.println("ON SCROLL IN PLAYERDEFESE");
-//            return false;
-//        }
         double scrollSpeed = 3000 / camera.zoomXY.x;
         double marginDetection = 30;
+
         double mDownX = e2.getX() / scales.x;
         double mDownY = e2.getY() / scales.y;
+
+        // When the firstGhostHold is true - the user has just swiped out of the menu and
+        // the MotionEvent will be relative to the menu bar and not the entire page.
+        // Thus the Y will be negative (~ -1016 at the top of the screen)
+        if (firstGhostHold) {
+            mDownY = (MENU_Y + e2.getY()) / scales.y;
+        }
+
         mDownX = mDownX - WIDTH / 2;
         mDownY = -1 * (mDownY - HEIGHT / 2);
         double realDownx = mDownX;
@@ -138,15 +144,11 @@ public class PlayerDefense extends Player {
         mDownX -= camera.translateXY.x * MyWorld.SCALE;
         mDownY -= camera.translateXY.y * MyWorld.SCALE;
 
-        System.out.println("SCROLLIG");
         if (holdingGhost) {
-            System.out.println("SCROLLING WITH GHOST!");
             if (lastDownPress + 30 < System.currentTimeMillis()) {
                 if (firstGhostHold || (e2.getPointerCount() < 2 && e1.getPointerCount() < 2)) {
-                    // TODO: THE Y coordinate IS WRONG HERE ONLY ON THE FIRST DRAG OUT (when firstghostHold = true) - seems offset by half screen height.
                     // also there is some small offset problem with the camera.
                     pullTowards = new Vector2(mDownX / world.SCALE, mDownY / world.SCALE);
-                    System.out.println("pullTowards in scroll: " + pullTowards);
                 }
             }
             if (camera.nearEdge(e2.getX(), e2.getY(), marginDetection)) {

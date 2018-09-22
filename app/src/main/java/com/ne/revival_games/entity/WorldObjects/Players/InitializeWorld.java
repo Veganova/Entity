@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Players;
 
 import com.ne.revival_games.entity.CustomViews.LoadingBar;
+import com.ne.revival_games.entity.CustomViews.MoneyPopUp;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.Entities;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.EntityLeaf;
@@ -33,7 +34,7 @@ public class InitializeWorld {
      * @param type  Returns an AI_Bot if specified
      * @param loadingBar
      */
-    public static AI_Bot init(String type, MyWorld world, LoadingBar loadingBar) {
+    public static AI_Bot init(String type, MyWorld world, LoadingBar loadingBar, MoneyPopUp moneyPopUp) {
         InputStream is;
         Nexus target = null;
         try {
@@ -88,7 +89,7 @@ public class InitializeWorld {
             }
 
             if (info.getBoolean("ai") && target != null) {
-                return new AI_Bot(2000, 2000, world, Team.OFFENSE, target, loadingBar);
+                return new AI_Bot(2000, 2000, world, Team.OFFENSE, target, loadingBar, moneyPopUp);
             }
 
         } catch(IOException e) {

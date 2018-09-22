@@ -1,6 +1,7 @@
 package com.ne.revival_games.entity.WorldObjects.Players;
 
 import com.ne.revival_games.entity.CustomViews.LoadingBar;
+import com.ne.revival_games.entity.CustomViews.MoneyPopUp;
 import com.ne.revival_games.entity.MainActivity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Creators.GhostEntity;
 import com.ne.revival_games.entity.WorldObjects.Entity.Entity;
@@ -25,6 +26,7 @@ import java.util.Iterator;
  */
 public class AI_Bot extends Launcher {
     private final LoadingBar loadingBar;
+    private final MoneyPopUp moneyPopUp;
     private State curState;
     private double breakUntil = 0, roundDuration = 0;
     private int max_level = 0;
@@ -36,8 +38,9 @@ public class AI_Bot extends Launcher {
     }
 
 
-    public AI_Bot(double width, double height, MyWorld world, Team team, Entity target, LoadingBar loadingBar) {
+    public AI_Bot(double width, double height, MyWorld world, Team team, Entity target, LoadingBar loadingBar, MoneyPopUp moneyPopUp) {
         super(width, height, world, team);
+        this.moneyPopUp = moneyPopUp;
         this.curState = State.NOT_READY_BREAK;
         // Set team query to random value because we don't want to have a level attached the front of the query (which happens automatically in Mysettings for offense team)
         this.max_level = (int) MySettings.getConfigNum(this.team.toString(), new Query("max_level"));
@@ -129,6 +132,8 @@ public class AI_Bot extends Launcher {
                         @Override
                         public void run() {
                             setState(State.NOT_READY_BREAK);
+                            // todo Display money earned
+//                            moneyPopUp.post.displayMoney();
 //                            setState(State.NOT_READY_BREAK, "IN ROUND AND OUT OF AMMO!!");
                         }
                     });
@@ -221,8 +226,10 @@ public class AI_Bot extends Launcher {
         double moneyForRound = MySettings.getConfigNum(this.team.toString(), new Query("money_awarded"));
 
         for (Player player : this.world.getPlayers()) {
-            if (player.team == Team.DEFENCE)
+            if (player.team == Team.DEFENCE) {
                 player.addMoney(moneyForRound);
+                moneyPopUp.post(() -> moneyPopUp.displayMoney(String.valueOf(moneyForRound)));
+            }
         }
 
         double totalUnits = 1.0 * fillAmmo();
@@ -233,7 +240,7 @@ public class AI_Bot extends Launcher {
         this.atOnce_range = (int) MySettings.getConfigNum(this.team.toString(), new Query("ammoFiredAtOnceVariance"));
 
         this.rate = this.roundDuration * this.atOnce / (totalUnits);
-        System.out.println(level + " ROUND PREP: " + totalUnits + " " + rate + " CLEANUP TIME - " + this.cleanupTime );
+        System.out.println(level + " ROUND PREP: " + totalUnits + " " + rate + " CLEANUP TIME - " + this.cleanupTime);
     }
 
     private void updateTarget() {

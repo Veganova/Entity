@@ -6,6 +6,7 @@ import android.view.View;
 import com.ne.revival_games.entity.CustomViews.GestureView;
 import com.ne.revival_games.entity.CustomViews.LoadingBar;
 import com.ne.revival_games.entity.CustomViews.MenuFactory;
+import com.ne.revival_games.entity.CustomViews.MoneyPopUp;
 import com.ne.revival_games.entity.Modes.GameMode;
 
 /**
@@ -22,8 +23,6 @@ public class MainMenuActivity extends MainActivity {
                 .addButton(GameMode.SINGLEPLAYER)
                 .addButton(GameMode.MULTIPLAYER)
                 .addButton(GameMode.TUTORIAL).build(getApplicationContext(), this);
-
-
 
         relativeLayout.addView(menu);
     }

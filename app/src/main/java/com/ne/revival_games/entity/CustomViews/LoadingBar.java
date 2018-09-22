@@ -1,9 +1,7 @@
 package com.ne.revival_games.entity.CustomViews;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -13,14 +11,12 @@ import android.widget.Space;
 import android.widget.TextView;
 
 import com.ne.revival_games.entity.GamePanel;
-import com.ne.revival_games.entity.WorldObjects.FrameTime;
 import com.ne.revival_games.entity.WorldObjects.Updatable;
 
 public class LoadingBar extends RelativeLayout implements Updatable {
 
     private ProgressBar progressBar;
     private TextView textView;
-    private int progressStatus = 0;
 
 //    private Handler handler = new Handler();
     public LoadingBar(final Context context) {
@@ -86,16 +82,6 @@ public class LoadingBar extends RelativeLayout implements Updatable {
 
         this.toReach = frameTime;
         this.framesLeft = 0;
-//        for (int i = 1; i <= frameTime; i++) {
-//            final int finalI = i;
-//            FrameTime.addCallBackAtDeltaFrames(i, new Runnable() {
-//                @Override
-//                public void run() {
-////                    System.out.println("Progress: " + finalI + " " + ((int) ((100 * finalI)/ (1.0 * frameTime))) + " " + progressBar.getProgress());
-//                    progressBar.setProgress((int) ((100 * finalI)/ (1.0 * frameTime)));
-//                }
-//            });
-//        }
     }
 
     public void hideBar() {

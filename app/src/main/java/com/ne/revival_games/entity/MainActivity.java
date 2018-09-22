@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.ne.revival_games.entity.CustomViews.GestureView;
 import com.ne.revival_games.entity.CustomViews.LoadingBar;
 import com.ne.revival_games.entity.CustomViews.MenuFactory;
+import com.ne.revival_games.entity.CustomViews.MoneyPopUp;
 import com.ne.revival_games.entity.CustomViews.PlayPauseArea;
 import com.ne.revival_games.entity.CustomViews.RestartHome;
 import com.ne.revival_games.entity.CustomViews.Screen;
@@ -110,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         this.addLoadingBar();
+        this.addMoneyPopUp();
         world.addUpdatable(loadingBar);
 
-
-        world.initializeWorld(loadingBar);
+        world.initializeWorld(loadingBar, moneyPopUp);
     }
 
     private void initGameMode(GameMode gameChoice) {
@@ -262,6 +263,14 @@ public class MainActivity extends AppCompatActivity {
         this.loadingBar = new LoadingBar(this);
         this.relativeLayout.addView(loadingBar);
     }
+
+
+    private MoneyPopUp moneyPopUp;
+    private void addMoneyPopUp() {
+        this.moneyPopUp = new MoneyPopUp(this);
+        this.relativeLayout.addView(moneyPopUp);
+    }
+
 
     private void addTutorialButtons() {
         MenuFactory factory = new MenuFactory(TutorialMode.class);
